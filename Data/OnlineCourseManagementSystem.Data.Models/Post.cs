@@ -8,10 +8,11 @@
 
     public class Post : BaseDeletableModel<int>
     {
-
         public Post()
         {
             this.Comments = new HashSet<Comment>();
+            this.Likes = new HashSet<Like>();
+            this.Dislikes = new HashSet<Dislike>();
         }
 
         public string Content { get; set; }
@@ -27,5 +28,9 @@
         public virtual ApplicationUser Author { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Like> Likes { get; set; }
+
+        public virtual ICollection<Dislike> Dislikes { get; set; }
     }
 }

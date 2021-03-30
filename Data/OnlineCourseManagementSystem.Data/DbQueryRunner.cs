@@ -3,9 +3,8 @@
     using System;
     using System.Threading.Tasks;
 
-    using OnlineCourseManagementSystem.Data.Common;
-
     using Microsoft.EntityFrameworkCore;
+    using OnlineCourseManagementSystem.Data.Common;
 
     public class DbQueryRunner : IDbQueryRunner
     {

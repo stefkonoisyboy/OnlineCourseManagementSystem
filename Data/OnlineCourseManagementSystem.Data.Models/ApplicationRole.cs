@@ -3,9 +3,8 @@ namespace OnlineCourseManagementSystem.Data.Models
 {
     using System;
 
-    using OnlineCourseManagementSystem.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using OnlineCourseManagementSystem.Data.Common.Models;
 
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity
     {

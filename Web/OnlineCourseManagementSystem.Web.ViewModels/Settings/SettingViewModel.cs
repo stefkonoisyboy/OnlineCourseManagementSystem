@@ -1,9 +1,8 @@
 ﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {
