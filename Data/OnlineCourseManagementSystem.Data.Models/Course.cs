@@ -14,6 +14,8 @@
             this.Exams = new HashSet<Exam>();
             this.Lectures = new HashSet<Lecture>();
             this.Users = new HashSet<UserCourse>();
+            this.Posts = new HashSet<Post>();
+            this.Assignments = new HashSet<Assignment>();
         }
 
         public string Name { get; set; }
@@ -37,5 +39,9 @@
         public virtual ICollection<Lecture> Lectures { get; set; }
 
         public virtual ICollection<UserCourse> Users { get; set; }
+
+        public virtual ICollection<Post> Posts { get; set; }
+
+        public virtual ICollection<Assignment> Assignments { get; set; }
     }
 }

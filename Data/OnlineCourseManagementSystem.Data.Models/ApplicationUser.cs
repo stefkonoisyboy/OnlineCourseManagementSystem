@@ -15,10 +15,15 @@ namespace OnlineCourseManagementSystem.Data.Models
 
             this.Events = new HashSet<Event>();
             this.Orders = new HashSet<Order>();
-            this.Exams = new HashSet<Exam>();
+            this.TeacherExams = new HashSet<Exam>();
+            this.Exams = new HashSet<UserExam>();
             this.Files = new HashSet<File>();
             this.Assignments = new HashSet<UserAssignment>();
             this.Courses = new HashSet<UserCourse>();
+            this.Comments = new HashSet<Comment>();
+            this.Answers = new HashSet<Answer>();
+            this.Likes = new HashSet<Like>();
+            this.Dislikes = new HashSet<Dislike>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -39,13 +44,23 @@ namespace OnlineCourseManagementSystem.Data.Models
 
         public virtual ICollection<Order> Orders { get; set; }
 
-        public virtual ICollection<Exam> Exams { get; set; }
+        public virtual ICollection<Exam> TeacherExams { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
 
         public virtual ICollection<UserAssignment> Assignments { get; set; }
 
         public virtual ICollection<UserCourse> Courses { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<UserExam> Exams { get; set; }
+
+        public virtual ICollection<Answer> Answers { get; set; }
+
+        public virtual ICollection<Like> Likes { get; set; }
+
+        public virtual ICollection<Dislike> Dislikes { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

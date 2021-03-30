@@ -11,6 +11,8 @@
         public Lecture()
         {
             this.Files = new HashSet<File>();
+            this.Comments = new HashSet<Comment>();
+            this.Assignments = new HashSet<Assignment>();
         }
 
         public string Title { get; set; }
@@ -24,5 +26,9 @@
         public virtual Course Course { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Assignment> Assignments { get; set; }
     }
 }
