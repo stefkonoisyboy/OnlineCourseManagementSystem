@@ -6,11 +6,10 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using OnlineCourseManagementSystem.Data.Common.Models;
-    using OnlineCourseManagementSystem.Data.Models;
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using OnlineCourseManagementSystem.Data.Common.Models;
+    using OnlineCourseManagementSystem.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -24,7 +23,45 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
+
+        public virtual DbSet<Event> Events { get; set; }
+
+        public virtual DbSet<Subject> Subjects { get; set; }
+
+        public virtual DbSet<Order> Orders { get; set; }
+
+        public virtual DbSet<Assignment> Assignments { get; set; }
+
+        public virtual DbSet<UserAssignment> UserAssignments { get; set; }
+
+        public virtual DbSet<Lecture> Lectures { get; set; }
+
+        public virtual DbSet<Exam> Exams { get; set; }
+
+        public virtual DbSet<UserExam> UserExams { get; set; }
+
+        public virtual DbSet<File> Files { get; set; }
+
+        public virtual DbSet<Answer> Answers { get; set; }
+
+        public virtual DbSet<Choice> Choices { get; set; }
+
+        public virtual DbSet<Question> Questions { get; set; }
+
+        public virtual DbSet<Comment> Comments { get; set; }
+
+        public virtual DbSet<Post> Posts { get; set; }
+
+        public virtual DbSet<Like> Likes { get; set; }
+
+        public virtual DbSet<Dislike> Dislikes { get; set; }
+
+        public virtual DbSet<Town> Towns { get; set; }
+
+        public virtual DbSet<UserCourse> UserCourses { get; set; }
+
+        public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

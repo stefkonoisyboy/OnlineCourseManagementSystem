@@ -8,7 +8,10 @@
 
     public class UserAssignment : BaseDeletableModel<int>
     {
-        // TODO: AssignmentId
+        public int AssignmentId { get; set; }
+
+        public virtual Assignment Assignment { get; set; }
+
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }

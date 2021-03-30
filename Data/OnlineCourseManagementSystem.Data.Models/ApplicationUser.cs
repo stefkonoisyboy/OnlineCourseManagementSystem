@@ -15,7 +15,7 @@ namespace OnlineCourseManagementSystem.Data.Models
 
             this.Events = new HashSet<Event>();
             this.Orders = new HashSet<Order>();
-            this.TeacherExams = new HashSet<Exam>();
+            this.LecturerExams = new HashSet<Exam>();
             this.Exams = new HashSet<UserExam>();
             this.Files = new HashSet<File>();
             this.Assignments = new HashSet<UserAssignment>();
@@ -24,6 +24,7 @@ namespace OnlineCourseManagementSystem.Data.Models
             this.Answers = new HashSet<Answer>();
             this.Likes = new HashSet<Like>();
             this.Dislikes = new HashSet<Dislike>();
+            this.Posts = new HashSet<Post>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -40,11 +41,19 @@ namespace OnlineCourseManagementSystem.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
+        public string Background { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public string TownId { get; set; }
+
+        public virtual Town Town { get; set; }
+
         public virtual ICollection<Event> Events { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
 
-        public virtual ICollection<Exam> TeacherExams { get; set; }
+        public virtual ICollection<Exam> LecturerExams { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
 
@@ -61,6 +70,8 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<Like> Likes { get; set; }
 
         public virtual ICollection<Dislike> Dislikes { get; set; }
+
+        public virtual ICollection<Post> Posts { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

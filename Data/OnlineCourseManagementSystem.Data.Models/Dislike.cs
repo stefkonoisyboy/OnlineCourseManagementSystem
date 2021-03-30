@@ -12,12 +12,12 @@
 
         public virtual ApplicationUser Creator { get; set; }
 
-        public virtual int PostId { get; set; }
+        public int? PostId { get; set; }
 
         public virtual Post Post { get; set; }
 
-        public int Comment { get; set; }
+        public int? CommentId { get; set; }
 
-        public virtual Comment CommentId { get; set; }
+        public virtual Comment Comment { get; set; }
     }
 }

@@ -5,6 +5,11 @@
     using System.IO;
     using System.Threading.Tasks;
 
+    using CommandLine;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using OnlineCourseManagementSystem.Data;
     using OnlineCourseManagementSystem.Data.Common;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
@@ -13,13 +18,6 @@
     using OnlineCourseManagementSystem.Data.Seeding;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Services.Messaging;
-
-    using CommandLine;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
     public static class Program
     {

@@ -2,9 +2,8 @@
 {
     using System.Diagnostics;
 
-    using OnlineCourseManagementSystem.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Web.ViewModels;
 
     public class HomeController : BaseController
     {

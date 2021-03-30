@@ -2,9 +2,8 @@
 {
     using System.Linq;
 
-    using OnlineCourseManagementSystem.Data.Common.Models;
-
     using Microsoft.EntityFrameworkCore;
+    using OnlineCourseManagementSystem.Data.Common.Models;
 
     internal static class EntityIndexesConfiguration
     {

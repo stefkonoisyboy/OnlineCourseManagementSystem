@@ -16,7 +16,10 @@
 
         public virtual ApplicationUser User { get; set; }
 
-        // TODO: AssignmentId
+        public int? AssignmentId { get; set; }
+
+        public virtual Assignment Assignment { get; set; }
+
         public int? LectureId { get; set; }
 
         public virtual Lecture Lecture { get; set; }

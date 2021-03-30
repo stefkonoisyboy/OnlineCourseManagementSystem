@@ -1,8 +1,8 @@
 ﻿namespace OnlineCourseManagementSystem.Data.Configurations
 {
-    using OnlineCourseManagementSystem.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using OnlineCourseManagementSystem.Data.Models;
 
     public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
