@@ -23,6 +23,12 @@
         {
         }
 
+        public virtual DbSet<Student> Students { get; set; }
+
+        public virtual DbSet<Lecturer> Lecturers { get; set; }
+
+        public virtual DbSet<Parent> Parents { get; set; }
+
         public virtual DbSet<Course> Courses { get; set; }
 
         public virtual DbSet<Event> Events { get; set; }

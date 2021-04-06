@@ -41,6 +41,18 @@ namespace OnlineCourseManagementSystem.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
+        public string ParentId { get; set; }
+
+        public virtual Parent Parent { get; set; }
+
+        public string StudentId { get; set; }
+
+        public virtual Student Student { get; set; }
+
+        public string LecturerId { get; set; }
+
+        public virtual Lecturer Lecturer { get; set; }
+
         public string Background { get; set; }
 
         public DateTime BirthDate { get; set; }
