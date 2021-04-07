@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210407063915_AddedPropertiesToUser")]
+    partial class AddedPropertiesToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,9 +216,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Background")
                         .HasColumnType("nvarchar(max)");
 
@@ -290,10 +289,10 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Title")
-                        .HasColumnType("int");
+                    b.Property<string>("TownId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TownId")
+                    b.Property<int?>("TownId1")
                         .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -315,7 +314,7 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("TownId");
+                    b.HasIndex("TownId1");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -1254,9 +1253,7 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Town", "Town")
                         .WithMany("Users")
-                        .HasForeignKey("TownId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("TownId1");
 
                     b.Navigation("Town");
                 });

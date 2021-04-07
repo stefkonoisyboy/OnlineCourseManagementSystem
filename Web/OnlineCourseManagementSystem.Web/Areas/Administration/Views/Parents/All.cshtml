@@ -1,0 +1,38 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Parents.AllParentsListViewModel
+@{ 
+    this.ViewData["Title"] = "Manage Parents";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+<table class="table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Date Created</th>
+            <th>Title</th>
+            <th>Name</th>
+            <th>UserName</th>
+            <th>Email</th>
+            <th>PhoneNumber</th>
+            <th>Address</th>
+            <th>Ward(s)</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody class="table-light">
+        @foreach (var user in this.Model.Parents)
+        {
+            <tr>
+                <td>@user.UserCreatedOn.ToString("dddd, dd MMMM yyyy")</td>
+                <td>@user.UserTitle</td>
+                <td>@(user.UserFirstName + ' ' + user.UserLastName)</td>
+                <td>@user.UserUserName</td>
+                <td>@user.UserEmail</td>
+                <td>@user.UserPhoneNumber</td>
+                <td>@user.UserAddress</td>
+                <td>@(string.Join(", ", user.Students.Select(s => s.UserFirstName + ' ' + s.UserLastName)))</td>
+                <td><a href="#"><p class="alert-warning">Edit</p></a><a href="#"><p class="alert-danger">Delete</p></a></td>
+            </tr>
+        }
+    </tbody>
+</table> 
