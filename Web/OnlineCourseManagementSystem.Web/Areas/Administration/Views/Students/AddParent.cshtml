@@ -1,0 +1,18 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Students.AddParentInputModel
+@{ 
+    this.ViewData["Title"] = "Add Parent to a Student";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+       <select asp-for="StudentId" asp-items="@this.Model.Students" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <select asp-for="ParentId" asp-items="@this.Model.Parents" class="form-control"></select>
+    </div>
+
+    <input type="submit" class="btn btn-success" value="Submit" />
+</form>

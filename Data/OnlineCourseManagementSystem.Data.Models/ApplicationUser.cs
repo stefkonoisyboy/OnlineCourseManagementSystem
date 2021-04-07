@@ -6,6 +6,7 @@ namespace OnlineCourseManagementSystem.Data.Models
 
     using Microsoft.AspNetCore.Identity;
     using OnlineCourseManagementSystem.Data.Common.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -53,13 +54,23 @@ namespace OnlineCourseManagementSystem.Data.Models
 
         public virtual Lecturer Lecturer { get; set; }
 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public Gender Gender { get; set; }
+
         public string Background { get; set; }
 
         public DateTime BirthDate { get; set; }
 
-        public string TownId { get; set; }
+        public int TownId { get; set; }
 
         public virtual Town Town { get; set; }
+
+        public string Address { get; set; }
+
+        public Title Title { get; set; }
 
         public virtual ICollection<Event> Events { get; set; }
 
