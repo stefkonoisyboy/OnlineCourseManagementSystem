@@ -1,7 +1,7 @@
 ﻿namespace OnlineCourseManagementSystem.Web
 {
     using System.Reflection;
-
+    using CloudinaryDotNet;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -39,6 +39,15 @@
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+            Account cloudinaryCredentials = new Account(
+                this.configuration["Cloudinary:CloudName"],
+                this.configuration["Cloudinary:ApiKey"],
+                this.configuration["Cloudinary:ApiSecret"]);
+
+            Cloudinary cloudinaryUtility = new Cloudinary(cloudinaryCredentials);
+
+            services.AddSingleton(cloudinaryUtility);
+
             services.Configure<CookiePolicyOptions>(
                 options =>
                     {
@@ -69,6 +78,7 @@
             services.AddTransient<IStudentsService, StudentsService>();
             services.AddTransient<ILecturersService, LecturersService>();
             services.AddTransient<IParentsService, ParentsService>();
+            services.AddTransient<IFileService, FileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
