@@ -1,0 +1,41 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Files
+@model IEnumerable<ImageViewModel>
+
+<h1>Gallery</h1>
+
+<div>
+    @Html.Partial("_PartialAddImages", new UploadImageInputModel { })
+</div>
+
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+
+<div class="row">
+    @foreach (var image in this.Model)
+    {
+        <div class="card col-md-4" style="height: 340px; width: 50px; background: #e9e6e6">
+            <img style="height: 263px; width: 268px" src="@image.ImageUrl" alt="Image" class="rounded" />
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="card-title">
+                            Album: @image.Album
+                        </h6>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                        <form asp-controller="File" asp-action="DeleteImage" asp-route-id="@image.ImageId" method="post">
+                            <button class="btn  btn-info">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <pre class="tab"></pre>
+
+    }
+</div>
