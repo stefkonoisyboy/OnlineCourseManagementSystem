@@ -67,6 +67,10 @@
 
         public virtual DbSet<UserCourse> UserCourses { get; set; }
 
+        public virtual DbSet<Tag> Tags { get; set; }
+
+        public virtual DbSet<CourseTag> CourseTags { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

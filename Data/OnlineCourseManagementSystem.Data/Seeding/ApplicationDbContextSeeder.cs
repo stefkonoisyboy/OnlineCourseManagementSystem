@@ -28,6 +28,8 @@
                               new RolesSeeder(),
                               new TownsSeeder(),
                               new UsersSeeder(),
+                              new SubjectsSeeder(),
+                              new TagsSeeder(),
                               new SettingsSeeder(),
                           };
 

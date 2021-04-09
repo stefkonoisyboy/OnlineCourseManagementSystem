@@ -1,12 +1,13 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Data.Models.Enumerations;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Students
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Students
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class AllStudentsViewModel : IMapFrom<Student>
     {
         public string Id { get; set; }

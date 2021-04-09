@@ -1,11 +1,12 @@
 ﻿namespace OnlineCourseManagementSystem.Services.Data
 {
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using OnlineCourseManagementSystem.Web.ViewModels.Students;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using OnlineCourseManagementSystem.Web.ViewModels.Students;
 
     public interface IStudentsService
     {

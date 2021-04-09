@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Students
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Students
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
+    using Microsoft.AspNetCore.Mvc.Rendering;
+
     public class AddParentInputModel
     {
         [Display(Name = "Student")]

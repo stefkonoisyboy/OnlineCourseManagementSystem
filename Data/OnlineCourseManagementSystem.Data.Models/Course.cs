@@ -16,6 +16,7 @@
             this.Users = new HashSet<UserCourse>();
             this.Posts = new HashSet<Post>();
             this.Assignments = new HashSet<Assignment>();
+            this.Tags = new HashSet<CourseTag>();
         }
 
         public string Name { get; set; }
@@ -32,6 +33,12 @@
 
         public virtual Subject Subject { get; set; }
 
+        public int FileId { get; set; }
+
+        public virtual File File { get; set; }
+
+        public bool? IsApproved { get; set; }
+
         public virtual ICollection<Order> Orders { get; set; }
 
         public virtual ICollection<Exam> Exams { get; set; }
@@ -43,5 +50,7 @@
         public virtual ICollection<Post> Posts { get; set; }
 
         public virtual ICollection<Assignment> Assignments { get; set; }
+
+        public virtual ICollection<CourseTag> Tags { get; set; }
     }
 }
