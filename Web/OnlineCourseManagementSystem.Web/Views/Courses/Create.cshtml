@@ -1,0 +1,59 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Courses.CreateCourseInputModel
+@{ 
+    this.ViewData["Title"] = "Create a Course";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubjectId">Subject</label>
+        <select asp-for="SubjectId" asp-items="@this.Model.SubjectItems" class="form-control"></select>
+        <span asp-validation-for="SubjectId" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Tags"></label>
+        <select multiple="multiple" class="multi-select form-control" id="my_multi_select1" asp-for="Tags" asp-items="@this.Model.TagItems"></select>
+        <span asp-validation-for="Tags" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Image"></label>
+        <input asp-for="Image" class="form-control" />
+        <span asp-validation-for="Image" class="alert-danger"></span>
+    </div>
+
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</form>

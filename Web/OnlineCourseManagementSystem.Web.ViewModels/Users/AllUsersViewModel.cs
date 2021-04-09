@@ -1,13 +1,14 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Data.Models.Enumerations;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Students;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Users
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Users
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Students;
+
     public class AllUsersViewModel : IMapFrom<ApplicationUser>
     {
         public DateTime CreatedOn { get; set; }

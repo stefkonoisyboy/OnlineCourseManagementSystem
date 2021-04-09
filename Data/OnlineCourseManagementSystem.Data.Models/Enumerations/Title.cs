@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Data.Models.Enumerations
+﻿namespace OnlineCourseManagementSystem.Data.Models.Enumerations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public enum Title
     {
         Mr = 1,

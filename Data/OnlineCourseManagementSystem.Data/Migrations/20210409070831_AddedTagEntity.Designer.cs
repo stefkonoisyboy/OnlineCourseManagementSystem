@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210409070831_AddedTagEntity")]
+    partial class AddedTagEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -473,12 +475,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FileId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsApproved")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -499,50 +495,11 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId")
-                        .IsUnique();
-
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.CourseTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("CourseTags");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Dislike", b =>
@@ -688,9 +645,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("AssignmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -1100,6 +1054,9 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -1116,6 +1073,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("IsDeleted");
 
@@ -1396,40 +1355,13 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Course", b =>
                 {
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.File", "File")
-                        .WithOne("Course")
-                        .HasForeignKey("OnlineCourseManagementSystem.Data.Models.Course", "FileId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Subject", "Subject")
                         .WithMany("Courses")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("File");
-
                     b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.CourseTag", b =>
-                {
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Course", "Course")
-                        .WithMany("Tags")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Tag", "Tag")
-                        .WithMany("Courses")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Dislike", b =>
@@ -1617,6 +1549,17 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Tag", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Course", "Course")
+                        .WithMany("Tags")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.UserAssignment", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Assignment", "Assignment")
@@ -1750,11 +1693,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.File", b =>
-                {
-                    b.Navigation("Course");
-                });
-
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Lecture", b =>
                 {
                     b.Navigation("Assignments");
@@ -1786,11 +1724,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Subject", b =>
-                {
-                    b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Tag", b =>
                 {
                     b.Navigation("Courses");
                 });

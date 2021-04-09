@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\OnlineCourseManagementSystem.Data.Models\OnlineCourseManagementSystem.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\OnlineCourseManagementSystem.Services.Mapping\OnlineCourseManagementSystem.Services.Mapping.csproj" />
+    <ProjectReference Include="..\OnlineCourseManagementSystem.Web.Infrastructure\OnlineCourseManagementSystem.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
