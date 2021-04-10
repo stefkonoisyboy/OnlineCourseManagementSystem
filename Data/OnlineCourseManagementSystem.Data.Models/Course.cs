@@ -17,6 +17,7 @@
             this.Posts = new HashSet<Post>();
             this.Assignments = new HashSet<Assignment>();
             this.Tags = new HashSet<CourseTag>();
+            this.Lecturers = new HashSet<CourseLecturer>();
         }
 
         public string Name { get; set; }
@@ -52,5 +53,7 @@
         public virtual ICollection<Assignment> Assignments { get; set; }
 
         public virtual ICollection<CourseTag> Tags { get; set; }
+
+        public virtual ICollection<CourseLecturer> Lecturers { get; set; }
     }
 }

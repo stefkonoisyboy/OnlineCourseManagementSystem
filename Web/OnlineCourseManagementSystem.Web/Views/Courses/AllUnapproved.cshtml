@@ -1,0 +1,40 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Courses.AllCoursesListViewModel
+@{ 
+    this.ViewData["Title"] = "All Unapproved Courses";
+}
+
+<table class="table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Subject</th>
+            <th>Approve</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody class="table-light">
+        @foreach (var course in this.Model.Courses)
+        {
+            <tr>
+                <td>@course.Name</td>
+                <td>@course.Description</td>
+                <td>@course.Price</td>
+                <td>@course.StartDate.ToString("dddd, dd MMMM yyyy")</td>
+                <td>@course.EndDate.ToString("dddd, dd MMMM yyyy")</td>
+                <td>@course.SubjectName</td>
+                <td>
+                    <form method="post" asp-controller="Courses" asp-action="Approve" asp-route-id="@course.Id">
+                        <input type="hidden" asp-for="@course.Id" />
+                        <input type="submit" value="Approve" class="btn btn-success" />
+                    </form>
+                </td>
+                <td><a href="#"><p class="alert-warning">Edit</p></a><a href="#"><p class="alert-danger">Delete</p></a></td>
+            </tr>
+        }
+    </tbody>
+</table>

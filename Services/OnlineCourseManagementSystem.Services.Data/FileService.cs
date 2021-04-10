@@ -35,6 +35,15 @@
             await this.fileRepository.SaveChangesAsync();
         }
 
+        public IEnumerable<T> GetAllById<T>(int lectureId)
+        {
+            return this.fileRepository
+                .All()
+                .Where(f => f.LectureId == lectureId)
+                .To<T>()
+                .ToList();
+        }
+
         public IEnumerable<ImageViewModel> GetAllImagesForUser(string userId)
         {
             var images = this.fileRepository
@@ -89,7 +98,5 @@
 
             await this.userRepository.SaveChangesAsync();
         }
-
-
     }
 }

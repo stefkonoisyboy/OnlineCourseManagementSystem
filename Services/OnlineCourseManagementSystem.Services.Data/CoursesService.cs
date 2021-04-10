@@ -19,18 +19,28 @@
         private readonly IDeletableEntityRepository<Course> coursesRepository;
         private readonly IDeletableEntityRepository<CourseTag> courseTagsRepository;
         private readonly IDeletableEntityRepository<File> filesRepository;
+        private readonly IDeletableEntityRepository<CourseLecturer> courseLecturersRepository;
         private readonly Cloudinary cloudinary;
 
         public CoursesService(
             IDeletableEntityRepository<Course> coursesRepository,
             IDeletableEntityRepository<CourseTag> courseTagsRepository,
             IDeletableEntityRepository<File> filesRepository,
+            IDeletableEntityRepository<CourseLecturer> courseLecturersRepository,
             Cloudinary cloudinary)
         {
             this.coursesRepository = coursesRepository;
             this.courseTagsRepository = courseTagsRepository;
             this.filesRepository = filesRepository;
+            this.courseLecturersRepository = courseLecturersRepository;
             this.cloudinary = cloudinary;
+        }
+
+        public async Task ApproveAsync(int courseId)
+        {
+            Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == courseId);
+            course.IsApproved = true;
+            await this.coursesRepository.SaveChangesAsync();
         }
 
         public async Task CreateAsync(CreateCourseInputModel input)
@@ -45,6 +55,21 @@
                 EndDate = input.EndDate,
             };
 
+            string fileName = course.Name + Guid.NewGuid().ToString();
+            string remoteUrl = await this.UploadImageAsync(input.Image, fileName);
+
+            File file = new File
+            {
+                Extension = System.IO.Path.GetExtension(input.Image.FileName),
+                RemoteUrl = remoteUrl,
+                CourseId = course.Id,
+                UserId = input.UserId,
+            };
+
+            await this.filesRepository.AddAsync(file);
+            await this.filesRepository.SaveChangesAsync();
+
+            course.FileId = file.Id;
             await this.coursesRepository.AddAsync(course);
             await this.coursesRepository.SaveChangesAsync();
 
@@ -61,19 +86,18 @@
 
             await this.courseTagsRepository.SaveChangesAsync();
 
-            string fileName = course.Name + Guid.NewGuid().ToString();
-            string remoteUrl = await this.UploadImageAsync(input.Image, fileName);
-
-            File file = new File
+            foreach (var lecturerId in input.Lecturers)
             {
-                Extension = System.IO.Path.GetExtension(input.Image.FileName),
-                RemoteUrl = remoteUrl,
-                CourseId = course.Id,
-                UserId = input.UserId,
-            };
+                CourseLecturer courseLecturer = new CourseLecturer
+                {
+                    CourseId = course.Id,
+                    LecturerId = lecturerId,
+                };
 
-            await this.filesRepository.AddAsync(file);
-            await this.filesRepository.SaveChangesAsync();
+                await this.courseLecturersRepository.AddAsync(courseLecturer);
+            }
+
+            await this.courseLecturersRepository.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
@@ -129,6 +153,16 @@
                 .All()
                 .OrderByDescending(c => c.StartDate)
                 .Where(c => c.EndDate < DateTime.UtcNow && c.IsApproved.Value)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllUnapproved<T>()
+        {
+            return this.coursesRepository
+                .All()
+                .OrderByDescending(c => c.StartDate)
+                .Where(c => c.IsApproved.HasValue == false)
                 .To<T>()
                 .ToList();
         }

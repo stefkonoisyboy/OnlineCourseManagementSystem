@@ -38,6 +38,12 @@
     </div>
 
     <div class="form-group">
+        <label asp-for="Lecturers"></label>
+        <select multiple="multiple" class="multi-select form-control" id="my_multi_select1" asp-for="Lecturers" asp-items="@this.Model.LecturerItems"></select>
+        <span asp-validation-for="Lecturers" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
         <label asp-for="StartDate"></label>
         <input asp-for="StartDate" class="form-control" />
         <span asp-validation-for="StartDate" class="alert-danger"></span>

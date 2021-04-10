@@ -37,11 +37,29 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="Administration" asp-controller="Lecturers" asp-action="All">Lecturers</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllUnapproved">Unapproved Courses</a>
+                            </li>
                         }
                         @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Create">Create a Course</a>
+                            </li>
+                        }
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="All">All Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllUpcoming">All Upcoming Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllPast">All Past Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllActive">All Active Courses</a>
                             </li>
                         }
                     </ul>

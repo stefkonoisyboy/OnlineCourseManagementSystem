@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
-    public class CreateCourseInputModel : BaseCourseInputModel, IValidatableObject
+    public class CreateCourseInputModel : BaseCourseInputModel
     {
         public string UserId { get; set; }
 
@@ -19,22 +19,8 @@
 
         public IEnumerable<SelectListItem> TagItems { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (this.StartDate < DateTime.UtcNow)
-            {
-                yield return new ValidationResult("Start Date should be higher than Current Date!");
-            }
+        public IEnumerable<string> Lecturers { get; set; }
 
-            if (this.EndDate < DateTime.UtcNow)
-            {
-                yield return new ValidationResult("End Date should be higher than Current Date!");
-            }
-
-            if (this.StartDate > this.EndDate)
-            {
-                yield return new ValidationResult("Start Date should be lower than End Date!");
-            }
-        }
+        public IEnumerable<SelectListItem> LecturerItems { get; set; }
     }
 }
