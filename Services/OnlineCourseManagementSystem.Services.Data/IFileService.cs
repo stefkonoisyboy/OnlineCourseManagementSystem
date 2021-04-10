@@ -15,5 +15,7 @@
         IEnumerable<ImageViewModel> GetAllImagesForUser(string userId);
 
         Task DeleteImageFromGallery(int fileId, string userId);
+
+        IEnumerable<T> GetAllById<T>(int lectureId);
     }
 }

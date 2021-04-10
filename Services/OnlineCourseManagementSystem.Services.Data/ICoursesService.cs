@@ -16,7 +16,11 @@
 
         Task DeleteAsync(int id);
 
+        Task ApproveAsync(int courseId);
+
         IEnumerable<T> GetAll<T>();
+
+        IEnumerable<T> GetAllUnapproved<T>();
 
         T GetById<T>(int id);
 

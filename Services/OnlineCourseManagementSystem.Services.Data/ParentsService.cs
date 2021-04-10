@@ -37,6 +37,7 @@
                 .All()
                 .OrderBy(p => p.User.FirstName + ' ' + p.User.LastName)
                 .ThenBy(p => p.User.UserName)
+                .Where(l => l.User.Roles.FirstOrDefault().RoleId.EndsWith("Parent"))
                 .Select(p => new SelectListItem
                 {
                     Text = p.User.FirstName + ' ' + p.User.LastName,

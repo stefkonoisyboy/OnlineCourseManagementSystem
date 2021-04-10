@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
-    public class BaseCourseInputModel
+    public class BaseCourseInputModel : IValidatableObject
     {
         [Required]
         [MinLength(10)]
@@ -26,13 +26,21 @@
         public IEnumerable<SelectListItem> SubjectItems { get; set; }
 
         [Required]
-        [CheckIfDateIsGreaterThanCurrentDateValidation]
+        [CheckIfDateIsGreaterThanCurrentDateValidation(ErrorMessage = "Start Date should be higher than Current Date!")]
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 
         [Required]
-        [CheckIfDateIsGreaterThanCurrentDateValidation]
+        [CheckIfDateIsGreaterThanCurrentDateValidation(ErrorMessage = "End Date should be higher than Current Date!")]
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.StartDate > this.EndDate)
+            {
+                yield return new ValidationResult("Start Date should be lower than End Date!");
+            }
+        }
     }
 }

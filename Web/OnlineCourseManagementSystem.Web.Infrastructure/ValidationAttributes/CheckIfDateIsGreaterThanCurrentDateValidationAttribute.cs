@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes
+﻿namespace OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
     public class CheckIfDateIsGreaterThanCurrentDateValidationAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)

@@ -11,10 +11,14 @@
         public Lecturer()
         {
             this.Id = Guid.NewGuid().ToString();
+
+            this.Courses = new HashSet<CourseLecturer>();
         }
 
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+
+        public virtual ICollection<CourseLecturer> Courses { get; set; }
     }
 }
