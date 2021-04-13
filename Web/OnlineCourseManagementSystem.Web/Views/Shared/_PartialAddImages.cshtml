@@ -1,12 +1,9 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Files
 @model UploadImageInputModel
 
-
-<form asp-controller="File" asp-action="AddImageToGallery" method="post" enctype="multipart/form-data">
+<h3>Add Image</h3>
+<form asp-controller="Files" asp-action="AddImageToGallery" asp-route-id="@Model.AlbumId" method="post" enctype="multipart/form-data">
     <div class="row">
-        <div class="col-md-4">
-            <input asp-for="Album" class="form-control">
-        </div>
         <div class="col-md-4">
             <input asp-for="Images" type="file" class="form-control" multiple>
         </div>

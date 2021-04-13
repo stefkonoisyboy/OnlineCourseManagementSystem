@@ -32,6 +32,8 @@
 
         public virtual Course Course { get; set; }
 
-        public string Album { get; set; }
+        public int? AlbumId { get; set; }
+
+        public Album Album { get; set; }
     }
 }

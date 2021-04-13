@@ -15,5 +15,11 @@
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+
+        public int? Points { get; set; }
+
+        public DateTime? TurnedOn { get; set; }
+
+        public bool Seen { get; set; }
     }
 }

@@ -1,0 +1,24 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Albums
+@model IEnumerable<AlbumViewModel>
+
+    <h1>Gallery</h1>
+@if (this.TempData.ContainsKey("AlbumExist"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["AlbumExist"]
+    </div>
+}
+
+@await Html.PartialAsync("_PartialCreateAlbum", new BaseAlbumInputModel { })
+
+<div class="row">
+    @foreach (var album in this.Model)
+    {
+        <div class="col-md-4">
+            <img src="https://icons-for-free.com/download-icon-folder-131964753094019398_256.png" alt="Folder" />
+            <a class="text-center" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">@album.Name</a>
+        </div>
+    }
+</div>
+

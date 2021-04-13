@@ -12,12 +12,12 @@
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
-    public class FileController : Controller
+    public class FilesController : Controller
     {
         private readonly IFileService fileService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public FileController(IFileService fileService, UserManager<ApplicationUser> userManager)
+        public FilesController(IFileService fileService, UserManager<ApplicationUser> userManager)
         {
             this.fileService = fileService;
             this.userManager = userManager;
@@ -30,19 +30,20 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddImageToGallery(UploadImageInputModel inputModel)
+        public async Task<IActionResult> AddImageToGallery(UploadImageInputModel inputModel, int id)
         {
             ApplicationUser applicationUser = await this.userManager.GetUserAsync(this.User);
             inputModel.UserId = applicationUser.Id;
+            inputModel.AlbumId = id;
             await this.fileService.UploadImage(inputModel);
-            return this.RedirectToAction("AllImages", "File");
+            return this.RedirectToAction("AllImages", "Files", new { Id = id });
         }
 
-        public async Task<IActionResult> AllImages()
+        public async Task<IActionResult> AllImages(int id)
         {
             ApplicationUser applicationUser = await this.userManager.GetUserAsync(this.User);
 
-            IEnumerable<ImageViewModel> images = this.fileService.GetAllImagesForUser(applicationUser.Id);
+            var images = this.fileService.GetAllImagesForUser(applicationUser.Id, id);
             return this.View(images);
         }
 
@@ -52,7 +53,7 @@
 
             await this.fileService.DeleteImageFromGallery(id, applicationUser.Id);
 
-            return this.RedirectToAction("AllImages", "File");
+            return this.RedirectToAction("AllImages", "Files");
         }
     }
 }

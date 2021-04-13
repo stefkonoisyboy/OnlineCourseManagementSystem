@@ -11,9 +11,9 @@
     {
         public IEnumerable<IFormFile> Images { get; set; }
 
-        [Required]
-        public string Album { get; set; }
+        public int AlbumId { get; set; }
 
         public string UserId { get; set; }
+
     }
 }

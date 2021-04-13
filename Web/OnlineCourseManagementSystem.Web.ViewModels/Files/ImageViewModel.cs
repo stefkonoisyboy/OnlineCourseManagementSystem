@@ -14,8 +14,6 @@
 
         public string ImageUrl { get; set; }
 
-        public string Album { get; set; }
-
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<File, ImageViewModel>()

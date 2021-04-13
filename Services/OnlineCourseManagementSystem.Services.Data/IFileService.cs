@@ -12,7 +12,7 @@
     {
         Task UploadImage(UploadImageInputModel uploadImageInputModel);
 
-        IEnumerable<ImageViewModel> GetAllImagesForUser(string userId);
+        AllImagesViewModel GetAllImagesForUser(string userId, int albumId);
 
         Task DeleteImageFromGallery(int fileId, string userId);
 

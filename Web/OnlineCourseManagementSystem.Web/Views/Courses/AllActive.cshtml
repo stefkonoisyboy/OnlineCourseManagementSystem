@@ -29,6 +29,11 @@
                 <div class="card-footer">
                     <a asp-controller="Courses" asp-action="ById" asp-route-id="@course.Id" class="btn btn-outline-primary">Read More about the Course</a>
                 </div>
+                <div class="card-footer">
+                    <a asp-controller="Assignments" asp-action="CreateAssignment" asp-route-id="@course.Id" class="btn btn-outline-primary">
+                      Create Assignment
+                    </a>
+                </div>
             </div>
         </div>
     </div>

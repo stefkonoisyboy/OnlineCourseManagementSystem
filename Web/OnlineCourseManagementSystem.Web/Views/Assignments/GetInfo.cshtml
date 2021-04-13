@@ -1,0 +1,20 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
+@model  AssignmentPageViewModel
+
+<h3>Instructions</h3>
+<div class="row">
+    <div class="col-md-4">
+        @this.Model.Instructions
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">@this.Model.PossiblePoints</div>
+</div>
+<div>
+    @foreach (var file in this.Model.Files)
+    {
+      <div>
+          @file
+      </div>
+    }
+</div>
+
