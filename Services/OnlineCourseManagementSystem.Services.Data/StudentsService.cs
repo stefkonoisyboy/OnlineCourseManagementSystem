@@ -53,6 +53,20 @@
                 .ToList();
         }
 
+        public IEnumerable<SelectListItem> GetAllAsSelectListItems(int courseId)
+        {
+            return this.studentsRepository
+                .All()
+                .OrderBy(s => s.User.FirstName + ' ' + s.User.LastName)
+                .ThenBy(s => s.User.UserName)
+                .Where(s => s.User.Courses.Any(c => c.Id == courseId) && s.User.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+                .Select(s => new SelectListItem
+                {
+                    Text = s.User.FirstName + ' ' + s.User.LastName,
+                    Value = s.Id,
+                }).ToList();
+        }
+
         public IEnumerable<T> GetAllById<T>(string parentId)
         {
             return this.studentsRepository
@@ -63,5 +77,6 @@
                 .To<T>()
                 .ToList();
         }
+
     }
 }

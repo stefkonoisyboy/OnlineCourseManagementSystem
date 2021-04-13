@@ -24,7 +24,7 @@
 
         public DateTime EndDate { get; set; }
 
-        public int? Points { get; set; }
+        public int? PossiblePoints { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
 

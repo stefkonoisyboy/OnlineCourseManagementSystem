@@ -8,6 +8,7 @@
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
@@ -125,6 +126,18 @@
                 .Where(c => c.StartDate <= DateTime.UtcNow && c.EndDate >= DateTime.UtcNow && c.IsApproved.Value)
                 .To<T>()
                 .ToList();
+        }
+
+        public IEnumerable<SelectListItem> GetAllActive()
+        {
+            return this.coursesRepository
+                .All()
+                .Where(x => x.StartDate >= DateTime.UtcNow && x.EndDate <= DateTime.UtcNow)
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString(),
+                });
         }
 
         public IEnumerable<T> GetAllByTag<T>(SearchByTagInputModel input)

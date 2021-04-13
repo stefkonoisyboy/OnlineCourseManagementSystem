@@ -1,0 +1,15 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Albums
+@model  BaseAlbumInputModel
+
+    
+
+    <form asp-controller="Albums" asp-action="CreateAlbum" method="post">
+        <div>
+            <label class="h3" asp-for="Name"> </label>
+            <input asp-for="Name" />
+            <span asp-validation-for="Name" class="alert-danger">Name of the album is required</span>
+        </div>
+        <div>
+            <button class="btn btn-info">Create Album</button>
+        </div>
+    </form>

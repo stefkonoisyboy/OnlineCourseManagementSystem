@@ -18,13 +18,15 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<File> fileRepository;
         private readonly Cloudinary cloudinaryUtility;
+        private readonly IDeletableEntityRepository<Album> albumRepository;
 
-        public FileService(IDeletableEntityRepository<ApplicationUser> userRepository,IDeletableEntityRepository<File> fileRepository,Cloudinary cloudinaryUtility)
+        public FileService(IDeletableEntityRepository<ApplicationUser> userRepository,IDeletableEntityRepository<File> fileRepository, Cloudinary cloudinaryUtility, IDeletableEntityRepository<Album> albumRepository)
         {
             this.userRepository = userRepository;
             this.fileRepository = fileRepository;
 
             this.cloudinaryUtility = cloudinaryUtility;
+            this.albumRepository = albumRepository;
         }
 
         public async Task DeleteImageFromGallery(int fileId, string userId)
@@ -44,17 +46,24 @@
                 .ToList();
         }
 
-        public IEnumerable<ImageViewModel> GetAllImagesForUser(string userId)
+        public AllImagesViewModel GetAllImagesForUser(string userId, int albumId)
         {
             var images = this.fileRepository
                 .All()
-                .Where(x => x.UserId == userId && x.RemoteUrl.Contains("gallery"))
+                .Where(x => x.UserId == userId && x.RemoteUrl.Contains("gallery") && x.AlbumId == albumId)
                 .To<ImageViewModel>().ToArray();
 
-            return images;
+            string albumName = this.albumRepository.All().FirstOrDefault(x => x.Id == albumId).Name;
+            AllImagesViewModel allImages = new AllImagesViewModel
+            {
+                Images = images,
+                AlbumId = albumId,
+                AlbumName = albumName,
+            };
+
+            return allImages;
         }
 
-        [Obsolete]
         public async Task UploadImage(UploadImageInputModel uploadImageInputModel)
         {
             ApplicationUser user = this.userRepository.All().FirstOrDefault(s => s.Id == uploadImageInputModel.UserId);
@@ -83,13 +92,13 @@
                     uploadResult = this.cloudinaryUtility.Upload(uploadParams);
                 }
 
-                string remoteUrl = uploadResult?.SecureUri.AbsoluteUri;
+                string remoteUrl = uploadResult?.SecureUrl.AbsoluteUri;
 
                 File file = new File()
                 {
                     Extension = extension,
                     UserId = uploadImageInputModel.UserId,
-                    Album = uploadImageInputModel.Album,
+                    AlbumId = uploadImageInputModel.AlbumId,
                     RemoteUrl = remoteUrl,
                 };
 

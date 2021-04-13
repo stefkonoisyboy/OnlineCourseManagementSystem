@@ -1,0 +1,41 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
+@model CreateAssignmentInputModel
+
+    <h1>Create Assignment</h1>
+    <form asp-controller="Assignments" asp-action="CreateAssignment" method="post">
+        <div>
+            <label asp-for="Instructions"></label>
+            <textarea asp-for="Instructions" ></textarea>
+            <span asp-validation-for="Instructions" class="alert-danger"></span>
+        </div>
+        <div>
+            <label asp-for="StartDate"></label>
+            <input asp-for="StartDate"/>
+            <span asp-validation-for="StartDate" class="alert-danger"></span>
+        </div>
+        <div>
+            <label asp-for="EndDate" ></label>
+            <input  asp-for="EndDate"/>
+            <span asp-validation-for="EndDate" class="alert-danger"></span>
+        </div>
+
+        <div>
+            <label asp-for="PossiblePoints"> </label>
+            <input asp-for="PossiblePoints" />
+        </div>
+
+        <div>
+            <label asp-for="Files"></label>
+            <input type="file" asp-for="Files"  multiple/>
+        </div>
+
+        <div>
+            <label asp-for="StudentsId"></label>
+            <select  asp-items="@this.Model.Students" multiple="multiple" class="multi-select form-control custom-radio" id="StudentsId" asp-for="StudentsId" >
+            </select>
+        </div>
+
+        <div>
+            <button class="btn btn-info">Create Assignment</button>
+        </div>
+    </form>

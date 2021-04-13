@@ -17,5 +17,7 @@
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
 
         Task AddParent(AddParentInputModel input);
+
+        IEnumerable<SelectListItem> GetAllAsSelectListItems(int courseId);
     }
 }

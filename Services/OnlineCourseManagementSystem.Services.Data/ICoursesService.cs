@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
 
@@ -33,5 +33,7 @@
         IEnumerable<T> GetAllActive<T>();
 
         IEnumerable<T> GetAllByTag<T>(SearchByTagInputModel input);
+
+        IEnumerable<SelectListItem> GetAllActive();
     }
 }

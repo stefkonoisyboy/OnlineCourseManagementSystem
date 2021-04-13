@@ -83,6 +83,8 @@
             services.AddTransient<ITagsService, TagsService>();
             services.AddTransient<ISubjectsService, SubjectsService>();
             services.AddTransient<ILecturesService, LecturesService>();
+            services.AddTransient<IAlbumsService, AlbumsService>();
+            services.AddTransient<IAssignmentsService, AssignmentsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
