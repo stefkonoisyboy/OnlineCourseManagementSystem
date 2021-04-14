@@ -43,5 +43,16 @@
                 })
                 .ToList();
         }
+
+        public IEnumerable<T> GetAllById<T>(int courseId)
+        {
+            return this.lecturersRepository
+                .All()
+                .Where(l => l.Courses.Any(c => c.Id == courseId) && l.User.Roles.FirstOrDefault().RoleId.EndsWith("Lecturer"))
+                .OrderBy(l => l.User.FirstName + ' ' + l.User.LastName)
+                .ThenBy(l => l.User.UserName)
+                .To<T>()
+                .ToList();
+        }
     }
 }

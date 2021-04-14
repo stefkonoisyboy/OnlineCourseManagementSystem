@@ -37,9 +37,11 @@
         }
 
         [Authorize]
-        public IActionResult ById(string id)
+        public IActionResult ById(int id)
         {
-            return this.View();
+            CourseByIdViewModel viewModel = this.coursesService.GetById<CourseByIdViewModel>(id);
+
+            return this.View(viewModel);
         }
 
         [Authorize]

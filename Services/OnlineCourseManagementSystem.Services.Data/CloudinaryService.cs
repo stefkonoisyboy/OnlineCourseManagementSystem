@@ -1,13 +1,14 @@
-﻿using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using OnlineCourseManagementSystem.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Services.Data
+﻿namespace OnlineCourseManagementSystem.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
+    using OnlineCourseManagementSystem.Data.Models;
+
     public class CloudinaryService
     {
         private readonly Cloudinary cloudinaryUtility;

@@ -5,6 +5,7 @@
     using System.Text;
 
     using Microsoft.AspNetCore.Http;
+    using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
     public class AddFileToLectureInputModel
     {

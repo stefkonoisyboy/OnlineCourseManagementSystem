@@ -15,8 +15,14 @@
 
         Task DeleteAsync(int id);
 
-        Task AddResourceAsync(AddFileToLectureInputModel input);
+        Task AddWordFileAsync(AddFileToLectureInputModel input);
 
-        IEnumerable<T> GetAllById<T>(int id);
+        Task AddPresentationFileAsync(AddFileToLectureInputModel input);
+
+        Task AddVideoAsync(AddVideoToLectureInputModel input);
+
+        IEnumerable<T> GetAllById<T>(int courseId);
+
+        IEnumerable<T> GetAllVideosById<T>(int lectureId);
     }
 }

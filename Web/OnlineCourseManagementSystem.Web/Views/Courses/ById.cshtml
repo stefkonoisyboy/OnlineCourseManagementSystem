@@ -1,1 +1,48 @@
-﻿
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Courses.CourseByIdViewModel
+@using OnlineCourseManagementSystem.Common
+@{
+    this.ViewData["Title"] = "Details for the Course";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert-success">
+        @this.TempData["Message"]
+    </div>
+}
+
+<h3>@this.ViewData["Title"]</h3>
+<h4>@this.Model.Name</h4>
+<p>Start Date: @this.Model.StartDate.ToString("dddd, dd MMMM yyyy")</p>
+<p>EndDate: @this.Model.EndDate.ToString("dddd, dd MMMM yyyy")</p>
+<p>Description: @this.Model.Description</p>
+
+@foreach (var lecturer in this.Model.Lecturers)
+{
+    <h4>@(lecturer.LecturerUserFirstName + ' ' + lecturer.LecturerUserLastName)</h4>
+    <p>@lecturer.LecturerUserBackground</p>
+}
+
+@foreach (var lecture in this.Model.Lectures)
+{
+    <h4>@lecture.Title</h4>
+    <p>Start Date: @lecture.StartDate.ToString("dddd, dd MMMM yyyy")</p>
+    <p>EndDate: @lecture.EndDate.ToString("dddd, dd MMMM yyyy")</p>
+    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+    {
+        <a asp-controller="Lectures" asp-action="AddWord" asp-route-id="@lecture.Id">Add Word Document to the Lecture</a>
+        <a asp-controller="Lectures" asp-action="AddPresentation" asp-route-id="@lecture.Id">Add Presentation to the Lecture</a>
+        <a asp-controller="Lectures" asp-action="AddVideo" asp-route-id="@lecture.Id">Add Video to the Lecture</a>
+    }
+    @if (this.User.Identity.IsAuthenticated)
+    {
+        <a asp-controller="Lectures" asp-action="AllFilesById" asp-route-id="@lecture.Id">All Resources for the Lecture</a>
+        <a asp-controller="Lectures" asp-action="AllVideosById" asp-route-id="@lecture.Id">All Videos for the Lecture</a>
+    }
+}
+<br />
+<hr />
+@if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+{
+    <a asp-controller="Lectures" asp-action="Create" asp-route-id="@this.Model.Id">Add Lecture to the Course</a>
+}
