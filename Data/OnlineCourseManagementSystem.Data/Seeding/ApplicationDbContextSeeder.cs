@@ -30,6 +30,7 @@
                               new UsersSeeder(),
                               new SubjectsSeeder(),
                               new TagsSeeder(),
+                              new UserCoursesSeeder(),
                               new SettingsSeeder(),
                           };
 

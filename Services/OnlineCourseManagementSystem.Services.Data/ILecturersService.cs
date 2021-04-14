@@ -9,6 +9,8 @@
     {
         IEnumerable<T> GetAll<T>();
 
+        IEnumerable<T> GetAllById<T>(int courseId);
+
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
     }
 }

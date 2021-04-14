@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Data;
-using OnlineCourseManagementSystem.Web.ViewModels.Albums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Controllers
+﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.ViewModels.Albums;
+
     public class AlbumsController : Controller
     {
         private readonly IAlbumsService albumService;

@@ -1,0 +1,12 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Lectures.AllVideosByIdListViewModel
+@{
+    this.ViewData["Title"] = "All Videos for this Lecture";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+@foreach (var video in this.Model.Videos)
+{
+    <iframe width="560" height="315" src="@video.RemoteUrl" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+}

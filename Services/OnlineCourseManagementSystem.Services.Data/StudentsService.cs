@@ -59,7 +59,7 @@
                 .All()
                 .OrderBy(s => s.User.FirstName + ' ' + s.User.LastName)
                 .ThenBy(s => s.User.UserName)
-                .Where(s => s.User.Courses.Any(c => c.Id == courseId) && s.User.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+                .Where(s => s.User.Courses.Any(c => c.CourseId == courseId) && s.User.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
                 .Select(s => new SelectListItem
                 {
                     Text = s.User.FirstName + ' ' + s.User.LastName,

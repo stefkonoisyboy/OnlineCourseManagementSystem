@@ -30,12 +30,51 @@
             this.cloudinary = cloudinary;
         }
 
-        public async Task AddResourceAsync(AddFileToLectureInputModel input)
+        public async Task AddVideoAsync(AddVideoToLectureInputModel input)
         {
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == input.LectureId);
 
-            string fileName = lecture.Title + Guid.NewGuid().ToString();
-            string remoteUrl = await this.UploadImageAsync(input.File, fileName);
+            File file = new File
+            {
+                Extension = ".mp4",
+                RemoteUrl = input.RemoteUrl,
+                LectureId = input.LectureId,
+                UserId = input.UserId,
+            };
+
+            await this.filesRepository.AddAsync(file);
+
+            await this.lecturesRepository.SaveChangesAsync();
+            await this.filesRepository.SaveChangesAsync();
+        }
+
+        public async Task AddPresentationFileAsync(AddFileToLectureInputModel input)
+        {
+            Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == input.LectureId);
+
+            string fileName = lecture.Title + Guid.NewGuid().ToString() + ".pptx";
+            string remoteUrl = await this.UploadPresentationAsync(input.File, fileName);
+
+            File file = new File
+            {
+                Extension = System.IO.Path.GetExtension(input.File.FileName),
+                RemoteUrl = remoteUrl,
+                LectureId = input.LectureId,
+                UserId = input.UserId,
+            };
+
+            await this.filesRepository.AddAsync(file);
+
+            await this.lecturesRepository.SaveChangesAsync();
+            await this.filesRepository.SaveChangesAsync();
+        }
+
+        public async Task AddWordFileAsync(AddFileToLectureInputModel input)
+        {
+            Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == input.LectureId);
+
+            string fileName = lecture.Title + Guid.NewGuid().ToString() + ".docx";
+            string remoteUrl = await this.UploadWordFileAsync(input.File, fileName);
 
             File file = new File
             {
@@ -72,11 +111,11 @@
             await this.lecturesRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAllById<T>(int id)
+        public IEnumerable<T> GetAllById<T>(int courseId)
         {
             return this.lecturesRepository
                 .All()
-                .Where(l => l.CourseId == id)
+                .Where(l => l.CourseId == courseId)
                 .OrderByDescending(l => l.StartDate)
                 .To<T>()
                 .ToList();
@@ -93,7 +132,16 @@
             await this.lecturesRepository.SaveChangesAsync();
         }
 
-        private async Task<string> UploadImageAsync(IFormFile formFile, string fileName)
+        public IEnumerable<T> GetAllVideosById<T>(int lectureId)
+        {
+            return this.filesRepository
+                .All()
+                .Where(f => f.LectureId == lectureId && f.Extension == ".mp4")
+                .To<T>()
+                .ToList();
+        }
+
+        private async Task<string> UploadWordFileAsync(IFormFile formFile, string fileName)
         {
             byte[] destinationData;
 
@@ -107,10 +155,38 @@
 
             using (var ms = new System.IO.MemoryStream(destinationData))
             {
-                ImageUploadParams uploadParams = new ImageUploadParams
+                RawUploadParams uploadParams = new RawUploadParams
                 {
                     Folder = "courses-files",
                     File = new FileDescription(fileName, ms),
+                    PublicId = fileName + ".docx",
+                };
+
+                result = this.cloudinary.Upload(uploadParams);
+            }
+
+            return result?.SecureUrl.AbsoluteUri;
+        }
+
+        private async Task<string> UploadPresentationAsync(IFormFile formFile, string fileName)
+        {
+            byte[] destinationData;
+
+            using (var ms = new System.IO.MemoryStream())
+            {
+                await formFile.CopyToAsync(ms);
+                destinationData = ms.ToArray();
+            }
+
+            UploadResult result = null;
+
+            using (var ms = new System.IO.MemoryStream(destinationData))
+            {
+                RawUploadParams uploadParams = new RawUploadParams
+                {
+                    Folder = "courses-files",
+                    File = new FileDescription(fileName, ms),
+                    PublicId = fileName + ".pptx",
                 };
 
                 result = this.cloudinary.Upload(uploadParams);

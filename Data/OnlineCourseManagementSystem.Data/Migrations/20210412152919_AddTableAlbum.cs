@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace OnlineCourseManagementSystem.Data.Migrations
+﻿namespace OnlineCourseManagementSystem.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddColumnAlbum : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

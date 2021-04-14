@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Assignments
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Assignments
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+
     public class CreateAssignmentInputModel
     {
         public string Instructions { get; set; }

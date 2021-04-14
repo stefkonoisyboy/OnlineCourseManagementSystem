@@ -1,12 +1,13 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Albums;
-using OnlineCourseManagementSystem.Web.ViewModels.Files;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Services.Data
+﻿namespace OnlineCourseManagementSystem.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Albums;
+    using OnlineCourseManagementSystem.Web.ViewModels.Files;
+
     public interface IAlbumsService
     {
 

@@ -1,16 +1,17 @@
-﻿using OnlineCourseManagementSystem.Data.Common.Repositories;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Albums;
-using OnlineCourseManagementSystem.Web.ViewModels.Files;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Services.Data
+﻿namespace OnlineCourseManagementSystem.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using OnlineCourseManagementSystem.Data.Common.Repositories;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Albums;
+    using OnlineCourseManagementSystem.Web.ViewModels.Files;
+
     public class AlbumsService : IAlbumsService
     {
         private readonly IDeletableEntityRepository<Album> albumRepository;
