@@ -194,7 +194,7 @@
         {
             return this.coursesRepository
                 .All()
-                .Where(c => c.Id == id && c.IsApproved.Value)
+                .Where(c => c.Id == id)
                 .To<T>()
                 .FirstOrDefault();
         }
@@ -211,6 +211,8 @@
             course.SubjectId = input.SubjectId;
 
             await this.coursesRepository.SaveChangesAsync();
+            await this.courseTagsRepository.SaveChangesAsync();
+            await this.courseLecturersRepository.SaveChangesAsync();
         }
 
         private async Task<string> UploadImageAsync(IFormFile formFile, string fileName)
