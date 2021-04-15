@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
@@ -127,7 +128,7 @@
         {
             CreateCourseInputModel input = new CreateCourseInputModel
             {
-                SubjectItems = this.subjectsService.GetAllAsSelectListItems(),
+                SubjectsItems = this.subjectsService.GetAllAsSelectListItems(),
                 TagItems = this.tagsService.GetAllAsSelectListItems(),
                 LecturerItems = this.lecturersService.GetAllAsSelectListItems(),
             };
@@ -141,7 +142,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                input.SubjectItems = this.subjectsService.GetAllAsSelectListItems();
+                input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
                 input.TagItems = this.tagsService.GetAllAsSelectListItems();
                 input.LecturerItems = this.lecturersService.GetAllAsSelectListItems();
                 return this.View(input);
@@ -152,6 +153,53 @@
             await this.coursesService.CreateAsync(input);
             this.TempData["Message"] = "Course is created successfully!";
 
+            return this.Redirect("/");
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public IActionResult Edit(int id)
+        {
+            //EditCourseInputModel input = new EditCourseInputModel
+            //{
+            //    Id = id,
+            //    Name = this.coursesService.GetNameById(id),
+            //    Description = this.coursesService.GetDescriptionById(id),
+            //    Price = this.coursesService.GetPriceById(id),
+            //    StartDate = this.coursesService.GetStartDateById(id),
+            //    EndDate = this.coursesService.GetEndDateById(id),
+            //    SubjectId = this.coursesService.GetSubjectIdById(id),
+            //    SubjectsItems = this.subjectsService.GetAllAsSelectListItems(),
+            //};
+
+            EditCourseInputModel input = this.coursesService.GetById<EditCourseInputModel>(id);
+            input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
+
+            return this.View(input);
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditCourseInputModel input, int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
+                return this.View(input);
+            }
+
+            input.Id = id;
+            await this.coursesService.UpdateAsync(input);
+            this.TempData["Message"] = "Course updated successfully!";
+
+            return this.Redirect($"/Courses/AllUnapproved");
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.coursesService.DeleteAsync(id);
+            this.TempData["Message"] = "Course deleted successfully!";
             return this.Redirect("/");
         }
 
