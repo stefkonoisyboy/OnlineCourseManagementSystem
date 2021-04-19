@@ -1,0 +1,13 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Files
+@model FilesToAssignmentInputModel
+
+    <form  method="post" enctype="multipart/form-data">
+        <input id="addFiles" type="file" multiple class="form-control" />
+    </form>
+
+<script type="text/javascript">
+    $(document).ready(function){
+        var files= document.getElementById("addFiles")
+        files.innerHTML("<div> id= ""id"" </div>");
+    }
+</script>

@@ -1,6 +1,8 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Files
 @model AllImagesViewModel
-
+@{
+    this.ViewData["Title"] = "Images";
+}
 <h1 class="card-title">
     Album: @Model.AlbumName
 </h1>
@@ -19,7 +21,7 @@
             <img style="height: 263px; width: 268px" src="@image.ImageUrl" alt="Image" class="rounded" />
             <div class="card-body">
                 <div class="row">
-                    
+
                     <div class="col-md-4">
                     </div>
                     <div class="col-md-4">

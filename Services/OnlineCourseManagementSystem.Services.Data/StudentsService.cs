@@ -63,7 +63,7 @@
                 .Select(s => new SelectListItem
                 {
                     Text = s.User.FirstName + ' ' + s.User.LastName,
-                    Value = s.Id,
+                    Value = s.UserId,
                 }).ToList();
         }
 

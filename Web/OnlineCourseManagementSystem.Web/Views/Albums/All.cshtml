@@ -1,7 +1,9 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Albums
 @model IEnumerable<AlbumViewModel>
-
-    <h1>Gallery</h1>
+@{
+    this.ViewData["Title"] = "Album";
+}
+<h1>Gallery</h1>
 @if (this.TempData.ContainsKey("AlbumExist"))
 {
     <div class="alert alert-danger alert-dismissible">
