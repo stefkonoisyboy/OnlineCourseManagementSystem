@@ -27,23 +27,28 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
-        public IActionResult CreateAssignment(CreateAssignmentInputModel inputModel, int id)
+        public IActionResult CreateAssignment(int id)
         {
-            inputModel.Students = this.studentsService.GetAllAsSelectListItems(id);
-            inputModel.CourseId = id;
-            return this.View(inputModel);
+            CreateAssignmentInputModel createAssignmentInputModel = new CreateAssignmentInputModel
+            {
+                Students = this.studentsService.GetAllAsSelectListItems(id),
+                CourseId = id,
+            };
+
+            return this.View(createAssignmentInputModel);
         }
 
         [HttpPost]
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
 
-        public async Task<IActionResult> CreateAssignment(CreateAssignmentInputModel inputModel)
+        public async Task<IActionResult> CreateAssignment(CreateAssignmentInputModel inputModel, int id)
         {
             if (!this.ModelState.IsValid)
             {
-                inputModel.Students = this.studentsService.GetAllAsSelectListItems(inputModel.CourseId);
+                inputModel.Students = this.studentsService.GetAllAsSelectListItems(id);
             }
 
+            inputModel.CourseId = id;
             await this.assignmentsService.CreateAsync(inputModel);
 
             return this.View(inputModel);

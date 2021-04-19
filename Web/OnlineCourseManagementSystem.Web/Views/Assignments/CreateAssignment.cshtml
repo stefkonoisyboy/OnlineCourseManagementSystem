@@ -2,7 +2,7 @@
 @model CreateAssignmentInputModel
 
     <h1>Create Assignment</h1>
-    <form asp-controller="Assignments" asp-action="CreateAssignment" method="post">
+    <form asp-controller="Assignments" asp-action="CreateAssignment" enctype="multipart/form-data" method="post">
         <div>
             <label asp-for="Instructions"></label>
             <textarea asp-for="Instructions" ></textarea>
@@ -26,7 +26,7 @@
 
         <div>
             <label asp-for="Files"></label>
-            <input type="file" asp-for="Files"  multiple/>
+            <input asp-for="Files"/>
         </div>
 
         <div>

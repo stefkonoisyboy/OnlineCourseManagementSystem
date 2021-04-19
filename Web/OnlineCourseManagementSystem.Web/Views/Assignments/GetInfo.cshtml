@@ -1,20 +1,39 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
-@model  AssignmentPageViewModel
+@model AssignmentPageViewModel
+@{
+    this.ViewData["Title"] = "Assignment Info";
+}
 
-<h3>Instructions</h3>
+<h1 class="text-center rounded-pill" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
 <div class="row">
     <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <form asp-controller="Assignment" asp-action="TurnIn" method="post">
+            <div>
+                <button class="btn rounded-pill" style="color:darkorange;background:#ffffff">Turn In</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h3 class="text-white">Instructions:</h3>
+<div class="row">
+    <div class="col-md-4 container rounded" style="background:#ffffff; color:darkorange">
         @this.Model.Instructions
     </div>
     <div class="col-md-4"></div>
-    <div class="col-md-4">@this.Model.PossiblePoints</div>
+    <div class="col-md-4 text-white">Points: @this.Model.PossiblePoints</div>
 </div>
-<div>
-    @foreach (var file in this.Model.Files)
-    {
-      <div>
-          @file
-      </div>
-    }
-</div>
+<p class="h3 text-white">Files</p>
+@foreach (var file in this.Model.Files)
+{
+    <div>
+        <iframe width="560" height="315" src="@file.RemoteUrl" title="YouTube video player" frameborder="0">
+    </div>
+}
+
+@Html.PartialAsync("_PartialAddFiles");
 
