@@ -9,29 +9,14 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
-    public class CreateAssignmentInputModel
+    public class CreateAssignmentInputModel : BaseAssignmentInputModel
     {
-        public string Instructions { get; set; }
-
-        [Required]
-        public int CourseId { get; set; }
+        public IEnumerable<IFormFile> Files { get; set; }
 
         [Required]
         public IEnumerable<string> StudentsId { get; set; }
 
         [Required]
         public IEnumerable<SelectListItem> Students { get; set; }
-
-        [Required]
-        public DateTime StartDate { get; set; }
-
-        [Required]
-        [CheckIfDateIsGreaterThanCurrentDateValidation(ErrorMessage = "Start Date should be higher than Current Date!")]
-        [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
-
-        public IEnumerable<IFormFile> Files { get; set; }
-
-        public int PossiblePoints { get; set; }
     }
 }

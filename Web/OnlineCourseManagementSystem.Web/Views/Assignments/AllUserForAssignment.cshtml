@@ -1,0 +1,37 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
+@model IEnumerable<AssignmentUserInfoViewModel>
+
+
+@foreach (var user in this.Model)
+{
+<div class="rounded row" style="background:#ffffff;color:darkblue">
+    <div class="col-md-4">
+        @user.UserName
+    </div>
+    @if (!user.Turned)
+    {
+        <div class="col-md-4">
+            @user.TurnedOn
+        </div>
+        <div class="rounded-circle" style="background:#ff0000">
+        </div>
+        <p>Seen:</p>
+        <div class="rounded-circle" style="background:#00ff21">
+            
+        </div>
+    }
+    else if(user.Seen)
+    {
+        <p>Not turned</p>
+        <div class="rounded-circle" style="background:#00ff21">
+        </div>
+    }
+    else
+    {
+        <div class="col-md-4">
+            Not Seen
+        </div>
+    }
+</div>
+}
+

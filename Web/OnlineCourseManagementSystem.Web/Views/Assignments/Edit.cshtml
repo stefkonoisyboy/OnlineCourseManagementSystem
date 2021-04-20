@@ -1,0 +1,41 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
+@model EditAssignmentInputModel
+@{
+    this.ViewData["Title"] = "Edit Assignment";
+}
+<h1 class="text-center" style="color: #ff6a00;background:#ffffff">Edit Assignment</h1>
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+<form asp-controller="Assignments" asp-action="Edit" enctype="multipart/form-data" method="post">
+    <div>
+        <label  asp-for="Instructions"></label>
+        <pre class="tab"></pre>
+        <textarea class="form-control" asp-for="Instructions"></textarea>
+        <span asp-validation-for="Instructions" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label  asp-for="StartDate"></label>
+        <input asp-for="StartDate" />
+        <span asp-validation-for="StartDate" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label  asp-for="EndDate"></label>
+        <input asp-for="EndDate" />
+        <span asp-validation-for="EndDate" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label  asp-for="PossiblePoints"> </label>
+        <input asp-for="PossiblePoints" />
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <button class="btn btn-info form-control">Edit Assignment</button>
+    </div>
+</form>
