@@ -1,0 +1,39 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
+@model IEnumerable<CreatedAssignmentsViewModel>
+@{
+    this.ViewData["Title"] = "Created Assignments";
+}
+
+@foreach (var assignment in this.Model)
+{
+
+    <div style="background:#ff6a00" class="rounded-pill">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-3" >
+                <a class="text-light" asp-controller="Assignments" asp-action="AllUserForAssignment" asp-route-id="@assignment.AssignmentId">
+                    @assignment.CourseName
+                </a>
+            </div>
+            <div class="col-md-3">
+                @assignment.EndDate
+            </div>
+            <div class="col-md-3">
+                @assignment.PossiblePoints points
+            </div>
+            
+            <div class="row col-md-3">
+                <div class="col-md-5">
+                    <a  class="btn" style="background:#00ffff;color:#000000" asp-controller="Assignments" asp-action="Edit" asp-route-id="@assignment.AssignmentId">Edit</a>
+                </div>
+                <div class="col-md-7">
+                    <form asp-controller="Assignments" asp-action="Delete" asp-route-id="@assignment.AssignmentId" method="post">
+                        <button class="form-control btn" style="background:#ff0000">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+}

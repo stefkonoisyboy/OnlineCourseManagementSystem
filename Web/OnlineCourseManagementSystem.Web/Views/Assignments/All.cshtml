@@ -1,35 +1,43 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
 @model IEnumerable<AssignmentViewModel>
-    <h1>Assignments</h1>
 
-    <table class=" table-stripped table-bordered table-hover">
-        <thead class="table-light">
+
+@{
+    this.ViewData["Title"] = "All Assignments";
+}
+<h1 class="text-center" style="color: #ff6a00;background:#ffffff">Assignments</h1>
+
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+
+<table class=" table-stripped table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>StartDate</th>
+            <th>DeadLine</th>
+            <th>Course Name</th>
+            <th>Points</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tdbody class="table-light" style ="background:#ff6a00">
+        @foreach (var assignment in this.Model)
+        {
             <tr>
-                <th>StartDate</th>
-                <th>DeadLine</th>
-                <th>Course Name</th>
-                <th>Points</th>
-                <th>Options</th>
-            </tr>
-        </thead>
-        <tdbody class="table-light">
-            @foreach (var assignment in this.Model)
-             {
-                <tr>
-                    <td>@assignment.StartDate</td>
-                    <td>@assignment.EndDate</td>
-                    <td>@assignment.CourseName</td>
-                    <td>@assignment.PossiblePoints</td>
-                    <td>
-                        <p>
-                            <a asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
-                                View
-                            </a>
-                        </p>
+                <td>@assignment.StartDate</td>
+                <td>@assignment.EndDate</td>
+                <td>@assignment.CourseName</td>
+                <td>@assignment.PossiblePoints</td>
+                <td>
+                    <p>
+                        <a asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+                            View
+                        </a>
+                    </p>
 
-                    </td>
-                </tr>
-             }
-        </tdbody>
-    </table>
+                </td>
+            </tr>
+        }
+    </tdbody>
+</table>
 

@@ -64,10 +64,11 @@
             return this.View(assignments);
         }
 
+        [Authorize]
         public IActionResult GetInfo(int id)
         {
             AssignmentPageViewModel assignmentPageViewModel = this.assignmentsService
-                .GetBy<AssignmentPageViewModel>(id);
+                .GetById<AssignmentPageViewModel>(id);
 
             this.assignmentsService.MarkAsSeen(id);
 
@@ -82,6 +83,52 @@
             var assignments = this.assignmentsService.GetAllFinishedBy<AssignmentViewModel>(user.Id);
 
             return this.View(assignments);
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public IActionResult AllCreated(int id)
+        {
+            var assignments = this.assignmentsService.GetAllBy<CreatedAssignmentsViewModel>(id);
+
+            return this.View(assignments);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            int courseId = await this.assignmentsService.DeleteAssignment(id);
+
+            return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId });
+        }
+
+        public IActionResult Edit(int id)
+        {
+            EditAssignmentInputModel editAssignmentInputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id);
+
+            return this.View(editAssignmentInputModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> Edit(EditAssignmentInputModel inputModel, int id)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                inputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id);
+            }
+
+            await this.assignmentsService.UpdateAsync(inputModel);
+
+            return this.RedirectToAction("AllCreated", "Assignments", new { Id = inputModel.CourseId });
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public IActionResult AllUserForAssignment(int id)
+        {
+            var usersAssignment = this.assignmentsService.GetAllUserForAssignment<AssignmentUserInfoViewModel>(id);
+
+            return this.View(usersAssignment);
         }
     }
 }

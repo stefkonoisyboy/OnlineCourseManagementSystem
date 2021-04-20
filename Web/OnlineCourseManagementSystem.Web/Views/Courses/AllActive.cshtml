@@ -1,4 +1,5 @@
-﻿@model OnlineCourseManagementSystem.Web.ViewModels.Courses.AllCoursesListViewModel
+﻿@using OnlineCourseManagementSystem.Common
+@model OnlineCourseManagementSystem.Web.ViewModels.Courses.AllCoursesListViewModel
 @{
     this.ViewData["Title"] = "All Active Courses";
 }
@@ -29,11 +30,21 @@
                 <div class="card-footer">
                     <a asp-controller="Courses" asp-action="ById" asp-route-id="@course.Id" class="btn btn-outline-primary">Read More about the Course</a>
                 </div>
-                <div class="card-footer">
-                    <a asp-controller="Assignments" asp-action="CreateAssignment" asp-route-id="@course.Id" class="btn btn-outline-primary">
-                      Create Assignment
-                    </a>
-                </div>
+                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                {
+                    <div class="card-footer">
+                        <a asp-controller="Assignments" asp-action="CreateAssignment" asp-route-id="@course.Id" class="btn btn-outline-primary">
+                            Create Assignment
+                        </a>
+                    </div>
+
+                    <div class="card-footer">
+                        <a class=" btn btn-info rounded h3" asp-controller="Assignments" asp-action="AllCreated" asp-route-id="@course.Id">
+                            All
+                        </a>
+                    </div>
+
+                }
             </div>
         </div>
     </div>

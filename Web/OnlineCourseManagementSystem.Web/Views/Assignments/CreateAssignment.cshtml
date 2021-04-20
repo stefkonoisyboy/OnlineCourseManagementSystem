@@ -1,41 +1,56 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
 @model CreateAssignmentInputModel
+@{
+    this.ViewData["Title"] = "Create Assignment";
+}
 
-    <h1>Create Assignment</h1>
-    <form asp-controller="Assignments" asp-action="CreateAssignment" enctype="multipart/form-data" method="post">
-        <div>
-            <label asp-for="Instructions"></label>
-            <textarea asp-for="Instructions" ></textarea>
-            <span asp-validation-for="Instructions" class="alert-danger"></span>
-        </div>
-        <div>
-            <label asp-for="StartDate"></label>
-            <input asp-for="StartDate"/>
-            <span asp-validation-for="StartDate" class="alert-danger"></span>
-        </div>
-        <div>
-            <label asp-for="EndDate" ></label>
-            <input  asp-for="EndDate"/>
-            <span asp-validation-for="EndDate" class="alert-danger"></span>
-        </div>
+<h1 class="text-center" style="color: #ff6a00;background:#ffffff">Create Assignment</h1>
 
-        <div>
-            <label asp-for="PossiblePoints"> </label>
-            <input asp-for="PossiblePoints" />
-        </div>
+<pre class="tab"></pre>
+<pre class="tab"></pre>
 
-        <div>
-            <label asp-for="Files"></label>
-            <input asp-for="Files"/>
-        </div>
-
-        <div>
-            <label asp-for="StudentsId"></label>
-            <select  asp-items="@this.Model.Students" multiple="multiple" class="multi-select form-control custom-radio" id="StudentsId" asp-for="StudentsId" >
-            </select>
-        </div>
-
-        <div>
-            <button class="btn btn-info">Create Assignment</button>
-        </div>
-    </form>
+<form asp-controller="Assignments" asp-action="CreateAssignment" enctype="multipart/form-data" method="post">
+    <div>
+        <label asp-for="Instructions"></label>
+        <textarea asp-for="Instructions" class="form-control"></textarea>
+        <span asp-validation-for="Instructions" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="PossiblePoints"> </label>
+        <input asp-for="PossiblePoints" class="form-control" />
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="Files"></label>
+        <input type="file" asp-for="Files" multiple class="form-control-file">
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="StudentsId"></label>
+        <select asp-items="@this.Model.Students" multiple="multiple" class="multi-select form-control custom-radio" id="StudentsId" asp-for="StudentsId">
+        </select>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <button class="btn btn-info form-control">Create Assignment</button>
+    </div>
+</form>

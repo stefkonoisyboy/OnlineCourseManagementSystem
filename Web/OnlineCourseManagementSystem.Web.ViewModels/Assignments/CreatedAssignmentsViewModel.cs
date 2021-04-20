@@ -8,8 +8,9 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
 
-    public class AssignmentViewModel : IMapFrom<UserAssignment>, IHaveCustomMappings
+    public class CreatedAssignmentsViewModel : IMapFrom<Assignment>, IHaveCustomMappings
     {
+
         public int AssignmentId { get; set; }
 
         public DateTime StartDate { get; set; }
@@ -22,12 +23,9 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<UserAssignment, AssignmentViewModel>()
-                .ForMember(a => a.CourseName, y => y.MapFrom(a => a.Assignment.Course.Name))
-                .ForMember(a => a.StartDate, y => y.MapFrom(a => a.Assignment.StartDate))
-                .ForMember(a => a.EndDate, y => y.MapFrom(a => a.Assignment.EndDate))
-                .ForMember(a => a.PossiblePoints, y => y.MapFrom(a => a.Assignment.PossiblePoints))
-                .ForMember(a => a.AssignmentId, y => y.MapFrom(a => a.AssignmentId));
+            configuration.CreateMap<Assignment, CreatedAssignmentsViewModel>()
+              .ForMember(x => x.CourseName, y => y.MapFrom(x => x.Course.Name))
+              .ForMember(x => x.AssignmentId, y => y.MapFrom(x => x.Id));
         }
     }
 }
