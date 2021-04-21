@@ -1,4 +1,8 @@
 ﻿@using OnlineCourseManagementSystem.Common
+@inject Microsoft.AspNetCore.Identity.UserManager<OnlineCourseManagementSystem.Data.Models.ApplicationUser> userManager
+@{ 
+    var user = await this.userManager.GetUserAsync(this.User);
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,6 +54,9 @@
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllByUser" asp-route-id="@user.Id">Your Courses</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="All">All Courses</a>
                             </li>
                             <li class="nav-item">
@@ -67,14 +74,14 @@
             </div>
         </nav>
     </header>
-    
+
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @this.RenderBody()
         </main>
     </div>
-    
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

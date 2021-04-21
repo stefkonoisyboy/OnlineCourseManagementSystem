@@ -8,7 +8,7 @@
     using CloudinaryDotNet;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
-    public interface IFileService
+    public interface IFilesService
     {
         Task UploadImage(UploadImageInputModel uploadImageInputModel);
 

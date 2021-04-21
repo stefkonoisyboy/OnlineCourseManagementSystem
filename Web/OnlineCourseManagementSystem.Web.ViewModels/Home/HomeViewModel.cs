@@ -7,5 +7,7 @@
     public class HomeViewModel
     {
         public int AssignmentsCount { get; set; }
+
+        public int CoursesInCartCount { get; set; }
     }
 }

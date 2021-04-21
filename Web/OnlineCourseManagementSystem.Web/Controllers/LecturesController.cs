@@ -15,12 +15,12 @@
     public class LecturesController : Controller
     {
         private readonly ILecturesService lecturesService;
-        private readonly IFileService fileService;
+        private readonly IFilesService fileService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public LecturesController(
             ILecturesService lecturesService,
-            IFileService fileService,
+            IFilesService fileService,
             UserManager<ApplicationUser> userManager)
         {
             this.lecturesService = lecturesService;

@@ -21,6 +21,7 @@
         private readonly IDeletableEntityRepository<CourseTag> courseTagsRepository;
         private readonly IDeletableEntityRepository<File> filesRepository;
         private readonly IDeletableEntityRepository<CourseLecturer> courseLecturersRepository;
+        private readonly IDeletableEntityRepository<UserCourse> userCoursesRepository;
         private readonly Cloudinary cloudinary;
 
         public CoursesService(
@@ -28,12 +29,14 @@
             IDeletableEntityRepository<CourseTag> courseTagsRepository,
             IDeletableEntityRepository<File> filesRepository,
             IDeletableEntityRepository<CourseLecturer> courseLecturersRepository,
+            IDeletableEntityRepository<UserCourse> userCoursesRepository,
             Cloudinary cloudinary)
         {
             this.coursesRepository = coursesRepository;
             this.courseTagsRepository = courseTagsRepository;
             this.filesRepository = filesRepository;
             this.courseLecturersRepository = courseLecturersRepository;
+            this.userCoursesRepository = userCoursesRepository;
             this.cloudinary = cloudinary;
         }
 
@@ -108,6 +111,18 @@
             await this.coursesRepository.SaveChangesAsync();
         }
 
+        public async Task EnrollAsync(int courseId, string userId)
+        {
+            UserCourse userCourse = new UserCourse
+            {
+                CourseId = courseId,
+                UserId = userId,
+            };
+
+            await this.userCoursesRepository.AddAsync(userCourse);
+            await this.userCoursesRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<T> GetAll<T>()
         {
             return this.coursesRepository
@@ -152,10 +167,10 @@
 
         public IEnumerable<T> GetAllByUser<T>(string userId)
         {
-            return this.coursesRepository
+            return this.userCoursesRepository
                 .All()
-                .OrderByDescending(c => c.StartDate)
-                .Where(c => c.Users.Any(u => u.UserId == userId) && c.IsApproved.Value)
+                .OrderByDescending(c => c.Course.StartDate)
+                .Where(c => c.UserId == userId && c.Course.IsApproved.Value)
                 .To<T>()
                 .ToList();
         }

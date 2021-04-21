@@ -14,10 +14,10 @@
 
     public class FilesController : Controller
     {
-        private readonly IFileService fileService;
+        private readonly IFilesService fileService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public FilesController(IFileService fileService, UserManager<ApplicationUser> userManager)
+        public FilesController(IFilesService fileService, UserManager<ApplicationUser> userManager)
         {
             this.fileService = fileService;
             this.userManager = userManager;

@@ -29,6 +29,14 @@
                 <div class="card-footer">
                     <a asp-controller="Courses" asp-action="ById" asp-route-id="@course.Id" class="btn btn-outline-primary">Read More about the Course</a>
                 </div>
+                @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                {
+                    <div class="card-footer">
+                        <form method="post" asp-controller="Orders" asp-action="Create" asp-route-id="@course.Id">
+                            <input type="submit" value="Add To Cart" class="btn btn-outline-primary" />
+                        </form>
+                    </div>
+                }
             </div>
         </div>
     </div>

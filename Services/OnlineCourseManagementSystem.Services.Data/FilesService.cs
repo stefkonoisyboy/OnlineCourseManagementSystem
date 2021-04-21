@@ -13,14 +13,14 @@
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
-    public class FileService : IFileService
+    public class FilesService : IFilesService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<File> fileRepository;
         private readonly Cloudinary cloudinaryUtility;
         private readonly IDeletableEntityRepository<Album> albumRepository;
 
-        public FileService(IDeletableEntityRepository<ApplicationUser> userRepository,IDeletableEntityRepository<File> fileRepository, Cloudinary cloudinaryUtility, IDeletableEntityRepository<Album> albumRepository)
+        public FilesService(IDeletableEntityRepository<ApplicationUser> userRepository,IDeletableEntityRepository<File> fileRepository, Cloudinary cloudinaryUtility, IDeletableEntityRepository<Album> albumRepository)
         {
             this.userRepository = userRepository;
             this.fileRepository = fileRepository;
