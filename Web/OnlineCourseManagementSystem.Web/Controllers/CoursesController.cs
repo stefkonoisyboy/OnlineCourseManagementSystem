@@ -70,9 +70,9 @@
         [Authorize]
         public IActionResult AllByUser(string id)
         {
-            AllCoursesListViewModel viewModel = new AllCoursesListViewModel
+            AllCoursesByUserListViewModel viewModel = new AllCoursesByUserListViewModel
             {
-                Courses = this.coursesService.GetAllByUser<AllCoursesViewModel>(id),
+                Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(id),
             };
 
             return this.View(viewModel);

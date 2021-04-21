@@ -15,22 +15,25 @@
     public class HomeController : BaseController
     {
         private readonly IAssignmentsService assignmentsService;
+        private readonly IOrdersService ordersService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public HomeController(IAssignmentsService assignmentsService, UserManager<ApplicationUser> userManager)
+        public HomeController(IAssignmentsService assignmentsService, IOrdersService ordersService, UserManager<ApplicationUser> userManager)
         {
             this.assignmentsService = assignmentsService;
+            this.ordersService = ordersService;
             this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            if(this.User.IsInRole(GlobalConstants.StudentRoleName))
+            if (this.User.IsInRole(GlobalConstants.StudentRoleName))
             {
                 HomeViewModel homeViewModel = new HomeViewModel
                 {
                     AssignmentsCount = this.assignmentsService.GetAllBy<AssignmentViewModel>(user.Id).Count(),
+                    CoursesInCartCount = this.ordersService.CoursesInCartCount(user.Id),
                 };
 
                 return this.View(homeViewModel);

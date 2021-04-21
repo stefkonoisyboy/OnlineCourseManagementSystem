@@ -18,6 +18,8 @@
 
         Task ApproveAsync(int courseId);
 
+        Task EnrollAsync(int courseId, string userId);
+
         IEnumerable<T> GetAll<T>();
 
         IEnumerable<T> GetAllUnapproved<T>();

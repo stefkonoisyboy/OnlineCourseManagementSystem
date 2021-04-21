@@ -20,6 +20,7 @@
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Services.Messaging;
     using OnlineCourseManagementSystem.Web.ViewModels;
+    using Stripe;
 
     public class Startup
     {
@@ -39,7 +40,7 @@
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-            Account cloudinaryCredentials = new Account(
+            CloudinaryDotNet.Account cloudinaryCredentials = new CloudinaryDotNet.Account(
                 this.configuration["Cloudinary:CloudName"],
                 this.configuration["Cloudinary:ApiKey"],
                 this.configuration["Cloudinary:ApiSecret"]);
@@ -78,18 +79,22 @@
             services.AddTransient<IStudentsService, StudentsService>();
             services.AddTransient<ILecturersService, LecturersService>();
             services.AddTransient<IParentsService, ParentsService>();
-            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IFilesService, FilesService>();
             services.AddTransient<ICoursesService, CoursesService>();
             services.AddTransient<ITagsService, TagsService>();
             services.AddTransient<ISubjectsService, SubjectsService>();
             services.AddTransient<ILecturesService, LecturesService>();
             services.AddTransient<IAlbumsService, AlbumsService>();
             services.AddTransient<IAssignmentsService, AssignmentsService>();
+            services.AddTransient<IOrdersService, OrdersService>();
+
+            services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            StripeConfiguration.ApiKey = this.configuration.GetSection("Stripe")["SecretKey"];
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
