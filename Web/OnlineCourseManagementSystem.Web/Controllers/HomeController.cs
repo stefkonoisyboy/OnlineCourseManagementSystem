@@ -34,6 +34,7 @@
                 {
                     AssignmentsCount = this.assignmentsService.GetAllBy<AssignmentViewModel>(user.Id).Count(),
                     CoursesInCartCount = this.ordersService.CoursesInCartCount(user.Id),
+                    UserId = user.Id,
                 };
 
                 return this.View(homeViewModel);

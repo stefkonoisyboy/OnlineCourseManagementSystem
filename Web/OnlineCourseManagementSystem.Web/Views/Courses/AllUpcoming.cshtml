@@ -1,6 +1,8 @@
 ﻿@model OnlineCourseManagementSystem.Web.ViewModels.Courses.AllCoursesListViewModel
+@inject Microsoft.AspNetCore.Identity.UserManager<OnlineCourseManagementSystem.Data.Models.ApplicationUser> userManager
 @{
     this.ViewData["Title"] = "All Upcoming Courses";
+    var user = await this.userManager.GetUserAsync(this.User);
 }
 
 <h3>@this.ViewData["Title"]</h3>
@@ -31,11 +33,20 @@
                 </div>
                 @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
                 {
-                    <div class="card-footer">
-                        <form method="post" asp-controller="Orders" asp-action="Create" asp-route-id="@course.Id">
-                            <input type="submit" value="Add To Cart" class="btn btn-outline-primary" />
-                        </form>
-                    </div>
+                    if (course.Users.Any(u => u.UserId == user.Id))
+                    {
+                        <div class="alert-success">
+                            <p>You have already enrolled for this course!</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-footer">
+                            <form method="post" asp-controller="Orders" asp-action="Create" asp-route-id="@course.Id">
+                                <input type="submit" value="Add To Cart" class="btn btn-outline-primary" />
+                            </form>
+                        </div>
+                    }
                 }
             </div>
         </div>

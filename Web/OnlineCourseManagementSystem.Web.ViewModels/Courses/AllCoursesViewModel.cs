@@ -24,5 +24,7 @@
         public string FileRemoteUrl { get; set; }
 
         public string SubjectName { get; set; }
+
+        public ICollection<UserCourse> Users { get; set; }
     }
 }

@@ -9,5 +9,7 @@
         public int AssignmentsCount { get; set; }
 
         public int CoursesInCartCount { get; set; }
+
+        public string UserId { get; set; }
     }
 }

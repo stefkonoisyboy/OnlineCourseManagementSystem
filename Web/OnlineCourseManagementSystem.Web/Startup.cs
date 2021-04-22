@@ -87,6 +87,7 @@
             services.AddTransient<IAlbumsService, AlbumsService>();
             services.AddTransient<IAssignmentsService, AssignmentsService>();
             services.AddTransient<IOrdersService, OrdersService>();
+            services.AddTransient<ITownsService, TownsService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }
