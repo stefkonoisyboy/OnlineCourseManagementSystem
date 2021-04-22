@@ -74,7 +74,7 @@ namespace OnlineCourseManagementSystem.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Charge(string stripeEmail, string stripeToken, int id)
+        public async Task<IActionResult> Charge(string stripeEmail, string stripeToken)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             AllOrdersByUserIdListViewModel viewModel = new AllOrdersByUserIdListViewModel
@@ -93,15 +93,22 @@ namespace OnlineCourseManagementSystem.Web.Controllers
 
             var charge = charges.Create(new ChargeCreateOptions
             {
-                Amount = (int)viewModel.Orders.Sum(o => o.CoursePrice),
+                Amount = (int)viewModel.Orders.Sum(o => o.CoursePrice) * 100,
                 Description = "Sample Charge",
                 Currency = "usd",
                 Customer = customer.Id,
             });
 
-            await this.coursesService.EnrollAsync(id, user.Id);
+            foreach (var course in viewModel.Orders.Select(o => o.CourseId))
+            {
+                await this.coursesService.EnrollAsync(course, user.Id);
+            }
 
-            this.TempData["Message"] = "You enrolled successfully for the Course!";
+            foreach (var course in viewModel.Orders.Select(o => o.CourseId))
+            {
+                await this.ordersService.DeleteAsync(course, user.Id);
+            }
+
             return this.Redirect($"/Courses/AllByUser/{user.Id}");
         }
     }

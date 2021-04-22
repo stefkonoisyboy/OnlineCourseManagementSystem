@@ -1,4 +1,7 @@
 ﻿@model OnlineCourseManagementSystem.Web.ViewModels.Orders.AllOrdersByUserIdListViewModel
+@using Microsoft.Extensions.Options
+@using OnlineCourseManagementSystem.Data.Models
+@inject IOptions<StripeSettings> Stripe
 @{
     this.ViewData["Title"] = "Courses Cart";
 }
@@ -55,13 +58,13 @@
 
                 </div>
                 <div class="card-footer">
-                    @*<form asp-controller="Orders" asp-action="Charge" asp-route-id="" method="POST">
+                    <form asp-controller="Orders" asp-action="Charge" method="POST">
                         <article>
-                            <label>Amount: $5.00</label>
+                            <label>Amount: @this.Model.Orders.Sum(o => o.CoursePrice).ToString("f2")</label>
                         </article>
-                        <script src="//checkout.stripe.com/v2/checkout.js" class="stripe-button" data-key="@Stripe.Value.PublishableKey" data-locale="auto" data-description="Sample Charge" data-amount="500">
+                        <script src="//checkout.stripe.com/v2/checkout.js" class="stripe-button" data-key="@Stripe.Value.PublishableKey" data-locale="auto" data-description="Sample Charge" data-amount="@((this.Model.Orders.Sum(o => o.CoursePrice) * 100).ToString("f2"))">
                         </script>
-                    </form>*@
+                    </form>
                 </div>
             </div>
         </div>

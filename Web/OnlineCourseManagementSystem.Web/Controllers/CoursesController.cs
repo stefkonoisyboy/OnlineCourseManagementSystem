@@ -79,6 +79,18 @@
         }
 
         [Authorize]
+        public async Task<IActionResult> AllByCurrentUser()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllCoursesByUserListViewModel viewModel = new AllCoursesByUserListViewModel
+            {
+                Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(user.Id),
+            };
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
         public IActionResult AllUpcoming()
         {
             AllCoursesListViewModel viewModel = new AllCoursesListViewModel

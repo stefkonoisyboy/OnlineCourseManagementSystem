@@ -1,7 +1,5 @@
 ﻿@using OnlineCourseManagementSystem.Common
-@inject Microsoft.AspNetCore.Identity.UserManager<OnlineCourseManagementSystem.Data.Models.ApplicationUser> userManager
 @{ 
-    var user = await this.userManager.GetUserAsync(this.User);
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +52,7 @@
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllByUser" asp-route-id="@user.Id">Your Courses</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllByCurrentUser">Your Courses</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="All">All Courses</a>

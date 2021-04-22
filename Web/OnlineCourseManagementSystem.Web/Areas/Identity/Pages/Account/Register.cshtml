@@ -1,5 +1,6 @@
 ﻿@page
 @model RegisterModel
+@inject OnlineCourseManagementSystem.Services.Data.ITownsService townsService
 @{
     ViewData["Title"] = "Register";
 }
@@ -12,20 +13,141 @@
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div class="form-row justify-content-center">
+
+                <div class="form-group col-sm-5">
+                    <label asp-for="Input.FirstName"></label>
+                    <input asp-for="Input.FirstName" class="form-control " placeholder="First Name" style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-5">
+                    <label asp-for="Input.LastName"></label>
+                    <input asp-for="Input.LastName" class="form-control " placeholder="Surname" style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div class="row example mb-lg-4"></div>
+            <div class="row justify-content-center">
+                <div class="form-group col-sm-10">
+                    <label asp-for="Input.TownId">Town</label>
+                    <select asp-for="Input.TownId" class="form-control " style="border-color: #c0c3cf;" asp-items="@this.townsService.GetAllAsSelectListItems()"></select>
+                    <span asp-validation-for="Input.TownId" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <div class="row example mb-lg-4"></div>
+            <div class="row">
+                <div class="form-group" style="padding-left:6.5em;">
+                    <div class="form-radio">
+                        <label for="gender" class="radio-label">
+                            Gender :
+                        </label>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Gender" id="male" value="Male" checked class="form-check-input" style="margin-left:-70px;">
+                            <label for="male" class="form-check-label" style="margin-left:17px;">Male</label>
+                            <span class="check"></span>
+                        </div>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Gender" id="female" value="Female" class="form-check-input" style="margin-left:-70px;">
+                            <label for="female" class="form-check-label" style="margin-left:17px;">Female</label>
+                            <span class="check"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="padding-left:6.5em;">
+                    <div class="form-radio">
+                        <label for="gender" class="radio-label">
+                            Title :
+                        </label>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Title" id="mr" value="Mr" checked class="form-check-input" style="margin-left:-70px;">
+                            <label for="mr" class="form-check-label" style="margin-left:17px;">Mr</label>
+                            <span class="check"></span>
+                        </div>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Title" id="mrs" value="Mrs" class="form-check-input" style="margin-left:-70px;">
+                            <label for="mrs" class="form-check-label" style="margin-left:17px;">Mrs</label>
+                            <span class="check"></span>
+                        </div>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Title" id="miss" value="Miss" class="form-check-input" style="margin-left:-70px;">
+                            <label for="miss" class="form-check-label" style="margin-left:17px;">Miss</label>
+                            <span class="check"></span>
+                        </div>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Title" id="dr" value="Dr" class="form-check-input" style="margin-left:-70px;">
+                            <label for="dr" class="form-check-label" style="margin-left:17px;">Dr</label>
+                            <span class="check"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4"></div>
+                <div class="form-radio">
+                    <label for="role" class="radio-label" style="margin-left:-6px;">
+                        Role :
+                    </label>
+                    <div class="form-radio-item">
+                        <input type="radio" asp-for="Input.Role" id="student" value="Student" checked class="form-check-input" style="margin-left:-432px;">
+                        <label for="student" class="form-check-label" style="margin-left:13px;">Student</label>
+                        <span class="check"></span>
+                    </div>
+                    <div class="form-radio-item">
+                        <input type="radio" asp-for="Input.Role" id="lecturer" value="Lecturer" class="form-check-input" style="margin-left:-432px;">
+                        <label for="lecturer" class="form-check-label" style="margin-left:13px;">Lecturer</label>
+                        <span class="check"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row example mb-lg-4"></div>
+            <div class="form-row justify-content-center">
+                <div class="form-group col-sm-5">
+                    <label asp-for="Input.PhoneNumber"></label>
+                    <input asp-for="Input.PhoneNumber" class="form-control " placeholder="Phone Number" style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-5">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control " placeholder="Email" style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row example mb-lg-4"></div>
+            <div class="row justify-content-center">
+                <div class="form-group col-sm-10">
+                    <label asp-for="Input.BirthDate"></label>
+                    <input asp-for="Input.BirthDate" class="form-control " style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-10">
+                    <label asp-for="Input.Background"></label>
+                    <input asp-for="Input.Background" class="form-control " style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.Background" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-10">
+                    <label asp-for="Input.Address"></label>
+                    <input asp-for="Input.Address" class="form-control " style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.Address" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row example mb-lg-4"></div>
+            <div class="row justify-content-center">
+                <div class="form-group col-sm-10">
+                    <label asp-for="Input.UserName"></label>
+                    <input asp-for="Input.UserName" class="form-control " placeholder="Username" style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row example mb-lg-4"></div>
+            <div class="form-row justify-content-center">
+                <div class="form-group col-sm-5">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control " placeholder="Password" style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group col-sm-5">
+                    <label asp-for="Input.ConfirmPassword"></label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control " placeholder="Confirm Password" style="border-color: #c0c3cf;" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
