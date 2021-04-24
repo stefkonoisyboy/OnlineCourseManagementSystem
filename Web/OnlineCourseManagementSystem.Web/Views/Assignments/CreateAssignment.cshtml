@@ -10,6 +10,15 @@
 <pre class="tab"></pre>
 
 <form asp-controller="Assignments" asp-action="CreateAssignment" enctype="multipart/form-data" method="post">
+
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
+    <div>
+        <label asp-for="Title"></label>
+        <textarea asp-for="Title" class="form-control"></textarea>
+        <span asp-validation-for="Title" class="alert-danger"></span>
+    </div>
+
     <div>
         <label asp-for="Instructions"></label>
         <textarea asp-for="Instructions" class="form-control"></textarea>

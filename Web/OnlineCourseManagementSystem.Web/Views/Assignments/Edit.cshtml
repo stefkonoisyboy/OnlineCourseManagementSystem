@@ -7,8 +7,16 @@
 <pre class="tab"></pre>
 <pre class="tab"></pre>
 <form asp-controller="Assignments" asp-action="Edit" enctype="multipart/form-data" method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
     <div>
-        <label  asp-for="Instructions"></label>
+        <label asp-for="Title"></label>
+        <textarea asp-for="Title" class="form-control"></textarea>
+        <span asp-validation-for="Title" class="alert-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Instructions"></label>
         <pre class="tab"></pre>
         <textarea class="form-control" asp-for="Instructions"></textarea>
         <span asp-validation-for="Instructions" class="alert-danger"></span>
@@ -16,21 +24,21 @@
     <pre class="tab"></pre>
     <pre class="tab"></pre>
     <div>
-        <label  asp-for="StartDate"></label>
+        <label asp-for="StartDate"></label>
         <input asp-for="StartDate" />
         <span asp-validation-for="StartDate" class="alert-danger"></span>
     </div>
     <pre class="tab"></pre>
     <pre class="tab"></pre>
     <div>
-        <label  asp-for="EndDate"></label>
+        <label asp-for="EndDate"></label>
         <input asp-for="EndDate" />
         <span asp-validation-for="EndDate" class="alert-danger"></span>
     </div>
     <pre class="tab"></pre>
     <pre class="tab"></pre>
     <div>
-        <label  asp-for="PossiblePoints"> </label>
+        <label asp-for="PossiblePoints"> </label>
         <input asp-for="PossiblePoints" />
     </div>
     <pre class="tab"></pre>

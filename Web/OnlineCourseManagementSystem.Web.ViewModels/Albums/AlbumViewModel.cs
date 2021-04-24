@@ -17,8 +17,9 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Album, AlbumViewModel>()
-                .ForMember(x => x.AlbumId,
-                y => y.MapFrom(x => x.Id));
+                .ForMember(
+                    x => x.AlbumId,
+                    y => y.MapFrom(x => x.Id));
         }
     }
 }

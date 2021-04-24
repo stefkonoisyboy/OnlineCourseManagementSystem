@@ -12,6 +12,8 @@
     {
         public int AssignmentId { get; set; }
 
+        public string Title { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
@@ -27,7 +29,8 @@
                 .ForMember(a => a.StartDate, y => y.MapFrom(a => a.Assignment.StartDate))
                 .ForMember(a => a.EndDate, y => y.MapFrom(a => a.Assignment.EndDate))
                 .ForMember(a => a.PossiblePoints, y => y.MapFrom(a => a.Assignment.PossiblePoints))
-                .ForMember(a => a.AssignmentId, y => y.MapFrom(a => a.AssignmentId));
+                .ForMember(a => a.AssignmentId, y => y.MapFrom(a => a.AssignmentId))
+                .ForMember(a => a.Title, y => y.MapFrom(a => a.Assignment.Title));
         }
     }
 }
