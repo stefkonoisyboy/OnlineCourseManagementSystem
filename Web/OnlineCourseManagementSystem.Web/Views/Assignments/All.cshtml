@@ -1,5 +1,5 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
-@model IEnumerable<AssignmentViewModel>
+@model AllAssignmentsViewModel
 
 
 @{
@@ -20,24 +20,62 @@
             <th>Options</th>
         </tr>
     </thead>
-    <tdbody class="table-light" style ="background:#ff6a00">
-        @foreach (var assignment in this.Model)
+    <tdbody class="table-light" style="background:#ff6a00">
+        @foreach (var assignment in this.Model.UnFinihedAssignements)
         {
-            <tr>
-                <td>@assignment.StartDate</td>
-                <td>@assignment.EndDate</td>
-                <td>@assignment.CourseName</td>
-                <td>@assignment.PossiblePoints</td>
-                <td>
-                    <p>
-                        <a asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
-                            View
-                        </a>
-                    </p>
+        <tr>
+            <td>@assignment.Title</td>
+            <td>@assignment.StartDate</td>
+            <td>@assignment.EndDate</td>
+            <td>@assignment.CourseName</td>
+            <td>@assignment.PossiblePoints</td>
+            <td>
+                <p>
+                    <a asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+                        View
+                    </a>
+                </p>
 
-                </td>
-            </tr>
+            </td>
+        </tr>
         }
     </tdbody>
 </table>
+
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+
+<p>
+    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allFinished">Completed</button>
+</p>
+
+<div class="row">
+
+    <div class="col">
+        <div class="collapse" id="allFinished">
+            <div class="card card-body bg-dark">
+
+                @foreach (var assignment in this.Model.FinishedAssignments)
+                {
+                    <div style="background:#ffffff;color:#ff6a00" class="row rounded">
+                        <div style="color:#ff6a00" class="row">
+
+                            <div class="col-md-5">
+                                @assignment.CourseName
+                            </div>
+                            <div class="col-md-4">
+                                Points: @assignment.ReceivedPoints/@assignment.PossiblePoints
+                            </div>
+                            <div class="col-md-4">
+                                @assignment.Title
+                            </div>
+                        </div>
+                    </div>
+                    <pre class="tab"></pre>
+                    <pre class="tab"></pre>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 

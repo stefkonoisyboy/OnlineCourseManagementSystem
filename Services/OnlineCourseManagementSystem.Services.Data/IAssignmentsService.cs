@@ -7,14 +7,15 @@
 
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Web.ViewModels.Assignments;
+    using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
     public interface IAssignmentsService
     {
         Task CreateAsync(CreateAssignmentInputModel inputModel);
 
-        IEnumerable<T> GetAllUserForAssignment<T>(int assignmentId);
+        IEnumerable<T> GetAllUsersForAssignment<T>(int assignmentId);
 
-        Task MarkAsSeen(int assignmentId);
+        Task MarkAsSeen(int assignmentId, string userId);
 
         IEnumerable<T> GetAllBy<T>(int courseId);
 
@@ -27,5 +28,9 @@
         T GetById<T>(int id);
 
         Task UpdateAsync(EditAssignmentInputModel inputModel);
+
+        Task<int> TurnIn(FilesToAssignmentInputModel inputModel);
+
+        Task<int> MarkSubmittedAssignment(MarkSubmittedAssignmentInputModel inputModel);
     }
 }

@@ -16,7 +16,6 @@
         [Required]
         public IEnumerable<string> StudentsId { get; set; }
 
-        [Required]
         public IEnumerable<SelectListItem> Students { get; set; }
     }
 }

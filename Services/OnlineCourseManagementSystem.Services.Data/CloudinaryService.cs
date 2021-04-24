@@ -7,54 +7,62 @@
 
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Internal;
     using OnlineCourseManagementSystem.Data.Models;
 
     public class CloudinaryService
     {
         private readonly Cloudinary cloudinaryUtility;
+        private const string DEAFULT_FOLDER_NAME = "files";
 
-        //public async Task AttachFile(UploadFileInputModel uploadImageInputModel)
-        //{
-        //    ApplicationUser user = this.userRepository.All().FirstOrDefault(s => s.Id == uploadImageInputModel.UserId);
+        public CloudinaryService(Cloudinary cloudinaryUtility)
+        {
+            this.cloudinaryUtility = cloudinaryUtility;
+        }
 
-        //    foreach (var image in uploadImageInputModel.Images)
-        //    {
-        //        string extension = image.ContentType;
-        //        string fileName = $"Gallery_IMG{DateTime.UtcNow.ToString("yyyy/dd/mm/ss")}";
-        //        byte[] destinationData;
-        //        using (var ms = new System.IO.MemoryStream())
-        //        {
-        //            await image.CopyToAsync(ms);
-        //            destinationData = ms.ToArray();
-        //        }
+        public async Task<string> UploadFile(IFormFile file, string fileName, string extension, string folder = DEAFULT_FOLDER_NAME)
+        {
+            byte[] destinationData;
 
-        //        UploadResult uploadResult = null;
+            using (var ms = new System.IO.MemoryStream())
+            {
+                await file.CopyToAsync(ms);
+                destinationData = ms.ToArray();
+            }
 
-        //        using (var ms = new System.IO.MemoryStream(destinationData))
-        //        {
-        //            ImageUploadParams uploadParams = new ImageUploadParams()
-        //            {
-        //                Folder = "gallery",
-        //                File = new FileDescription(fileName, ms),
-        //            };
+            UploadResult result = null;
 
-        //            uploadResult = this.cloudinaryUtility.Upload(uploadParams);
-        //        }
+            if (extension != ".pptx" && extension != ".docx" && extension != ".pdf")
+            {
+                using (var ms = new System.IO.MemoryStream(destinationData))
+                {
+                    ImageUploadParams uploadParams = new ImageUploadParams
+                    {
+                        Folder = folder,
+                        File = new FileDescription(fileName, ms),
+                    };
 
-        //        string remoteUrl = uploadResult?.SecureUri.AbsoluteUri;
+                    result = this.cloudinaryUtility.Upload(uploadParams);
+                }
+            }
+            else
+            {
+                using (var ms = new System.IO.MemoryStream(destinationData))
+                {
+                    RawUploadParams uploadParams = new RawUploadParams
+                    {
+                        Folder = folder,
+                        File = new FileDescription(fileName, ms),
+                        PublicId = fileName + extension,
+                    };
 
-        //        File file = new File()
-        //        {
-        //            Extension = extension,
-        //            UserId = uploadImageInputModel.UserId,
-        //            AlbumId = uploadImageInputModel.AlbumId,
-        //            RemoteUrl = remoteUrl,
-        //        };
+                    result = this.cloudinaryUtility.Upload(uploadParams);
+                }
+            }
 
-        //        user.Files.Add(file);
-        //    }
+            return result?.SecureUrl.AbsoluteUri;
+        }
 
-        //    await this.userRepository.SaveChangesAsync();
-        //}
     }
 }

@@ -3,20 +3,33 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-
+    using AutoMapper;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
-    public class AssignmentUserInfoViewModel : IMapFrom<UserAssignment>
+    public class AssignmentUserInfoViewModel : IMapFrom<UserAssignment>, IHaveCustomMappings
     {
-        public string UserName { get; set; }
+        public string StudentName { get; set; }
+
+        public string UserId { get; set; }
 
         public bool Seen { get; set; }
 
         public DateTime TurnedOn { get; set; }
 
+        public DateTime EndDate { get; set; }
+
         public bool Turned { get; set; }
 
-        public IEnumerable<string> FilesUrl { get; set; }
+        public MarkSubmittedAssignmentInputModel InputModel { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<UserAssignment, AssignmentUserInfoViewModel>()
+                .ForMember(x => x.StudentName, y => y.MapFrom(ua => ua.User.UserName))
+                .ForMember(x => x.Turned, y => y.MapFrom(ua => ua.TurnedOn != null))
+                .ForMember(x => x.EndDate, y => y.MapFrom(ua => ua.Assignment.EndDate));
+        }
     }
 }

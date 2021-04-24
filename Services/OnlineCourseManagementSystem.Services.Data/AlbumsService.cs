@@ -21,9 +21,9 @@
             this.albumRepository = albumRepository;
         }
 
-        public async Task CreateAsync(BaseAlbumInputModel albumInputModel)
+        public async Task CreateAsync(AlbumInputModel albumInputModel)
         {
-            if (this.albumRepository.All().Any(x => x.Name == albumInputModel.Name))
+            if (this.albumRepository.All().Where(a => a.UserId == albumInputModel.UserId && a.Name == albumInputModel.Name).Any())
             {
                 throw new ArgumentException("There is already existing album with this name");
             }
@@ -50,7 +50,11 @@
 
         public IEnumerable<T> GetAllById<T>(string userId)
         {
-            return this.albumRepository.All().Where(x => x.UserId == userId).To<T>().ToArray();
+            return this.albumRepository
+                .All()
+                .Where(x => x.UserId == userId)
+                .To<T>()
+                .ToList();
         }
     }
 }

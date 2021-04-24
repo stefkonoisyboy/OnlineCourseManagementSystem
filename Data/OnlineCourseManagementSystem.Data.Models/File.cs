@@ -5,6 +5,7 @@
     using System.Text;
 
     using OnlineCourseManagementSystem.Data.Common.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
 
     public class File : BaseDeletableModel<int>
     {
@@ -35,5 +36,7 @@
         public int? AlbumId { get; set; }
 
         public Album Album { get; set; }
+
+        public FileType Type { get; set; }
     }
 }

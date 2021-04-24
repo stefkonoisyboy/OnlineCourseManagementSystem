@@ -20,6 +20,8 @@
 
         public DateTime? TurnedOn { get; set; }
 
+        public string Feedback { get; set; }
+
         public bool Seen { get; set; }
     }
 }

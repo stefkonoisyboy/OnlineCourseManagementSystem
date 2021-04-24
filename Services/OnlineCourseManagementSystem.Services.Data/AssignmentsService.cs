@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Http;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Assignments;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
@@ -20,29 +21,33 @@
         private readonly IDeletableEntityRepository<Assignment> assignmentRepository;
         private readonly IDeletableEntityRepository<UserAssignment> userAssignmentRepository;
         private readonly Cloudinary cloudinaryUtility;
+        private readonly CloudinaryService cloudinaryService;
 
         public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentRepository, IDeletableEntityRepository<UserAssignment> userAssignmentRepository, Cloudinary cloudinaryUtility)
         {
             this.assignmentRepository = assignmentRepository;
             this.userAssignmentRepository = userAssignmentRepository;
             this.cloudinaryUtility = cloudinaryUtility;
+
+            this.cloudinaryService = new CloudinaryService(cloudinaryUtility);
         }
 
         public IEnumerable<T> GetAllFinishedBy<T>(string userId)
         {
             var assignments = this.userAssignmentRepository
                 .AllWithDeleted()
-                .Where(x => x.TurnedOn != null)
+                .Where(x => x.TurnedOn != null && x.Points != null)
+                .OrderByDescending(x => x.TurnedOn)
                 .To<T>().ToArray();
 
             return assignments;
-
         }
 
         public async Task CreateAsync(CreateAssignmentInputModel inputModel)
         {
             Assignment assignment = new Assignment
             {
+                Title = inputModel.Title,
                 Instructions = inputModel.Instructions,
                 CourseId = inputModel.CourseId,
                 StartDate = inputModel.StartDate,
@@ -56,7 +61,7 @@
 
             if (inputModel.Files != null)
             {
-               await this.AttachFile(assignment, inputModel.Files);
+               await this.AttachFile(assignment, inputModel.Files, FileType.Resource);
             }
 
             foreach (var id in inputModel.StudentsId)
@@ -80,20 +85,22 @@
                     .FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAllUserForAssignment<T>(int assignmentId)
+        public IEnumerable<T> GetAllUsersForAssignment<T>(int assignmentId)
         {
             return this.userAssignmentRepository.All()
-                .Where(a => a.AssignmentId == assignmentId)
+                .Where(a => a.AssignmentId == assignmentId && a.Points == null)
                 .To<T>()
                 .ToList();
         }
 
         public IEnumerable<T> GetAllBy<T>(int courseId)
         {
-            return this.assignmentRepository
+
+            return this.userAssignmentRepository
                 .All()
-                .Where(x => x.CourseId == courseId)
+                .Where(x => x.Points == null)
                 .To<T>()
+                .Distinct()
                 .ToList();
         }
 
@@ -101,7 +108,10 @@
         {
             return this.userAssignmentRepository
                 .All()
-                .Where(x => x.UserId == userId && x.User.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+                .Where(x => x.UserId == userId && x.User.Roles
+                        .FirstOrDefault().RoleId
+                        .EndsWith("Student") && x.TurnedOn == null)
+                .OrderByDescending(x => x.Assignment.StartDate)
                 .To<T>()
                 .ToList();
         }
@@ -111,29 +121,11 @@
         {
             Assignment assignment = this.assignmentRepository.All().FirstOrDefault(x => x.Id == inputModel.Id);
 
+            assignment.Title = inputModel.Title;
             assignment.StartDate = inputModel.StartDate;
             assignment.EndDate = inputModel.EndDate;
-            //await this.AttachFile(assignment, inputModel.Files);
             assignment.Instructions = inputModel.Instructions;
             assignment.PossiblePoints = inputModel.PossiblePoints;
-
-            //foreach (var studentId in inputModel.StudentsId)
-            //{
-            //    if (!this.userAssignmentRepository.All().Any(x => x.UserId == studentId && x.AssignmentId == inputModel.Id))
-            //    {
-            //        await this.userAssignmentRepository.AddAsync(
-            //            new UserAssignment
-            //        {
-            //            Assignment = assignment,
-            //            UserId = studentId,
-            //        });
-            //    }
-            //    else
-            //    {
-            //        UserAssignment userAssignment = this.userAssignmentRepository.All().FirstOrDefault(x => x.UserId == studentId);
-            //        userAssignment.Assignment = assignment;
-            //    }
-            //}
 
             await this.assignmentRepository.SaveChangesAsync();
             await this.userAssignmentRepository.SaveChangesAsync();
@@ -149,56 +141,70 @@
             return courseId;
         }
 
-        public async Task AttachFile(Assignment assignment, IEnumerable<IFormFile> files)
+        public async Task AttachFile(Assignment assignment, IEnumerable<IFormFile> files, FileType fileType, string userId = null)
         {
             foreach (var file in files)
             {
-                string extension = file.ContentType;
-                string fileName = $"File_{DateTime.UtcNow.ToString("yyyy/dd/mm/ss")}";
-                string remoteUrl = await this.UploadWordFileAsync(file, fileName);
+                string extension = System.IO.Path.GetExtension(file.FileName);
+                string fileName = $"File_{DateTime.UtcNow.ToString("yyyy/dd/mm/ss")}" + extension;
+
+                string remoteUrl = await this.cloudinaryService.UploadFile(file, fileName, extension);
                 assignment.Files
                     .Add(new File
                     {
+                        UserId = userId,
                         Extension = extension,
                         RemoteUrl = remoteUrl,
+                        Type = fileType,
                     });
             }
         }
 
-        public async Task MarkAsSeen(int assignmentId)
+        public async Task MarkAsSeen(int assignmentId, string userId)
         {
-            UserAssignment userAssignment = this.userAssignmentRepository.All().FirstOrDefault(a => a.AssignmentId == assignmentId);
+            UserAssignment userAssignment = this.userAssignmentRepository
+                .All()
+                .FirstOrDefault(ua => ua.AssignmentId == assignmentId && ua.UserId == userId);
             userAssignment.Seen = true;
-
-            this.userAssignmentRepository.Update(userAssignment);
 
             await this.userAssignmentRepository.SaveChangesAsync();
         }
 
-        public async Task<string> UploadWordFileAsync(IFormFile file, string fileName)
+        public async Task<int> TurnIn(FilesToAssignmentInputModel inputModel)
         {
-            byte[] destinationData;
-            using (var ms = new System.IO.MemoryStream())
+            Assignment assignment = this.assignmentRepository.All().FirstOrDefault(a => a.Id == inputModel.AssignmentId);
+
+            UserAssignment userAssignment = this.userAssignmentRepository
+                .All()
+                .FirstOrDefault(ua => ua.AssignmentId == inputModel.AssignmentId && ua.UserId == inputModel.UserId);
+            userAssignment.TurnedOn = DateTime.UtcNow;
+
+
+            if (inputModel.Files != null)
             {
-                await file.CopyToAsync(ms);
-                destinationData = ms.ToArray();
+                await this.AttachFile(assignment, inputModel.Files, FileType.Submit, inputModel.UserId);
             }
 
-            UploadResult uploadResult = null;
+            await this.assignmentRepository.SaveChangesAsync();
+            await this.userAssignmentRepository.SaveChangesAsync();
 
-            using (var ms = new System.IO.MemoryStream(destinationData))
-            {
-                RawUploadParams uploadParams = new RawUploadParams()
-                {
-                    Folder = "assignments",
-                    File = new FileDescription(fileName, ms),
-                    PublicId = $"{fileName}.docx",
-                };
+            return assignment.Id;
+        }
 
-                uploadResult = this.cloudinaryUtility.Upload(uploadParams);
-            }
+        public async Task<int> MarkSubmittedAssignment(MarkSubmittedAssignmentInputModel inputModel)
+        {
+            UserAssignment userAssignment = this.userAssignmentRepository
+                .All()
+                .Where(ua => ua.AssignmentId == inputModel.AssignmentId && ua.UserId == inputModel.UserId)
+                .FirstOrDefault();
 
-            return uploadResult?.SecureUrl.AbsoluteUri;
+            userAssignment.Points = inputModel.Points;
+            userAssignment.Feedback = inputModel.Feedback;
+
+            Assignment assignment = this.assignmentRepository.All().FirstOrDefault(a => a.Id == userAssignment.AssignmentId);
+            await this.userAssignmentRepository.SaveChangesAsync();
+
+            return assignment.CourseId;
         }
     }
 }

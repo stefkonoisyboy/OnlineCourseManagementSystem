@@ -5,38 +5,54 @@
     this.ViewData["Title"] = "Assignment Info";
 }
 
-<h1 class="text-center rounded-pill" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
-<div class="row">
-    <div class="col-md-4">
+<form asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
+    <h1 class="text-center rounded-pill" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <button class="btn rounded-pill" style="color:darkorange;background:#ffffff">Turn In</button>
+        </div>
     </div>
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4">
-        <form method="post">
-        </form>
-    </div>
-</div>
 
-<h3 class="text-white">Instructions:</h3>
-<div class="row">
-    <div class="col-md-4 container rounded" style="background:#ffffff; color:darkorange">
-        @this.Model.Instructions
+    <h3 class="text-white">Instructions:</h3>
+    <div class="row">
+        <div class="col-md-4 container rounded" style="background:#ffffff; color:darkorange">
+            @this.Model.Instructions
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-white">Points: @this.Model.PossiblePoints</div>
     </div>
-    <div class="col-md-4"></div>
-    <div class="col-md-4 text-white">Points: @this.Model.PossiblePoints</div>
-</div>
 
-<p class="h3 text-white">Files</p>
-<p class="h4 text-white">Resorces</p>
-@foreach (var file in this.Model.Files)
-{
-<div class="pt-1">
-    <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="600" width="400"></iframe>
-</div>
-}
+    <p class="h3 text-white">Files</p>
+    <p class="h4 text-white">Resorces</p>
+    @foreach (var file in this.Model.Files)
+    {
+        if (file.RemoteUrl.EndsWith(".jpg")) 
+        {
+                <div class="pt-1">
+                    <img src=@file.RemoteUrl height="600" width="400"/>
+                </div>
+        }
+        else
+        {
+            <div class="pt-1">
+                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="600" width="400"></iframe>
+            </div>
+        }
+
+
+    }
 <pre class="tab"></pre>
 <pre class="tab"></pre>
-<p>My work</p>
-@await Html.PartialAsync("_PartialAddFiles", new FilesToAssignmentInputModel { })
+    <p>My work</p>
+    <div>
+        <label asp-for="InputModel.Files"></label>
+        <input asp-for="InputModel.Files" id="addFiles" type="file" multiple class="form-control" />
+    </div>
+</form>
+
 
 

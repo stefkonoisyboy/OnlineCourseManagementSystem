@@ -11,7 +11,7 @@
     public interface IAlbumsService
     {
 
-        Task CreateAsync(BaseAlbumInputModel albumInputModel);
+        Task CreateAsync(AlbumInputModel albumInputModel);
 
         IEnumerable<T> GetAllById<T>(string userId);
 

@@ -10,6 +10,7 @@
     using CloudinaryDotNet.Actions;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
@@ -19,6 +20,7 @@
         private readonly IDeletableEntityRepository<File> fileRepository;
         private readonly Cloudinary cloudinaryUtility;
         private readonly IDeletableEntityRepository<Album> albumRepository;
+        private readonly CloudinaryService cloudinaryService;
 
         public FilesService(IDeletableEntityRepository<ApplicationUser> userRepository,IDeletableEntityRepository<File> fileRepository, Cloudinary cloudinaryUtility, IDeletableEntityRepository<Album> albumRepository)
         {
@@ -27,14 +29,18 @@
 
             this.cloudinaryUtility = cloudinaryUtility;
             this.albumRepository = albumRepository;
+
+            this.cloudinaryService = new CloudinaryService(cloudinaryUtility);
         }
 
-        public async Task DeleteImageFromGallery(int fileId, string userId)
+        public async Task<int?> DeleteImageFromGallery(int fileId, string userId)
         {
             File file = this.fileRepository.All().FirstOrDefault(f => f.Id == fileId);
             this.fileRepository.Delete(file);
 
             await this.fileRepository.SaveChangesAsync();
+
+            return file.AlbumId;
         }
 
         public IEnumerable<T> GetAllById<T>(int lectureId)
@@ -42,6 +48,15 @@
             return this.fileRepository
                 .All()
                 .Where(f => f.LectureId == lectureId)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByUserAndAssignment<T>(int assignmentId, string userId)
+        {
+            return this.fileRepository
+                .All()
+                .Where(f => f.AssignmentId == assignmentId && f.Type == FileType.Resource)
                 .To<T>()
                 .ToList();
         }
@@ -64,48 +79,36 @@
             return allImages;
         }
 
-        public async Task UploadImage(UploadImageInputModel uploadImageInputModel)
+        public async Task AddImages(UploadImageInputModel uploadImageInputModel)
         {
             ApplicationUser user = this.userRepository.All().FirstOrDefault(s => s.Id == uploadImageInputModel.UserId);
 
+
             foreach (var image in uploadImageInputModel.Images)
             {
-                string extension = image.ContentType;
-                string fileName = $"Gallery_IMG{DateTime.UtcNow.ToString("yyyy/dd/mm/ss")}";
-                byte[] destinationData;
-                using (var ms = new System.IO.MemoryStream())
-                {
-                    await image.CopyToAsync(ms);
-                    destinationData = ms.ToArray();
-                }
-
-                UploadResult uploadResult = null;
-
-                using (var ms = new System.IO.MemoryStream(destinationData))
-                {
-                    ImageUploadParams uploadParams = new ImageUploadParams()
-                    {
-                        Folder = "gallery",
-                        File = new FileDescription(fileName, ms),
-                    };
-
-                    uploadResult = this.cloudinaryUtility.Upload(uploadParams);
-                }
-
-                string remoteUrl = uploadResult?.SecureUrl.AbsoluteUri;
-
+                string fileName = $"gallery_IMG{DateTime.UtcNow.ToString("yyyy/dd/mm/ss")}";
+                string extension = System.IO.Path.GetExtension(image.FileName);
                 File file = new File()
                 {
                     Extension = extension,
                     UserId = uploadImageInputModel.UserId,
                     AlbumId = uploadImageInputModel.AlbumId,
-                    RemoteUrl = remoteUrl,
+                    RemoteUrl = await this.cloudinaryService.UploadFile(image, fileName, extension,"gallery"),
                 };
 
                 user.Files.Add(file);
             }
 
             await this.userRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<T> GetAllUserSubmittedFilesForAssignment<T>(int assignmentId, string userId)
+        {
+            return this.fileRepository
+                .All()
+                .Where(f => f.AssignmentId == assignmentId && f.UserId == userId && f.Type == FileType.Submit)
+                .To<T>()
+                .ToList();
         }
     }
 }

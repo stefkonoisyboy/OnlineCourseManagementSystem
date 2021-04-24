@@ -35,7 +35,7 @@
             ApplicationUser applicationUser = await this.userManager.GetUserAsync(this.User);
             inputModel.UserId = applicationUser.Id;
             inputModel.AlbumId = id;
-            await this.fileService.UploadImage(inputModel);
+            await this.fileService.AddImages(inputModel);
             return this.RedirectToAction("AllImages", "Files", new { Id = id });
         }
 
@@ -47,13 +47,13 @@
             return this.View(images);
         }
 
-        public async Task<ActionResult> DeleteImage(int id)
+        public async Task<IActionResult> DeleteImage(int id)
         {
             ApplicationUser applicationUser = await this.userManager.GetUserAsync(this.User);
 
-            await this.fileService.DeleteImageFromGallery(id, applicationUser.Id);
+            int albumId = (int)await this.fileService.DeleteImageFromGallery(id, applicationUser.Id);
 
-            return this.RedirectToAction("AllImages", "Files");
+            return this.RedirectToAction("AllImages", "Files", new { Id = albumId });
         }
     }
 }

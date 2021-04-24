@@ -17,7 +17,7 @@
 
         public override bool IsValid(object value)
         {
-            string[] allowedExtensions = new string[] { ".pptx", ".docx", ".pdf" };
+            string[] allowedExtensions = new string[] { ".pptx", ".docx", ".pdf"};
 
             if (value is IFormFile file)
             {

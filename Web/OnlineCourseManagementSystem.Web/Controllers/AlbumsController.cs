@@ -25,13 +25,16 @@
         public async Task<IActionResult> All()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            var albums = this.albumService.GetAllById<AlbumViewModel>(user.Id);
+            AllAlbumsViewModel allAlbumsViewModel = new AllAlbumsViewModel
+            {
+                Albums = this.albumService.GetAllById<AlbumViewModel>(user.Id),
+            };
 
-            return this.View(albums);
+            return this.View(allAlbumsViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAlbum(BaseAlbumInputModel inputModel)
+        public async Task<IActionResult> CreateAlbum(AlbumInputModel inputModel)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 

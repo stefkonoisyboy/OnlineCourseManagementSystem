@@ -4,27 +4,37 @@
     this.ViewData["Title"] = "Created Assignments";
 }
 
+@if (this.TempData.ContainsKey("CreatedAssignment"))
+ {
+        <div class="alert alert-success alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @this.TempData["CreatedAssignment"]
+        </div>
+ }
+
 @foreach (var assignment in this.Model)
 {
-
-    <div style="background:#ff6a00" class="rounded-pill">
+    <div style="background:#ffffff" class="rounded-pill">
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-3" >
-                <a class="text-light" asp-controller="Assignments" asp-action="AllUserForAssignment" asp-route-id="@assignment.AssignmentId">
+            <div class="col-md-3">
+                <a class="text-black-50" asp-controller="Assignments" asp-action="AllUsersForAssignment" asp-route-id="@assignment.AssignmentId">
                     @assignment.CourseName
                 </a>
             </div>
             <div class="col-md-3">
-                @assignment.EndDate
+                StartDate: @assignment.StartDate
+            </div>
+            <div class="col-md-3">
+                EndDate: @assignment.EndDate
             </div>
             <div class="col-md-3">
                 @assignment.PossiblePoints points
             </div>
-            
+
             <div class="row col-md-3">
                 <div class="col-md-5">
-                    <a  class="btn" style="background:#00ffff;color:#000000" asp-controller="Assignments" asp-action="Edit" asp-route-id="@assignment.AssignmentId">Edit</a>
+                    <a class="btn" style="background:#00ffff;color:#000000" asp-controller="Assignments" asp-action="Edit" asp-route-id="@assignment.AssignmentId">Edit</a>
                 </div>
                 <div class="col-md-7">
                     <form asp-controller="Assignments" asp-action="Delete" asp-route-id="@assignment.AssignmentId" method="post">
@@ -34,6 +44,7 @@
             </div>
         </div>
     </div>
+
     <pre class="tab"></pre>
     <pre class="tab"></pre>
 }
