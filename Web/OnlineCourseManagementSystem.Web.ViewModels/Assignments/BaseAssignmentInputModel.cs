@@ -14,7 +14,7 @@
         [Required]
         public string Title { get; set; }
 
-        [MinLength(10 , ErrorMessage = "Instructions need be at least 10 symbols")]
+        [MinLength(10, ErrorMessage = "Instructions need be at least 10 symbols")]
         public string Instructions { get; set; }
 
         [Required]

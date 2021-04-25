@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -54,6 +55,13 @@
             int albumId = (int)await this.fileService.DeleteImageFromGallery(id, applicationUser.Id);
 
             return this.RedirectToAction("AllImages", "Files", new { Id = albumId });
+        }
+
+        public async Task<IActionResult> DeleteWorkFileFromAssignment(int id)
+        {
+            int assignmentId = (int)await this.fileService.DeleteWorkFileFromAssignment(id);
+
+            return this.RedirectToAction("GetInfo", "Assignments", new { Id = id });
         }
     }
 }

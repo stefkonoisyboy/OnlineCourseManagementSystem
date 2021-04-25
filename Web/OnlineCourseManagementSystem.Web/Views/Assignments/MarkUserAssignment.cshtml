@@ -21,8 +21,9 @@
         </div>
         <div class="cols-md-6 " style="background:#ffffff;">
             <div class="col">
-                    <div class="card card-body bg-dark">
-
+                <div class="card card-body bg-dark">
+                    @if (this.Model.TurnedOn != null)
+                    {
                         @foreach (var file in this.Model.Files)
                         {
                             <div style="background:#6984aa;color:#ff6a00" class="row rounded">
@@ -45,7 +46,8 @@
                             <pre class="tab"></pre>
                             <pre class="tab"></pre>
                         }
-                    </div>
+                    }
+                </div>
             </div>
         </div>
     </div>

@@ -21,5 +21,7 @@
         IEnumerable<T> GetAllByUserAndAssignment<T>(int assignmentId, string userId);
 
         IEnumerable<T> GetAllUserSubmittedFilesForAssignment<T>(int assignmentId, string userId);
+
+        Task<int?> DeleteWorkFileFromAssignment(int fileId);
     }
 }

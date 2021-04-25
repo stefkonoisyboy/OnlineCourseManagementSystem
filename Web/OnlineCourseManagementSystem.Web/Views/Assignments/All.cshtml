@@ -10,37 +10,54 @@
 <pre class="tab"></pre>
 <pre class="tab"></pre>
 
-<table class=" table-stripped table-bordered table-hover">
-    <thead class="table-light">
-        <tr>
-            <th>StartDate</th>
-            <th>DeadLine</th>
-            <th>Course Name</th>
-            <th>Points</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <tdbody class="table-light" style="background:#ff6a00">
-        @foreach (var assignment in this.Model.UnFinihedAssignements)
-        {
-        <tr>
-            <td>@assignment.Title</td>
-            <td>@assignment.StartDate</td>
-            <td>@assignment.EndDate</td>
-            <td>@assignment.CourseName</td>
-            <td>@assignment.PossiblePoints</td>
-            <td>
-                <p>
-                    <a asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
-                        View
-                    </a>
-                </p>
+<div class="row">
+    <div class="col">
+        <div class="card card-body bg-dark">
+            @foreach (var assignment in this.Model.UnFinishedAssignments)
+            {
+                <a class="btn" style="background:#ffffff" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+                    <div style="color:#ff6a00" class="row">
 
-            </td>
-        </tr>
-        }
-    </tdbody>
-</table>
+                        <div class="col-md-4">
+                            <p style="color:#000000">@assignment.Title</p>
+                            <p class="text-black-50"> @assignment.CourseName</p>
+                            @if (assignment.EndDate.Day > DateTime.UtcNow.Day)
+                            {
+                                <div class="col-md-4">
+                                   <p> Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")</p>
+                                </div>
+                            }
+                            else if (assignment.EndDate.Day == DateTime.UtcNow.Day + 1)
+                            {
+                                <div class="col-md-4">
+                                    <p>Due Tomorrow</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-4 text-danger">
+                                    <p>Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")<p>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-3">
+                            @assignment.PossiblePoints Points
+                        </div>
+                        @if (assignment.EndDate < DateTime.UtcNow)
+                        {
+                            <div class="col-md-3 text-danger">
+                                Past due
+                            </div>
+                        }
+
+                    </div>
+                </a>
+                <pre class="tab"></pre>
+                <pre class="tab"></pre>
+            }
+        </div>
+   </div>
+</div>
 
 <pre class="tab"></pre>
 <pre class="tab"></pre>
@@ -57,20 +74,22 @@
 
                 @foreach (var assignment in this.Model.FinishedAssignments)
                 {
-                    <div style="background:#ffffff;color:#ff6a00" class="row rounded">
-                        <div style="color:#ff6a00" class="row">
+                        <a class="btn" style="background:#ffffff" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+                            
+                                <div style="color:#000000" class="row">
 
-                            <div class="col-md-5">
-                                @assignment.CourseName
-                            </div>
-                            <div class="col-md-4">
-                                Points: @assignment.ReceivedPoints/@assignment.PossiblePoints
-                            </div>
-                            <div class="col-md-4">
-                                @assignment.Title
-                            </div>
-                        </div>
-                    </div>
+                                    <div class="col-md-5">
+                                        @assignment.CourseName
+                                    </div>
+                                    <div class="col-md-4">
+                                        Points: @assignment.ReceivedPoints/@assignment.PossiblePoints
+                                    </div>
+                                    <div class="col-md-4">
+                                        @assignment.Title
+                                    </div>
+                                </div>
+                        </a>
+                    
                     <pre class="tab"></pre>
                     <pre class="tab"></pre>
                 }

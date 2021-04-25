@@ -66,7 +66,7 @@
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             AllAssignmentsViewModel allAssignmentsViewModel = new AllAssignmentsViewModel
             {
-                UnFinihedAssignements = this.assignmentsService.GetAllBy<AssignmentViewModel>(user.Id),
+                UnFinishedAssignments = this.assignmentsService.GetAllBy<AssignmentViewModel>(user.Id),
                 FinishedAssignments = this.assignmentsService.GetAllFinishedBy<FinishedAssignmentViewModel>(user.Id),
             };
 
@@ -78,8 +78,21 @@
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             AssignmentPageViewModel assignmentPageViewModel = this.assignmentsService
-                .GetById<AssignmentPageViewModel>(id);
-            assignmentPageViewModel.Files = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(id, user.Id);
+                .GetById<AssignmentPageViewModel>(id, user.Id);
+
+            IEnumerable<FileAssignmentViewModel> resourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(id, user.Id);
+            IEnumerable<FileAssignmentViewModel> workFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(id, user.Id);
+
+            if (resourceFiles.Any())
+            {
+                assignmentPageViewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(id, user.Id);
+            }
+
+            if (workFiles.Any())
+            {
+                assignmentPageViewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(id, user.Id);
+            }
+
             await this.assignmentsService.MarkAsSeen(id, user.Id);
 
             return this.View(assignmentPageViewModel);
@@ -112,9 +125,11 @@
             return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId });
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            EditAssignmentInputModel editAssignmentInputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id);
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            EditAssignmentInputModel editAssignmentInputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id, user.Id);
 
             return this.View(editAssignmentInputModel);
         }
@@ -123,9 +138,11 @@
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         public async Task<IActionResult> Edit(EditAssignmentInputModel inputModel, int id)
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
             if (!this.ModelState.IsValid)
             {
-                inputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id);
+                inputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id, user.Id);
             }
 
             await this.assignmentsService.UpdateAsync(inputModel);
@@ -144,6 +161,7 @@
         }
 
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> TurnIn(FilesToAssignmentInputModel inputModel, int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -151,19 +169,27 @@
             inputModel.UserId = user.Id;
             await this.assignmentsService.TurnIn(inputModel);
 
-            return this.RedirectToAction("All", "Assignments", new { Id = id });
+            return this.RedirectToAction("GetInfo", "Assignments", new { Id = id });
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UndoTurnIn(int id)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            await this.assignmentsService.UndoTurnIn(id, user.Id);
+
+            return this.RedirectToAction("GetInfo", "Assignments", new { Id = id });
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         public IActionResult MarkUserAssignment(string id)
         {
             int assignmentId = (int)this.TempData["AssignmentId"];
             this.TempData["AssignmentId"] = assignmentId;
-            MarkSubmittedAssignmentViewModel viewModel = new MarkSubmittedAssignmentViewModel
-            {
-                Files = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, id),
-                UserId = id,
-            };
-
+            var viewModel = this.assignmentsService.GetById<MarkSubmittedAssignmentViewModel>(assignmentId, id);
+            viewModel.Files = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, id);
             return this.View(viewModel);
         }
 

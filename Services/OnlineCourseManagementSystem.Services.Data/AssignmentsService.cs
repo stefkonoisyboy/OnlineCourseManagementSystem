@@ -20,15 +20,12 @@
     {
         private readonly IDeletableEntityRepository<Assignment> assignmentRepository;
         private readonly IDeletableEntityRepository<UserAssignment> userAssignmentRepository;
-        private readonly Cloudinary cloudinaryUtility;
         private readonly CloudinaryService cloudinaryService;
 
         public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentRepository, IDeletableEntityRepository<UserAssignment> userAssignmentRepository, Cloudinary cloudinaryUtility)
         {
             this.assignmentRepository = assignmentRepository;
             this.userAssignmentRepository = userAssignmentRepository;
-            this.cloudinaryUtility = cloudinaryUtility;
-
             this.cloudinaryService = new CloudinaryService(cloudinaryUtility);
         }
 
@@ -36,7 +33,7 @@
         {
             var assignments = this.userAssignmentRepository
                 .AllWithDeleted()
-                .Where(x => x.TurnedOn != null && x.Points != null)
+                .Where(x => x.TurnedOn != null && x.UserId == userId)
                 .OrderByDescending(x => x.TurnedOn)
                 .To<T>().ToArray();
 
@@ -77,10 +74,10 @@
             await this.userAssignmentRepository.SaveChangesAsync();
         }
 
-        public T GetById<T>(int assignmentId)
+        public T GetById<T>(int assignmentId, string userId)
         {
-            return this.assignmentRepository.All()
-                    .Where(a => a.Id == assignmentId)
+            return this.userAssignmentRepository.All()
+                    .Where(a => a.AssignmentId == assignmentId && a.UserId == userId)
                     .To<T>()
                     .FirstOrDefault();
         }
@@ -119,7 +116,7 @@
 
         public async Task UpdateAsync(EditAssignmentInputModel inputModel)
         {
-            Assignment assignment = this.assignmentRepository.All().FirstOrDefault(x => x.Id == inputModel.Id);
+            Assignment assignment = this.assignmentRepository.All().FirstOrDefault(x => x.Id == inputModel.AssignmentId);
 
             assignment.Title = inputModel.Title;
             assignment.StartDate = inputModel.StartDate;
@@ -205,6 +202,17 @@
             await this.userAssignmentRepository.SaveChangesAsync();
 
             return assignment.CourseId;
+        }
+
+        public async Task UndoTurnIn(int assignmentId, string userId)
+        {
+            UserAssignment userAssignment = this.userAssignmentRepository
+                .All()
+                .FirstOrDefault(ua => ua.AssignmentId == assignmentId && ua.UserId == userId);
+
+            userAssignment.TurnedOn = null;
+
+            await this.userAssignmentRepository.SaveChangesAsync();
         }
     }
 }
