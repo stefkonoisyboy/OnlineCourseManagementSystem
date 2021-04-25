@@ -11,8 +11,8 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
 
-    public class EditAssignmentInputModel : BaseAssignmentInputModel, IMapFrom<Assignment>
+    public class EditAssignmentInputModel : BaseAssignmentInputModel, IMapFrom<UserAssignment>
     {
-        public int Id { get; set; }
+        public int AssignmentId { get; set; }
     }
 }

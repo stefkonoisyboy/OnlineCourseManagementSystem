@@ -22,7 +22,7 @@
         private readonly IDeletableEntityRepository<Album> albumRepository;
         private readonly CloudinaryService cloudinaryService;
 
-        public FilesService(IDeletableEntityRepository<ApplicationUser> userRepository,IDeletableEntityRepository<File> fileRepository, Cloudinary cloudinaryUtility, IDeletableEntityRepository<Album> albumRepository)
+        public FilesService(IDeletableEntityRepository<ApplicationUser> userRepository, IDeletableEntityRepository<File> fileRepository, Cloudinary cloudinaryUtility, IDeletableEntityRepository<Album> albumRepository)
         {
             this.userRepository = userRepository;
             this.fileRepository = fileRepository;
@@ -83,7 +83,6 @@
         {
             ApplicationUser user = this.userRepository.All().FirstOrDefault(s => s.Id == uploadImageInputModel.UserId);
 
-
             foreach (var image in uploadImageInputModel.Images)
             {
                 string fileName = $"gallery_IMG{DateTime.UtcNow.ToString("yyyy/dd/mm/ss")}";
@@ -93,7 +92,7 @@
                     Extension = extension,
                     UserId = uploadImageInputModel.UserId,
                     AlbumId = uploadImageInputModel.AlbumId,
-                    RemoteUrl = await this.cloudinaryService.UploadFile(image, fileName, extension,"gallery"),
+                    RemoteUrl = await this.cloudinaryService.UploadFile(image, fileName, extension, "gallery"),
                 };
 
                 user.Files.Add(file);
@@ -109,6 +108,19 @@
                 .Where(f => f.AssignmentId == assignmentId && f.UserId == userId && f.Type == FileType.Submit)
                 .To<T>()
                 .ToList();
+        }
+
+        public async Task<int?> DeleteWorkFileFromAssignment(int fileId)
+        {
+            File file = this.fileRepository
+                .All()
+                .FirstOrDefault(f => f.Id == fileId);
+
+            this.fileRepository.Delete(file);
+
+            await this.fileRepository.SaveChangesAsync();
+
+            return file.AssignmentId;
         }
     }
 }

@@ -25,12 +25,14 @@
 
         IEnumerable<T> GetAllFinishedBy<T>(string userId);
 
-        T GetById<T>(int id);
+        T GetById<T>(int assignmentId, string userId);
 
         Task UpdateAsync(EditAssignmentInputModel inputModel);
 
         Task<int> TurnIn(FilesToAssignmentInputModel inputModel);
 
         Task<int> MarkSubmittedAssignment(MarkSubmittedAssignmentInputModel inputModel);
+
+        Task UndoTurnIn(int assignmentId, string userId);
     }
 }

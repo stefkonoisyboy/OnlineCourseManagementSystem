@@ -5,54 +5,105 @@
     this.ViewData["Title"] = "Assignment Info";
 }
 
-<form asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
-    <h1 class="text-center rounded-pill" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
-    <div class="row">
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-        </div>
-        <div class="col-md-4">
-            <button class="btn rounded-pill" style="color:darkorange;background:#ffffff">Turn In</button>
-        </div>
-    </div>
 
-    <h3 class="text-white">Instructions:</h3>
-    <div class="row">
-        <div class="col-md-4 container rounded" style="background:#ffffff; color:darkorange">
-            @this.Model.Instructions
-        </div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4 text-white">Points: @this.Model.PossiblePoints</div>
+<h1 class="text-center rounded-pill" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
+<div class="row">
+    <div class="col-md-4">
     </div>
-
-    <p class="h3 text-white">Files</p>
-    <p class="h4 text-white">Resorces</p>
-    @foreach (var file in this.Model.Files)
+    <div class="col-md-4">
+    </div>
+    @if (this.Model.TurnedOn == null)
     {
-        if (file.RemoteUrl.EndsWith(".jpg")) 
+        <form asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
+            <div class="col-md-4">
+                <button class="btn rounded-pill" style="color:darkorange;background:#ffffff">Turn In</button>
+            </div>
+            <div class="pt-2">
+                <label asp-for="InputModel.Files"></label>
+                <input asp-for="InputModel.Files" id="addFiles" type="file" multiple class="form-control" />
+            </div>
+
+        </form>
+    }
+    else
+    {
+        <form asp-controller="Assignments" asp-action="UndoTurnIn" asp-route-id="@this.Model.AssignmentId" method="post">
+            <div>
+                <button class="btn rounded-pill" style="color:darkorange;background:#ffffff">Undo turn in</button>
+            </div>
+        </form>
+    }
+
+</div>
+
+<h3 class="text-white">Instructions:</h3>
+<div class="row">
+    <div class="col-md-4 container rounded" style="background:#ffffff; color:darkorange">
+        @this.Model.Instructions
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4 text-white">Points: @this.Model.PossiblePoints</div>
+</div>
+
+<p class="h3 text-white">Files</p>
+<p class="h4 text-white">Resorces</p>
+@if (this.Model.ResourceFiles != null)
+{
+    @foreach (var file in this.Model.ResourceFiles)
+    {
+        if (file.RemoteUrl.EndsWith(".jpg"))
         {
-                <div class="pt-1">
-                    <img src=@file.RemoteUrl height="600" width="400"/>
-                </div>
+            <form>
+            </form>
+            <div class="pt-1">
+                <iframe src=@file.RemoteUrl height="300" width="300"></iframe>
+            </div>
         }
         else
         {
             <div class="pt-1">
-                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="600" width="400"></iframe>
+                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="300" width="300"></iframe>
             </div>
         }
+    }
+}
+else
+{
+    <p class="text-white">No files</p>
+}
 
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+<p>My work</p>
+
+@if (this.Model.WorkFiles != null)
+{
+    @foreach (var file in this.Model.WorkFiles)
+    {
+        <form asp-controller="Files" asp-action="DeleteWorkFileFromAssignment" asp-route-id="@file.FileId" method="post">
+            @if (file.RemoteUrl.EndsWith(".jpg"))
+            {
+                <div class="pt-1">
+                    <iframe src=@file.RemoteUrl height="300" width="300"></iframe>
+                    <button class="form-control">Delete</button>
+                </div>
+            }
+            else
+            {
+                <div class="pt-1">
+                    <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="300" width="300"></iframe>
+                </div>
+            }
+        </form>
 
     }
-<pre class="tab"></pre>
-<pre class="tab"></pre>
-    <p>My work</p>
-    <div>
-        <label asp-for="InputModel.Files"></label>
-        <input asp-for="InputModel.Files" id="addFiles" type="file" multiple class="form-control" />
-    </div>
-</form>
+}
+else
+{
+    <p class="text-white">No files</p>
+}
+
+
 
 
 
