@@ -50,10 +50,10 @@
 
         public string CourseNameByStudentAndCourse(string studentId, int courseId)
         {
-            return this.userCoursesRepository
+            return this.coursesRepository
                 .All()
-                .FirstOrDefault(uc => uc.User.StudentId == studentId && uc.CourseId == courseId)
-                .Course.Name;
+                .FirstOrDefault(c => c.Users.Any(u => u.User.StudentId == studentId) && c.Id == courseId)
+                .Name;
         }
 
         public async Task CreateAsync(CreateCourseInputModel input)
