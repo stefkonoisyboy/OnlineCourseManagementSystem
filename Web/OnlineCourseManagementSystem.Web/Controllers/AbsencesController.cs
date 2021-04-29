@@ -65,6 +65,8 @@
                 EndDate = input.EndDate,
             };
 
+            this.ViewBag.CourseName = this.coursesService.CourseNameByStudentAndCourse(input.StudentId, input.CourseId);
+
             return this.View("AllByStudentInIntervalResult", viewModel);
         }
 
