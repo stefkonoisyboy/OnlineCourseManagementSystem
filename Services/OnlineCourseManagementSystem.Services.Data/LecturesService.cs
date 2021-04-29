@@ -141,6 +141,17 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllInInterval<T>(DateTime startDate, DateTime endDate)
+        {
+            return this.lecturesRepository
+                .All()
+                .Where(l => l.StartDate >= startDate && l.EndDate <= endDate)
+                .OrderBy(l => l.StartDate)
+                .ThenBy(l => l.EndDate)
+                .To<T>()
+                .ToList();
+        }
+
         private async Task<string> UploadWordFileAsync(IFormFile formFile, string fileName)
         {
             byte[] destinationData;

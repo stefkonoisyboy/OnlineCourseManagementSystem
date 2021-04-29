@@ -13,6 +13,7 @@
             this.Files = new HashSet<File>();
             this.Comments = new HashSet<Comment>();
             this.Assignments = new HashSet<Assignment>();
+            this.Absences = new HashSet<Absence>();
         }
 
         public string Title { get; set; }
@@ -30,5 +31,7 @@
         public virtual ICollection<Comment> Comments { get; set; }
 
         public virtual ICollection<Assignment> Assignments { get; set; }
+
+        public virtual ICollection<Absence> Absences { get; set; }
     }
 }

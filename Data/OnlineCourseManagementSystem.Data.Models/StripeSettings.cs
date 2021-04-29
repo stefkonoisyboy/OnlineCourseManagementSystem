@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Data.Models
+﻿namespace OnlineCourseManagementSystem.Data.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class StripeSettings
     {
         public string SecretKey { get; set; }

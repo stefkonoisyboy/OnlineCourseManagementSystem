@@ -1,0 +1,44 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Absences.GetAllByStudentInIntervalListViewModel
+@{ 
+    this.ViewData["Title"] = "View Attendance";
+}
+
+@if (this.Model.Students.Count() == 0)
+{
+    <h1>No results found!</h1>
+}
+else
+{
+    <div class="form-group">
+        <h3>Student: @this.Model.StudentFullName</h3>
+        <h3>Attendance: </h3>
+        <h4 class="alert-success">StartDate: @this.Model.StartDate</h4>
+        <h4 class="alert-danger">EndDate: @this.Model.EndDate</h4>
+    </div>
+
+    <div class="form-group">
+        <table class="table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Lecture Title</th>
+                    <th>Lecture Date</th>
+                    <th>Attendance</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in this.Model.Students)
+                {
+                    <tr>
+                        <td>@(student.StudentUserFirstName + ' ' + student.StudentUserLastName)</td>
+                        <td>@student.LectureTitle</td>
+                        <td>@student.LectureStartDate.ToString("dddd, dd MMMM yyyy")</td>
+                        <td>@student.Type.ToString()</td>
+                        <td>@student.Reason</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

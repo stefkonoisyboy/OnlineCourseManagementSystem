@@ -1,0 +1,16 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Absences
+@model List<CreateAbsenceInputModel>
+
+<form method="post">
+    @if (this.Model.Count() == 0)
+    {
+        @for (int i = 0; i < 3; i++)
+        {
+            <div class="form-group">
+                <input name="[@i].Reason" class="form-control" />
+            </div>
+        }
+    }
+
+    <input type="submit" value="Submit" class="btn btn-success" />
+</form>

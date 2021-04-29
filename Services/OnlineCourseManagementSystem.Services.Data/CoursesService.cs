@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
@@ -45,6 +46,14 @@
             Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == courseId);
             course.IsApproved = true;
             await this.coursesRepository.SaveChangesAsync();
+        }
+
+        public string CourseNameByStudentAndCourse(string studentId, int courseId)
+        {
+            return this.userCoursesRepository
+                .All()
+                .FirstOrDefault(uc => uc.User.StudentId == studentId && uc.CourseId == courseId)
+                .Course.Name;
         }
 
         public async Task CreateAsync(CreateCourseInputModel input)
@@ -153,6 +162,19 @@
                     Text = c.Name,
                     Value = c.Id.ToString(),
                 });
+        }
+
+        public IEnumerable<SelectListItem> GetAllAsSelectListItems()
+        {
+            return this.coursesRepository
+                .All()
+                .OrderBy(c => c.Name)
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString(),
+                })
+                .ToList();
         }
 
         public IEnumerable<T> GetAllByTag<T>(SearchByTagInputModel input)

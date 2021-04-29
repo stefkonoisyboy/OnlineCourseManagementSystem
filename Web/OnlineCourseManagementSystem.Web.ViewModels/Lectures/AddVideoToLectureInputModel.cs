@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Lectures
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Lectures
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
     public class AddVideoToLectureInputModel
     {
         public string UserId { get; set; }

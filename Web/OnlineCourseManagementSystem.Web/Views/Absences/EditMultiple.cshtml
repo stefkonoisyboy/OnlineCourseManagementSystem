@@ -1,0 +1,53 @@
+﻿@model IEnumerable<OnlineCourseManagementSystem.Web.ViewModels.Absences.EditAbsenceInputModel>
+@using OnlineCourseManagementSystem.Data.Models.Enumerations
+@{
+    this.ViewData["Title"] = "Update Attendance";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+
+<h3>@this.ViewBag.CourseName</h3>
+<h3>@this.ViewBag.LectureTitle</h3>
+
+<form asp-controller="Absences" asp-action="EditMultiple" asp-route-courseId="@this.ViewBag.CourseId" asp-route-lectureId="@this.ViewBag.LectureId" asp-route-courseName="@this.ViewBag.CourseName" asp-route-lectureTitle="@this.ViewBag.LectureTitle" method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
+    <table class="table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Student Name</th>
+                <th>Attendance</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+
+        <tbody class="table-light">
+            @for (int i = 0; i < this.Model.Count(); i++)
+            {
+                <tr>
+                    <td>@(this.Model.ToList()[i].StudentUserFirstName + ' ' + this.Model.ToList()[i].StudentUserLastName)</td>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="ToList()[i].Type"></label>
+                            <select asp-for="ToList()[i].Type" asp-items="Html.GetEnumSelectList<AbsenceType>()" class="form-control">
+                                <option>Select type ...</option>
+                            </select>
+                            <span asp-validation-for="ToList()[i].Type" class="alert-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="ToList()[i].Reason"></label>
+                            <textarea asp-for="ToList()[i].Reason" class="form-control"></textarea>
+                            <span asp-validation-for="ToList()[i].Reason" class="alert-danger"></span>
+                        </div>
+
+                        <input type="hidden" asp-for="ToList()[i].Id" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <input type="submit" value="Update Attendance" class="btn btn-warning" />
+</form>

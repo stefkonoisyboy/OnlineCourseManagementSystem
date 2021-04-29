@@ -1,6 +1,7 @@
 ﻿namespace OnlineCourseManagementSystem.Web
 {
     using System.Reflection;
+
     using CloudinaryDotNet;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -88,6 +89,7 @@
             services.AddTransient<IAssignmentsService, AssignmentsService>();
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<ITownsService, TownsService>();
+            services.AddTransient<IAbsencesService, AbsencesService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }

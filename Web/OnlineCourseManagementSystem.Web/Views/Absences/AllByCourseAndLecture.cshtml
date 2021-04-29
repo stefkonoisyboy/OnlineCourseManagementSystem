@@ -1,0 +1,65 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Absences.AllAbsencesByCourseAndLectureListViewModel
+@{
+    this.ViewData["Title"] = "All Absences for the given course and lecture";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+<h3>@this.Model.CourseName</h3>
+<h3>@this.Model.LectureTitle</h3>
+
+@if (this.TempData.ContainsKey("SuccessMessage"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["SuccessMessage"]
+    </div>
+}
+
+@if (this.TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["ErrorMessage"]
+    </div>
+}
+
+@if (this.Model.Absences.Count() == 0)
+{
+    <h1>There is no data about Lecture's Attendance</h1>
+}
+else
+{
+    <form asp-controller="Absences" asp-action="DeleteByLecture" asp-route-courseId="@this.Model.CourseId" asp-route-lectureId="@this.Model.LectureId" method="post">
+        <input type="submit" value="Delete Lecture's Attendance" class="btn btn-danger" />
+    </form>
+
+    <table class="table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Student Name</th>
+                <th>Attendance</th>
+                <th>Reason</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody class="table-light">
+            @foreach (var absence in this.Model.Absences)
+            {
+                <tr>
+                    <td>@(absence.StudentUserFirstName + ' ' + absence.StudentUserLastName)</td>
+                    <td>@absence.Type.ToString()</td>
+                    <td>@absence.Reason</td>
+                    <td>
+                        <form asp-controller="Absences" asp-action="DeleteByStudent" asp-route-courseId="@this.Model.CourseId" asp-route-lectureId="@this.Model.LectureId" asp-route-studentId="@absence.StudentId" method="post">
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        </form>
+
+                        <a asp-controller="Absences" asp-action="Edit" asp-route-id="@absence.Id" class="btn btn-warning">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
@@ -67,6 +68,17 @@
                 }).ToList();
         }
 
+        public IEnumerable<T> GetAllByCourse<T>(int courseId)
+        {
+            return this.studentsRepository
+               .All()
+               .OrderBy(s => s.User.FirstName + ' ' + s.User.LastName)
+               .ThenBy(s => s.User.UserName)
+               .Where(s => s.User.Courses.Any(c => c.CourseId == courseId) && s.User.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+               .To<T>()
+               .ToList();
+        }
+
         public IEnumerable<T> GetAllById<T>(string parentId)
         {
             return this.studentsRepository
@@ -78,5 +90,28 @@
                 .ToList();
         }
 
+        public IEnumerable<SelectListItem> GetAllByParentAsSelectListItems(string parentId)
+        {
+            return this.studentsRepository
+                .All()
+                .OrderBy(s => s.User.FirstName + ' ' + s.User.LastName)
+                .ThenBy(s => s.User.UserName)
+                .Where(s => s.ParentId == parentId && s.User.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+                .Select(s => new SelectListItem
+                {
+                    Text = s.User.FirstName + ' ' + s.User.LastName,
+                    Value = s.Id,
+                }).ToList();
+        }
+
+        public string GetFullNameById(string studentId)
+        {
+            return this.studentsRepository
+                .All()
+                .FirstOrDefault(s => s.Id == studentId && s.User.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+                .User.FirstName + ' ' + this.studentsRepository
+                .All()
+                .FirstOrDefault(s => s.Id == studentId && s.User.Roles.FirstOrDefault().RoleId.EndsWith("Student")).User.LastName;
+        }
     }
 }
