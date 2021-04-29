@@ -10,11 +10,17 @@
 
     public interface IStudentsService
     {
+        string GetFullNameById(string studentId);
+
         IEnumerable<T> GetAll<T>();
 
         IEnumerable<T> GetAllById<T>(string parentId);
 
+        IEnumerable<T> GetAllByCourse<T>(int courseId);
+
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
+
+        IEnumerable<SelectListItem> GetAllByParentAsSelectListItems(string parentId);
 
         Task AddParent(AddParentInputModel input);
 

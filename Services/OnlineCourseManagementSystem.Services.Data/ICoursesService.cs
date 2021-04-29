@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
@@ -19,6 +20,8 @@
         Task ApproveAsync(int courseId);
 
         Task EnrollAsync(int courseId, string userId);
+
+        string CourseNameByStudentAndCourse(string studentId, int courseId);
 
         IEnumerable<T> GetAll<T>();
 
@@ -37,5 +40,7 @@
         IEnumerable<T> GetAllByTag<T>(SearchByTagInputModel input);
 
         IEnumerable<SelectListItem> GetAllActive();
+
+        IEnumerable<SelectListItem> GetAllAsSelectListItems();
     }
 }

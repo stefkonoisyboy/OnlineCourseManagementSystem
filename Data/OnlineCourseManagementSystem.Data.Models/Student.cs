@@ -11,6 +11,8 @@
         public Student()
         {
             this.Id = Guid.NewGuid().ToString();
+
+            this.Absences = new HashSet<Absence>();
         }
 
         public string UserId { get; set; }
@@ -20,5 +22,7 @@
         public string ParentId { get; set; }
 
         public virtual Parent Parent { get; set; }
+
+        public virtual ICollection<Absence> Absences { get; set; }
     }
 }

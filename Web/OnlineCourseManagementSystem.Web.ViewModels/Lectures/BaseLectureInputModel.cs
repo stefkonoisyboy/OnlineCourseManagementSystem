@@ -1,10 +1,11 @@
 ﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Lectures
 {
-    using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Text;
+
+    using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
     public class BaseLectureInputModel : IValidatableObject
     {

@@ -75,6 +75,8 @@
 
         public virtual DbSet<Album> Albums { get; set; }
 
+        public virtual DbSet<Absence> Absences { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

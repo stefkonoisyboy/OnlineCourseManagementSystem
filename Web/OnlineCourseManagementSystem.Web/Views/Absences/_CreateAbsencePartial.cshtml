@@ -1,0 +1,23 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Absences.CreateAbsenceInputModel
+@using OnlineCourseManagementSystem.Data.Models.Enumerations
+@{ 
+    this.ViewData["Title"] = "Create Absence";
+}
+
+<form method="post">
+    <div asp-validation-summary="All"></div>
+
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <select asp-for="Type" asp-items="Html.GetEnumSelectList<AbsenceType>()" class="form-control">
+            <option>Select type ...</option>
+        </select>
+        <span asp-validation-for="Type" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Reason"></label>
+        <textarea asp-for="Reason" class="form-control"></textarea>
+        <span asp-validation-for="Reason" class="alert-danger"></span>
+    </div>
+</form>

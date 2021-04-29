@@ -33,6 +33,12 @@
         <a asp-controller="Lectures" asp-action="AddWord" asp-route-id="@lecture.Id">Add Word Document to the Lecture</a>
         <a asp-controller="Lectures" asp-action="AddPresentation" asp-route-id="@lecture.Id">Add Presentation to the Lecture</a>
         <a asp-controller="Lectures" asp-action="AddVideo" asp-route-id="@lecture.Id">Add Video to the Lecture</a>
+        if (lecture.StartDate <= DateTime.UtcNow)
+        {
+            <a class="btn btn-success" asp-controller="Absences" asp-action="Create" asp-route-courseId="@this.Model.Id" asp-route-lectureId="@lecture.Id" asp-route-courseName="@this.Model.Name" asp-route-lectureTitle="@lecture.Title">Mark Attendance</a>
+            <a class="btn btn-success" asp-controller="Absences" asp-action="EditMultiple" asp-route-courseId="@this.Model.Id" asp-route-lectureId="@lecture.Id" asp-route-courseName="@this.Model.Name" asp-route-lectureTitle="@lecture.Title">Update Attendance</a>
+            <a class="btn btn-success" asp-controller="Absences" asp-action="AllByCourseAndLecture" asp-route-courseId="@this.Model.Id" asp-route-lectureId="@lecture.Id" asp-route-courseName="@this.Model.Name" asp-route-lectureTitle="@lecture.Title">View Lecture's Attendance</a>
+        }
     }
     @if (this.User.Identity.IsAuthenticated)
     {

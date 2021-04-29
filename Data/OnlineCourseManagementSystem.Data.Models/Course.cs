@@ -18,6 +18,7 @@
             this.Assignments = new HashSet<Assignment>();
             this.Tags = new HashSet<CourseTag>();
             this.Lecturers = new HashSet<CourseLecturer>();
+            this.Absences = new HashSet<Absence>();
         }
 
         public string Name { get; set; }
@@ -55,5 +56,7 @@
         public virtual ICollection<CourseTag> Tags { get; set; }
 
         public virtual ICollection<CourseLecturer> Lecturers { get; set; }
+
+        public virtual ICollection<Absence> Absences { get; set; }
     }
 }

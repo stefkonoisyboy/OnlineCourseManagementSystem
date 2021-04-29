@@ -24,5 +24,7 @@
         IEnumerable<T> GetAllById<T>(int courseId);
 
         IEnumerable<T> GetAllVideosById<T>(int lectureId);
+
+        IEnumerable<T> GetAllInInterval<T>(DateTime startDate, DateTime endDate);
     }
 }

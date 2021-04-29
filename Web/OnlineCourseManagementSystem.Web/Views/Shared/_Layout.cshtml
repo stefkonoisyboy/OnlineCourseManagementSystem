@@ -49,6 +49,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Create">Create a Course</a>
                             </li>
                         }
+                        @if (this.User.IsInRole(GlobalConstants.ParentRoleName))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Absences" asp-action="AllByStudentInInterval">View Attendance</a>
+                            </li>
+                        }
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">

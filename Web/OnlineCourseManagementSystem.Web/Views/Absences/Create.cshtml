@@ -1,0 +1,51 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Absences.CreateAbsenceListInputModel
+@using OnlineCourseManagementSystem.Data.Models.Enumerations
+@{ 
+    this.ViewData["Title"] = "Mark Attendance";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+
+<h3>@this.Model.CourseName</h3>
+<h3>@this.Model.LectureTitle</h3>
+
+<form asp-controller="Absences" asp-action="Create" asp-route-courseId="@this.Model.CourseId" asp-route-lectureId="@this.Model.LectureId" asp-route-courseName="@this.Model.CourseName" asp-route-lectureTitle="@this.Model.LectureTitle" method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
+    <table class="table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Student Name</th>
+                <th>Attendance</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+
+        <tbody class="table-light">
+            @for (int i = 0; i < this.Model.Students.Count(); i++)
+            {
+                <tr>
+                    <td>@(this.Model.Students.ToList()[i].UserFirstName + ' ' + this.Model.Students.ToList()[i].UserLastName)</td>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="Inputs[i].Type"></label>
+                            <select asp-for="Inputs[i].Type" asp-items="Html.GetEnumSelectList<AbsenceType>()" class="form-control">
+                                <option>Select type ...</option>
+                            </select>
+                            <span asp-validation-for="Inputs[i].Type" class="alert-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="Inputs[i].Reason"></label>
+                            <textarea asp-for="Inputs[i].Reason" class="form-control"></textarea>
+                            <span asp-validation-for="Inputs[i].Reason" class="alert-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <input type="submit" value="Mark Attendance" class="btn btn-success" />
+</form>

@@ -1,0 +1,28 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Absences.EditAbsenceInputModel
+@using OnlineCourseManagementSystem.Data.Models.Enumerations
+@{ 
+    this.ViewData["Title"] = "Update this Attendance";
+} 
+
+<h3>@this.ViewData["Title"]</h3>
+<form asp-controller="Absences" asp-action="Edit" asp-route-courseId="@this.ViewBag.CourseId" asp-route-lectureId="@this.ViewBag.LectureId" method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <select asp-for="Type" asp-items="Html.GetEnumSelectList<AbsenceType>()" class="form-control">
+            <option>Select type ...</option>
+        </select>
+        <span asp-validation-for="Type" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Reason"></label>
+        <textarea asp-for="Reason" class="form-control"></textarea>
+        <span asp-validation-for="Reason" class="alert-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <input type="submit" value="Edit" class="btn btn-warning" />
+</form>

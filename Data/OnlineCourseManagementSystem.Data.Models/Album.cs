@@ -1,9 +1,10 @@
 ﻿namespace OnlineCourseManagementSystem.Data.Models
 {
-    using OnlineCourseManagementSystem.Data.Common.Models;
     using System;
     using System.Collections.Generic;
     using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Common.Models;
 
     public class Album : BaseDeletableModel<int>
     {

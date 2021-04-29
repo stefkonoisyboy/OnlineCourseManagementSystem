@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Assignments
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Assignments
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
     public class MarkSubmittedAssignmentInputModel
     {
         public int AssignmentId { get; set; }
