@@ -9,6 +9,13 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <Content Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <EmbeddedResource Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <None Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
@@ -47,5 +54,9 @@
     <ProjectReference Include="..\..\Services\OnlineCourseManagementSystem.Services\OnlineCourseManagementSystem.Services.csproj" />
     <ProjectReference Include="..\OnlineCourseManagementSystem.Web.Infrastructure\OnlineCourseManagementSystem.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\OnlineCourseManagementSystem.Web.ViewModels\OnlineCourseManagementSystem.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\icons\" />
   </ItemGroup>
 </Project>

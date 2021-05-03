@@ -56,6 +56,7 @@
         <label asp-for="StudentsId"></label>
         <select asp-items="@this.Model.Students" multiple="multiple" class="multi-select form-control custom-radio" id="StudentsId" asp-for="StudentsId">
         </select>
+        <span asp-validation-for="StudentsId"></span>
     </div>
     <pre class="tab"></pre>
     <pre class="tab"></pre>
