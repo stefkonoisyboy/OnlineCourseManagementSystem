@@ -1,0 +1,233 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Posts
+@model PostInfoViewModel
+@{
+    this.ViewData["Title"] = "Post";
+}
+
+@if (this.TempData.ContainsKey("CreatedComment"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["CreatedComment"]
+    </div>
+}
+
+<article class="rounded" style=" background: #d8d8d8">
+    <div class="card-header">
+        <span>@this.Model.Post.AuthorName</span>
+
+        <h1>@this.Model.Post.Title</h1>
+
+    </div>
+    <div class="card-body">
+        <p>@this.Model.Post.Content</p>
+    </div>
+    <div class="card-footer">
+        <p>
+            <span>Likes</span>
+            <span>@this.Model.Post.LikesCount</span>
+            <span>DisLikes</span>
+            <span>@this.Model.Post.DisLikesCount</span>
+        </p>
+        <p>
+            <img src="~/icons/calendar.png" alt="Alternate Text" />
+            <span>@this.Model.Post.CreatedOn</span>
+        </p>
+        @if (!this.User.Identity.IsAuthenticated)
+        {
+            <p>
+                To have permission to the forum(adding questions, responding or comment) you have to be signed in course of onlineManagmentSystem.bg
+            </p>
+        }
+    </div>
+</article>
+
+@if (this.User.Identity.IsAuthenticated)
+{
+    <a class="btn" style="background:#ffffff; color:#ff6a00; width: auto" asp-controller="Comments" asp-action="Create" asp-route-id="@this.Model.Post.Id">
+        Add Comment
+    </a>
+}
+
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+
+    <div class="col justify-content-lg-end">
+        @if (!(this.Model.Comments is null))
+        {
+            @foreach (var comment in this.Model.Comments)
+            {
+                <article class="rounded" style="background: #d8d8d8">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span>@comment.AuthorName</span>
+                                @if (comment.ModifiedOn != null)
+                                {
+                                    <span>(editted)</span>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                @if (comment.AuthorName == this.User.Identity.Name)
+                                {
+                                    <form asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.Id" method="post">
+                                        <span>
+                                            <button style="background:#ff0000;color:#ffffff">
+                                                Delete Comment
+                                            </button>
+                                        </span>
+                                    </form>
+                                    <pre class="tab"></pre>
+                                    <span>
+                                        <a asp-controller="Comments" asp-action="Edit" class="btn btn-info" asp-route-id="@comment.Id">
+                                            Edit
+                                        </a>
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>@comment.Content</p>
+                    </div>
+                    <div class="card-footer">
+                        <p>
+                            <button id="likebtn">
+                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                            </button>
+                            <span>Likes</span>
+                            <input type="number" style="width: 50px;border: none;background: none;color:#5c9a3a" class="voteInput" id="input1" value="0" />
+
+                            <button id="dislikebtn">
+                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                            </button>
+                            <span>Dislikes</span>
+                            <input type="number" style="width: 50px;border: none;background: none;color:#ff0000" class="voteInput" id="input2" value="0" />
+                        </p>
+                        <p>
+                            <img src="~/icons/calendar.png" alt="Alternate Text" />
+                            @if (comment.ModifiedOn == null)
+                            {
+                                <span>@comment.CreatedOn</span>
+                            }
+                            else
+                            {
+                                <span>@comment.ModifiedOn</span>
+
+                            }
+                        </p>
+                        <div class="row">
+                            <article>
+                                <div class="card-footer">
+                                    <span>
+                                        <a asp-controller="Comments" asp-action="Reply" class="btn" style="background:#2847c0;color:aliceblue" asp-route-id="@comment.Id">
+                                            Reply
+                                        </a>
+                                    </span>
+                                    <span>
+                                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allreplies">Replies</button>
+                                    </span>
+                                </div>
+                            </article>
+
+                        </div>
+                    </div>
+                </article>
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse" id="allreplies">
+                            <div class="card card-body bg-dark">
+                                @foreach (var reply in comment.Replies)
+                                {
+                                    <div class="container" style="background:#ffffff">
+                                        <article class="rounded" style="background: #d8d8d8">
+                                            <div class="card-header">
+                                                <span>@reply.AuthorName</span>
+                                                @if (reply.ModifiedOn != null)
+                                                {
+                                                    <span>(editted)</span>
+                                                }
+                                            </div>
+                                            <div class="card-body">
+                                                <p>@reply.Content</p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <p>
+                                                    <button id="likebtn">
+                                                        <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                    </button>
+                                                    <span>Likes</span>
+                                                    <input type="number" style="width: 50px;border: none;background: none;color:#5c9a3a" class="voteInput" id="input1" value="0" />
+
+                                                    <button id="dislikebtn">
+                                                        <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                                    </button>
+                                                    <span>Dislikes</span>
+                                                    <input type="number" style="width: 50px;border: none;background: none;color:#ff0000" class="voteInput" id="input2" value="0" />
+                                                </p>
+                                                <p>
+                                                    <img src="~/icons/calendar.png" alt="Alternate Text" />
+                                                    @if (reply.ModifiedOn == null)
+                                                    {
+                                                        <span>@reply.CreatedOn</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@reply.ModifiedOn</span>
+
+                                                    }
+                                                </p>
+                                                <div class="row">
+                                                    <article>
+                                                        <div class="card-footer">
+                                                            @if (comment.AuthorName == this.User.Identity.Name)
+                                                            {
+                                                                <form asp-controller="Comments" asp-action="Delete" asp-route-id="@reply.Id" method="post">
+                                                                    <span>
+                                                                        <button style="background:#ff0000;color:#ffffff">
+                                                                            Delete Comment
+                                                                        </button>
+                                                                    </span>
+                                                                </form>
+                                                                <span>
+                                                                    <a asp-controller="Comments" asp-action="Edit" class="btn btn-info" asp-route-id="@reply.Id">
+                                                                        Edit
+                                                                    </a>
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                    <pre class="tab"></pre>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <pre class="tab"></pre>
+             }
+         }
+    </div>
+
+@*<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="card-header">
+                    <h1>Edit Comment</h1>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Comments" asp-action="Edit" asp-route-id="@this.Model." method="post">
+                        <div class="form-group">
+                            <label asp-for="@this.Model.InputModel.Content"></label>
+                            <textarea class="form-control" placeholder="Edit Comment"></textarea>
+                            <span class="alert-danger"></span>
+                        </div>
+                        <button class="btn btn-success">Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>*@

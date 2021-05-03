@@ -36,63 +36,11 @@
             Courses In Cart<span class="badge bg-secondary">@this.Model.CoursesInCartCount</span>
         </a>
     }
-
 }
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button>
-
-@*<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="/" method="post">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <label asp-for="Instructions"></label>
-                            <pre class="tab"></pre>
-                            <textarea class="form-control" asp-for="Instructions"></textarea>
-                            <span asp-validation-for="Instructions" class="alert-danger"></span>
-                        </div>
-                        <pre class="tab"></pre>
-                        <pre class="tab"></pre>
-                        <div>
-                            <label asp-for="StartDate"></label>
-                            <input asp-for="StartDate" />
-                            <span asp-validation-for="StartDate" class="alert-danger"></span>
-                        </div>
-                        <pre class="tab"></pre>
-                        <pre class="tab"></pre>
-                        <div>
-                            <label asp-for="EndDate"></label>
-                            <input asp-for="EndDate" />
-                            <span asp-validation-for="EndDate" class="alert-danger"></span>
-                        </div>
-                        <pre class="tab"></pre>
-                        <pre class="tab"></pre>
-                        <div>
-                            <label asp-for="PossiblePoints"> </label>
-                            <input asp-for="PossiblePoints" />
-                        </div>
-                        <pre class="tab"></pre>
-                        <pre class="tab"></pre>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <div>
-                            <button class="btn btn-info form-control">Edit Assignment</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>*@
+<a class="btn btn-info" asp-controller="Posts" asp-action="All" asp-route-id="1">
+    Forum
+</a>
 
 <div class="text-center">
     <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>

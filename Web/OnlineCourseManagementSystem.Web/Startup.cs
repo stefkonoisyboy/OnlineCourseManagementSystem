@@ -90,6 +90,8 @@
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<ITownsService, TownsService>();
             services.AddTransient<IAbsencesService, AbsencesService>();
+            services.AddTransient<IPostsService, PostsService>();
+            services.AddTransient<ICommentsService, CommentsService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }

@@ -143,6 +143,7 @@
             if (!this.ModelState.IsValid)
             {
                 inputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id, user.Id);
+                return this.View(inputModel);
             }
 
             await this.assignmentsService.UpdateAsync(inputModel);

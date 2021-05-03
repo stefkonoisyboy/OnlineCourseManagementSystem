@@ -11,7 +11,6 @@
 
         public string UserId { get; set; }
 
-        [Required]
         public int Points { get; set; }
 
         public string Feedback { get; set; }
