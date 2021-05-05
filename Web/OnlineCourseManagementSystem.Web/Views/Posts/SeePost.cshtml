@@ -72,7 +72,7 @@
                                 {
                                     <form asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.Id" method="post">
                                         <span>
-                                            <button style="background:#ff0000;color:#ffffff">
+                                            <button class="form-control" style="background:#ff0000;color:#ffffff">
                                                 Delete Comment
                                             </button>
                                         </span>
@@ -91,19 +91,22 @@
                         <p>@comment.Content</p>
                     </div>
                     <div class="card-footer">
-                        <p>
-                            <button id="likebtn">
-                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                            </button>
-                            <span>Likes</span>
-                            <input type="number" style="width: 50px;border: none;background: none;color:#5c9a3a" class="voteInput" id="input1" value="0" />
-
-                            <button id="dislikebtn">
-                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                            </button>
-                            <span>Dislikes</span>
-                            <input type="number" style="width: 50px;border: none;background: none;color:#ff0000" class="voteInput" id="input2" value="0" />
-                        </p>
+                        <div class="p-1">
+                            <form asp-controller="Comments" asp-action="Like" asp-route-id="@comment.Id" method="post">
+                                <button id="likebtn">
+                                    <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                </button>
+                                <span>Likes</span>
+                                <span>@comment.LikesCount</span>
+                            </form>
+                            <form asp-controller="Comments" asp-action="Dislike" asp-route-id="@comment.Id" method="post">
+                                <button id="dislikebtn">
+                                    <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                </button>
+                                <span>Dislikes</span>
+                                <span>@comment.DislikesCount</span>
+                            </form>
+                        </div>
                         <p>
                             <img src="~/icons/calendar.png" alt="Alternate Text" />
                             @if (comment.ModifiedOn == null)

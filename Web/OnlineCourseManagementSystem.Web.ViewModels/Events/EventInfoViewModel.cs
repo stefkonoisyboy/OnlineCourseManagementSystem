@@ -1,0 +1,37 @@
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Events
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Files;
+
+    public class EventInfoViewModel : IMapFrom<Event>, IHaveCustomMappings
+    {
+        public string Theme { get; set; }
+
+        public string Description { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        public string Address { get; set; }
+
+        public IEnumerable<FileViewModel> Files { get; set; }
+
+        public string CreatorName { get; set; }
+
+        public string CreatorDescription { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Event, EventInfoViewModel>()
+                .ForMember(x => x.CreatorName, y => y.MapFrom(e => $"{e.Creator.FirstName} {e.Creator.LastName}"))
+                .ForMember(x => x.CreatorDescription, y => y.MapFrom(e => e.Creator.Background));
+        }
+    }
+}

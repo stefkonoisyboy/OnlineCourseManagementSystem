@@ -68,12 +68,12 @@
 
             if (search != null)
             {
-                query = query.Where(p => p.Title.Contains(search));
+                query = this.postsService.SearchByTitle<PostViewModel>(search);
             }
 
             if (courseId != 0)
             {
-                query = query.Where(p => p.CourseId == courseId);
+                query = this.postsService.GetByCourseId<PostViewModel>(courseId);
             }
 
             var posts = query
@@ -96,6 +96,7 @@
                 PagesCount = pagesCount,
                 PostsCount = postsCount,
                 Search = search,
+                CourseId = courseId,
             };
 
             return this.View(viewModel);
@@ -154,15 +155,22 @@
             return this.RedirectToAction("All", "Posts");
         }
 
-        [HttpPost]
-        public IActionResult Search(SearchInputModel inputModel)
+        public async Task<IActionResult> Like(int id, int currentPage, string search, int courseId)
         {
-            AllPostsViewModel viewModel = new AllPostsViewModel
-            {
-                Posts = this.postsService.SearchByTitle<PostViewModel>(inputModel),
-            };
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
-            return this.View(viewModel);
+            await this.postsService.Like(id, user.Id);
+
+            return this.RedirectToAction("All", "Posts", new { Id = currentPage, Search = search, CourseId = courseId });
+        }
+
+        public async Task<IActionResult> Dislike(int id, int currentPage, string search, int courseId)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            await this.postsService.Dislike(id, user.Id);
+
+            return this.RedirectToAction("All", "Posts", new { Id = currentPage, Search = search, CourseId = courseId });
         }
     }
 }
