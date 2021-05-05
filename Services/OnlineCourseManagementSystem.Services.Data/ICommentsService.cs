@@ -26,5 +26,9 @@
         IEnumerable<T> GetAllReplies<T>(int commentId);
 
         T GetLastActiveCommentByPostId<T>(int postId);
+
+        Task Like(int commentId, string userId);
+
+        Task Dislike(int commentId, string userId);
     }
 }

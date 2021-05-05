@@ -1,0 +1,84 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Events
+@model EventInfoViewModel
+@{
+    this.ViewData["Title"] = "Event info";
+}
+
+<h1 class="text-center rounded" style="color: #ff6a00;background:#ffffff">@this.Model.Theme</h1>
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+<div class="row rounded" style="background:#919090">
+    <div class="col-md-3">
+        <span>
+            <img src="~/icons/calendar.png" />
+            <span> @this.Model.StartDate.ToString("dd MMM yyyy(ddd)")</span>
+        </span>
+    </div>
+    <div class="col-md-3">
+        <img class="rounded-circle" src="/icons/alarm.png" />
+        <span>
+            @this.Model.StartDate.ToString("t") - @this.Model.EndDate.ToString("t")
+        </span>
+    </div>
+    <div class="col-md-3">
+        <span>
+            <img src="~/icons/pin_2.png"/>
+        </span>
+        <span>@this.Model.Address</span>
+    </div>
+    <div class="col-md-3">
+        <span>
+            <img src="~/icons/user.png" alt="Alternate Text" />
+        </span>
+        <span>
+            @this.Model.CreatorName
+        </span>
+    </div>
+</div>
+<pre class="tab"></pre>
+<pre class="tab"></pre>
+<div class="rounded" style="background:#ffffff">
+    
+
+    <p>
+        @this.Model.Description
+    </p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="text-center">Resources</h3>
+            @foreach (var file in this.Model.Files)
+            {
+                <p>
+                    @if (file.RemoteUrl.EndsWith(".jpg"))
+                    {
+                        <div class="pt-1">
+                            <iframe src=@file.RemoteUrl height="300" width="300"></iframe>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="pt-1">
+                            <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="300" width="300"></iframe>
+                        </div>
+                    }
+                </p>
+            }
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-center">Information about the lecture</h3>
+            <span>
+                <span>
+                    <img class="rounded-circle" style="width:200px;height:200px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
+                </span>
+                <span>
+                    @this.Model.CreatorName
+                </span>
+                <span>@this.Model.CreatorDescription</span>
+            </span>
+        </div>
+    </div>
+    
+</div>
+
+

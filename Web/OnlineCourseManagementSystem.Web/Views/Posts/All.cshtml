@@ -43,14 +43,6 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="text-white">
-                    Questions(0)
-                </h4>
-                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allreplies">Questions</button>
-                <h4 class="text-white">
-                    Suggestions and Problems(0)
-                </h4>
-                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allreplies">Suggestions</button>
             </div>
         </div>
         <div id="page-content-wrapper">
@@ -128,17 +120,20 @@
                                     <div class="card-footer">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <button id="likebtn">
-                                                    <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                </button>
-                                                <span>Likes</span>
-                                                <input type="number" style="width: 50px;border: none;background: none;color:#5c9a3a" class="voteInput" id="input1" value="0" />
-
-                                                <button id="dislikebtn">
-                                                    <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                </button>
-                                                <span>Dislikes</span>
-                                                <input type="number" style="width: 50px;border: none;background: none;color:#ff0000" class="voteInput" id="input2" value="0" />
+                                                <form asp-controller="Posts" asp-action="Like" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
+                                                    <button id="likebtn">
+                                                        <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                    </button>
+                                                    <span>Likes</span>
+                                                    <span>@post.LikesCount</span>
+                                                </form>
+                                                <form asp-controller="Posts" asp-action="Dislike" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
+                                                    <button id="dislikebtn">
+                                                        <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                                    </button>
+                                                    <span>Dislikes</span>
+                                                    <span>@post.DisLikesCount</span>
+                                                </form>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="row">

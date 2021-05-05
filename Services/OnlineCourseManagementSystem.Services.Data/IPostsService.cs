@@ -19,6 +19,12 @@
 
         Task DeleteAsync(int postId);
 
-        IEnumerable<T> SearchByTitle<T>(SearchInputModel inputModel);
+        IEnumerable<T> SearchByTitle<T>(string search);
+
+        IEnumerable<T> GetByCourseId<T>(int courseId);
+
+        Task Like(int postId, string userId);
+
+        Task Dislike(int postId, string userId);
     }
 }

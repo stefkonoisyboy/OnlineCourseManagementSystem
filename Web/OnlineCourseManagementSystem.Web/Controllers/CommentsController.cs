@@ -95,6 +95,26 @@ namespace OnlineCourseManagementSystem.Web.Controllers
             inputModel.AuthorId = user.Id;
             await this.commentsService.ReplyToComment(inputModel);
 
+            return this.RedirectToAction("SeePost", "Posts", new { Id = postId });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Like(int id)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            await this.commentsService.Like(id, user.Id);
+            int? postId = this.commentsService.GetPostId(id);
+
+            return this.RedirectToAction("SeePost", "Posts", new { Id = postId });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Dislike(int id)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            await this.commentsService.Dislike(id, user.Id);
+            int? postId = this.commentsService.GetPostId(id);
 
             return this.RedirectToAction("SeePost", "Posts", new { Id = postId });
         }

@@ -14,10 +14,14 @@
     public class CommentsService : ICommentsService
     {
         private readonly IDeletableEntityRepository<Comment> commentRepository;
+        private readonly IDeletableEntityRepository<Like> likesRepository;
+        private readonly IDeletableEntityRepository<Dislike> dislikesRepository;
 
-        public CommentsService(IDeletableEntityRepository<Comment> commentRepository)
+        public CommentsService(IDeletableEntityRepository<Comment> commentRepository,IDeletableEntityRepository<Like> likesRepository, IDeletableEntityRepository<Dislike> dislikesRepository )
         {
             this.commentRepository = commentRepository;
+            this.likesRepository = likesRepository;
+            this.dislikesRepository = dislikesRepository;
         }
 
         public async Task CreateAsync(CreateCommentInputModel inputModel)
@@ -116,6 +120,79 @@
             comment.Content = inputModel.Content;
 
             await this.commentRepository.SaveChangesAsync();
+        }
+
+        public async Task Dislike(int commentId, string userId)
+        {
+            if (this.dislikesRepository.All().Where(l => l.CreatorId == userId && l.CommentId == commentId).Count() == 0)
+            {
+                if (this.dislikesRepository.AllWithDeleted().Where(d => d.CommentId == commentId && d.CreatorId == userId).Count() != 0)
+                {
+                    Dislike dislike = this.dislikesRepository.AllWithDeleted().FirstOrDefault(d => d.CommentId == commentId && d.CreatorId == userId);
+
+                    this.dislikesRepository.Undelete(dislike);
+                }
+                else
+                {
+                    Dislike dislike = new Dislike
+                    {
+                        CommentId = commentId,
+                        CreatorId = userId,
+                    };
+
+                    await this.dislikesRepository.AddAsync(dislike);
+                }
+            }
+            else
+            {
+                Dislike dislike = this.dislikesRepository.All().FirstOrDefault(l => l.CreatorId == userId && l.CommentId == commentId);
+                this.dislikesRepository.Delete(dislike);
+            }
+
+            if (this.likesRepository.All().Where(x => x.CommentId == commentId && x.CreatorId == userId).Count() != 0)
+            {
+                Like like = this.likesRepository.All().FirstOrDefault(l => l.CreatorId == userId && l.CommentId == commentId);
+                this.likesRepository.Delete(like);
+            }
+
+            await this.dislikesRepository.SaveChangesAsync();
+            await this.likesRepository.SaveChangesAsync();
+        }
+
+        public async Task Like(int commentId, string userId)
+        {
+            if (this.likesRepository.All().Where(x => x.CommentId == commentId && x.CreatorId == userId).Count() == 0)
+            {
+                if (this.likesRepository.AllWithDeleted().Where(l => l.CommentId == commentId && l.CreatorId == userId).Count() != 0)
+                {
+                    Like like = this.likesRepository.AllWithDeleted().FirstOrDefault(l => l.CommentId == commentId && l.CreatorId == userId);
+                    this.likesRepository.Undelete(like);
+                }
+                else
+                {
+                    Like like = new Like
+                    {
+                        CommentId = commentId,
+                        CreatorId = userId,
+                    };
+
+                    await this.likesRepository.AddAsync(like);
+                }
+            }
+            else
+            {
+                Like like = this.likesRepository.All().FirstOrDefault(l => l.CommentId == commentId && l.CreatorId == userId);
+                this.likesRepository.Delete(like);
+            }
+
+            if (this.dislikesRepository.All().Where(d => d.CommentId == commentId && d.CreatorId == userId).Count() != 0)
+            {
+                Dislike dislike = this.dislikesRepository.All().FirstOrDefault(l => l.CreatorId == userId && l.CommentId == commentId);
+                this.dislikesRepository.Delete(dislike);
+            }
+
+            await this.likesRepository.SaveChangesAsync();
+            await this.dislikesRepository.SaveChangesAsync();
         }
     }
 }
