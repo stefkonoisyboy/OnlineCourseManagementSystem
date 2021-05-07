@@ -1,10 +1,11 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Courses;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Posts
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Posts
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+
     public class AllPostsViewModel
     {
         public IEnumerable<PostViewModel> Posts { get; set; }

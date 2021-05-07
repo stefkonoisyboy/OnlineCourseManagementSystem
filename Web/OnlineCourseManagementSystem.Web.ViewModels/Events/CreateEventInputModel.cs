@@ -6,6 +6,7 @@
     using System.Text;
 
     using Microsoft.AspNetCore.Http;
+    using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
     public class CreateEventInputModel
@@ -14,9 +15,11 @@
         public string Theme { get; set; }
 
         [Required]
+        [CheckIfDateIsGreaterThanCurrentDateValidationAttribute]
         public DateTime StartDate { get; set; }
 
         [Required]
+        [CheckIfDateIsGreaterThanCurrentDateValidationAttribute]
         public DateTime EndDate { get; set; }
 
         [Required]

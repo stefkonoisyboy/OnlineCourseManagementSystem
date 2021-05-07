@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Data;
-using OnlineCourseManagementSystem.Web.ViewModels.Comments;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Controllers
+﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.ViewModels.Comments;
+
     public class CommentsController : Controller
     {
         private readonly ICommentsService commentsService;

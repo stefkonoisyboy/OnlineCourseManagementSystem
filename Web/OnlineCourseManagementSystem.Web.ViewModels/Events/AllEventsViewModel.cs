@@ -6,6 +6,8 @@
 
     public class AllEventsViewModel
     {
-        public IEnumerable<EventViewModel> Events { get; set; }
+        public IEnumerable<EventViewModel> EventsComing { get; set; }
+
+        public IEnumerable<EventViewModel> EventsFinished { get; set; }
     }
 }

@@ -7,6 +7,8 @@
     using AutoMapper;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Dislikes;
+    using OnlineCourseManagementSystem.Web.ViewModels.Likes;
 
     public class CommentViewModel : IMapFrom<Comment>, IHaveCustomMappings
     {
@@ -18,9 +20,9 @@
 
         public string Content { get; set; }
 
-        public int LikesCount { get; set; }
+        public IEnumerable<LikeViewModel> Likes { get; set; }
 
-        public int DislikesCount { get; set; }
+        public IEnumerable<DislikeViewModel> Dislikes { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

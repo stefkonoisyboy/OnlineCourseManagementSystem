@@ -121,18 +121,56 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <form asp-controller="Posts" asp-action="Like" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
-                                                    <button id="likebtn">
-                                                        <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                    </button>
+                                                    @if (!this.User.Identity.IsAuthenticated)
+                                                    {
+                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        if (post.Likes.Any(x => x.CreatorName == this.User.Identity.Name))
+                                                        {
+                                                            <button id="likebtn" class=" btn btn-secondary" style="background:#137cdc">
+                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button id="likebtn" class="btn btn-secondary">
+                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+
+                                                    }
                                                     <span>Likes</span>
-                                                    <span>@post.LikesCount</span>
+                                                    <span>@post.Likes.Count()</span>
                                                 </form>
                                                 <form asp-controller="Posts" asp-action="Dislike" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
-                                                    <button id="dislikebtn">
-                                                        <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                    </button>
+                                                    @if (!this.User.Identity.IsAuthenticated)
+                                                    {
+                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (post.Dislikes.Any(x => x.CreatorName == this.User.Identity.Name))
+                                                        {
+                                                            <button id="likebtn"  class="btn btn-secondary"style="background:#137cdc">
+                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button id="dislikebtn" class="btn btn-secondary">
+                                                                <i class="fa fa-thumbs-down " style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+                                                    }
                                                     <span>Dislikes</span>
-                                                    <span>@post.DisLikesCount</span>
+                                                    <span>@post.Dislikes.Count()</span>
                                                 </form>
                                             </div>
                                             <div class="col-md-6">
