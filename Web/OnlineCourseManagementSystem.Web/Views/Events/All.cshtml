@@ -4,96 +4,83 @@
     this.ViewData["Title"] = "Events";
 }
 <h1 class="text-center rounded" style="color: #ff6a00;background:#ffffff">Events</h1>
-@if (this.TempData.ContainsKey("CreatedEvent"))
-{
-    <div class="alert alert-success alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        @this.TempData["CreatedEvent"]
-    </div>
-}
-
-@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.LecturerRoleName))
-{
-    <a asp-controller="Events" asp-action="Create" class="btn btn-success">
-        Create Event
-    </a>
-}
-
 <pre class="tab"></pre>
 <pre class="tab"></pre>
-
-@foreach (var eventView in this.Model.Events)
-{
-<li class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff">
-
-    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+<h3>Events Coming</h3>
+    @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
     {
-        <div class="row">
-            <div class="col-md-8">
+        <li class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff">
+            <div>
+                <h3>
+                    <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                        @eventComing.Theme
+                    </a>
+                </h3>
             </div>
-            <div class="col-md-4">
-                <div style="background:#4f4c4c">
-                    <form asp-controller="Events" asp-action="Approve" asp-route-id="@eventView.Id" method="post">
-                        <button class="btn-success form-control">
-                            Approve
-                        </button>
-                    </form>
-                    <form asp-controller="Events" asp-action="Disapprove" asp-route-id="@eventView.Id" method="post">
-                        <button class="btn-danger form-control">
-                            DisApprove
-                        </button>
-                    </form>
-                </div>
+            <div>
+                <span>
+                    <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
+                </span>
+                <span class="text-black">@eventComing.AuthorName</span>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                    <span>
+                        <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
+                        <span class="text-black-50">
+                            @eventComing.StartDate.ToString("dd MMM yyyy(ddd)")
+                        </span>
+                    </span>
 
+                    <span>
+                        <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
+                        <span class="text-black-50">
+                            @eventComing.StartDate.ToString("t") - @eventComing.EndDate.ToString("t")
+                            <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
+                        </span>
+                    </span>
+                </a>
             </div>
-        </div>
+        </li>
     }
-    <div>
-        <h3>
-            <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventView.Id">
-                @eventView.Theme
-            </a>
-        </h3>
-    </div>
-    <div>
-        <span>
-            <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
-        </span>
-        <span class="text-black">@eventView.AuthorName</span>
-        @if (this.User.IsInRole(GlobalConstants.LecturerRoleName) || this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-        {
-            @if (eventView.IsApproved)
-            {
-                <div class="bg-success">
-                    Approved
-                </div>
-            }
-            else
-            {
-                <div class="bg-danger">
-                    Disapproved
-                </div>
-            }
-        }
-    </div>
-    <div class="card-footer">
-        <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventView.Id">
-            <span>
-                <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
-                <span class="text-black-50">
-                    @eventView.StartDate.ToString("dd MMM yyyy(ddd)")
-                </span>
-            </span>
 
+
+<h3>Events Finished</h3>
+@foreach (var eventFinished in this.Model.EventsFinished)
+{
+    <li class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff">
+        <div>
+            <h3>
+                <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                    @eventFinished.Theme
+                </a>
+            </h3>
+        </div>
+        <div>
             <span>
-                <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
-                <span class="text-black-50">
-                    @eventView.StartDate.ToString("t") - @eventView.EndDate.ToString("t")
-                    <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
-                </span>
+                <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
             </span>
-        </a>
-    </div>
-</li>
+            <span class="text-black">@eventFinished.AuthorName</span>
+        </div>
+        <div class="card-footer">
+            <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                <span>
+                    <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
+                    <span class="text-black-50">
+                        @eventFinished.StartDate.ToString("dd MMM yyyy(ddd)")
+                    </span>
+                </span>
+
+                <span>
+                    <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
+                    <span class="text-black-50">
+                        @eventFinished.StartDate.ToString("t") - @eventFinished.EndDate.ToString("t")
+                        <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
+                    </span>
+                </span>
+            </a>
+        </div>
+    </li>
 }
+
 

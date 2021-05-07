@@ -43,19 +43,36 @@ namespace OnlineCourseManagementSystem.Web.Controllers
             inputModel.CreatorId = user.Id;
             await this.eventsService.CreateAsync(inputModel);
 
-            return this.RedirectToAction("All", "Events");
+            return this.RedirectToAction("AllCreated", "Events", new { Id = user.Id });
         }
 
         public IActionResult All()
         {
             AllEventsViewModel viewModel = new AllEventsViewModel
             {
-                Events = this.eventsService.GetAll<EventViewModel>(),
+                EventsComing = this.eventsService.GetAllComing<EventViewModel>(),
+                EventsFinished = this.eventsService.GetAllFinished<EventViewModel>(),
             };
 
             return this.View(viewModel);
         }
 
+        [Authorize]
+        public async Task<IActionResult> AllCreated()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllEventsCreatedViewModel viewModel = new AllEventsCreatedViewModel();
+            if (user.LecturerId == null)
+            {
+                viewModel.Events = this.eventsService.GetAll<EventViewModel>();
+            }
+            else
+            {
+                viewModel.Events = this.eventsService.GetAllCreatedByUserId<EventViewModel>(user.Id);
+            }
+
+            return this.View(viewModel);
+        }
 
         public IActionResult EventInfo(int id)
         {
@@ -67,17 +84,14 @@ namespace OnlineCourseManagementSystem.Web.Controllers
         {
             await this.eventsService.Approve(id);
 
-            this.TempData["EventApproved"] = "Successfully approved event";
-
-            return this.RedirectToAction("All", "Events");
+            return this.RedirectToAction("AllCreated", "Events");
         }
 
         public async Task<IActionResult> Disapprove(int id)
         {
             await this.eventsService.Disapprove(id);
-            this.TempData["Evemt Disapproved"] = "Succesfully disaproved event";
 
-            return this.RedirectToAction("All", "Events");
+            return this.RedirectToAction("AllCreated", "Events");
         }
     }
 }

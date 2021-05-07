@@ -25,9 +25,9 @@
     <div class="card-footer">
         <p>
             <span>Likes</span>
-            <span>@this.Model.Post.LikesCount</span>
+            <span>@this.Model.Post.Likes.Count()</span>
             <span>DisLikes</span>
-            <span>@this.Model.Post.DisLikesCount</span>
+            <span>@this.Model.Post.Dislikes.Count()</span>
         </p>
         <p>
             <img src="~/icons/calendar.png" alt="Alternate Text" />
@@ -93,18 +93,56 @@
                     <div class="card-footer">
                         <div class="p-1">
                             <form asp-controller="Comments" asp-action="Like" asp-route-id="@comment.Id" method="post">
-                                <button id="likebtn">
-                                    <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                </button>
+                                @if (!this.User.Identity.IsAuthenticated)
+                                {
+                                    <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                        <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    if (comment.Likes.Any(l => l.CreatorName == this.User.Identity.Name))
+                                    {
+                                        <button id="likebtn" class="btn btn-secondary" style="background:#137cdc">
+                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="likebtn" class="btn btn-secondary">
+                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                        </button>
+                                    }
+
+                                }
                                 <span>Likes</span>
-                                <span>@comment.LikesCount</span>
+                                <span>@comment.Likes.Count()</span>
                             </form>
                             <form asp-controller="Comments" asp-action="Dislike" asp-route-id="@comment.Id" method="post">
-                                <button id="dislikebtn">
-                                    <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                </button>
+                                @if (!this.User.Identity.IsAuthenticated)
+                                {
+                                    <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                        <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    if (comment.Dislikes.Any(d => d.CreatorName == this.User.Identity.Name))
+                                    {
+                                        <button id="dislikebtn" class="btn btn-secondary" style="background:#137cdc">
+                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="dislikebtn" class="btn btn-secondary">
+                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                        </button>
+                                    }
+
+                                }
                                 <span>Dislikes</span>
-                                <span>@comment.DislikesCount</span>
+                                <span>@comment.Dislikes.Count()</span>
                             </form>
                         </div>
                         <p>
@@ -155,19 +193,56 @@
                                                 <p>@reply.Content</p>
                                             </div>
                                             <div class="card-footer">
-                                                <p>
-                                                    <button id="likebtn">
-                                                        <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                    </button>
+                                                <form asp-controller="Comments" asp-action="Like" asp-route-id="@reply.Id" method="post">
+                                                    @if (!this.User.Identity.IsAuthenticated)
+                                                    {
+                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (reply.Likes.Any(l => l.CreatorName == this.User.Identity.Name))
+                                                        {
+                                                            <button id="likebtn" class="btn btn-secondary" style="background:#137cdc">
+                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button id="likebtn" class="btn btn-secondary">
+                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+                                                    }
                                                     <span>Likes</span>
-                                                    <input type="number" style="width: 50px;border: none;background: none;color:#5c9a3a" class="voteInput" id="input1" value="0" />
-
-                                                    <button id="dislikebtn">
-                                                        <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                    </button>
+                                                    <span>@reply.Likes.Count()</span>
+                                                </form>
+                                                <form asp-controller="Comments" asp-action="Dislike" asp-route-id="@reply.Id" method="post">
+                                                    @if (!this.User.Identity.IsAuthenticated)
+                                                    {
+                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (reply.Dislikes.Any(d => d.CreatorName == this.User.Identity.Name))
+                                                        {
+                                                            <button id="dislikebtn" class="btn btn-secondary" style="background:#137cdc">
+                                                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button id="dislikebtn" class="btn btn-secondary">
+                                                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                                            </button>
+                                                        }
+                                                    }
                                                     <span>Dislikes</span>
-                                                    <input type="number" style="width: 50px;border: none;background: none;color:#ff0000" class="voteInput" id="input2" value="0" />
-                                                </p>
+                                                    <span>@reply.Dislikes.Count()</span>
+                                                </form>
                                                 <p>
                                                     <img src="~/icons/calendar.png" alt="Alternate Text" />
                                                     @if (reply.ModifiedOn == null)
@@ -183,11 +258,11 @@
                                                 <div class="row">
                                                     <article>
                                                         <div class="card-footer">
-                                                            @if (comment.AuthorName == this.User.Identity.Name)
+                                                            @if (reply.AuthorName == this.User.Identity.Name)
                                                             {
                                                                 <form asp-controller="Comments" asp-action="Delete" asp-route-id="@reply.Id" method="post">
                                                                     <span>
-                                                                        <button style="background:#ff0000;color:#ffffff">
+                                                                        <button class="btn form-control" style="background:#ff0000;color:#ffffff">
                                                                             Delete Comment
                                                                         </button>
                                                                     </span>

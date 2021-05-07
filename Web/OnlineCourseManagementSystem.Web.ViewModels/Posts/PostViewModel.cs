@@ -8,6 +8,8 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Comments;
+    using OnlineCourseManagementSystem.Web.ViewModels.Dislikes;
+    using OnlineCourseManagementSystem.Web.ViewModels.Likes;
 
     public class PostViewModel : IMapFrom<Post>, IHaveCustomMappings
     {
@@ -21,9 +23,9 @@
 
         public string AuthorName { get; set; }
 
-        public int LikesCount { get; set; }
+        public IEnumerable<LikeViewModel> Likes { get; set; }
 
-        public int DisLikesCount { get; set; }
+        public IEnumerable<DislikeViewModel> Dislikes { get; set; }
 
         public int CourseId { get; set; }
 
