@@ -1,0 +1,45 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Exams.EditExamInputModel
+@{ 
+    this.ViewData["Title"] = "Update exam";
+}
+
+<h3>@this.ViewData["Title"]</h3>
+<form method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CourseId"></label>
+        <select asp-for="CourseId" asp-items="@this.Model.CourseItems" class="form-control">
+            <option>Select Course ...</option>
+        </select>
+        <span asp-validation-for="CourseId" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="alert-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="alert-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <input type="submit" value="Submit" class="btn btn-success" />
+</form>

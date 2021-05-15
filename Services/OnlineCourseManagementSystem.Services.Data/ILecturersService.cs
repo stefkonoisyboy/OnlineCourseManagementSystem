@@ -13,5 +13,7 @@
         IEnumerable<T> GetAllById<T>(int courseId);
 
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
+
+        IEnumerable<SelectListItem> GetAllByCourseAsSelectListItems(int courseId);
     }
 }

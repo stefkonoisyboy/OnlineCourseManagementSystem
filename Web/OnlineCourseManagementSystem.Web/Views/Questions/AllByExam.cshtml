@@ -1,0 +1,56 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Questions.AllQuestionsByExamListViewModel
+@{
+    this.ViewData["Title"] = "All Questions";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Message"]
+    </div>
+}
+
+<div class="row">
+    <div class="alert alert-dark col-md-2" role="alert">
+        @this.ViewData["Title"]
+    </div>
+    <div class="alert alert-danger col-md-10" role="alert">
+    </div>
+</div>
+<div class="row">
+    <table class="table-bordered table-hover table-striped col-md-12 bg-light">
+        <thead>
+            <tr>
+                <th>Exam</th>
+                <th>Question</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var question in this.Model.Questions)
+            {
+                <tr>
+                    <td>@question.ExamName</td>
+                    <td>@Html.Raw(question.Text)</td>
+                    <td>
+                        <a asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id" class="btn btn-secondary" style="background:#137cdc">
+                            <i class="fa fa-info"></i>
+                            Details
+                        </a>
+                        <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-warning">
+                            <i class="fa fa-edit"></i>
+                            Edit
+                        </a>
+                        <form asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" asp-route-examId="@question.ExamId" method="post">
+                            <button class="btn btn-danger">
+                                <i class="fa fa-trash"></i>
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

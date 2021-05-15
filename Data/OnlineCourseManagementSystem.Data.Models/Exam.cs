@@ -16,11 +16,15 @@
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
+        public int PassMarks { get; set; }
+
         public string LecturerId { get; set; }
 
         public virtual ApplicationUser Lecturer { get; set; }
 
-        public string CourseId { get; set; }
+        public int CourseId { get; set; }
 
         public virtual Course Course { get; set; }
 

@@ -45,6 +45,21 @@
                 .ToList();
         }
 
+        public IEnumerable<SelectListItem> GetAllByCourseAsSelectListItems(int courseId)
+        {
+            return this.lecturersRepository
+               .All()
+               .OrderBy(l => l.User.FirstName + ' ' + l.User.LastName)
+               .ThenBy(l => l.User.UserName)
+               .Where(l => l.User.Roles.FirstOrDefault().RoleId.EndsWith("Lecturer") && l.Courses.Any(c => c.Id == courseId))
+               .Select(l => new SelectListItem
+               {
+                   Text = l.User.FirstName + ' ' + l.User.LastName,
+                   Value = l.Id,
+               })
+               .ToList();
+        }
+
         public IEnumerable<T> GetAllById<T>(int courseId)
         {
             return this.lecturersRepository

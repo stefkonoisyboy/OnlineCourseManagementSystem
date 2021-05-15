@@ -59,4 +59,15 @@
   <ItemGroup>
     <Folder Include="wwwroot\icons\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\tinymce\plugins\code\plugin.min.js" />
+    <None Include="wwwroot\lib\tinymce\plugins\image\plugin.min.js" />
+    <None Include="wwwroot\lib\tinymce\plugins\link\plugin.min.js" />
+    <None Include="wwwroot\lib\tinymce\plugins\media\plugin.min.js" />
+    <None Include="wwwroot\lib\tinymce\plugins\paste\plugin.min.js" />
+    <None Include="wwwroot\lib\tinymce\plugins\table\plugin.min.js" />
+    <None Include="wwwroot\lib\tinymce\themes\silver\theme.min.js" />
+    <None Include="wwwroot\lib\tinymce\tinymce.min.js" />
+  </ItemGroup>
 </Project>
