@@ -1,0 +1,75 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Exams.AllExamsListViewModel
+@{
+    this.ViewData["Title"] = "Exam List";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Message"]
+    </div>
+}
+
+<div class="row">
+    <div class="alert alert-dark col-md-2" role="alert">
+        @this.ViewData["Title"]
+    </div>
+    <div class="alert alert-danger col-md-10" role="alert">
+        <a asp-controller="Exams" asp-action="Create">Add Exam</a>
+    </div>
+    <ul class="list-group col-md-12">
+        <li class="list-group-item">
+            <div class="row">
+                <table class="table-bordered table-hover table-striped col-md-12">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Lecturer</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var exam in this.Model.Exams)
+                        {
+                            <tr>
+                                <td>@exam.Name</td>
+                                <td>@exam.CourseName</td>
+                                <td>@(exam.LecturerFirstName + ' ' + exam.LecturerLastName)</td>
+                                <td>@exam.StartDate.ToString("yyyy-MM-dd HH:mm tt")</td>
+                                <td>@exam.EndDate.ToString("yyyy-MM-dd HH:mm tt")</td>
+                                <td>
+                                    <a asp-controller="Exams" asp-action="Details" asp-route-id="@exam.Id" class=" btn btn-secondary" style="background:#137cdc">
+                                        <i class="fa fa-info"></i>
+                                        Details
+                                    </a>
+                                    <a asp-controller="Exams" asp-action="Edit" asp-route-id="@exam.Id" class=" btn btn-warning">
+                                        <i class="fa fa-edit"></i>
+                                        Edit
+                                    </a>
+                                    <form asp-controller="Exams" asp-action="Delete" asp-route-id="@exam.Id" method="post">
+                                        <button class=" btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                            Delete
+                                        </button>
+                                    </form>
+                                    <a asp-controller="Questions" asp-action="Create" asp-route-examId="@exam.Id" class=" btn btn-success">
+                                        <i class="fa fa-plus"></i>
+                                        Add Question
+                                    </a>
+                                    <a asp-controller="Questions" asp-action="AllByExam" asp-route-examId="@exam.Id" class=" btn btn-dark">
+                                        <i class="fa fa-info"></i>
+                                        View Questions
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    </ul>
+</div>

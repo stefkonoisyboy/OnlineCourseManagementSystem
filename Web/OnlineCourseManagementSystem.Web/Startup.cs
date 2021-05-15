@@ -93,6 +93,9 @@
             services.AddTransient<IPostsService, PostsService>();
             services.AddTransient<ICommentsService, CommentsService>();
             services.AddTransient<IEventsService, EventsService>();
+            services.AddTransient<IExamsService, ExamsService>();
+            services.AddTransient<IQuestionsService, QuestionsService>();
+            services.AddTransient<IChoicesService, ChoicesService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }

@@ -1,0 +1,91 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Exams.ExamDetailsViewModel
+@{
+    this.ViewData["Title"] = "Exam Details";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Message"]
+    </div>
+}
+
+<style>
+    table {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    th {
+        background-color: #4287f5;
+        color: white;
+    }
+
+    th,
+    td {
+        width: 150px;
+        text-align: center;
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    h2 {
+        color: #4287f5;
+    }
+</style>
+
+<div class="row">
+    <div class="alert alert-dark col-md-2" role="alert">
+        @this.ViewData["Title"]
+    </div>
+    <div class="alert alert-danger col-md-10" role="alert">
+    </div>
+    <ul class="list-group col-md-12">
+        <li class="list-group-item">
+            <div class="row">
+                <table class="table-bordered table-hover table-striped col-md-12">
+                    <tbody>
+                        <tr class="mt-2">
+                            <td><strong>Name</strong></td>
+                            <td>@this.Model.Name</td>
+                        </tr>
+                        <tr class="mt-2">
+                            <td><strong>Description</strong></td>
+                            <td>@this.Model.Description</td>
+                        </tr>
+                        <tr class="mt-2">
+                            <td><strong>Lecturer</strong></td>
+                            <td>@(this.Model.LecturerFirstName + ' ' + this.Model.LecturerLastName)</td>
+                        </tr>
+                        <tr class="mt-2">
+                            <td><strong>Start Date</strong></td>
+                            <td>@this.Model.StartDate.ToString("yyyy-MM-dd HH:mm tt")</td>
+                        </tr>
+                        <tr class="mt-2">
+                            <td><strong>End Date</strong></td>
+                            <td>@this.Model.EndDate.ToString("yyyy-MM-dd HH:mm tt")</td>
+                        </tr>
+                        <tr class="mt-2">
+                            <td><strong>Pass Marks</strong></td>
+                            <td>@this.Model.PassMarks</td>
+                        </tr>
+                        <tr class="mt-2">
+                            <td><strong>Total Marks</strong></td>
+                            <td>@this.Model.TotalMarks</td>
+                        </tr>
+                        <tr class="mt-2">
+                            <td>
+                                <a asp-controller="Exams" asp-action="All" class="btn btn-dark">
+                                    <i class="fas fa-arrow-alt-circle-left"></i>
+                                    Back To Exam List
+                                </a>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    </ul>
+</div>

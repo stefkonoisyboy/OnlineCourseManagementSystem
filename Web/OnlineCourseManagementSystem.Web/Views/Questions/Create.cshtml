@@ -1,0 +1,88 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Questions.CreateQuestionInputModel
+@{
+    this.ViewData["Title"] = "Add Question";
+    char[] symbols = new char[4]
+    {
+        'A', 'B', 'C', 'D'
+    };
+}
+
+<script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "image paste table link code media"
+        ]
+    });</script>
+
+<div class="row">
+    <div class="alert alert-dark col-md-2" role="alert">
+        @this.ViewData["Title"]
+    </div>
+    <div class="alert alert-danger col-md-10" role="alert">
+    </div>
+</div>
+<ul class="list-group">
+    <li class="list-group-item bg-dark">
+        <form method="post">
+            <div asp-validation-summary="All" class="alert-danger"></div>
+
+            <div class="form-group row">
+                <label asp-for="Text" class="col-md-2"></label>
+                <textarea asp-for="Text" class="form-control col-md-10"></textarea>
+                <span asp-validation-for="Text" class="alert-danger"></span>
+            </div>
+
+            @for (int i = 0; i < 4; i++)
+            {
+                <div class="form-group row">
+                    <label asp-for="Choices[i].Text" class="col-md-2">@("Option " + symbols[i])</label>
+                    @if (i < 2)
+                    {
+                        <input asp-for="Choices[i].Text" class="form-control col-md-10" placeholder="Required" />
+                    }
+                    else
+                    {
+                        <input asp-for="Choices[i].Text" class="form-control col-md-10" />
+                    }
+                    <span asp-validation-for="Choices[i].Text" class="alert-danger"></span>
+                </div>
+            }
+
+            <div class="form-group form-radio row">
+                <label class="radio-label" style="margin-left: 15px;">
+                    Correct Answer
+                </label>
+                <div class="form-radio-item">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="a" value="A" class="form-check-input" style="margin-left:70px;">
+                    <label for="a" class="form-check-label" style="margin-left:90px;">A</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="b" value="B" class="form-check-input" style="margin-left:70px;">
+                    <label for="b" class="form-check-label" style="margin-left:90px;">B</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="c" value="C" class="form-check-input" style="margin-left:80px;">
+                    <label for="c" class="form-check-label" style="margin-left:100px;">C</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="d" value="D" class="form-check-input" style="margin-left:90px;">
+                    <label for="d" class="form-check-label" style="margin-left:110px;">D</label>
+                    <span class="check"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Points" class="col-md-2"></label>
+                <input asp-for="Points" class="form-control col-md-10" />
+                <span asp-validation-for="Points" class="alert-danger"></span>
+            </div>
+
+            <input type="submit" value="Add Question" class="btn btn-success" />
+        </form>
+    </li>
+</ul>
