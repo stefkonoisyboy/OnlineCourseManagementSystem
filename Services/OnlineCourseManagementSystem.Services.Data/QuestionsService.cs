@@ -103,30 +103,33 @@ namespace OnlineCourseManagementSystem.Services.Data
             question.Text = new HtmlSanitizer().Sanitize(input.Text);
             question.Points = input.Points;
 
+            Choice oldChoice = this.choicesRepository.All().FirstOrDefault(c => c.QuestionId == question.Id && c.IsCorrect);
+            oldChoice.IsCorrect = false;
+
             foreach (var choice in input.Choices.Where(c => c.Text != null))
             {
                 Choice dbChoice = this.choicesRepository.All().FirstOrDefault(c => c.Id == choice.Id);
-                choice.Text = choice.Text;
+                dbChoice.Text = choice.Text;
             }
 
             if (input.CorrectAnswerOption == "A")
             {
-                Choice choice = question.Choices.FirstOrDefault();
+                Choice choice = this.choicesRepository.All().Where(c => c.QuestionId == question.Id).FirstOrDefault();
                 choice.IsCorrect = true;
             }
             else if (input.CorrectAnswerOption == "B")
             {
-                Choice choice = question.Choices.Skip(1).FirstOrDefault();
+                Choice choice = this.choicesRepository.All().Where(c => c.QuestionId == question.Id).Skip(1).FirstOrDefault();
                 choice.IsCorrect = true;
             }
             else if (input.CorrectAnswerOption == "C")
             {
-                Choice choice = question.Choices.Skip(2).FirstOrDefault();
+                Choice choice = this.choicesRepository.All().Where(c => c.QuestionId == question.Id).Skip(2).FirstOrDefault();
                 choice.IsCorrect = true;
             }
             else
             {
-                Choice choice = question.Choices.Skip(3).FirstOrDefault();
+                Choice choice = this.choicesRepository.All().Where(c => c.QuestionId == question.Id).Skip(3).FirstOrDefault();
                 choice.IsCorrect = true;
             }
 
