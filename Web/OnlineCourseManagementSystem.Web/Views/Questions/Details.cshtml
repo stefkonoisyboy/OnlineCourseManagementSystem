@@ -67,6 +67,10 @@
                         </tr>
                     }
                     <tr class="mt-2">
+                        <td><strong>Correct Answer</strong></td>
+                        <td>@this.Model.Choices.FirstOrDefault(c => c.IsCorrect).Text</td>
+                    </tr>
+                    <tr class="mt-2">
                         <td>
                             <a asp-controller="Questions" asp-action="AllByExam" asp-route-examId="@this.Model.ExamId" class="btn btn-dark">
                                 <i class="fas fa-arrow-alt-circle-left"></i>
