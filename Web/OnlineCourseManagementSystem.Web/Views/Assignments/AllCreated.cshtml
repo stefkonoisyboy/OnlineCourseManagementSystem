@@ -1,20 +1,22 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
-@model IEnumerable<CreatedAssignmentsViewModel>
+@model AllLectureAssignmetViewModel
 @{
     this.ViewData["Title"] = "Created Assignments";
 }
 
-@if (this.TempData.ContainsKey("CreatedAssignment"))
- {
-        <div class="alert alert-success alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            @this.TempData["CreatedAssignment"]
-        </div>
- }
+<h1>All Created Assignments</h1>
 
-@foreach (var assignment in this.Model)
+@if (this.TempData.ContainsKey("CreatedAssignment"))
 {
-    <div style="background:#ffffff" class="rounded-pill">
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["CreatedAssignment"]
+    </div>
+}
+
+@foreach (var assignment in this.Model.CreatedAssignments)
+{
+    <div style="background:#ffffff" class="rounded">
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-3">
@@ -48,3 +50,37 @@
     <pre class="tab"></pre>
     <pre class="tab"></pre>
 }
+
+<details>
+    <summary>
+        <h3>All Checked Assignments</h3>
+    </summary>
+    <p>
+        @foreach (var assignment in this.Model.CheckedAssignmets)
+        {
+            <div style="background:#ffffff" class="rounded">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-3">
+                        <a class="text-black-50" asp-controller="Assignments" asp-action="AllCheckedUsersForAssignment" asp-route-id="@assignment.AssignmentId">
+                            @assignment.CourseName
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        StartDate: @assignment.StartDate
+                    </div>
+                    <div class="col-md-3">
+                        EndDate: @assignment.EndDate
+                    </div>
+                    <div class="col-md-3">
+                        @assignment.PossiblePoints points
+                    </div>
+                </div>
+            </div>
+
+            <pre class="tab"></pre>
+            <pre class="tab"></pre>
+        }
+
+    </p>
+</details>

@@ -37,16 +37,29 @@
 </div>
 
 <h3 class="text-white">Instructions:</h3>
-<div class="row">
+<div class="row" style="margin-bottom: 10px">
     <div class="col-md-4 container rounded" style="background:#ffffff; color:darkorange">
         @this.Model.Instructions
     </div>
     <div class="col-md-4"></div>
     <div class="col-md-4 text-white">Points: @this.Model.PossiblePoints</div>
+    @if (this.Model.Feedback == "")
+    {
+        <div class="col-md-4 text-white" style="left: 67%;">
+            Feedback: @this.Model.Feedback
+        </div>
+    }
+    else
+    {
+        <div class="col-md-4 text-white" style="left: 67%;">
+            Feedback: none
+        </div>
+    }
 </div>
 
 <p class="h3 text-white">Files</p>
-<p class="h4 text-white">Resorces</p>
+
+<p class="h4 text-white" style="margin-top: 50px">Resorces</p>
 @if (this.Model.ResourceFiles != null)
 {
     @foreach (var file in this.Model.ResourceFiles)
@@ -74,7 +87,7 @@ else
 
 <pre class="tab"></pre>
 <pre class="tab"></pre>
-<p>My work</p>
+<h4 class="text-white">My work</h4>
 
 @if (this.Model.WorkFiles != null)
 {

@@ -33,7 +33,7 @@
         {
             var assignments = this.userAssignmentRepository
                 .AllWithDeleted()
-                .Where(x => x.TurnedOn != null && x.UserId == userId)
+                .Where(x => x.IsChecked && x.UserId == userId)
                 .OrderByDescending(x => x.TurnedOn)
                 .To<T>().ToArray();
 
@@ -85,7 +85,7 @@
         public IEnumerable<T> GetAllUsersForAssignment<T>(int assignmentId)
         {
             return this.userAssignmentRepository.All()
-                .Where(a => a.AssignmentId == assignmentId && a.Points == null)
+                .Where(a => a.AssignmentId == assignmentId && a.IsChecked == false)
                 .To<T>()
                 .ToList();
         }
@@ -95,7 +95,7 @@
 
             return this.userAssignmentRepository
                 .All()
-                .Where(x => x.Points == null)
+                .Where(x => x.IsChecked == false && x.Assignment.CourseId == courseId)
                 .To<T>()
                 .Distinct()
                 .ToList();
@@ -197,8 +197,14 @@
 
             userAssignment.Points = inputModel.Points;
             userAssignment.Feedback = inputModel.Feedback;
+            userAssignment.IsChecked = true;
 
             Assignment assignment = this.assignmentRepository.All().FirstOrDefault(a => a.Id == userAssignment.AssignmentId);
+            if (inputModel.Points > assignment.PossiblePoints)
+            {
+                throw new ArgumentException("Points must be less than the stated!");
+            }
+
             await this.userAssignmentRepository.SaveChangesAsync();
 
             return assignment.CourseId;
@@ -213,6 +219,52 @@
             userAssignment.TurnedOn = null;
 
             await this.userAssignmentRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<T> GetAllCheckedBy<T>(int courseId)
+        {
+            return this.userAssignmentRepository
+                .All()
+                .Where(ua => ua.Assignment.CourseId == courseId && ua.IsChecked)
+                .To<T>()
+                .ToList();
+        }
+
+        public async Task UpdateCheckedAsync(EditCheckedAssignmentInputModel inputModel)
+        {
+            UserAssignment userAssignment = this.userAssignmentRepository
+                .All()
+                .FirstOrDefault(ua => ua.AssignmentId == inputModel.AssignmentId && ua.UserId == inputModel.UserId);
+
+
+            userAssignment.Points = inputModel.Points;
+            userAssignment.Feedback = inputModel.Feedback;
+
+            Assignment assignment = this.assignmentRepository.All().FirstOrDefault(a => a.Id == inputModel.AssignmentId);
+            if (assignment.PossiblePoints < inputModel.Points)
+            {
+                throw new ArgumentException("Points must be less than the stated!");
+            }
+
+            await this.userAssignmentRepository.SaveChangesAsync();
+        }
+
+        public T GetCheckedBy<T>(int assignmentId, string userId)
+        {
+            return this.userAssignmentRepository
+                .All()
+                .Where(ua => ua.AssignmentId == assignmentId && ua.UserId == userId)
+                .To<T>()
+                .FirstOrDefault();
+        }
+
+        public IEnumerable<T> GetAllCheckedUserAssignments<T>(int assignmentId)
+        {
+            return this.userAssignmentRepository
+                .All()
+                .Where(ua => ua.IsChecked && ua.AssignmentId == assignmentId)
+                .To<T>()
+                .ToList();
         }
     }
 }

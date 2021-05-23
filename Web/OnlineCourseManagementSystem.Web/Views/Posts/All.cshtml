@@ -159,7 +159,7 @@
                                                         if (post.Dislikes.Any(x => x.CreatorName == this.User.Identity.Name))
                                                         {
                                                             <button id="likebtn"  class="btn btn-secondary"style="background:#137cdc">
-                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
                                                             </button>
                                                         }
                                                         else
@@ -183,7 +183,7 @@
                                                         }
                                                         else
                                                         {
-                                                            @post.CreatedOn
+                                                            @post.LastActive.Name
                                                         }
                                                     </div>
                                                     <div class="col-md-4">

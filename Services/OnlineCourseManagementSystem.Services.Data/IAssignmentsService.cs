@@ -34,5 +34,13 @@
         Task<int> MarkSubmittedAssignment(MarkSubmittedAssignmentInputModel inputModel);
 
         Task UndoTurnIn(int assignmentId, string userId);
+
+        IEnumerable<T> GetAllCheckedBy<T>(int courseId);
+
+        Task UpdateCheckedAsync(EditCheckedAssignmentInputModel inputModel);
+
+        T GetCheckedBy<T>(int assignmentId, string userId);
+
+        IEnumerable<T> GetAllCheckedUserAssignments<T>(int assignmentId);
     }
 }

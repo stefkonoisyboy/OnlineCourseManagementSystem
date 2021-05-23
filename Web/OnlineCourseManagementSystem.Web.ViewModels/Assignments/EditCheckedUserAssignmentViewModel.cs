@@ -9,13 +9,13 @@
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
-    public class MarkSubmittedAssignmentViewModel : IMapFrom<UserAssignment>, IHaveCustomMappings
+    public class EditCheckedUserAssignmentViewModel : IMapFrom<UserAssignment>, IHaveCustomMappings
     {
         public int AssignmentId { get; set; }
 
         public IEnumerable<FileAssignmentViewModel> Files { get; set; }
 
-        public MarkSubmittedAssignmentInputModel InputModel { get; set; }
+        public EditCheckedAssignmentInputModel InputModel { get; set; }
 
         public string UserId { get; set; }
 
@@ -25,7 +25,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<UserAssignment, MarkSubmittedAssignmentViewModel>()
+            configuration.CreateMap<UserAssignment, EditCheckedUserAssignmentViewModel>()
                  .ForMember(x => x.TurnedOn, y => y.MapFrom(ua => ua.TurnedOn))
                  .ForMember(x => x.PossiblePoints, y => y.MapFrom(ua => ua.Assignment.PossiblePoints));
         }

@@ -77,6 +77,7 @@
 
         public T GetLastActiveCommentByPostId<T>(int postId)
         {
+
             return this.commentRepository
                 .All()
                 .Where(c => c.PostId == postId)

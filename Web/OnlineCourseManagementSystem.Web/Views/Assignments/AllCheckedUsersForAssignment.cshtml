@@ -1,0 +1,82 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
+@model IEnumerable<CheckedUserAssignmentsViewModel>
+
+@if (this.TempData.ContainsKey("EditedCheckedAssignment"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["EditedCheckedAssignment"]
+    </div>
+}
+
+@foreach (var user in this.Model)
+{
+    <div class="rounded row" style="background:#ffffff;color:darkblue">
+        <div class="col-md-4 text-black-50">
+            @user.StudentName
+        </div>
+
+        @if (user.TurnedOn != null)
+        {
+            <div class="col-md-4">
+
+
+                @if (user.TurnedOn > user.EndDate)
+                {
+                    <p>Turned: <span class="badge" style="background: #ffd800; color: #ffd800">0</span></p>
+                    <p>@user.TurnedOn</p>
+                    <p>Turned Late</p>
+                }
+                else
+                {
+                    <p>Turned: <span class="badge bg-success text-success">0</span></p>
+                    <p>@user.TurnedOn</p>
+                    <p>Turned on time</p>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="col-md-4">
+                <p>Turned: <span class="badge bg-danger text-danger">0</span></p>
+            </div>
+        }
+
+        @*<div class="col-md-4">
+                <p>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allFiles">
+                        Files <span class="badge bg-secondary">@user.FilesUrl.Count</span>
+                    </button>
+                </p>
+
+                <div class="row">
+
+                    <div class="col">
+                        <div class="collapse" id="allFiles">
+                            <div class="card card-body bg-dark">
+
+                                @foreach (var file in user.FilesUrl)
+                                {
+                                    <div style="background:#ffffff;color:#ff6a00" class="row rounded">
+                                        <div style="color:#ff6a00" class="row">
+
+
+                                        </div>
+                                    </div>
+                                    <pre class="tab"></pre>
+                                    <pre class="tab"></pre>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <a asp-controller="Assignments" asp-action="EditCheckedAssignment" asp-route-assignmentId="@user.AssignmentId" asp-route-userId="@user.UserId" class="btn btn-dark">Edit</a>
+        <div>
+            Points: @user.Points
+        </div>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+}

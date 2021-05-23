@@ -10,18 +10,22 @@
 
     @if (user.Turned)
     {
-        <div class="col-md-4">
-            <p>Turned: <span class="badge bg-success text-success">0</span></p>
-            <p>@user.TurnedOn</p>
-            @if (user.TurnedOn > user.EndDate)
-            {
-                <p>Turned Late</p>
-            }
-            else
-            {
-                <p>Turned on time</p>
-            }
-        </div>
+<div class="col-md-4">
+
+
+    @if (user.TurnedOn > user.EndDate)
+    {
+        <p>Turned: <span class="badge" style="background: #ffd800; color: #ffd800">0</span></p>
+        <p>@user.TurnedOn</p>
+        <p>Turned Late</p>
+    }
+    else
+    {
+        <p>Turned: <span class="badge bg-success text-success">0</span></p>
+        <p>@user.TurnedOn</p>
+        <p>Turned on time</p>
+    }
+</div>
     }
     else
     {
@@ -72,7 +76,7 @@
         </div>
     </div>*@
    
-    <a asp-controller="Assignments" asp-action="MarkUserAssignment" asp-route-id="@user.UserId" class="btn btn-dark">Check and Rate</a>
+    <a asp-controller="Assignments" asp-action="MarkUserAssignment" asp-route-assignmentId="@user.AssignmentId" asp-route-userId="@user.UserId" class="btn btn-dark">Check and Rate</a>
 </div>
     <pre class="tab"></pre>
     <pre class="tab"></pre>

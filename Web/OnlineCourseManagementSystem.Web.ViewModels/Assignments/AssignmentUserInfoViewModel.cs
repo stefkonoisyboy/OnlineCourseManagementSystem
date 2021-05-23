@@ -13,6 +13,8 @@
     {
         public string StudentName { get; set; }
 
+        public int AssignmentId { get; set; }
+
         public string UserId { get; set; }
 
         public bool Seen { get; set; }

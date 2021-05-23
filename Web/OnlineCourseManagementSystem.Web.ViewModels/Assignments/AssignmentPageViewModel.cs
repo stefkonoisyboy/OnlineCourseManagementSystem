@@ -18,6 +18,8 @@
 
         public int PossiblePoints { get; set; }
 
+        public string Feedback { get; set; }
+
         public IEnumerable<FileAssignmentViewModel> ResourceFiles { get; set; }
 
         public IEnumerable<FileAssignmentViewModel> WorkFiles { get; set; }

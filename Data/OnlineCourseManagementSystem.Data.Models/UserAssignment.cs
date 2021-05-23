@@ -23,5 +23,7 @@
         public string Feedback { get; set; }
 
         public bool Seen { get; set; }
+
+        public bool IsChecked { get; set; }
     }
 }

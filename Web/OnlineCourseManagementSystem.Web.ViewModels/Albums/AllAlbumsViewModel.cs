@@ -6,7 +6,6 @@
 
     public class AllAlbumsViewModel
     {
-
         public IEnumerable<AlbumViewModel> Albums { get; set; }
 
         public AlbumInputModel InputModel { get; set; }

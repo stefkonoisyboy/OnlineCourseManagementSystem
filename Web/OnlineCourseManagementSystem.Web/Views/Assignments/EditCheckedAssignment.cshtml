@@ -1,6 +1,6 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
-@model MarkSubmittedAssignmentViewModel
-
+@model EditCheckedUserAssignmentViewModel
+ 
 @if (this.TempData.ContainsKey("ErrorPoints"))
 {
     <div class="alert alert-danger alert-dismissible">
@@ -8,11 +8,12 @@
         @this.TempData["ErrorPoints"]
     </div>
 }
+
 <div class="row">
     <div class="col-md-3">
     </div>
     <div class="col-md-4">
-        <form asp-controller="Assignments" asp-action="MarkUserAssignment" asp-route-assignmentId="@this.Model.AssignmentId" asp-route-userId="@this.Model.UserId" method="post">
+        <form asp-controller="Assignments" asp-action="EditCheckedAssignment" asp-route-assignmentId ="@this.Model.AssignmentId" asp-route-userId="@this.Model.UserId" method="post">
             @if (this.Model.PossiblePoints != null)
             {
                 <div class="form-group">
@@ -26,7 +27,7 @@
                 <input asp-for="InputModel.Feedback" class="form-control" />
                 <span asp-validation-for="InputModel.Feedback"></span>
             </div>
-            <button class="form-control btn-success">Mark</button>
+            <button class="form-control btn-success">Edit</button>
         </form>
     </div>
     <div class="cols-md-6 " style="background:#ffffff;">
@@ -61,4 +62,3 @@
         </div>
     </div>
 </div>
-
