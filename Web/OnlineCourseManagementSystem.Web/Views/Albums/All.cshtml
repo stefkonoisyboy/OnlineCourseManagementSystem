@@ -30,7 +30,7 @@
     @foreach (var album in this.Model.Albums)
     {
         <div class="col-md-4">
-            <img src="https://icons-for-free.com/download-icon-folder-131964753094019398_256.png" alt="Folder" />
+            <img src="~/icons/folder_ok.png" alt="Folder" />
             <a class="text-center text-white" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">@album.Name</a>
         </div>
     }
