@@ -136,4 +136,28 @@ label {
 }
 
 
+.img-link{
+    width: 100px;
+    height: 100px;
+    opacity: 0.8;
+}
 
+.link-container{
+    background: #fff;
+    width: 300px;
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.link{
+    color:#ff6a00;
+}
+
+
+.index-container{
+    display: inline-flex;
+}

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
     using AutoMapper;
@@ -17,7 +18,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Comment, LastActiveViewModel>()
-                .ForMember(x => x.LastActive, y => y.MapFrom(c => c.CreatedOn))
+                .ForMember(x => x.LastActive, y => y.MapFrom(c => c.ModifiedOn ?? c.CreatedOn))
                 .ForMember(x => x.Name, y => y.MapFrom(c => c.Author.UserName));
         }
     }

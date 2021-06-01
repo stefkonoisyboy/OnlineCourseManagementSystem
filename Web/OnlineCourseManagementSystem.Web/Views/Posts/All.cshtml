@@ -103,9 +103,8 @@
                 {
                     <div class="container">
                         <div class="col justify-content-center">
-                            @foreach (var post in this.Model.Posts)
+                            @foreach (var post in this.Model.Posts.OrderByDescending(p => p.LastActive.LastActive))
                             {
-
                                 <article class="row-cols-md-1 rounded" style="background:#d8d8d8">
                                     <div class="card-header">
                                         <a asp-controller="Posts" asp-action="SeePost" asp-route-id="@post.Id" class="text-dark">@post.Title</a>
@@ -179,7 +178,7 @@
                                                         Last Active
                                                         @if (post.LastActive == null)
                                                         {
-                                                            @post.CreatedOn
+                                                            @post.AuthorName
                                                         }
                                                         else
                                                         {
@@ -189,11 +188,11 @@
                                                     <div class="col-md-4">
                                                         @if (post.LastActive == null)
                                                         {
-                                                            @post.AuthorName
+                                                            @post.CreatedOn
                                                         }
                                                         else
                                                         {
-                                                            @post.LastActive.Name
+                                                            @post.LastActive.LastActive
                                                         }
                                                     </div>
                                                 </div>
@@ -289,10 +288,4 @@
                 </nav>
             </div>
         </div>
-
     </div>
-
-
-
-
-

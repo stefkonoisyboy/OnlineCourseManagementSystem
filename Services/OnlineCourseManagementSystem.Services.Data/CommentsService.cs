@@ -77,13 +77,33 @@
 
         public T GetLastActiveCommentByPostId<T>(int postId)
         {
+            //T lastActiveComment = this.commentRepository
+            //    .All()
+            //    .Where(c => c.PostId == postId)
+            //    .OrderByDescending(c => c.ModifiedOn)
+            //    .ThenByDescending(c => c.Likes.FirstOrDefault().CreatedOn)
+            //    .ThenByDescending(c => c.CreatedOn)
+            //    .To<T>()
+            //    .FirstOrDefault();
+            Comment lastCommentCreatedOn = this.commentRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.CreatedOn).FirstOrDefault();
+            Comment lastCommentModifiedOn = this.commentRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.ModifiedOn).FirstOrDefault();
 
-            return this.commentRepository
-                .All()
-                .Where(c => c.PostId == postId)
-                .OrderByDescending(c => c.CreatedOn)
-                .To<T>()
-                .FirstOrDefault();
+            if (lastCommentCreatedOn.CreatedOn > lastCommentModifiedOn.ModifiedOn)
+            {
+                return this.commentRepository
+                    .All()
+                    .Where(c => c.Id == lastCommentCreatedOn.Id)
+                    .To<T>()
+                    .FirstOrDefault();
+            }
+            else
+            {
+                return this.commentRepository
+                    .All()
+                    .Where(c => c.Id == lastCommentModifiedOn.Id)
+                    .To<T>()
+                    .FirstOrDefault();
+            }
         }
 
         public int? GetPostId(int commentId)

@@ -3,3 +3,20 @@
 
 // Write your JavaScript code.
 
+const btnsReplies = Array.from(document.querySelectorAll('.btn-replies'));
+
+const collapsesReplies = Array.from(document.querySelectorAll('.collapse-replies')) 
+
+btnsReplies.forEach(btnReplies => {
+    btnReplies.addEventListener('click', e => {
+        collapsesReplies.forEach(collapseReplies => {
+            const pushedButtonTarget = e.target;
+            const pushedBtnReplies = pushedButtonTarget.dataset['number']
+
+            const collapseReplies = collapseReplies.dataset['number'];
+            if (pushedBtnReplies == collapseReplies) {
+                collapseReplies.style.visibility = `${visible}`
+            }
+        })
+    })
+})
