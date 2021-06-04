@@ -21,6 +21,8 @@
 
         public DateTime CreatedOn { get; set; }
 
+        public DateTime ModifiedOn { get; set; }
+
         public string AuthorName { get; set; }
 
         public IEnumerable<LikeViewModel> Likes { get; set; }

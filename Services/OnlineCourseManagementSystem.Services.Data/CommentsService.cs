@@ -49,22 +49,80 @@
 
         public IEnumerable<T> GetAllByPostId<T>(int postId)
         {
-            return this.commentRepository
-                .All()
-                .Where(c => c.PostId == postId && c.ParentId == null)
-                .OrderBy(c => c.CreatedOn)
-                .To<T>()
-                .ToList();
+            ICollection<Comment> commentsToUse = this.commentRepository
+               .All()
+               .Where(c => c.PostId == postId && c.ParentId == null)
+               .ToArray();
+
+            Dictionary<int, DateTime?> commentDictionary = new Dictionary<int, DateTime?>();
+
+            foreach (var comment in commentsToUse)
+            {
+                if (comment.ModifiedOn != null)
+                {
+                    if (comment.ModifiedOn > comment.CreatedOn)
+                    {
+                        commentDictionary.Add(comment.Id, comment.ModifiedOn);
+                    }
+                }
+                else
+                {
+                    commentDictionary.Add(comment.Id, comment.CreatedOn);
+                }
+            }
+
+            ICollection<T> comments = new List<T>();
+
+            foreach (var comment in commentDictionary.OrderByDescending(c => c.Value)) 
+            {
+                T commentGet = this.commentRepository
+                    .All()
+                    .Where(x => x.Id == comment.Key)
+                    .To<T>()
+                    .FirstOrDefault();
+                comments.Add(commentGet);
+            }
+
+            return comments;
         }
 
         public IEnumerable<T> GetAllReplies<T>(int commentId)
         {
-            return this.commentRepository
-                .All()
-                .Where(c => c.ParentId != null && c.ParentId == commentId)
-                .OrderBy(c => c.CreatedOn)
-                .To<T>()
-                .ToList();
+            ICollection<Comment> repliesToComment = this.commentRepository
+               .All()
+               .Where(c => c.ParentId != null && c.ParentId == commentId)
+               .ToArray();
+
+            Dictionary<int, DateTime?> commentDictionary = new Dictionary<int, DateTime?>();
+
+            foreach (var comment in repliesToComment)
+            {
+                if (comment.ModifiedOn != null)
+                {
+                    if (comment.ModifiedOn > comment.CreatedOn)
+                    {
+                        commentDictionary.Add(comment.Id, comment.ModifiedOn);
+                    }
+                }
+                else
+                {
+                    commentDictionary.Add(comment.Id, comment.CreatedOn);
+                }
+            }
+
+            ICollection<T> replies = new List<T>();
+
+            foreach (var comment in commentDictionary.OrderByDescending(c => c.Value))
+            {
+                T commentGet = this.commentRepository
+                    .All()
+                    .Where(x => x.Id == comment.Key)
+                    .To<T>()
+                    .FirstOrDefault();
+                replies.Add(commentGet);
+            }
+
+            return replies;
         }
 
         public T GetById<T>(int commentId)
@@ -77,32 +135,31 @@
 
         public T GetLastActiveCommentByPostId<T>(int postId)
         {
-            //T lastActiveComment = this.commentRepository
-            //    .All()
-            //    .Where(c => c.PostId == postId)
-            //    .OrderByDescending(c => c.ModifiedOn)
-            //    .ThenByDescending(c => c.Likes.FirstOrDefault().CreatedOn)
-            //    .ThenByDescending(c => c.CreatedOn)
-            //    .To<T>()
-            //    .FirstOrDefault();
             Comment lastCommentCreatedOn = this.commentRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.CreatedOn).FirstOrDefault();
             Comment lastCommentModifiedOn = this.commentRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.ModifiedOn).FirstOrDefault();
 
-            if (lastCommentCreatedOn.CreatedOn > lastCommentModifiedOn.ModifiedOn)
+            if (this.commentRepository.All().Where(c => c.PostId == postId).Any())
             {
-                return this.commentRepository
-                    .All()
-                    .Where(c => c.Id == lastCommentCreatedOn.Id)
-                    .To<T>()
-                    .FirstOrDefault();
+                if (lastCommentCreatedOn.CreatedOn > lastCommentModifiedOn.ModifiedOn)
+                {
+                    return this.commentRepository
+                        .All()
+                        .Where(c => c.Id == lastCommentCreatedOn.Id)
+                        .To<T>()
+                        .FirstOrDefault();
+                }
+                else
+                {
+                    return this.commentRepository
+                        .All()
+                        .Where(c => c.Id == lastCommentModifiedOn.Id)
+                        .To<T>()
+                        .FirstOrDefault();
+                }
             }
             else
             {
-                return this.commentRepository
-                    .All()
-                    .Where(c => c.Id == lastCommentModifiedOn.Id)
-                    .To<T>()
-                    .FirstOrDefault();
+                return default(T);
             }
         }
 

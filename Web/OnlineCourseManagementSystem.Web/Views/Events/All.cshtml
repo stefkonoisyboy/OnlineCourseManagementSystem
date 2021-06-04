@@ -7,9 +7,10 @@
 <pre class="tab"></pre>
 <pre class="tab"></pre>
 <h3>Events Coming</h3>
+<div class="row">
     @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
     {
-        <li class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff">
+        <li class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff;margin: 0.60rem;">
             <div>
                 <h3>
                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
@@ -43,44 +44,50 @@
             </div>
         </li>
     }
+</div>
+  
 
 
 <h3>Events Finished</h3>
-@foreach (var eventFinished in this.Model.EventsFinished)
-{
-    <li class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff">
-        <div>
-            <h3>
-                <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
-                    @eventFinished.Theme
-                </a>
-            </h3>
-        </div>
-        <div>
-            <span>
-                <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
-            </span>
-            <span class="text-black">@eventFinished.AuthorName</span>
-        </div>
-        <div class="card-footer">
-            <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+<div class="row">
+    @foreach (var eventFinished in this.Model.EventsFinished)
+    {
+        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff; margin: 0.60rem;">
+            <div>
+                <h3>
+                    <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                        @eventFinished.Theme
+                    </a>
+                </h3>
+            </div>
+            <div>
                 <span>
-                    <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
-                    <span class="text-black-50">
-                        @eventFinished.StartDate.ToString("dd MMM yyyy(ddd)")
-                    </span>
+                    <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
                 </span>
+                <span class="text-black">@eventFinished.AuthorName</span>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                    <span>
+                        <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
+                        <span class="text-black-50">
+                            @eventFinished.StartDate.ToString("dd MMM yyyy(ddd)")
+                        </span>
+                    </span>
 
-                <span>
-                    <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
-                    <span class="text-black-50">
-                        @eventFinished.StartDate.ToString("t") - @eventFinished.EndDate.ToString("t")
-                        <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
+                    <span>
+                        <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
+                        <span class="text-black-50">
+                            @eventFinished.StartDate.ToString("t") - @eventFinished.EndDate.ToString("t")
+                            <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
+                        </span>
                     </span>
-                </span>
-            </a>
+                </a>
+            </div>
         </div>
-    </li>
-}
+
+    }
+
+</div>
 
 
