@@ -103,7 +103,7 @@
                 {
                     <div class="container">
                         <div class="col justify-content-center">
-                            @foreach (var post in this.Model.Posts.OrderByDescending(p => p.LastActive.LastActive))
+                            @foreach (var post in this.Model.Posts)
                             {
                                 <article class="row-cols-md-1 rounded" style="background:#d8d8d8">
                                     <div class="card-header">
@@ -176,24 +176,26 @@
                                                 <div class="row">
                                                     <div class="col-md-5">
                                                         Last Active
-                                                        @if (post.LastActive == null)
+                                                        @*@if (post.LastActive == null)
                                                         {
                                                             @post.AuthorName
                                                         }
                                                         else
                                                         {
                                                             @post.LastActive.Name
-                                                        }
+                                                        }*@
+                                                        @post.LastActive.Name
                                                     </div>
                                                     <div class="col-md-4">
-                                                        @if (post.LastActive == null)
+                                                        @*@if (post.LastActive == null)
                                                         {
                                                             @post.CreatedOn
                                                         }
                                                         else
                                                         {
                                                             @post.LastActive.LastActive
-                                                        }
+                                                        }*@
+                                                        @post.LastActive.LastActive
                                                     </div>
                                                 </div>
                                             </div>

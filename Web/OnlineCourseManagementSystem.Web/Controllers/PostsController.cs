@@ -84,13 +84,31 @@
             foreach (var post in posts)
             {
                 post.LastActive = this.commentsService.GetLastActiveCommentByPostId<LastActiveViewModel>(post.Id);
+                if (post.LastActive == null)
+                {
+                    LastActiveViewModel lastActive = new LastActiveViewModel
+                    {
+                        Name = post.AuthorName,
+                    };
+
+                    if (post.CreatedOn > post.ModifiedOn)
+                    {
+                        lastActive.LastActive = post.CreatedOn;
+                    }
+                    else
+                    {
+                        lastActive.LastActive = post.ModifiedOn;
+                    }
+
+                    post.LastActive = lastActive;
+                }
             }
 
             var postsCount = query.Count();
             var pagesCount = (int)Math.Ceiling(postsCount / (decimal)this.ItemsPerPage);
             AllPostsViewModel viewModel = new AllPostsViewModel
             {
-                Posts = posts,
+                Posts = posts.OrderByDescending(p => p.LastActive.LastActive),
                 Courses = this.coursesService.GetAll<CourseViewModel>(),
                 CurrentPage = id,
                 PagesCount = pagesCount,

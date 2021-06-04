@@ -23,66 +23,54 @@
     <div class="row">
         @if (this.User.Identity.IsAuthenticated)
         {
-            <div class="link-container col-md-3">
+            <a class="link link-container col-md-4" asp-controller="Albums" asp-action="All">
                 <img src="~/icons/folder.png" alt="Alternate Text" class="img-link" />
-                <a class="link" asp-controller="Albums" asp-action="All">
-                    Gallery
-                </a>
-            </div>
+                Gallery
+            </a>
 
 
             if (this.User.IsInRole(GlobalConstants.StudentRoleName))
             {
-                <div class="link-container col-md-3">
+                <a class="link link-container col-md-4" asp-controller="Assignments" asp-action="All">
                     <img src="~/icons/notepad.png" class="img-link">
-                    <a class="link" asp-controller="Assignments" asp-action="All">
-                        Assignments<span class="badge bg-secondary">@this.Model.AssignmentsCount</span>
-                    </a>
-                </div>
+                    Assignments<span class="badge bg-secondary">@this.Model.AssignmentsCount</span>
+                </a>
 
             }
 
             if (this.User.IsInRole(GlobalConstants.StudentRoleName))
             {
-                <div class="link-container">
-                    <img src="~/icons/basket.png" class="img-link"/>
-                    <a class="link col-md-4" asp-controller="Orders" asp-action="AllByUserId">
-                        Courses In Cart<span class="badge bg-secondary">@this.Model.CoursesInCartCount</span>
-                    </a>
-                </div>
+                <a class="link link-container col-md-4" asp-controller="Orders" asp-action="AllByUserId">
+                    <img src="~/icons/basket.png" class="img-link" />
+                    Courses In Cart<span class="badge bg-secondary">@this.Model.CoursesInCartCount</span>
+                </a>
             }
         }
 
 
-        <div class="link-container col-md-3">
+        <a class="link link-container col-md-4" asp-controller="Posts" asp-action="All" asp-route-id="1">
             <img src="~/icons/speech_3.png" class="img-link" />
-            <a class="link" asp-controller="Posts" asp-action="All" asp-route-id="1">
-                Forum
-            </a>
-        </div>
+            Forum
+        </a>
 
 
-        <div class="link-container col-md-3">
+        <a asp-controller="Events" asp-action="All" class="link link-container col-md-4">
             <img src="~/icons/events.jpg" class="img-link" alt="Alternate Text" />
-            <a asp-controller="Events" asp-action="All" class="link">
-                Events
-            </a>
-        </div>
+            Events
+        </a>
 
 
         @if (this.User.IsInRole(GlobalConstants.LecturerRoleName) || this.User.IsInRole(GlobalConstants.AdministratorRoleName))
         {
-             <div class="link-container">
-                 <img src="~/icons/calendar_add.png" class="img-link" c />
-                 <a asp-controller="Events" asp-action="AllCreated" class="link col-md-4">
-                     All Created Events
-                 </a>
-             </div>
+            <a asp-controller="Events" asp-action="AllCreated" class="link link-container col-md-4">
+                <img src="~/icons/calendar_add.png" class="img-link" c />
+
+                All Created Events
+            </a>
         }
 
     </div>
 </div>
-
 
 @*<div class="text-center">
         <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>

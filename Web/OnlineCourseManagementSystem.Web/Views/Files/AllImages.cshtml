@@ -17,16 +17,17 @@
 <div class="row">
     @foreach (var image in this.Model.Images)
     {
-        <div class="card col-md-4" style="height: 340px; width: 50px; background: #e9e6e6">
-            <img style="height: 263px; width: 268px" src="@image.ImageUrl" alt="Image" class="rounded" />
+        <div class="container-image col-md-4">
+            <img  src="@image.ImageUrl" alt="Image" class="image" />
             <div class="card-body">
                 <div class="row">
 
                     <div class="col-md-4">
                     </div>
                     <div class="col-md-4">
+
                         <form asp-controller="Files" asp-action="DeleteImage" asp-route-id="@image.ImageId" method="post">
-                            <button class="btn  btn-info">
+                            <button class="btn  btn-delete">
                                 Delete
                             </button>
                         </form>
@@ -34,8 +35,6 @@
                 </div>
             </div>
         </div>
-
         <pre class="tab"></pre>
-
     }
 </div>

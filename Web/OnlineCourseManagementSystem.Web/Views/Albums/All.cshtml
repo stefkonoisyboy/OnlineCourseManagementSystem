@@ -29,10 +29,10 @@
 <div class="row">
     @foreach (var album in this.Model.Albums)
     {
-        <div class="col-md-4">
-            <img src="~/icons/folder_ok.png" alt="Folder" />
-            <a class="text-center text-white" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">@album.Name</a>
-        </div>
+            <a class="text-center folder-container col-md-2" style="color: black" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">
+                <img src="~/icons/folder_ok.png" alt="Folder" />
+                @album.Name
+            </a>
     }
 </div>
 

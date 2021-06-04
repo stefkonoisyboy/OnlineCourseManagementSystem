@@ -139,18 +139,20 @@ label {
 .img-link{
     width: 100px;
     height: 100px;
-    opacity: 0.8;
+    opacity: 0.7;
+
 }
 
 .link-container{
     background: #fff;
-    width: 300px;
+    width: 250px;
     display:flex;
     flex-direction:column;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
     margin: 10px;
+
 }
 
 .link{
@@ -160,4 +162,51 @@ label {
 
 .index-container{
     display: inline-flex;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+.link-container:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+    transition: transform 150ms;
+    box-shadow: 0 0.4rem 1.4rem 0 #ff6a00;
+}
+
+.container-image{
+    display: flex;
+    padding: 0.75rem;
+    justify-content: center;
+    background: #e5e5e5;
+}
+
+.image{
+    position: relative;
+    height: 13rem;
+    width: 13rem;
+}
+
+.btn-delete{
+    position: relative;
+    background: #e3883a;
+    color: aliceblue;
+}
+
+.folder-container {
+    background: #fff;
+    padding: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    margin: 10px;
+}
+.folder-container:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+    transition: transform 150ms;
+    box-shadow: 0 0.4rem 1.4rem 0 #ff6a00;
 }
