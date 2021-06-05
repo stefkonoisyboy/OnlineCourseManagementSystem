@@ -3,10 +3,12 @@
 @model AssignmentPageViewModel
 @{
     this.ViewData["Title"] = "Assignment Info";
+    int i = 0;
+    int j = 0;
 }
 
 
-<h1 class="text-center rounded-pill" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
+<h1 class="title" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
 <div class="row">
     <div class="col-md-4">
     </div>
@@ -66,16 +68,19 @@
     {
         if (file.RemoteUrl.EndsWith(".jpg"))
         {
-            <form>
-            </form>
-            <div class="pt-1">
-                <iframe src=@file.RemoteUrl height="300" width="300"></iframe>
+            <div class="file">
+                <a class="file-block" href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
+                    WorkFiles@{j++;}
+                </a>
             </div>
         }
         else
         {
-            <div class="pt-1">
-                <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="300" width="300"></iframe>
+            <div class="file">
+                <a href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
+                    WorkFiles@{j++;}
+                </a>
+            
             </div>
         }
     }
@@ -96,19 +101,25 @@ else
         <form asp-controller="Files" asp-action="DeleteWorkFileFromAssignment" asp-route-id="@file.FileId" method="post">
             @if (file.RemoteUrl.EndsWith(".jpg"))
             {
-                <div class="pt-1">
-                    <iframe src=@file.RemoteUrl height="300" width="300"></iframe>
+                <div class="file">
+                    <a class="file-block" href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
+                        WorkFiles@{i++;}
+                    </a>
                     <button class="form-control">Delete</button>
                 </div>
             }
             else
             {
-                <div class="pt-1">
-                    <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="300" width="300"></iframe>
+                <div class="file">
+                    <a href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
+                        WorkFiles@{i++;}
+                    </a>
+
+                    <button class="form-control " style="margin-left: 30rem; width: 80px">Delete</button>
+
                 </div>
             }
         </form>
-
     }
 }
 else

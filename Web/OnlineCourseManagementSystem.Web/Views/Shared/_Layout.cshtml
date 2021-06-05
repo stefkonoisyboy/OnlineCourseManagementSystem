@@ -7,7 +7,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
-    <link href="bootstrap.bundle.min.js" rel="stylesheet" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" asp-append-version="true">
@@ -154,7 +153,7 @@
             }
         }
     </script>
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         let liketbtn = document.querySelector('#likebtn');
         let dislikebtn = document.querySelector('#dislikebtn');
 
@@ -168,11 +167,7 @@
         dislikebtn.addEventListener('click', () => {
             input2.value = parseInt(input2.value) + 1;
         })
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('[data-toggle="popover"]').popover();
-        });
-    </script>
+    </script>*@
+    
 </body>
 </html>

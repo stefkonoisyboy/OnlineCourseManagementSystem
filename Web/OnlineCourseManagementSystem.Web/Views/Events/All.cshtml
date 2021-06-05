@@ -3,14 +3,13 @@
 @{
     this.ViewData["Title"] = "Events";
 }
-<h1 class="text-center rounded" style="color: #ff6a00;background:#ffffff">Events</h1>
-<pre class="tab"></pre>
-<pre class="tab"></pre>
+<h1 class="title">Events</h1>
+
 <h3>Events Coming</h3>
 <div class="row">
     @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
     {
-        <li class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff;margin: 0.60rem;">
+        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff;margin: 0.60rem;">
             <div>
                 <h3>
                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
@@ -42,7 +41,7 @@
                     </span>
                 </a>
             </div>
-        </li>
+        </div>
     }
 </div>
   

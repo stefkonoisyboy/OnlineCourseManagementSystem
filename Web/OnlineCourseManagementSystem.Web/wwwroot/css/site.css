@@ -63,7 +63,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background: #1e3e63
+    background: #1e3e63;
 }
 
 .footer {
@@ -177,9 +177,10 @@ a:hover{
 
 .container-image{
     display: flex;
-    padding: 0.75rem;
+    padding: 0.60rem;
     justify-content: center;
     background: #e5e5e5;
+    margin-bottom: 1rem;
 }
 
 .image{
@@ -204,9 +205,85 @@ a:hover{
     border-radius: 4px;
     margin: 10px;
 }
+
 .folder-container:hover {
     cursor: pointer;
     transform: scale(1.03);
     transition: transform 150ms;
     box-shadow: 0 0.4rem 1.4rem 0 #ff6a00;
+}
+
+#btn-scrollTop {
+    background: #ff6a00;
+    border-radius: 50px;
+    z-index: 9;
+    padding: 0.4rem;
+    bottom: 30px;
+    right: 30px;
+    position: fixed;
+    outline: none;
+    display: none;
+}
+
+.form-album-container{
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
+
+
+
+#modal-content{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #fcb25c;
+    z-index: 9;
+    padding: 5rem;
+    border-radius: 4px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+}
+
+#btn-close{
+    top: 30px;
+    position: absolute;
+    right: 30px;
+    padding: 0.5rem;
+    background: #808080;
+    border-radius: 10px;
+}
+
+#btn-form-album:hover {
+    transform: scale(1.03);
+    transition: transform 150ms;
+    cursor: pointer;
+}
+
+#btn-form-album {
+    background-color: azure;
+    margin-left: 10px;
+}
+
+.title {
+    color: #ff6a00;
+    background: #ffffff;
+    margin: 6rem;
+    border-radius: 10px;
+    position: center;
+    display: flex;
+    justify-content: center;
+    color: #ff6a00;
+}
+
+.file{
+    padding: 1rem;
+    width: 40rem;
+    background-color:aliceblue;
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
 }

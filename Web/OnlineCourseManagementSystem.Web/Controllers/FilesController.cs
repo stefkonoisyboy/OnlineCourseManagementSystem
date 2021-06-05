@@ -61,7 +61,7 @@
         {
             int assignmentId = (int)await this.fileService.DeleteWorkFileFromAssignment(id);
 
-            return this.RedirectToAction("GetInfo", "Assignments", new { Id = id });
+            return this.RedirectToAction("GetInfo", "Assignments", new { Id = assignmentId });
         }
     }
 }
