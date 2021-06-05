@@ -3,7 +3,7 @@
 @{
     this.ViewData["Title"] = "Images";
 }
-<h1 class="card-title">
+<h1 class="title" style="color: #ff6a00;background:#ffffff; margin:10rem;">
     Album: @Model.AlbumName
 </h1>
 
@@ -17,7 +17,7 @@
 <div class="row">
     @foreach (var image in this.Model.Images)
     {
-        <div class="container-image col-md-4">
+        <div class="container-image col-md-4" style="margin: 1rem;">
             <img  src="@image.ImageUrl" alt="Image" class="image" />
             <div class="card-body">
                 <div class="row">
