@@ -1,6 +1,8 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
 @model EditCheckedUserAssignmentViewModel
- 
+@{ 
+    this.ViewData["Title"] = "Edit Checked Assignment";
+}
 @if (this.TempData.ContainsKey("ErrorPoints"))
 {
     <div class="alert alert-danger alert-dismissible">
@@ -9,11 +11,10 @@
     </div>
 }
 
-<div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-4">
-        <form asp-controller="Assignments" asp-action="EditCheckedAssignment" asp-route-assignmentId ="@this.Model.AssignmentId" asp-route-userId="@this.Model.UserId" method="post">
+
+<div class="lecture-assignment-info-container">
+    <div class="edit-container">
+        <form asp-controller="Assignments" asp-action="EditCheckedAssignment" asp-route-assignmentId="@this.Model.AssignmentId" asp-route-userId="@this.Model.UserId" method="post">
             @if (this.Model.PossiblePoints != null)
             {
                 <div class="form-group">
@@ -22,43 +23,72 @@
                     <span asp-validation-for="InputModel.Points"></span>
                 </div>
             }
-            <div class="form-group">
+            <div class="form-group ">
                 <label asp-for="InputModel.Feedback"></label>
-                <input asp-for="InputModel.Feedback" class="form-control" />
+                <textarea asp-for="InputModel.Feedback" class="form-control"></textarea>
                 <span asp-validation-for="InputModel.Feedback"></span>
             </div>
             <button class="form-control btn-success">Edit</button>
         </form>
     </div>
-    <div class="cols-md-6 " style="background:#ffffff;">
-        <div class="col">
-            <div class="card card-body bg-dark">
-                @if (this.Model.TurnedOn != null)
-                {
-                    @foreach (var file in this.Model.Files)
-                    {
-                        <div style="background:#6984aa;color:#ff6a00" class="row rounded">
-                            <div style="color:#ff6a00" class="row">
-                                @if (file.RemoteUrl.EndsWith(".jpg"))
-                                {
-                                    <div class="pt-1">
-                                        <img href=@file.RemoteUrl height="200" width="200" />
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="pt-1">
-                                        <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="400" width="400"></iframe>
-                                    </div>
-                                }
+    <div class="files-container">
+        <h2 class="text-white" style="background:#e1dfdf;width:auto;outline: 1px solid #808080">
+            Resource Files
+        </h2>
 
-                            </div>
+        <div class="row">
+            @foreach (var file in this.Model.ResourceFiles)
+            {
+                <div class="col-md-3">
+                    @if (file.RemoteUrl.EndsWith(".jpg"))
+                    {
+
+                        <div>
+                            <img class="file-iframe" href=@file.RemoteUrl />
                         </div>
-                        <pre class="tab"></pre>
-                        <pre class="tab"></pre>
                     }
-                }
-            </div>
+                    else
+                    {
+                        <div>
+                            <iframe class="file-iframe" src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="400" width="400"></iframe>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-md-2">
+                </div>
+            }
         </div>
+
+        <h2 class="text-white" style="background:#e1dfdf;padding:1rem;width:auto;outline: 1px solid #808080">
+            Work Files
+        </h2>
+        @if (this.Model.TurnedOn != null)
+        {
+             <div class="row">
+                 @foreach (var file in this.Model.WorkFiles)
+                 {
+                     <div class="col-md-3">
+                         @if (file.RemoteUrl.EndsWith(".jpg"))
+                         {
+
+                             <div>
+                                 <img class="file-iframe" href=@file.RemoteUrl />
+                             </div>
+                         }
+                         else
+                         {
+                             <div>
+                                 <iframe class="file-iframe" src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="400" width="400"></iframe>
+                             </div>
+                         }
+                     </div>
+                     <div class="col-md-2">
+                     </div>
+
+                 }
+             </div>
+        }
     </div>
 </div>
+

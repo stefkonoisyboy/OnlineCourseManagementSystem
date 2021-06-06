@@ -1,5 +1,8 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
 @model IEnumerable<AssignmentUserInfoViewModel>
+@{
+    this.ViewData["Title"] = "Users For Assignment ";
+}
 
 @foreach (var user in this.Model)
 {

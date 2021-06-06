@@ -13,7 +13,9 @@
     {
         public int AssignmentId { get; set; }
 
-        public IEnumerable<FileAssignmentViewModel> Files { get; set; }
+        public IEnumerable<FileAssignmentViewModel> WorkFiles { get; set; }
+
+        public IEnumerable<FileAssignmentViewModel> ResourceFiles { get; set; }
 
         public MarkSubmittedAssignmentInputModel InputModel { get; set; }
 

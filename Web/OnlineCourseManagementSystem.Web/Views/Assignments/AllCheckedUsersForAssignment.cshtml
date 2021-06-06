@@ -1,5 +1,8 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
 @model IEnumerable<CheckedUserAssignmentsViewModel>
+@{ 
+    this.ViewData["Title"] = "Checked Assignment";
+}
 
 @if (this.TempData.ContainsKey("EditedCheckedAssignment"))
 {
@@ -11,7 +14,7 @@
 
 @foreach (var user in this.Model)
 {
-    <div class="rounded row" style="background:#ffffff;color:darkblue">
+    <div class="lecture-assignment row" style="background:#ffffff;color:darkblue">
         <div class="col-md-4 text-black-50">
             @user.StudentName
         </div>
@@ -42,36 +45,6 @@
             </div>
         }
 
-        @*<div class="col-md-4">
-                <p>
-                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allFiles">
-                        Files <span class="badge bg-secondary">@user.FilesUrl.Count</span>
-                    </button>
-                </p>
-
-                <div class="row">
-
-                    <div class="col">
-                        <div class="collapse" id="allFiles">
-                            <div class="card card-body bg-dark">
-
-                                @foreach (var file in user.FilesUrl)
-                                {
-                                    <div style="background:#ffffff;color:#ff6a00" class="row rounded">
-                                        <div style="color:#ff6a00" class="row">
-
-
-                                        </div>
-                                    </div>
-                                    <pre class="tab"></pre>
-                                    <pre class="tab"></pre>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-
         <a asp-controller="Assignments" asp-action="EditCheckedAssignment" asp-route-assignmentId="@user.AssignmentId" asp-route-userId="@user.UserId" class="btn btn-dark">Edit</a>
         <div>
             Points: @user.Points
@@ -80,3 +53,10 @@
     <pre class="tab"></pre>
     <pre class="tab"></pre>
 }
+
+<div id="btn-scrollTop">
+    <img class="img-scrollUp" src="~/icons/circle_up.png"  />
+    <div class="img-scrollUp">
+        Hello
+    </div>
+</div>

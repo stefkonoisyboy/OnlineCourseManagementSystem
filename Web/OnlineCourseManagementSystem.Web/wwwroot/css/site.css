@@ -55,6 +55,8 @@ button.accept-policy {
 
 /* Sticky footer styles
 -------------------------------------------------- */
+
+
 html {
     position: relative;
     min-height: 100%;
@@ -214,15 +216,25 @@ a:hover{
 }
 
 #btn-scrollTop {
-    background: #ff6a00;
+    background-color:grey;
     border-radius: 50px;
     z-index: 9;
-    padding: 0.4rem;
+    padding: 0.30rem;
     bottom: 30px;
     right: 30px;
     position: fixed;
-    outline: none;
     display: none;
+}
+
+.img-scrollUp{
+   width: 70px;
+   height: 70px;
+}
+
+#btn-scrollTop:hover {
+    transform: scale(1.03);
+    transition: transform 150ms;
+    cursor: pointer;
 }
 
 .form-album-container{
@@ -268,16 +280,6 @@ a:hover{
     margin-left: 10px;
 }
 
-.title {
-    color: #ff6a00;
-    background: #ffffff;
-    margin: 6rem;
-    border-radius: 10px;
-    position: center;
-    display: flex;
-    justify-content: center;
-    color: #ff6a00;
-}
 
 .file{
     padding: 1rem;
@@ -287,3 +289,101 @@ a:hover{
     flex-direction: row;
     margin: 1rem;
 }
+
+.file-iframe{
+    width: 300px;
+    height: 300px;
+}
+
+/*Assignments*/
+.lecture-assignment {
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 10px;
+    background: #ffffff;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+}
+
+.lecture-assignment:hover{
+    transform: scale(1.03);
+    transition: transform 150ms;
+    cursor: pointer;
+}
+
+.lecture-assignment-info-container{
+    flex-direction: column;
+    display: flex;
+    margin-left: 20px; 
+}
+
+.files-container{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    position: relative;
+    width: 85%;
+    height: 85%;
+}
+
+.edit-container{
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 2rem;
+    position: static;
+}
+
+@media (min-width: 768px) {
+    .lecture-assignment-info-container {
+        flex-direction: row;
+    }
+}
+
+/*Styles used through all the pages*/
+/*Title for the pages*/
+.title {
+    color: #ff6a00;
+    background: #ffffff;
+    margin: 6rem;
+    border-radius: 10px;
+    position: center;
+    display: flex;
+    justify-content: center;
+    color: #ff6a00;
+    align-items: center;
+}
+
+.btn-delete {
+    display: flex;
+    background: #ff0000;
+    padding: 0.80rem;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+
+.flex-item{
+    padding: 1rem;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.flex-item>div{
+    border: 1px solid black;
+    flex: 1 1 auto;
+}
+
+.modify-options{
+    display: flex;
+    flex-direction: row;
+    margin-inline: 1rem;
+    padding: 1rem;
+    border: 1px;
+    box-sizing: border-box;
+}
+
+

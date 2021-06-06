@@ -193,7 +193,9 @@
         public IActionResult MarkUserAssignment(int assignmentId, string userId)
         {
             MarkSubmittedAssignmentViewModel viewModel = this.assignmentsService.GetById<MarkSubmittedAssignmentViewModel>(assignmentId, userId);
-            viewModel.Files = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
+            viewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
+            viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(assignmentId, userId);
+
             return this.View(viewModel);
         }
 
@@ -214,7 +216,8 @@
             {
 
                 viewModel = this.assignmentsService.GetById<MarkSubmittedAssignmentViewModel>(viewModel.AssignmentId, userId);
-                viewModel.Files = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
+                viewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
+                viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
 
                 this.TempData["ErrorPoints"] = e.Message;
                 return this.RedirectToAction("MarkUserAssignment", "Assignments", new { AssignmentId = viewModel.AssignmentId, UserId = userId });
@@ -226,7 +229,9 @@
         {
             EditCheckedUserAssignmentViewModel viewModel = this.assignmentsService.GetCheckedBy<EditCheckedUserAssignmentViewModel>(assignmentId, userId);
 
-            viewModel.Files = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(assignmentId, userId);
+            viewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
+            viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(assignmentId, userId);
+
             viewModel.InputModel = this.assignmentsService.GetCheckedBy<EditCheckedAssignmentInputModel>(assignmentId, userId);
 
             viewModel.AssignmentId = assignmentId;
@@ -249,7 +254,9 @@
             catch (Exception e)
             {
                 viewModel.InputModel = this.assignmentsService.GetCheckedBy<EditCheckedAssignmentInputModel>(viewModel.AssignmentId, userId);
-                viewModel.Files = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
+
+                viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
+                viewModel.WorkFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
 
                 this.TempData["ErrorPoints"] = e.Message;
                 return this.RedirectToAction("EditCheckedAssignment", "Assignments", new { AssignmentId = viewModel.AssignmentId, UserId = userId });
