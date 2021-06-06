@@ -16,39 +16,36 @@
 
 @foreach (var assignment in this.Model.CreatedAssignments)
 {
-    <div style="background:#ffffff" class="rounded">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-3">
-                <a class="text-black-50" asp-controller="Assignments" asp-action="AllUsersForAssignment" asp-route-id="@assignment.AssignmentId">
-                    @assignment.CourseName
-                </a>
-            </div>
-            <div class="col-md-3">
-                StartDate: @assignment.StartDate
-            </div>
-            <div class="col-md-3">
-                EndDate: @assignment.EndDate
-            </div>
-            <div class="col-md-3">
-                @assignment.PossiblePoints points
-            </div>
 
-            <div class="row col-md-3">
-                <div class="col-md-5">
-                    <a class="btn" style="background:#00ffff;color:#000000" asp-controller="Assignments" asp-action="Edit" asp-route-id="@assignment.AssignmentId">Edit</a>
+    <div class="lecture-assignment">
+        <a asp-controller="Assignments" asp-action="AllUsersForAssignment" asp-route-id="@assignment.AssignmentId">
+            <div class="row" style="color: black;">
+                <div class="col-md-2"></div>
+                <div class="col-md-3 text-black-50">
+                    @assignment.CourseName
                 </div>
-                <div class="col-md-7">
-                    <form asp-controller="Assignments" asp-action="Delete" asp-route-id="@assignment.AssignmentId" method="post">
-                        <button class="form-control btn" style="background:#ff0000">Delete</button>
-                    </form>
+                <div class="col-md-3">
+                    StartDate: @assignment.StartDate
                 </div>
+                <div class="col-md-3">
+                    EndDate: @assignment.EndDate
+                </div>
+                <div class="col-md-3">
+                    @assignment.PossiblePoints points
+                </div>
+            </div>
+        </a>
+        <div class="col-md-3 modify-options">
+            <div class="flex-item">
+                <a class="btn" style="background:#00ffff;color:#000000; padding:0.75rem;" asp-controller="Assignments" asp-action="Edit" asp-route-id="@assignment.AssignmentId">Edit</a>
+            </div>
+            <div class="flex-item">
+                <form asp-controller="Assignments" asp-action="Delete" asp-route-id="@assignment.AssignmentId" method="post">
+                    <button class="form-control btn-delete">Delete</button>
+                </form>
             </div>
         </div>
     </div>
-
-    <pre class="tab"></pre>
-    <pre class="tab"></pre>
 }
 
 <details>
@@ -58,29 +55,32 @@
     <p>
         @foreach (var assignment in this.Model.CheckedAssignmets)
         {
-            <div style="background:#ffffff" class="rounded">
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-3">
-                        <a class="text-black-50" asp-controller="Assignments" asp-action="AllCheckedUsersForAssignment" asp-route-id="@assignment.AssignmentId">
-                            @assignment.CourseName
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        StartDate: @assignment.StartDate
-                    </div>
-                    <div class="col-md-3">
-                        EndDate: @assignment.EndDate
-                    </div>
-                    <div class="col-md-3">
-                        @assignment.PossiblePoints points
-                    </div>
-                </div>
-            </div>
 
-            <pre class="tab"></pre>
-            <pre class="tab"></pre>
+            <div class="lecture-assignment">
+                <a asp-controller="Assignments" asp-action="AllCheckedUsersForAssignment" asp-route-id="@assignment.AssignmentId">
+                    <div class="row" style="color: black">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-3 text-black-50">
+                            @assignment.CourseName
+                        </div>
+                        <div class="col-md-3">
+                            StartDate: @assignment.StartDate
+                        </div>
+                        <div class="col-md-3">
+                            EndDate: @assignment.EndDate
+                        </div>
+                        <div class="col-md-3">
+                            @assignment.PossiblePoints points
+                        </div>
+                    </div>
+                </a>
+            </div>
         }
 
     </p>
 </details>
+
+<div id="btn-scrollTop" onclick="getToTop()">
+    <img  class="img-scrollUp" src="~/icons/circle_up.png" alt="Alternate Text" />
+</div>
+
