@@ -11,6 +11,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using MudBlazor.Services;
     using OnlineCourseManagementSystem.Data;
     using OnlineCourseManagementSystem.Data.Common;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
@@ -66,6 +67,7 @@
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSingleton(this.configuration);
+            services.AddServerSideBlazor();
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -75,6 +77,7 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddMudServices();
 
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IStudentsService, StudentsService>();
@@ -96,6 +99,8 @@
             services.AddTransient<IExamsService, ExamsService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IChoicesService, ChoicesService>();
+            services.AddTransient<IChannelsService, ChannelsService>();
+            services.AddTransient<IAudienceCommentsService, AudienceCommentsService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }
@@ -140,6 +145,7 @@
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
+                        endpoints.MapBlazorHub();
                     });
         }
     }

@@ -1,5 +1,5 @@
 ﻿@using OnlineCourseManagementSystem.Common
-@{ 
+@{
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -8,8 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" asp-append-version="true">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -51,6 +54,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="All">Exams</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Channels" asp-action="IndexLecturers">Q&A</a>
                             </li>
                         }
                         @if (this.User.IsInRole(GlobalConstants.ParentRoleName))
@@ -101,6 +107,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 
     @await this.RenderSectionAsync("Scripts", required: false)
     <script>
@@ -154,20 +161,23 @@
         }
     </script>
     @*<script type="text/javascript">
-        let liketbtn = document.querySelector('#likebtn');
-        let dislikebtn = document.querySelector('#dislikebtn');
+            let liketbtn = document.querySelector('#likebtn');
+            let dislikebtn = document.querySelector('#dislikebtn');
 
-        let input1 = document.querySelector('#input1');
-        let input2 = document.querySelector("#input2");
+            let input1 = document.querySelector('#input1');
+            let input2 = document.querySelector("#input2");
 
-        liketbtn.addEventListener('click', () => {
-            input1.value = parseInt(input1.value) + 1;
-        })
+            liketbtn.addEventListener('click', () => {
+                input1.value = parseInt(input1.value) + 1;
+            })
 
-        dislikebtn.addEventListener('click', () => {
-            input2.value = parseInt(input2.value) + 1;
-        })
-    </script>*@
-    
+            dislikebtn.addEventListener('click', () => {
+                input2.value = parseInt(input2.value) + 1;
+            })
+        </script>*@
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </body>
 </html>
+
+<base href="~/" />
+<script src="_framework/blazor.server.js"></script>

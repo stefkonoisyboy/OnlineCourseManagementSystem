@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	 <GenerateMvcApplicationPartsAssemblyAttributes>false</GenerateMvcApplicationPartsAssemblyAttributes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MatBlazor" Version="2.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.6" PrivateAssets="all" />
+    <PackageReference Include="MudBlazor" Version="5.0.11" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Services\OnlineCourseManagementSystem.Services.Data\OnlineCourseManagementSystem.Services.Data.csproj" />
+    <ProjectReference Include="..\Web\OnlineCourseManagementSystem.Web.ViewModels\OnlineCourseManagementSystem.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\iconsBlazor\" />
+  </ItemGroup>
+
+</Project>

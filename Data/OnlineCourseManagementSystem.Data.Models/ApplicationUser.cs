@@ -27,6 +27,9 @@ namespace OnlineCourseManagementSystem.Data.Models
             this.Dislikes = new HashSet<Dislike>();
             this.Posts = new HashSet<Post>();
             this.Albums = new HashSet<Album>();
+            this.AudienceComments = new HashSet<AudienceComment>();
+            this.Channels = new HashSet<UserChannel>();
+            this.CreatedChannels = new HashSet<Channel>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -98,6 +101,12 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<Post> Posts { get; set; }
 
         public virtual ICollection<Album> Albums { get; set; }
+
+        public virtual ICollection<AudienceComment> AudienceComments { get; set; }
+
+        public virtual ICollection<UserChannel> Channels { get; set; }
+
+        public virtual ICollection<Channel> CreatedChannels { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

@@ -1,8 +1,12 @@
 ﻿@using OnlineCourseManagementSystem.Common
 @using OnlineCourseManagementSystem.Web.ViewModels.Home
+@using Microsoft.AspNetCore.Identity
+@using OnlineCourseManagementSystem.Data.Models
+@inject UserManager<ApplicationUser> userManager
 @model HomeViewModel
 @{
     this.ViewData["Title"] = "Home Page";
+    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 }
 
 @if (this.TempData.ContainsKey("Message"))

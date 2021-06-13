@@ -77,6 +77,12 @@
 
         public virtual DbSet<Absence> Absences { get; set; }
 
+        public virtual DbSet<AudienceComment> AudienceComments { get; set; }
+
+        public virtual DbSet<Channel> Channels { get; set; }
+
+        public virtual DbSet<UserChannel> UserChannels { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
