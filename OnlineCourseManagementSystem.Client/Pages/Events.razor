@@ -1,0 +1,139 @@
+﻿@inject IDialogService dialogService
+@inject IChannelsService channelsService
+
+<style>
+    #calendarIconDiv {
+        position: relative;
+        right: 50px;
+        text-align: center;
+        float: left;
+        width: 50px;
+        height: 50px;
+        border: 1px solid #909090;
+        border-radius: 100%;
+        margin-right: 7px;
+        background-color: aliceblue;
+    }
+
+    #calendarIcon {
+        position: relative;
+        top: 10px;
+        line-height: 100px;
+        color: lawngreen;
+    }
+</style>
+
+<p style="position: relative; left: 10px; top: 50px;">Active</p>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#scheduleChannel" style="position: relative; left: 950px; bottom: 10px;">
+    + Add Channel
+</button>
+
+<!-- Modal -->
+
+<div class="modal fade" id="scheduleChannel" tabindex="-1" aria-labelledby="scheduleChannelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleChannelLabel">Schedule Channel</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="input" OnValidSubmit="Submit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <label class="text-secondary" for="eventName">Event name: </label>
+                        <InputText id="eventName" class="form-control" @bind-Value="input.Name" placeholder="Enter event name"></InputText>
+                        <ValidationMessage For="@(() => input.Name)" />
+                    </div>
+                    <div class="form-group">
+                        <label class="text-secondary" for="startDate">Start date: </label>
+                        <InputDate id="startDate" class="form-control" @bind-Value="input.StartDate"></InputDate>
+                        <ValidationMessage For="@(() => input.StartDate)" />
+                    </div>
+                    <div class="form-group">
+                        <label class="text-secondary" for="endDate">End date: </label>
+                        <InputDate id="endDate" class="form-control" @bind-Value="input.EndDate"></InputDate>
+                        <ValidationMessage For="@(() => input.EndDate)" />
+                    </div>
+                    <div class="form-group">
+                        <label class="text-secondary" for="code">Code: </label>
+                        <InputText id="code" class="form-control" @bind-Value="input.Code" placeholder="Enter code"></InputText>
+                        <ValidationMessage For="@(() => input.Code)" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Schedule Channel</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (this.viewModel == null)
+{
+    <p>No data.</p>
+}
+else
+{
+    foreach (var channel in this.viewModel)
+    {
+        <a>
+            <div class="card h-25" style="width: 68rem;">
+                <ul class="list-group list-group-flush h-25">
+                    <li class="list-group-item">
+                        <div class="h-25" style="position: relative; top: 30px; left: 40px;">
+                            <div id="calendarIconDiv" class="bg-">
+                                <svg id="calendarIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                </svg>
+                            </div>
+                            <strong style="position: relative; right: 35px;">@channel.Name</strong>
+                            <p class="text-secondary" style="position: relative; left: 75px; bottom: 23px;">#@channel.Code</p>
+                            <p style="position: relative; left: 20px; bottom: 40px;">@(channel.StartDate.ToString("dd") + " - " + channel.EndDate.ToString("dd MMMM yyyy"))</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </a>
+    }
+}
+
+@code {
+    private CreateChannelInputModel input = new CreateChannelInputModel();
+    private IEnumerable<GetAllChannelsByParticipantIdViewModel> viewModel;
+
+    bool visible = false;
+    void OpenDialog()
+    {
+        this.visible = true;
+    }
+
+    protected override void OnInitialized()
+    {
+        this.Load();
+    }
+
+    async Task Submit()
+    {
+        this.input.CreatorId = this.UserId;
+        await this.channelsService.CreateAsync(this.input);
+        this.Load();
+    }
+
+    void Cancel()
+    {
+        this.visible = false;
+    }
+
+    void Load()
+    {
+        this.viewModel = this.channelsService.GetAllByParticipantId<GetAllChannelsByParticipantIdViewModel>(this.UserId);
+    }
+
+    [Parameter]
+    public string UserId { get; set; }
+}

@@ -19,5 +19,9 @@
         public int? CommentId { get; set; }
 
         public virtual Comment Comment { get; set; }
+
+        public int? AudienceCommentId { get; set; }
+
+        public virtual AudienceComment AudienceComment { get; set; }
     }
 }
