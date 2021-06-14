@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using OnlineCourseManagementSystem.Data.Models 
+@using OnlineCourseManagementSystem.Web.Views.Shared.Components
+@inject UserManager<ApplicationUser> userManager
+@{
+    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+}
+
+<style>
+    body {
+        background-color: lightgray;
+    }
+</style>
+
+<body>
+    <component type="typeof(Chats)" render-mode="ServerPrerendered" param-CreatorId="user.Id" />
+</body>
+

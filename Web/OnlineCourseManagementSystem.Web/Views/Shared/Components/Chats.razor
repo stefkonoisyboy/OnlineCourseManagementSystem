@@ -1,0 +1,55 @@
+﻿@inject OnlineCourseManagementSystem.Services.Data.IChatsService chatsService
+@inject OnlineCourseManagementSystem.Services.Data.IUsersService usersService
+<div class="container-chat">
+    <div class="sidebar-heading">
+        <h3>Chats</h3>
+    </div>
+    <div class="form-input-User">
+        <input @bind-value:event="oninput" @bind-value="this.Text" />
+
+
+        @if (this.Text != null && this.CountUsersFound > 0)
+        {
+            <div class="text-white">
+                In
+            </div>
+            <div class="list-users">
+                @foreach (var user in this.Users.Where(x=> x.FirstName.Contains(this.Text) || x.LastName.Contains(this.Text)))
+                {
+                    <div class="user" style="background-color:white">
+                        <p>@user.FirstName</p>
+                        <p>@user.LastName</p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <div class="content">
+    </div>
+</div>
+@code {
+    private string Text="";
+    private CreateChatInputModel InputModel = new CreateChatInputModel();
+    private IEnumerable<UserViewModel> Users;
+    private int CountUsersFound => this.Users.Where(x => x.FirstName.Contains(this.Text) || x.LastName.Contains(this.Text)).Count();
+
+    async Task Create()
+    {
+        this.InputModel.CreatorId = CreatorId;
+        await this.chatsService.CreateAsync(this.InputModel);
+        this.Load();
+    }
+
+    protected override void OnInitialized()
+    {
+        this.Load();
+    }
+
+    void Load()
+    {
+        this.Users = this.usersService.GetAll<UserViewModel>();
+    }
+
+    [Parameter]
+    public string CreatorId { get; set; }
+}

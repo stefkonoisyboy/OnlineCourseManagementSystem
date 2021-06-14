@@ -30,6 +30,9 @@ namespace OnlineCourseManagementSystem.Data.Models
             this.AudienceComments = new HashSet<AudienceComment>();
             this.Channels = new HashSet<UserChannel>();
             this.CreatedChannels = new HashSet<Channel>();
+            this.Chats = new HashSet<ChatUser>();
+            this.Messages = new HashSet<Message>();
+            this.Emojis = new HashSet<MessageEmoji>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -107,6 +110,12 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<UserChannel> Channels { get; set; }
 
         public virtual ICollection<Channel> CreatedChannels { get; set; }
+
+        public virtual ICollection<ChatUser> Chats { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
+
+        public virtual ICollection<MessageEmoji> Emojis { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
