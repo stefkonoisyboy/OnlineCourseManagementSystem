@@ -83,6 +83,16 @@
 
         public virtual DbSet<UserChannel> UserChannels { get; set; }
 
+        public virtual DbSet<Chat> Chats { get; set; }
+
+        public virtual DbSet<ChatUser> ChatUsers { get; set; }
+
+        public virtual DbSet<Message> Messages { get; set; }
+
+        public virtual DbSet<Emoji> Emojis { get; set; }
+
+        public virtual DbSet<MessageEmoji> MessageEmojis { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

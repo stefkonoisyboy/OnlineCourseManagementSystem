@@ -73,6 +73,12 @@
             </a>
         }
 
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Chats" asp-action="IndexChats" class="link link-container col-md-4">
+                Chats
+            </a>
+        }
     </div>
 </div>
 
