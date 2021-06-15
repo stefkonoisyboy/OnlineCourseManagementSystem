@@ -26,22 +26,32 @@
 
         public async Task CreateAsync(CreateChatInputModel inputModel)
         {
-            Chat chat = new Chat();
+            Chat chat = new Chat()
+            {
+                Name = string.Empty,
+            };
+
             ChatUser userCreator = new ChatUser
             {
                 UserId = inputModel.CreatorId,
             };
 
-            ChatUser userAdded = new ChatUser
+            foreach (var friendId in inputModel.FriendsToAdd)
             {
-                UserId = inputModel.AddedUserId,
-            };
+                chat.Users.Add(userCreator);
+                ChatUser userAdded = new ChatUser
+                {
+                    UserId = friendId,
+                };
 
-            ApplicationUser user = this.userRepository.All().FirstOrDefault(u => u.Id == inputModel.AddedUserId);
+                ApplicationUser user = this.userRepository.All().FirstOrDefault(u => u.Id == friendId);
 
-            chat.Name = $"{user.FirstName} {user.LastName}";
-            chat.Users.Add(userCreator);
-            chat.Users.Add(userAdded);
+                chat.Name += $"{user.FirstName} {user.LastName}, ";
+
+                chat.Users.Add(userAdded);
+            }
+
+            chat.Name.Remove(chat.Name.LastIndexOf(','));
 
             await this.chatRepository.AddAsync(chat);
             await this.chatRepository.SaveChangesAsync();

@@ -1,53 +1,225 @@
 ﻿@inject OnlineCourseManagementSystem.Services.Data.IChatsService chatsService
 @inject OnlineCourseManagementSystem.Services.Data.IUsersService usersService
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+    .container-chat{
+        display: flex;
+        flex-direction: row;
+        background-color:#36393f;
+        color: aliceblue;
+        padding-bottom: 23rem; 
+        position: relative;
+        border-radius: 10px;
+    }
+    .user-add {
+        left: 0px auto;
+        width: 150px;
+        font-size:smaller;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .added-chats {
+        right: 0px auto;
+        width: 500px;
+        font-size: smaller;
+        display: flex;
+        flex-direction: column;
+        margin-left: 1rem;
+    }
+
+    .chat-heading {
+        padding: 0.7rem;
+        font-size: 15px;
+        margin-bottom: 2rem;
+        color: white;
+        margin-left: 2rem;
+        margin-inline: 1rem;
+    }
+
+    .chat {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        position: relative;
+        padding-bottom: inherit;
+    }
+
+    .chat-sidebar {
+        display: flex;
+        flex-direction: column;
+        background: #2f3136;
+        padding-bottom: 40rem;
+        width: 250px;
+        border-radius: 10px;
+        margin-left: 1rem;
+    }
+    
+    .chats{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-item{
+        padding: 0.7rem;
+        opacity: 0.4;
+    }
+
+    .chat-item:hover {
+        opacity: 1;
+        background: #3e4148;
+        cursor: pointer;
+    }
+    .card-body{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .friend-item{
+        margin: 0.7rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .friend-item:hover{
+        background:#3e4148;
+        cursor:pointer;
+    }
+    
+    .friend-name{
+        margin-right: 1rem;
+    }
+
+    .btn-add-friend {
+        padding: 0.7rem;
+        background: #808080;
+        color: white;
+        opacity:0.5;
+    }
+
+    #CreateChatWithFriends{
+        color: black;
+    }
+
+</style>
+
 <div class="container-chat">
-    <div class="sidebar-heading">
-        <h3>Chats</h3>
-    </div>
-    <div class="form-input-User">
-        <input @bind-value:event="oninput" @bind-value="this.Text" />
-
-
-        @if (this.Text != null && this.CountUsersFound > 0)
-        {
-            <div class="text-white">
-                In
+    <div class="chat-sidebar">
+        <h3 class="chat-heading">
+            Chats  
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#CreateChatWithFriends">
+                +
+            </button>
+        </h3>
+        <div class="chats">
+            <div class="added-chats">
+                   @foreach (var chat in this.ViewModel.Chats)
+                   {
+                        <div class="chat-item">
+                            @chat.Name
+                        </div>
+                   }
             </div>
-            <div class="list-users">
-                @foreach (var user in this.Users.Where(x=> x.FirstName.Contains(this.Text) || x.LastName.Contains(this.Text)))
-                {
-                    <div class="user" style="background-color:white">
-                        <p>@user.FirstName</p>
-                        <p>@user.LastName</p>
+
+            <div class="modal fade" id="CreateChatWithFriends" tabindex="-1" aria-labelledby="CreateChatWithFriendsLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="CreateChatWithFriendsLabel">Choose Friends</h5>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">X</button>
+                        </div>
+                        <div class="modal-body">
+                            <input style="margin:1rem;" @bind-value:event="oninput" @bind-value="this.Name" />
+
+                            @foreach (var friend in this.Friends.Where(x => x.FirstName.ToLower().Contains(this.Name.ToLower())))
+                            {
+                                
+                                  <div class="friend-item" @onclick="() => this.Mark(friend.Id)">
+                                      <div class="friend-name">
+                                          @friend.FirstName @friend.LastName
+                                      </div>
+                                      <div>
+                                          @if (this.MarkedFriends[friend.Id])
+                                          {
+                                              <div>
+                                                  Marked
+
+                                              </div>
+                                          }
+                                          else
+                                          {
+                                              <div>
+                                                  UnMarked
+                                              </div>
+                                          }
+                                      </div>
+                                  </div>
+                             }
+                        </div>
+                        <div class="modal-footer" style="display:flex;justify-content:center; align-items:center;">
+                            <button @onclick="@Create" class="btn" style="background:#891aea; width: 10rem; border-radius: 4px;">Create Chat</button>
+                        </div>
                     </div>
-                }
+                </div>
             </div>
-        }
+        </div>
     </div>
-    <div class="content">
+    <div class="chat">
+        Hallo
     </div>
 </div>
 @code {
-    private string Text="";
+    private string Name = "";
+
+    private Dictionary<string, bool> MarkedFriends = new Dictionary<string, bool>();
+    private AllChatsViewModel ViewModel = new AllChatsViewModel();
+
     private CreateChatInputModel InputModel = new CreateChatInputModel();
-    private IEnumerable<UserViewModel> Users;
-    private int CountUsersFound => this.Users.Where(x => x.FirstName.Contains(this.Text) || x.LastName.Contains(this.Text)).Count();
+    private IEnumerable<UserViewModel> Friends;
+    private bool IsModalVisible;
+
 
     async Task Create()
     {
         this.InputModel.CreatorId = CreatorId;
+        this.InputModel.FriendsToAdd = this.MarkedFriends.Where(f => f.Value).Select(x => x.Key);
         await this.chatsService.CreateAsync(this.InputModel);
         this.Load();
     }
 
     protected override void OnInitialized()
     {
+        this.IsModalVisible = false;
         this.Load();
+    }
+
+
+    void MadeModalVisible()
+    {
+        this.IsModalVisible = !this.IsModalVisible;
     }
 
     void Load()
     {
-        this.Users = this.usersService.GetAll<UserViewModel>();
+        this.Friends = this.usersService.GetAll<UserViewModel>().Where(x => x.Id != CreatorId);
+
+        this.ViewModel.Chats = this.chatsService.GetAllBy<ChatViewModel>(this.CreatorId);
+
+        foreach (var friend in this.Friends)
+        {
+            this.MarkedFriends[friend.Id] = false;
+        }
+    }
+
+    void Mark(string userId)
+    {
+        this.MarkedFriends[userId] = !this.MarkedFriends[userId];
+    }
+
+    void SearchFriends(string name)
+    {
+        this.Friends = this.Friends.Where(x => x.FirstName.ToLower().Contains(name));
     }
 
     [Parameter]

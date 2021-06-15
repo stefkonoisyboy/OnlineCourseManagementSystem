@@ -67,3 +67,4 @@ function closeAlbumForm() {
     modalContent.style.display = 'none';
     albumContainer.style.opacity = '1';
 }
+
