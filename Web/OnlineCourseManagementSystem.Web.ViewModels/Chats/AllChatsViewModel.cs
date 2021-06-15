@@ -4,10 +4,8 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public class CreateChatInputModel
+    public class AllChatsViewModel
     {
-        public string CreatorId { get; set; }
-
-        public IEnumerable<string> FriendsToAdd { get; set; }
+        public IEnumerable<ChatViewModel> Chats { get; set; }
     }
 }
