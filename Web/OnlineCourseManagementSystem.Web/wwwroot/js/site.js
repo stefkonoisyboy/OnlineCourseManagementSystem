@@ -30,41 +30,41 @@
 
 ///Button to scrool to the Top
 
-window.onscroll = function () {
-    scrollFunction()
-}
+//window.onscroll = function () {
+//    scrollFunction()
+//}
 
 
-function scrollFunction() {
-    let button = document.getElementById('btn-scrollTop');
-    if (document.body.scroll > 20 || document.documentElement.scrollTop > 20) {
-        button.style.display = 'block';
-    }
-    else {
-        button.style.display = 'none';
-    }
-}
-button.addEventListener("click", getToTop());
+//function scrollFunction() {
+//    let button = document.getElementById('btn-scrollTop');
+//    if (document.body.scroll > 20 || document.documentElement.scrollTop > 20) {
+//        button.style.display = 'block';
+//    }
+//    else {
+//        button.style.display = 'none';
+//    }
+//}
+//button.addEventListener("click", getToTop());
 
-function getToTop() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-}
+//function getToTop() {
+//    document.body.scrollTop = 0;
+//    document.documentElement.scrollTop = 0;
+//}
 
 //Btn album
-let modalContent = document.getElementById('modal-content');
+//let modalContent = document.getElementById('modal-content');
 
-function openAlbumForm() {
-    let modalContent = document.getElementById('modal-content');
-    let albumContainer = document.querySelector('.album-container');
-    modalContent.style.display = 'block';
-    albumContainer.style.opacity = '0.5';
-}
+//function openAlbumForm() {
+//    let modalContent = document.getElementById('modal-content');
+//    let albumContainer = document.querySelector('.album-container');
+//    modalContent.style.display = 'block';
+//    albumContainer.style.opacity = '0.5';
+//}
 
-function closeAlbumForm() {
-    let modalContent = document.getElementById('modal-content');
-    let albumContainer = document.querySelector('.album-container');
-    modalContent.style.display = 'none';
-    albumContainer.style.opacity = '1';
-}
+//function closeAlbumForm() {
+//    let modalContent = document.getElementById('modal-content');
+//    let albumContainer = document.querySelector('.album-container');
+//    modalContent.style.display = 'none';
+//    albumContainer.style.opacity = '1';
+//}
 

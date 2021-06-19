@@ -65,5 +65,13 @@
                 .To<T>()
                 .ToList();
         }
+
+        public string GetNameBy(int? chatId)
+        {
+            return this.chatRepository
+                .All()
+                .FirstOrDefault(c => c.Id == chatId)
+                .Name;
+        }
     }
 }

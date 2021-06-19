@@ -102,6 +102,7 @@
             services.AddTransient<IChannelsService, ChannelsService>();
             services.AddTransient<IAudienceCommentsService, AudienceCommentsService>();
             services.AddTransient<IChatsService, ChatsService>();
+            services.AddTransient<IMessagesService, MessagesService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }
