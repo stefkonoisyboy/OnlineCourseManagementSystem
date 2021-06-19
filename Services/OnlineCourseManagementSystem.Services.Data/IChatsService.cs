@@ -12,5 +12,7 @@
         Task CreateAsync(CreateChatInputModel inputModel);
 
         IEnumerable<T> GetAllBy<T>(string userId);
+
+        string GetNameBy(int? chatId);
     }
 }

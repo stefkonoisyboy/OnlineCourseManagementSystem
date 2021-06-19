@@ -1,5 +1,6 @@
 ﻿@inject OnlineCourseManagementSystem.Services.Data.IChatsService chatsService
 @inject OnlineCourseManagementSystem.Services.Data.IUsersService usersService
+@inject OnlineCourseManagementSystem.Services.Data.IMessagesService messagesService
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
     .container-chat{
@@ -7,7 +8,7 @@
         flex-direction: row;
         background-color:#36393f;
         color: aliceblue;
-        padding-bottom: 23rem; 
+        padding-bottom: 10rem; 
         position: relative;
         border-radius: 10px;
     }
@@ -40,19 +41,22 @@
     .chat {
         display: flex;
         justify-content: center;
+        align-items: center;
         flex-direction: row;
         position: relative;
-        padding-bottom: inherit;
+        margin:1rem;
+        flex-direction: column;
+        width: 100%;
     }
 
     .chat-sidebar {
         display: flex;
         flex-direction: column;
         background: #2f3136;
-        padding-bottom: 40rem;
+        padding-bottom: 20rem;
         width: 250px;
         border-radius: 10px;
-        margin-left: 1rem;
+        margin: 1rem;
     }
     
     .chats{
@@ -63,17 +67,48 @@
     .chat-item{
         padding: 0.7rem;
         opacity: 0.4;
+        width: 45%;
+        font-size: 15px;
+        display: flex;
+        flex-direction: row;
     }
 
     .chat-item:hover {
         opacity: 1;
         background: #3e4148;
         cursor: pointer;
+        border-radius: 4px;
     }
+
     .card-body{
         display: flex;
         flex-direction: column;
     }
+
+    .content-messages{
+        display: flex;
+        flex-direction: column;
+        justify-content:flex-start;
+        padding-bottom: 40rem;
+        background:#2f3136;
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    .messaging-container {
+        background: #2f3136;
+        width: 100%;
+        padding: 1rem;
+        bottom: 0px auto;
+        border-radius:4px;
+    }
+
+    .message{
+        margin: 0.5rem;
+        width: 100%;
+        padding: 1rem;
+    }
+
 
     .friend-item{
         margin: 0.7rem;
@@ -116,8 +151,8 @@
             <div class="added-chats">
                    @foreach (var chat in this.ViewModel.Chats)
                    {
-                        <div class="chat-item">
-                            @chat.Name
+                        <div class="chat-item" @onclick="() => this.OpenChat(chat.ChatId)">
+                            <img style="margin-right: 0.5rem; background:#891aea" src="~/icons/users.png" /> @chat.Name.Substring(0, (int)Math.Floor((decimal)chat.Name.Length/2))
                         </div>
                    }
             </div>
@@ -166,17 +201,58 @@
         </div>
     </div>
     <div class="chat">
-        Hallo
+        @if (this.CurrentOpenedChatId != null)
+        {
+            <div style="background-color: gray; width: 100%; font-size:15px; left: 0px auto; padding: 1rem; border-radius: 4px">
+                @this.ChatName.Substring(0, (int)Math.Floor((decimal)this.ChatName.Length / 2))...
+            </div>
+            <div class="content-messages">
+
+                @foreach (var message in this.Messages)
+                {
+                    <div class="message">
+                        <div style="opacity: 0.5;">
+                            @message.CreatorName
+                        </div>
+                        <div style="color: white; font-size: 10px;">
+                            @message.Content
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="messaging-container">
+                <div class="input-form">
+                    <EditForm Model="@this.CreateMessageInputModel" OnValidSubmit="@WriteMessage">
+                        <InputText @bind-Value="@this.CreateMessageInputModel.Content" />
+                        <button class="btn" style="background-color:white; color: black;">Write</button>
+                    </EditForm>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div>
+                No chat choosen
+            </div>
+        }
+
     </div>
 </div>
 @code {
     private string Name = "";
+    private string ChatName = "";
 
     private Dictionary<string, bool> MarkedFriends = new Dictionary<string, bool>();
     private AllChatsViewModel ViewModel = new AllChatsViewModel();
 
     private CreateChatInputModel InputModel = new CreateChatInputModel();
+    private CreateMessageInputModel CreateMessageInputModel = new CreateMessageInputModel();
+
     private IEnumerable<UserViewModel> Friends;
+    private IEnumerable<MessageViewModel> Messages;
+    private Dictionary<int, bool> ChatsStatus = new Dictionary<int, bool>();
+
+    private int? CurrentOpenedChatId;
     private bool IsModalVisible;
 
 
@@ -185,6 +261,7 @@
         this.InputModel.CreatorId = CreatorId;
         this.InputModel.FriendsToAdd = this.MarkedFriends.Where(f => f.Value).Select(x => x.Key);
         await this.chatsService.CreateAsync(this.InputModel);
+
         this.Load();
     }
 
@@ -193,6 +270,7 @@
         this.IsModalVisible = false;
         this.Load();
     }
+
 
 
     void MadeModalVisible()
@@ -205,11 +283,41 @@
         this.Friends = this.usersService.GetAll<UserViewModel>().Where(x => x.Id != CreatorId);
 
         this.ViewModel.Chats = this.chatsService.GetAllBy<ChatViewModel>(this.CreatorId);
+        foreach (var chat in this.ViewModel.Chats)
+        {
+            this.ChatsStatus[chat.ChatId] = false;
+        }
 
         foreach (var friend in this.Friends)
         {
             this.MarkedFriends[friend.Id] = false;
         }
+    }
+
+    void LoadMessages()
+    {
+        this.Messages = this.messagesService.GetAllBy<MessageViewModel>((int)this.CurrentOpenedChatId);
+    }
+
+    void OpenChat(int chatId)
+    {
+        this.CurrentOpenedChatId = chatId;
+        this.ChatsStatus[chatId] = !this.ChatsStatus[chatId];
+        this.ChatName = chatsService.GetAllBy<ChatViewModel>(this.CreatorId).FirstOrDefault(c => c.ChatId == chatId).Name;
+        //this.ChatsName = chatsService.GetNameBy(this.CurrentOpenedChatId);
+        this.LoadMessages();
+
+    }
+
+    async Task WriteMessage()
+    {
+        this.CreateMessageInputModel.UserId = this.CreatorId;
+        this.CreateMessageInputModel.ChatId = this.CurrentOpenedChatId;
+
+        await this.messagesService.Create(this.CreateMessageInputModel);
+        this.CreateMessageInputModel.Content = string.Empty;
+
+        this.LoadMessages();
     }
 
     void Mark(string userId)
