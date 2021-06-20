@@ -3,19 +3,20 @@
 @inject OnlineCourseManagementSystem.Services.Data.IMessagesService messagesService
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
-    .container-chat{
+    .container-chat {
         display: flex;
         flex-direction: row;
-        background-color:#36393f;
+        background-color: #36393f;
         color: aliceblue;
-        padding-bottom: 10rem; 
+        padding-bottom: 10rem;
         position: relative;
         border-radius: 10px;
     }
+
     .user-add {
         left: 0px auto;
         width: 150px;
-        font-size:smaller;
+        font-size: smaller;
         display: flex;
         flex-direction: column;
     }
@@ -44,7 +45,7 @@
         align-items: center;
         flex-direction: row;
         position: relative;
-        margin:1rem;
+        margin: 1rem;
         flex-direction: column;
         width: 100%;
     }
@@ -58,13 +59,13 @@
         border-radius: 10px;
         margin: 1rem;
     }
-    
-    .chats{
+
+    .chats {
         display: flex;
         flex-direction: column;
     }
 
-    .chat-item{
+    .chat-item {
         padding: 0.7rem;
         opacity: 0.4;
         width: 45%;
@@ -73,24 +74,24 @@
         flex-direction: row;
     }
 
-    .chat-item:hover {
-        opacity: 1;
-        background: #3e4148;
-        cursor: pointer;
-        border-radius: 4px;
-    }
+        .chat-item:hover {
+            opacity: 1;
+            background: #3e4148;
+            cursor: pointer;
+            border-radius: 4px;
+        }
 
-    .card-body{
+    .card-body {
         display: flex;
         flex-direction: column;
     }
 
-    .content-messages{
+    .content-messages {
         display: flex;
         flex-direction: column;
-        justify-content:flex-start;
+        justify-content: flex-start;
         padding-bottom: 40rem;
-        background:#2f3136;
+        background: #2f3136;
         margin-bottom: 0.5rem;
         width: 100%;
     }
@@ -100,29 +101,29 @@
         width: 100%;
         padding: 1rem;
         bottom: 0px auto;
-        border-radius:4px;
+        border-radius: 4px;
     }
 
-    .message{
+    .message {
         margin: 0.5rem;
         width: 100%;
         padding: 1rem;
     }
 
 
-    .friend-item{
+    .friend-item {
         margin: 0.7rem;
         padding: 1rem;
         display: flex;
         flex-direction: row;
     }
 
-    .friend-item:hover{
-        background:#3e4148;
-        cursor:pointer;
-    }
-    
-    .friend-name{
+        .friend-item:hover {
+            background: #3e4148;
+            cursor: pointer;
+        }
+
+    .friend-name {
         margin-right: 1rem;
     }
 
@@ -130,13 +131,26 @@
         padding: 0.7rem;
         background: #808080;
         color: white;
-        opacity:0.5;
+        opacity: 0.5;
     }
 
-    #CreateChatWithFriends{
+    #CreateChatWithFriends {
         color: black;
     }
 
+    .input-message {
+        width: 90%;
+        padding: 1rem;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+    @@media (min-width: 600px){
+        .chat-sidebar{
+            width: 50%;
+            height: 50%
+        }
+    }
 </style>
 
 <div class="container-chat">
@@ -151,9 +165,18 @@
             <div class="added-chats">
                    @foreach (var chat in this.ViewModel.Chats)
                    {
-                        <div class="chat-item" @onclick="() => this.OpenChat(chat.ChatId)">
-                            <img style="margin-right: 0.5rem; background:#891aea" src="~/icons/users.png" /> @chat.Name.Substring(0, (int)Math.Floor((decimal)chat.Name.Length/2))
-                        </div>
+                <div class="chat-item" @onclick="() => this.OpenChat(chat.ChatId)">
+                    @if (chat.Users.Count() > 2)
+                    {
+                        <img style="margin-right: 0.5rem; background: #891aea;height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/33/33308.png" />
+                    }
+                    else
+                    {
+                <img style="margin-right: 0.5rem; background:#ff6a00; height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/1077/1077114.png" />
+                    }
+                    @chat.Name.Substring(0, (int)Math.Floor((decimal)chat.Name.Length / 2))
+
+                </div>
                    }
             </div>
 
@@ -207,7 +230,6 @@
                 @this.ChatName.Substring(0, (int)Math.Floor((decimal)this.ChatName.Length / 2))...
             </div>
             <div class="content-messages">
-
                 @foreach (var message in this.Messages)
                 {
                     <div class="message">
@@ -223,8 +245,10 @@
             <div class="messaging-container">
                 <div class="input-form">
                     <EditForm Model="@this.CreateMessageInputModel" OnValidSubmit="@WriteMessage">
-                        <InputText @bind-Value="@this.CreateMessageInputModel.Content" />
-                        <button class="btn" style="background-color:white; color: black;">Write</button>
+                        <InputText class="input-message" @bind-Value="@this.CreateMessageInputModel.Content" />
+                        <button class="btn btn-message" style="background-color:white; color: black; padding: 0.5rem;">
+                            <img src="https://image.flaticon.com/icons/png/512/565/565340.png" style="height:30px; width:30px;" />
+                        </button>
                     </EditForm>
                 </div>
             </div>
@@ -241,6 +265,9 @@
 @code {
     private string Name = "";
     private string ChatName = "";
+    private bool IsTrue;
+
+    Dictionary<int, List<int>> BgcolorsPerChat = new Dictionary<int, List<int>>();
 
     private Dictionary<string, bool> MarkedFriends = new Dictionary<string, bool>();
     private AllChatsViewModel ViewModel = new AllChatsViewModel();
@@ -261,7 +288,6 @@
         this.InputModel.CreatorId = CreatorId;
         this.InputModel.FriendsToAdd = this.MarkedFriends.Where(f => f.Value).Select(x => x.Key);
         await this.chatsService.CreateAsync(this.InputModel);
-
         this.Load();
     }
 
@@ -270,8 +296,6 @@
         this.IsModalVisible = false;
         this.Load();
     }
-
-
 
     void MadeModalVisible()
     {
@@ -283,6 +307,11 @@
         this.Friends = this.usersService.GetAll<UserViewModel>().Where(x => x.Id != CreatorId);
 
         this.ViewModel.Chats = this.chatsService.GetAllBy<ChatViewModel>(this.CreatorId);
+        foreach (var chat in this.ViewModel.Chats)
+        {
+            chat.Users = this.chatsService.GetUserByChat<UserViewModel>(chat.ChatId);
+        }
+
         foreach (var chat in this.ViewModel.Chats)
         {
             this.ChatsStatus[chat.ChatId] = false;
@@ -311,13 +340,16 @@
 
     async Task WriteMessage()
     {
-        this.CreateMessageInputModel.UserId = this.CreatorId;
-        this.CreateMessageInputModel.ChatId = this.CurrentOpenedChatId;
+        if (this.CreateMessageInputModel.Content != string.Empty)
+        {
+            this.CreateMessageInputModel.UserId = this.CreatorId;
+            this.CreateMessageInputModel.ChatId = this.CurrentOpenedChatId;
 
-        await this.messagesService.Create(this.CreateMessageInputModel);
-        this.CreateMessageInputModel.Content = string.Empty;
+            await this.messagesService.Create(this.CreateMessageInputModel);
+            this.CreateMessageInputModel.Content = string.Empty;
 
-        this.LoadMessages();
+            this.LoadMessages();
+        }
     }
 
     void Mark(string userId)

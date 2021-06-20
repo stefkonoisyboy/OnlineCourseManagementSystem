@@ -73,5 +73,14 @@
                 .FirstOrDefault(c => c.Id == chatId)
                 .Name;
         }
+
+        public IEnumerable<T> GetUserByChat<T>(int chatId)
+        {
+            return this.chatUserRepository
+                .All()
+                .Where(x => x.ChatId == chatId)
+                .To<T>()
+                .ToList();
+        }
     }
 }

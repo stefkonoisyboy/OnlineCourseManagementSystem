@@ -14,5 +14,7 @@
         IEnumerable<T> GetAllBy<T>(string userId);
 
         string GetNameBy(int? chatId);
+
+        IEnumerable<T> GetUserByChat<T>(int chatId);
     }
 }
