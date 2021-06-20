@@ -6,12 +6,15 @@
     using AutoMapper;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public class ChatViewModel : IMapFrom<ChatUser>, IHaveCustomMappings
     {
         public string Name { get; set; }
 
         public int ChatId { get; set; }
+
+        public IEnumerable<UserViewModel> Users { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
