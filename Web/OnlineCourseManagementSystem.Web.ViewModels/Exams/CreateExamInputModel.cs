@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
-    public class CreateExamInputModel : IValidatableObject
+    public class CreateExamInputModel
     {
         [Required]
         [MinLength(5)]
@@ -31,15 +31,6 @@
         public DateTime StartDate { get; set; }
 
         [Required]
-        [CheckIfDateIsGreaterThanCurrentDateValidation]
-        public DateTime EndDate { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (this.StartDate > this.EndDate)
-            {
-                yield return new ValidationResult("Start Date cannot be greater than End Date");
-            }
-        }
+        public int Duration { get; set; }
     }
 }

@@ -30,7 +30,11 @@
 
         public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate => this.StartDate.AddMinutes(this.Duration);
+
+        public int Duration { get; set; }
+
+        public bool IsActive => DateTime.UtcNow >= this.StartDate && DateTime.UtcNow <= this.EndDate;
 
         public virtual ICollection<UserExam> Users { get; set; }
 

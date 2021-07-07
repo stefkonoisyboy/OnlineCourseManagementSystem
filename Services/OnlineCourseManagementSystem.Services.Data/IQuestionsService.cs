@@ -14,6 +14,8 @@ namespace OnlineCourseManagementSystem.Services.Data
 
         Task DeleteAsync(int id);
 
+        int GetCountByExamId(int examId);
+
         T GetById<T>(int id);
 
         IEnumerable<T> GetAllByExam<T>(int examId);

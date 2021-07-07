@@ -11,9 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\AudienceComments\**" />
     <Compile Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <Content Remove="Views\AudienceComments\**" />
     <Content Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <EmbeddedResource Remove="Views\AudienceComments\**" />
     <EmbeddedResource Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <None Remove="Views\AudienceComments\**" />
     <None Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
   </ItemGroup>
   <ItemGroup>
@@ -60,10 +64,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\AudienceComments\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Include="wwwroot\Attractive-jQuery-Circular-Countdown-Timer-Plugin-TimeCircles\.gitignore" />
+    <None Include="wwwroot\Attractive-jQuery-Circular-Countdown-Timer-Plugin-TimeCircles\inc\TimeCircles.js" />
+    <None Include="wwwroot\Attractive-jQuery-Circular-Countdown-Timer-Plugin-TimeCircles\README.bower.md" />
+    <None Include="wwwroot\Attractive-jQuery-Circular-Countdown-Timer-Plugin-TimeCircles\README.md" />
     <None Include="wwwroot\lib\tinymce\plugins\code\plugin.min.js" />
     <None Include="wwwroot\lib\tinymce\plugins\image\plugin.min.js" />
     <None Include="wwwroot\lib\tinymce\plugins\link\plugin.min.js" />
@@ -72,5 +76,123 @@
     <None Include="wwwroot\lib\tinymce\plugins\table\plugin.min.js" />
     <None Include="wwwroot\lib\tinymce\themes\silver\theme.min.js" />
     <None Include="wwwroot\lib\tinymce\tinymce.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\datatables-select.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\datatables-select2.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\datatables.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\datatables2.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\directives.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\flag.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\jquery.zmd.hierarchical-display.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\addons\rating.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\mdb.lite.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\mdb.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\css\modules\animations-extended.min.css.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\img\svg\arrow_left.svg" />
+    <None Include="wwwroot\MDB-Free_4.19.2\img\svg\arrow_right.svg" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables-select.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables-select.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables-select2.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables-select2.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables2.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\datatables2.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\directives.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\directives.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\flag.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\flag.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\imagesloaded.pkgd.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\imagesloaded.pkgd.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\jquery.zmd.hierarchical-display.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\jquery.zmd.hierarchical-display.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\masonry.pkgd.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\masonry.pkgd.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\rating.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\addons\rating.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\bootstrap.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\bootstrap.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\jquery.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\jquery.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\mdb.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\mdb.lite.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\mdb.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\mdb.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\animations-extended.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\animations-extended.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\forms-free.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\forms-free.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\scrolling-navbar.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\scrolling-navbar.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\treeview.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\treeview.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\wow.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\modules\wow.min.js.map" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\popper.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\js\popper.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\License.pdf" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_datatables-select.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_datatables-select2.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_datatables.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_datatables2.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_directives.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_flag.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_hierarchical-display.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\addons\_rating.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\bootstrap\_functions.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\bootstrap\_rfs.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\bootstrap\_variables.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_colors.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_global.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_helpers.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_masks.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_mixins.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_typography.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_variables.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\core\_waves.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\modules\animations-extended\animations-extended.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\modules\animations-extended\_module.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_animations-basic.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_badges.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_buttons.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_cards.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_carousels.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_depreciated.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_dropdowns.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_footers.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_forms.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_input-group.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_list-group.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_loader.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_modals.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_msc.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_navbars.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_pagination.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_steppers.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_tables.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\free\_treeview.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\mdb-free.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\mdb-lite-free.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\_custom-styles.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\scss\_custom-variables.scss" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\free\forms-free.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\free\scrolling-navbar.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\free\treeview.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\free\wow.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\datatables-select.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\datatables-select2.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\datatables.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\datatables2.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\imagesloaded.pkgd.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\jquery.zmd.hierarchical-display.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\masonry.pkgd.min.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\addons\rating.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\bs-custom-file-input.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\chart.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\chartjs-datalabels.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\enhanced-modals.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\jquery.easing.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\velocity.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\waves.js" />
+    <None Include="wwwroot\MDB-Free_4.19.2\Useful_Resources.pdf" />
   </ItemGroup>
 </Project>

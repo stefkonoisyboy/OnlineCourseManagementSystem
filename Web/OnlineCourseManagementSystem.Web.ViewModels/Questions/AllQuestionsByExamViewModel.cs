@@ -1,5 +1,8 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
+﻿using AutoMapper;
+using Ganss.XSS;
+using OnlineCourseManagementSystem.Data.Models;
 using OnlineCourseManagementSystem.Services.Mapping;
+using OnlineCourseManagementSystem.Web.ViewModels.Choices;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +17,13 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
 
         public string Text { get; set; }
 
+        [IgnoreMap]
+        public string SanitizedText => this.Text.Replace("<p>", string.Empty).Replace("</p>", string.Empty);
+
         public int ExamId { get; set; }
+
+        public int Points { get; set; }
+
+        public IEnumerable<AllChoicesByIdViewModel> Choices { get; set; }
     }
 }

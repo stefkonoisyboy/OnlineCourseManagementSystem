@@ -96,6 +96,13 @@ namespace OnlineCourseManagementSystem.Services.Data
                 .FirstOrDefault();
         }
 
+        public int GetCountByExamId(int examId)
+        {
+            return this.questionsRepository
+                .All()
+                .Count(q => q.ExamId == examId);
+        }
+
         public async Task UpdateAsync(EditQuestionInputModel input)
         {
             Question question = this.questionsRepository.All().FirstOrDefault(q => q.Id == input.Id);

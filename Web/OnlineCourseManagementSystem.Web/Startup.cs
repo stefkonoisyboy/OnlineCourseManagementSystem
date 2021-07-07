@@ -103,6 +103,7 @@
             services.AddTransient<IAudienceCommentsService, AudienceCommentsService>();
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
+            services.AddTransient<IAnswersService, AnswersService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }
