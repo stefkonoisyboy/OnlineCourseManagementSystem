@@ -1,0 +1,22 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Paging.PagingViewModel
+<nav aria-label="...">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @if (!Model.HasPreviousPage) { <text>disabled</text> }">
+            <button type="submit" class="btn btn-secondary" asp-controller="Exams" asp-action="SaveAnswer" asp-route-id="@Model.ExamId" asp-route-page="@Model.PreviousPageNumber">Previous</button>
+        </li>
+        @if (!Model.HasNextPage)
+        {
+            <li class="page-item">
+                <form method="post" asp-controller="Exams" asp-action="TakeExam" asp-route-id="@Model.ExamId" asp-route-page="@Model.PageNumber">
+                    <input type="submit" class="btn btn-success" value="Submit" />
+                </form>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <button type="submit" class="btn btn-success" asp-controller="Exams" asp-action="SaveAnswer" asp-route-id="@Model.ExamId" asp-route-page="@Model.NextPageNumber">Next</button>
+            </li>
+        }
+    </ul>
+</nav>

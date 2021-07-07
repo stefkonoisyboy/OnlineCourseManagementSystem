@@ -5,6 +5,7 @@
     using System.Text;
 
     using OnlineCourseManagementSystem.Data.Common.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
 
     public class UserExam : BaseDeletableModel<int>
     {
@@ -17,5 +18,9 @@
         public virtual ApplicationUser User { get; set; }
 
         public double Grade { get; set; }
+
+        public Status Status { get; set; }
+
+        public DateTime? SeenOn { get; set; }
     }
 }
