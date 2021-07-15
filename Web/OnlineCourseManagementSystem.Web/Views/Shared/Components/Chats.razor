@@ -1,6 +1,9 @@
 ﻿@inject OnlineCourseManagementSystem.Services.Data.IChatsService chatsService
 @inject OnlineCourseManagementSystem.Services.Data.IUsersService usersService
 @inject OnlineCourseManagementSystem.Services.Data.IMessagesService messagesService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
     .container-chat {
@@ -21,7 +24,7 @@
         flex-direction: column;
     }
 
-    .added-chats {
+    .chats {
         right: 0px auto;
         width: 500px;
         font-size: smaller;
@@ -54,27 +57,51 @@
         display: flex;
         flex-direction: column;
         background: #2f3136;
-        padding-bottom: 20rem;
-        width: 250px;
+        width: 420px;
         border-radius: 10px;
         margin: 1rem;
+        height: 46.5rem;
+        /*width: inherit;*/
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
+        .chat-sidebar::-webkit-scrollbar {
+            width: 15px;
+        }
 
-    .chats {
+        .chat-sidebar::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .chat-sidebar::-webkit-scrollbar-thumb {
+            background-color: orange;
+            border-radius: 10px;
+        }
+
+    .all-chats {
         display: flex;
         flex-direction: column;
     }
 
     .chat-item {
-        padding: 0.7rem;
-        opacity: 0.4;
-        width: 45%;
-        font-size: 15px;
         display: flex;
         flex-direction: row;
+        padding: 0.5rem;
+        opacity: 0.4;
+        width: 50%;
+        font-size: 13px;
+        margin:0.5rem 0 0.5rem 0;
     }
 
         .chat-item:hover {
+            opacity: 1;
+            background: #3e4148;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .chat-item-onclick {
             opacity: 1;
             background: #3e4148;
             cursor: pointer;
@@ -86,15 +113,44 @@
         flex-direction: column;
     }
 
+
+    .close{
+        color:aqua;
+    }
+
+    .close:hover{
+        transform: scale(1.03);
+        transition: transform 250ms;
+        color:white;
+    }
+
     .content-messages {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        padding-bottom: 40rem;
+        padding-bottom: 0.5rem;
         background: #2f3136;
-        margin-bottom: 0.5rem;
-        width: 100%;
+        height: 35rem;
+        width: inherit;
+        overflow-y: scroll;
+        overflow-x:hidden;
+        margin: 1rem;
     }
+
+        .content-messages::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        .content-messages::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .content-messages::-webkit-scrollbar-thumb {
+            background-color: orange;
+            border-radius: 10px;
+        }
+
 
     .messaging-container {
         background: #2f3136;
@@ -105,9 +161,10 @@
     }
 
     .message {
-        margin: 0.5rem;
+        margin: 0.3rem;
         width: 100%;
-        padding: 1rem;
+        padding: 0.6rem;
+        font-size: 15px;
     }
 
 
@@ -119,7 +176,7 @@
     }
 
         .friend-item:hover {
-            background: #3e4148;
+            background: #535760;
             cursor: pointer;
         }
 
@@ -138,6 +195,8 @@
         color: black;
     }
 
+
+
     .input-message {
         width: 90%;
         padding: 1rem;
@@ -145,78 +204,218 @@
         font-size: 15px;
     }
 
-    @@media (min-width: 600px){
+    @@media (max-width: 600px){
         .chat-sidebar{
             width: 50%;
             height: 50%
         }
     }
+
+    .dropbtn:after {
+        content: '\2807';
+        font-size: 2.5em;
+        color: white;
+        z-index:3;
+    }
+
+    .dropbtn:hover {
+        transform: scale(1.05);
+        transition: transform 350ms;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content a {
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: fixed;
+        margin-top: 60px;
+        background-color: #891aea;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        color: white;
+        background: #2f3136;
+    }
+
+    .unmarked {
+        border-radius: 5px;
+        height: 20px;
+        width: 20px;
+        background-color: white;
+        box-shadow: 0 0 0 3px #3e4148;
+    }
+
+    .marked {
+        border-radius: 5px;
+        height: 20px;
+        width: 20px;
+        box-shadow: 0 0 0 3px #3e4148;
+        background-color: #3e4148;
+    }
+
+
+
+    .option{
+        opacity: 0.4;
+    }
+
+        .option:hover {
+            opacity: 1;
+            background: #3e4148;
+            cursor: pointer;
+            color: white;
+        }
+
+    .show {
+        display: block;
+    }
+
 </style>
 
 <div class="container-chat">
     <div class="chat-sidebar">
         <h3 class="chat-heading">
-            Chats  
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#CreateChatWithFriends">
+            Add Chat
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CreateChatWithFriends">
                 +
             </button>
         </h3>
-        <div class="chats">
-            <div class="added-chats">
-                   @foreach (var chat in this.ViewModel.Chats)
-                   {
-                <div class="chat-item" @onclick="() => this.OpenChat(chat.ChatId)">
-                    @if (chat.Users.Count() > 2)
+        <div class="all-chats">
+            <div class="chats">
+                <h3>Pinned</h3>
+                @foreach (var chat in this.ViewModel.PinnedChats)
+                {
+                    if (chat.ChatId == this.CurrentRoom)
                     {
-                        <img style="margin-right: 0.5rem; background: #891aea;height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/33/33308.png" />
+                        this.className = "chat-item-onclick";
                     }
                     else
                     {
-                <img style="margin-right: 0.5rem; background:#ff6a00; height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/1077/1077114.png" />
+                        this.className = string.Empty;
                     }
-                    @chat.Name.Substring(0, (int)Math.Floor((decimal)chat.Name.Length / 2))
 
-                </div>
-                   }
+                    <div class="chat-item @this.className" oncontextmenu="return false;" onmouseup="showDropdown()" @onclick="() => this.OpenChat(chat.ChatId)" >
+                            @if (chat.Users.Count() > 2)
+                            {
+                                <img style="margin-right: 0.5rem; background: #891aea;height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/33/33308.png" />
+                            }
+                            else
+                            {
+                                <img style="margin-right: 0.5rem; background:#ff6a00; height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/1077/1077114.png" />
+                            }
+                            <div style="display:flex; flex-direction:column;margin-right:10px;">
+                                <div>
+                                    @chat.Name.Substring(0, (int)Math.Floor((decimal)chat.Name.Length / 2))...
+                                </div>
+                                <div>
+                                    @chat.UsersPerChatCount users
+                                </div>
+                            </div>
+                        <a class="close" data-bs-toggle="modal" data-bs-target="#LeaveChat" style="position: relative" @onclick="() => this.LeaveChat(chat.ChatId)" aria-label="close">x</a>
+                    </div>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a class="option"  @onclick="() => this.UnpinChat(chat.ChatId)">Unpin</a>
+                        <a class="option" @onclick="() => this.MuteChat(chat.ChatId)">Mute</a>
+                    </div>
+                    
+                }
+            </div>
+            <div class="chats">
+                <h3>Chats</h3>
+                @foreach (var chat in this.ViewModel.Chats)
+                {
+                    if (chat.ChatId == this.CurrentRoom)
+                    {
+                        this.className = "chat-item-onclick";
+                    }
+                    else
+                    {
+                        this.className = string.Empty;
+                    }
+
+                    <div class="chat-item @this.className" oncontextmenu="return false;" onmouseup="showDropdown()" @onclick="() => this.OpenChat(chat.ChatId)" >
+                        @if (chat.Users.Count() > 2)
+                        {
+                            <img style="margin-right: 0.5rem; background: #891aea;height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/33/33308.png" />
+                        }
+                        else
+                        {
+                            <img style="margin-right: 0.5rem; background:#ff6a00; height: 40px; width: 40px; border-radius: 50%;" src="https://image.flaticon.com/icons/png/512/1077/1077114.png" />
+                        }
+                        <div style="display:flex; flex-direction:column;margin-right:10px;">
+                            <div>
+                                @chat.Name.Substring(0, (int)Math.Floor((decimal)chat.Name.Length / 2))
+                            </div>
+                            <div>
+                                @chat.UsersPerChatCount users
+                            </div>
+                        </div>
+                        <a class="close" data-bs-toggle="modal" data-bs-target="#LeaveChat" style="position: relative" @onclick="() => this.LeaveChat(chat.ChatId)" aria-label="close">x</a>
+                    </div>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a class="option" @onclick="() => this.PinChat(chat.ChatId)">Pin</a>
+                        <a class="option" @onclick="() => this.MuteChat(chat.ChatId)">Mute</a>
+                    </div>
+                }
             </div>
 
+            <div class="modal fade" id="LeaveChat" tabindex="-1" aria-labelledby="LeaveChat" aria-hidden="true" >
+                <div class="modal-dialog" >
+                    <div class="modal-content" style="background:#2f3136">
+                        <div class="modal-body">
+                            <h2 style="color:white">Leave Group with @this.ChatName</h2>
+                        </div>
+                        <div class="modal-footer" style="display:flex;justify-content:center; align-items:center;">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-danger" @onclick="() => this.LeaveChat()">Leave</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="CreateChatWithFriends" tabindex="-1" aria-labelledby="CreateChatWithFriendsLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="CreateChatWithFriendsLabel">Choose Friends</h5>
-                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">X</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                         </div>
-                        <div class="modal-body">
-                            <input style="margin:1rem;" @bind-value:event="oninput" @bind-value="this.Name" />
+                        <div class="modal-body" style="background:#2f3136">
+                            <input style="margin:1rem;" @bind-value:event="oninput" @bind-value="this.FriendName" />
 
-                            @foreach (var friend in this.Friends.Where(x => x.FirstName.ToLower().Contains(this.Name.ToLower())))
+                            @foreach (var friend in this.Friends.Where(x => x.FirstName.ToLower().Contains(this.FriendName.ToLower())))
                             {
-                                
-                                  <div class="friend-item" @onclick="() => this.Mark(friend.Id)">
-                                      <div class="friend-name">
-                                          @friend.FirstName @friend.LastName
-                                      </div>
-                                      <div>
-                                          @if (this.MarkedFriends[friend.Id])
-                                          {
-                                              <div>
-                                                  Marked
 
-                                              </div>
-                                          }
-                                          else
-                                          {
-                                              <div>
-                                                  UnMarked
-                                              </div>
-                                          }
-                                      </div>
-                                  </div>
-                             }
+                                <div class="friend-item" @onclick="() => this.Mark(friend.Id)">
+                                    <div class="friend-name">
+                                        @friend.FirstName @friend.LastName
+                                    </div>
+                                    <div style="right:3px; position: absolute;">
+                                        @if (this.MarkedFriends[friend.Id])
+                                        {
+                                            <div class="marked">
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="unmarked">
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
                         </div>
                         <div class="modal-footer" style="display:flex;justify-content:center; align-items:center;">
-                            <button @onclick="@Create" class="btn" style="background:#891aea; width: 10rem; border-radius: 4px;">Create Chat</button>
+                            <button @onclick="@CreateChat" class="btn" style="background:#891aea; width: 10rem; border-radius: 4px;">Create Chat</button>
                         </div>
                     </div>
                 </div>
@@ -224,19 +423,19 @@
         </div>
     </div>
     <div class="chat">
-        @if (this.CurrentOpenedChatId != null)
+        @if (this.CurrentRoom != null)
         {
             <div style="background-color: gray; width: 100%; font-size:15px; left: 0px auto; padding: 1rem; border-radius: 4px">
                 @this.ChatName.Substring(0, (int)Math.Floor((decimal)this.ChatName.Length / 2))...
             </div>
-            <div class="content-messages">
-                @foreach (var message in this.Messages)
+            <div id="messages" class="content-messages">
+                @foreach (var message in this.MessagesTest[(int)this.CurrentRoom])
                 {
                     <div class="message">
                         <div style="opacity: 0.5;">
                             @message.CreatorName
                         </div>
-                        <div style="color: white; font-size: 10px;">
+                        <div style="color: white; font-size: 13px;">
                             @message.Content
                         </div>
                     </div>
@@ -263,38 +462,56 @@
     </div>
 </div>
 @code {
-    private string Name = "";
+    private int LeftChatId = 0;
+    private string FriendName = "";
     private string ChatName = "";
     private bool IsTrue;
+    private int? CurrentRoom;
+    private bool IsModalVisible;
+    private HubConnection hubConnection;
+    string className;
 
-    Dictionary<int, List<int>> BgcolorsPerChat = new Dictionary<int, List<int>>();
-
-    private Dictionary<string, bool> MarkedFriends = new Dictionary<string, bool>();
+    private IDictionary<string, bool> MarkedFriends = new Dictionary<string, bool>();
     private AllChatsViewModel ViewModel = new AllChatsViewModel();
-
     private CreateChatInputModel InputModel = new CreateChatInputModel();
     private CreateMessageInputModel CreateMessageInputModel = new CreateMessageInputModel();
-
     private IEnumerable<UserViewModel> Friends;
-    private IEnumerable<MessageViewModel> Messages;
-    private Dictionary<int, bool> ChatsStatus = new Dictionary<int, bool>();
+    private IDictionary<int, ICollection<MessageViewModel>> MessagesTest = new Dictionary<int, ICollection<MessageViewModel>>();
 
-    private int? CurrentOpenedChatId;
-    private bool IsModalVisible;
-
-
-    async Task Create()
+    async Task CreateChat()
     {
-        this.InputModel.CreatorId = CreatorId;
+        this.InputModel.CreatorId = UserId;
         this.InputModel.FriendsToAdd = this.MarkedFriends.Where(f => f.Value).Select(x => x.Key);
         await this.chatsService.CreateAsync(this.InputModel);
         this.Load();
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        this.IsModalVisible = false;
         this.Load();
+        this.hubConnection = new HubConnectionBuilder()
+    .WithUrl(this.NavigationManager.BaseUri + "hubs/ChatHub")
+    .Build();
+        this.hubConnection.On<string, string, int>("SendMessage", (name, message, room) =>
+        {
+            MessageViewModel messageViewModel = new MessageViewModel()
+            {
+                CreatorName = name,
+                Content = message,
+            };
+
+            if (!this.MessagesTest.ContainsKey(room))
+            {
+                this.MessagesTest.Add(room, new List<MessageViewModel>());
+            }
+
+            this.MessagesTest[room].Add(messageViewModel);
+            this.StateHasChanged();
+            ScrollToBottom();
+        });
+
+        await this.hubConnection.StartAsync();
+
     }
 
     void MadeModalVisible()
@@ -304,52 +521,96 @@
 
     void Load()
     {
-        this.Friends = this.usersService.GetAll<UserViewModel>().Where(x => x.Id != CreatorId);
+        this.Friends = this.usersService.GetAll<UserViewModel>().Where(x => x.Id != UserId);
 
-        this.ViewModel.Chats = this.chatsService.GetAllBy<ChatViewModel>(this.CreatorId);
+        this.ViewModel.Chats = this.chatsService.GetAllBy<ChatViewModel>(this.UserId);
+        this.ViewModel.PinnedChats = this.chatsService.GetAllPinnedBy<ChatViewModel>(this.UserId);
         foreach (var chat in this.ViewModel.Chats)
         {
-            chat.Users = this.chatsService.GetUserByChat<UserViewModel>(chat.ChatId);
+            chat.Users = this.chatsService.GetUsersByChat<UserViewModel>(chat.ChatId);
         }
 
-        foreach (var chat in this.ViewModel.Chats)
+        foreach (var chat in this.ViewModel.PinnedChats)
         {
-            this.ChatsStatus[chat.ChatId] = false;
+            chat.Users = this.chatsService.GetUsersByChat<UserViewModel>(chat.ChatId);
         }
 
         foreach (var friend in this.Friends)
         {
             this.MarkedFriends[friend.Id] = false;
         }
+        this.StateHasChanged();
+
     }
 
-    void LoadMessages()
-    {
-        this.Messages = this.messagesService.GetAllBy<MessageViewModel>((int)this.CurrentOpenedChatId);
-    }
+
 
     void OpenChat(int chatId)
     {
-        this.CurrentOpenedChatId = chatId;
-        this.ChatsStatus[chatId] = !this.ChatsStatus[chatId];
-        this.ChatName = chatsService.GetAllBy<ChatViewModel>(this.CreatorId).FirstOrDefault(c => c.ChatId == chatId).Name;
-        //this.ChatsName = chatsService.GetNameBy(this.CurrentOpenedChatId);
+        this.CurrentRoom = chatId;
+        this.ChatName = this.chatsService.GetNameBy(chatId);
         this.LoadMessages();
+        ScrollToBottom();
+    }
 
+    async Task LeaveChat(int chatId = 0)
+    {
+        if (chatId != 0)
+        {
+            this.LeftChatId = chatId;
+            return;
+        }
+
+        await this.chatsService.LeaveChat(this.LeftChatId, this.UserId);
+        this.LeftChatId = 0;
+        this.CurrentRoom = null;
+        this.Load();
+    }
+
+    async Task PinChat(int chatId)
+    {
+        await this.chatsService.PinChat(chatId, this.UserId);
+        this.Load();
+    }
+
+    async Task UnpinChat(int chatId)
+    {
+        await this.chatsService.UnPinChat(chatId, this.UserId);
+        this.Load();
+    }
+
+    async Task MuteChat(int chatId)
+    {
+        await this.chatsService.MuteChat(chatId, this.UserId);
+    }
+
+    async Task UnmuteChat(int chatId)
+    {
+        await this.chatsService.UnmuteChat(chatId, this.UserId);
     }
 
     async Task WriteMessage()
     {
         if (this.CreateMessageInputModel.Content != string.Empty)
         {
-            this.CreateMessageInputModel.UserId = this.CreatorId;
-            this.CreateMessageInputModel.ChatId = this.CurrentOpenedChatId;
+            this.CreateMessageInputModel.UserId = this.UserId;
+            this.CreateMessageInputModel.ChatId = this.CurrentRoom;
 
             await this.messagesService.Create(this.CreateMessageInputModel);
-            this.CreateMessageInputModel.Content = string.Empty;
 
-            this.LoadMessages();
+            await this.hubConnection.SendAsync("SendMessage", this.UserFullName ,this.CreateMessageInputModel.Content, (int)this.CurrentRoom);
+            this.CreateMessageInputModel.Content = string.Empty;
         }
+    }
+
+    void LoadMessages()
+    {
+        if (!this.MessagesTest.ContainsKey((int)this.CurrentRoom))
+        {
+            this.MessagesTest.Add((int)this.CurrentRoom, new List<MessageViewModel>());
+        }
+
+        this.MessagesTest[(int)this.CurrentRoom] = this.messagesService.GetAllBy<MessageViewModel>((int)this.CurrentRoom).ToList();
     }
 
     void Mark(string userId)
@@ -362,6 +623,14 @@
         this.Friends = this.Friends.Where(x => x.FirstName.ToLower().Contains(name));
     }
 
+    async void ScrollToBottom()
+    {
+        await this.JS.InvokeVoidAsync("scrollToBottom");
+    }
+
     [Parameter]
-    public string CreatorId { get; set; }
+    public string UserId { get; set; }
+
+    [Parameter]
+    public string UserFullName { get; set; }
 }

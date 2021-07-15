@@ -21,6 +21,7 @@
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Services.Messaging;
+    using OnlineCourseManagementSystem.Web.Hubs;
     using OnlineCourseManagementSystem.Web.ViewModels;
     using Stripe;
 
@@ -58,6 +59,7 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
+            services.AddSignalR();
             services.AddControllersWithViews(
                 options =>
                     {
@@ -149,6 +151,7 @@
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
                         endpoints.MapBlazorHub();
+                        endpoints.MapHub<ChatHub>("hubs/ChatHub");
                     });
         }
     }

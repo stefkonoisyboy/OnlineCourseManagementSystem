@@ -15,6 +15,18 @@
 
         string GetNameBy(int? chatId);
 
-        IEnumerable<T> GetUserByChat<T>(int chatId);
+        IEnumerable<T> GetUsersByChat<T>(int chatId);
+
+        Task LeaveChat(int chatId, string userId);
+
+        Task PinChat(int chatId, string userId);
+
+        Task UnPinChat(int chatId, string userId);
+
+        Task MuteChat(int chatId, string userId);
+
+        Task UnmuteChat(int chatId, string userId);
+
+        IEnumerable<T> GetAllPinnedBy<T>(string userId);
     }
 }
