@@ -68,3 +68,8 @@
 //    albumContainer.style.opacity = '1';
 //}
 
+function scrollToBottom() {
+    var objDiv = document.getElementById("messages");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}
+
