@@ -9,9 +9,24 @@
 
     public class ChatHub : Hub
     {
-        public async Task SendMessage(string name, string message, int room)
+        public async Task SendMessage(string name, string message, int messageId, string creatorId, int room)
         {
-            await this.Clients.All.SendAsync("SendMessage", name, message, room);
+            await this.Clients.All.SendAsync("SendMessage", name, message, messageId, creatorId, room);
+        }
+
+        public async Task UpdateMessage(string newMessage, int messageId, int room)
+        {
+            await this.Clients.All.SendAsync("UpdateMessage", newMessage, messageId, room);
+        }
+
+        public async Task DeleteMessage(int messageId, int room)
+        {
+            await this.Clients.All.SendAsync("DeleteMessage", messageId, room);
+        }
+
+        public async Task OnInputMessage(string name, string userId, int room)
+        {
+            await this.Clients.All.SendAsync("OnInputMessage", name, userId, room);
         }
     }
 }

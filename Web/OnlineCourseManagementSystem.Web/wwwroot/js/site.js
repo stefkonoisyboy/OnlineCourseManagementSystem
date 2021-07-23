@@ -69,7 +69,40 @@
 //}
 
 function scrollToBottom() {
-    var objDiv = document.getElementById("messages");
-    objDiv.scrollTop = objDiv.scrollHeight;
+    try {
+        var objDiv = document.getElementById("messages");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    } catch (e) {
+        return;
+    }
+    
+    
 }
 
+//service-worker.js
+
+//function showNotification(event) {
+//    return new Promise(resolve => {
+//        const { body, title, tag } = JSON.parse(event.data.text());
+
+//        self.registration
+//            .getNotifications({ tag })
+//            .then(existingNotifications => { })
+//            .then(() => {
+//                const icon = `/path/to/icon`;
+//                return self.registration
+//                    .showNotification(title, {body, tag, icon })
+//            })
+//            .then(resolve)
+//    })
+//}
+
+//self.addEventListener("push", event => {
+//    event.waitUntil(
+//        showNotification(event)
+//    );
+//})
+
+//self.addEventListener("notificationclick", event => {
+//    event.waitUntil(clients.openWindow('/'));
+//})

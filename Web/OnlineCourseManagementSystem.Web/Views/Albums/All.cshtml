@@ -14,14 +14,12 @@
         </div>
     }
 
-    <div style="display: flex; flex-direction: row; margin-bottom: 1rem;">
-        <h3>Add Album</h3>
-        <button class="btn" id="btn-form-album" onclick="openAlbumForm()" style="background-color: azure ;margin-left: 10px; ">
-            <img src="~/icons/square_add.png" style="max-width: 30px; max-height: 30px" alt="Alternate Text" />
-        </button>
-    </div>
-    
-
+<div style="display: flex; flex-direction: row; margin-bottom: 1rem;">
+    <h3>Add Album</h3>
+    <button type="button" class="btn" style="background-color: azure ;margin-left: 10px; " data-bs-toggle="modal" data-bs-target="#addAlbumModal">
+        <img src="~/icons/square_add.png" style="max-width: 30px; max-height: 30px" alt="Btn open modal" />
+    </button>
+</div>
     <div class="row">
         @foreach (var album in this.Model.Albums)
         {
@@ -34,25 +32,29 @@
 
 </div>
 
-
-<div id="modal-content">
-     <button id="btn-close" onclick="closeAlbumForm()">
-         Close
-     </button>
-
-    <h1 class="text-center">Add Album</h1>
-        <p class="text-success" style="background: #e7e7e7; display: flex; border-radius: 5px">Here using the button add,you can create album and add it to your gallery</p>
-    <form asp-controller="Albums" asp-action="CreateAlbum" method="post" class="form-album-container">
-        <div>
-            <label class="h3" style="color: black" asp-for="InputModel.Name"></label>
-            <input asp-for="InputModel.Name" />
-            <span asp-validation-for="InputModel.Name" class="alert-danger"></span>
+<div class="modal fade" id="addAlbumModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addAlbumModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAlbumModal">Add Album</h5>
+                <p class="text-success" style="background: #e7e7e7; display: flex; border-radius: 5px">Here using the button create,you can create album and add it to your gallery</p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Albums" asp-action="CreateAlbum" method="post" class="form-album-container">
+                    <div>
+                        <label class="h3" style="color: black" asp-for="InputModel.Name"></label>
+                        <input asp-for="InputModel.Name" />
+                        <span asp-validation-for="InputModel.Name" class="alert-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary">
+                    Create
+                </button>
+            </div>
         </div>
-        <div>
-            <button class="btn" id="btn-form-album" >
-                <img src="~/icons/square_add.png" style="max-width: 30px; max-height: 30px" alt="Alternate Text" />
-            </button>
-        </div>
-    </form>
+    </div>
 </div>
-

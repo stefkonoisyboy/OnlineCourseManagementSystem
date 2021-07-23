@@ -27,6 +27,8 @@
 
         public virtual Chat Chat { get; set; }
 
+        public bool IsSeen { get; set; }
+
         public virtual ICollection<MessageEmoji> Emojis { get; set; }
     }
 }

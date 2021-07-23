@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210720102342_DeletedEntityIcon")]
+    partial class DeletedEntityIcon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -552,9 +554,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
@@ -571,8 +570,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
 
                     b.HasIndex("IsDeleted");
 
@@ -1907,15 +1904,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Chat", b =>
-                {
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
-                        .WithMany("CreatedChats")
-                        .HasForeignKey("CreatorId");
-
-                    b.Navigation("Creator");
-                });
-
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.ChatUser", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Chat", "Chat")
@@ -2367,8 +2355,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Courses");
 
                     b.Navigation("CreatedChannels");
-
-                    b.Navigation("CreatedChats");
 
                     b.Navigation("Dislikes");
 

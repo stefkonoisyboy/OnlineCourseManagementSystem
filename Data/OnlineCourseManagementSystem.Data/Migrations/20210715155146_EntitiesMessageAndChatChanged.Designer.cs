@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210715155146_EntitiesMessageAndChatChanged")]
+    partial class EntitiesMessageAndChatChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -552,14 +554,11 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IconRemoteUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("IconId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -572,7 +571,7 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("IconId");
 
                     b.HasIndex("IsDeleted");
 
@@ -1068,6 +1067,38 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Icon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RemoteUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Icons");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Lecture", b =>
@@ -1909,11 +1940,11 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Chat", b =>
                 {
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
-                        .WithMany("CreatedChats")
-                        .HasForeignKey("CreatorId");
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Icon", "Icon")
+                        .WithMany()
+                        .HasForeignKey("IconId");
 
-                    b.Navigation("Creator");
+                    b.Navigation("Icon");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.ChatUser", b =>
@@ -2367,8 +2398,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Courses");
 
                     b.Navigation("CreatedChannels");
-
-                    b.Navigation("CreatedChats");
 
                     b.Navigation("Dislikes");
 
