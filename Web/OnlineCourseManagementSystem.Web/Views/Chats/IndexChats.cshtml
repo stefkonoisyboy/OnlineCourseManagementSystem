@@ -19,23 +19,61 @@
 </body>
 
 <script>
-    function showDropdown() {
-        
-                document.getElementById("myDropdown").classList.toggle("show");
+    function showDropdown(myDropDown) {
+        try {
+            document.getElementById(myDropDown).classList.toggle("show");
+        } catch (error) {
+            console.log("No message found with that dropdown");
+        }
     }
 
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
+        if (!event.target.matches(".dropbtn")) {
             var dropdowns = document.getElementsByClassName("dropdown-content");
             var i;
             for (i = 0; i < dropdowns.length; i++) {
                 var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
+                if (openDropdown.classList.contains("show")) {
+                    openDropdown.classList.remove("show");
+                }
+            }
+            
+        }
+    }
+
+    window.onclick = function (event) {
+        if (!event.target.matches(".message")) {
+            var messageDropdowns = document.getElementsByClassName("messageDropdown");
+            var j;
+            for (j = 0; j < messageDropdowns.length; j++) {
+                var openMesssageDropdown = messageDropdowns[j];
+                if (openMesssageDropdown.classList.contains("show")) {
+                    openMesssageDropdown.classList.remove("show");
                 }
             }
         }
     }
-   
+
+    function searchDropDown() {
+        document.getElementById("mySearch").classList.toggle("show-search-form");
+        document.getElementById("members").classList.remove("show");
+    }
+
+    function showMembers() {
+        document.getElementById("members").classList.toggle("show");
+        document.getElementById("mySearch").classList.remove("show-search-form");
+    }
+
+    function showNotification(name, message) {
+        const notification = new Notification(name, {
+            body: message,
+            icon: "https://th.bing.com/th/id/OIP.LS8ICLspAEXYBgx_C67y-wHaDj?pid=ImgDet&rs=1"
+        });
+
+        notification.onclick = (e) => {
+            window.location.href = "https://localhost:44319/Chats/IndexChats"
+        };
+    }
 </script>
+

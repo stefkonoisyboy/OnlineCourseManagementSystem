@@ -4,13 +4,19 @@
     using System.Collections.Generic;
     using System.Text;
 
+    using AutoMapper;
     using Microsoft.AspNetCore.Http;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
 
-    public class EditChatInputModel
+    public class EditChatInputModel : IMapFrom<Chat>
     {
-        public int ChatId { get; set; }
+        public int Id { get; set; }
 
+        [IgnoreMap]
         public IFormFile Icon { get; set; }
+
+        public string IconRemoteUrl { get; set; }
 
         public string Name { get; set; }
     }

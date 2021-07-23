@@ -31,6 +31,7 @@ namespace OnlineCourseManagementSystem.Data.Models
             this.Channels = new HashSet<UserChannel>();
             this.CreatedChannels = new HashSet<Channel>();
             this.Chats = new HashSet<ChatUser>();
+            this.CreatedChats = new HashSet<Chat>();
             this.Messages = new HashSet<Message>();
             this.Emojis = new HashSet<MessageEmoji>();
 
@@ -112,6 +113,8 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<Channel> CreatedChannels { get; set; }
 
         public virtual ICollection<ChatUser> Chats { get; set; }
+
+        public virtual ICollection<Chat> CreatedChats { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
 

@@ -1,0 +1,109 @@
+﻿@inject OnlineCourseManagementSystem.Services.Data.IChatsService chatsService
+@inject IJSRuntime JS
+<style>
+    .chat-item {
+        display: flex;
+        flex-direction: column;
+        padding: 0.45rem;
+        opacity: 0.45;
+        width: 50%;
+        font-size: 13px;
+        margin: 2px 0 2px 0;
+        justify-content: start;
+        align-items: start;
+    }
+
+        .chat-item:hover {
+            opacity: 1;
+            background: #3e4148;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+    .chat-item-selected {
+        opacity: 1;
+        background: #3e4148;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .chat-name {
+        white-space: nowrap;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+@{
+    string selected = string.Empty;
+} 
+
+@if (this.IsSelected)
+{
+    selected = "chat-item-selected";
+}
+
+<div class="chat-item @selected" oncontextmenu="return false;">
+    <div class="row">
+        <div class="col-md-3">
+            @if (string.IsNullOrEmpty(Chat.IconUrl))
+            {
+                @if (Chat.IsGroupChat)
+                {
+                    <img style="margin-right: 0.5rem; background: #891aea;height: 40px; width: 40px; border-radius: 50%;" src="@GROUP_CHAT_ICON_URL" />
+                }
+                else
+                {
+                    <img style="margin-right: 0.5rem; background:#ff6a00; height: 40px; width: 40px; border-radius: 50%;" src="@NORMAL_CHAT_ICON_URL" />
+                }
+            }
+            else
+            {
+                <img src="@Chat.IconUrl" style="margin-right: 0.5rem; height: 40px; width: 40px; border-radius: 50%;" />
+            }
+        </div>
+        <div class="col-md-6">
+            <div style="display:flex; flex-direction:column;margin-right:20px;">
+                @if (Chat.IsGroupChat)
+                {
+                    <div class="chat-name">
+                        @Chat.Name
+                    </div>
+                }
+                else
+                {
+                    <div class="chat-name">
+                        @Chat.Name
+                    </div>
+                }
+                <div>
+                    @Chat.UsersPerChatCount users
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dropbtn" @onclick="() => this.ChatSettingsDropdownToggle(Chat.ChatId)" @onclick:stopPropagation></div>
+        </div>
+    </div>
+</div>
+@code {
+    private const string GROUP_CHAT_ICON_URL = "https://image.flaticon.com/icons/png/512/33/33308.png";
+    private const string NORMAL_CHAT_ICON_URL = "https://image.flaticon.com/icons/png/512/709/709722.png";
+
+    [Parameter]
+    public ChatViewModel Chat { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    async void ChatSettingsDropdownToggle(int chatId)
+    {
+        string dropDown = $"myDropDown{chatId}";
+        await this.JS.InvokeVoidAsync("showDropdown", dropDown);
+
+    }
+}

@@ -9,8 +9,20 @@
 
     public interface IMessagesService
     {
-        Task Create(CreateMessageInputModel inputModel);
+        Task<int> Create(CreateMessageInputModel inputModel);
+
+        Task UpdateAsync(EditMessageInputModel inputModel);
+
+        Task DeleteAsync(int messageId);
 
         IEnumerable<T> GetAllBy<T>(int chatId);
+
+        T GetMessageBy<T>(int messageId);
+
+        Task MarkAsSeeen(int messageId);
+
+        int AllUnseenMessagesCountBy(int chatId, int userId);
+
+        IEnumerable<T> SearchMessages<T>(SearchInputModel inputModel);
     }
 }

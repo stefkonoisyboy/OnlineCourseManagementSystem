@@ -10,14 +10,21 @@
 
     public class MessageViewModel : IMapFrom<Message>, IHaveCustomMappings
     {
+        public int Id { get; set; }
+
         public string Content { get; set; }
 
         public string CreatorName { get; set; }
 
+        public string CreatorId { get; set; }
+
+        public bool IsModified { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Message, MessageViewModel>()
-                .ForMember(x => x.CreatorName, y => y.MapFrom(m => $"{m.Creator.FirstName} {m.Creator.LastName}"));
+                .ForMember(x => x.CreatorName, y => y.MapFrom(m => $"{m.Creator.FirstName} {m.Creator.LastName}"))
+                .ForMember(x => x.IsModified, y => y.MapFrom(m => m.ModifiedOn != null));
         }
     }
 }

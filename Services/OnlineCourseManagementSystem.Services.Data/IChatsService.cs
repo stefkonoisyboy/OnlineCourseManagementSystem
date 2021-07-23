@@ -6,14 +6,27 @@
     using System.Threading.Tasks;
 
     using OnlineCourseManagementSystem.Web.ViewModels.Chats;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public interface IChatsService
     {
         Task CreateAsync(CreateChatInputModel inputModel);
 
+        Task UpdateAsync(EditChatInputModel inputModel);
+
+        Task AddUsersToChat(AddUsersToChatInputModel inputModel);
+
         IEnumerable<T> GetAllBy<T>(string userId);
 
-        string GetNameBy(int? chatId);
+        IEnumerable<UserViewModel> GetAllUsersNotAddedBy(int chatId);
+
+        Task RemoveUserFromChat(string userId, int chatId);
+
+        string GetCreatorIdBy(int chatId);
+
+        T GetBy<T>(int chatId);
+
+        string GetNameBy(int? chatId, string userId);
 
         IEnumerable<T> GetUsersByChat<T>(int chatId);
 
