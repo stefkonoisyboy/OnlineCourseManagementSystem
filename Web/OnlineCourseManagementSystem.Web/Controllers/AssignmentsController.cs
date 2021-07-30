@@ -66,7 +66,7 @@
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             AllAssignmentsViewModel allAssignmentsViewModel = new AllAssignmentsViewModel
             {
-                UnFinishedAssignments = this.assignmentsService.GetAllBy<AssignmentViewModel>(user.Id),
+                UnfinishedAssignments = this.assignmentsService.GetAllBy<AssignmentViewModel>(user.Id),
                 FinishedAssignments = this.assignmentsService.GetAllFinishedBy<FinishedAssignmentViewModel>(user.Id),
             };
 
@@ -80,12 +80,12 @@
             AssignmentPageViewModel assignmentPageViewModel = this.assignmentsService
                 .GetById<AssignmentPageViewModel>(id, user.Id);
 
-            IEnumerable<FileAssignmentViewModel> resourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(id, user.Id);
+            IEnumerable<FileAssignmentViewModel> resourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(id, user.Id);
             IEnumerable<FileAssignmentViewModel> workFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(id, user.Id);
 
             if (resourceFiles.Any())
             {
-                assignmentPageViewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(id, user.Id);
+                assignmentPageViewModel.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(id, user.Id);
             }
 
             if (workFiles.Any())
@@ -96,16 +96,6 @@
             await this.assignmentsService.MarkAsSeen(id, user.Id);
 
             return this.View(assignmentPageViewModel);
-        }
-
-        [Authorize]
-        public async Task<IActionResult> AllFinished()
-        {
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-
-            var assignments = this.assignmentsService.GetAllFinishedBy<AssignmentViewModel>(user.Id);
-
-            return this.View(assignments);
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
@@ -130,30 +120,27 @@
             return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId });
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public IActionResult Edit(int id)
         {
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-
-            EditAssignmentInputModel editAssignmentInputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id, user.Id);
+            EditAssignmentInputModel editAssignmentInputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id);
 
             return this.View(editAssignmentInputModel);
         }
 
         [HttpPost]
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
-        public async Task<IActionResult> Edit(EditAssignmentInputModel inputModel, int id)
+        public async Task<IActionResult> Edit(EditAssignmentInputModel inputModel, int assignmentId, int courseId)
         {
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-
             if (!this.ModelState.IsValid)
             {
-                inputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id, user.Id);
+                inputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(assignmentId);
                 return this.View(inputModel);
             }
 
+            inputModel.AssignmentId = assignmentId;
+            inputModel.CourseId = courseId;
             await this.assignmentsService.UpdateAsync(inputModel);
-
-            return this.RedirectToAction("AllCreated", "Assignments", new { Id = inputModel.CourseId });
+            return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId});
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
@@ -193,32 +180,31 @@
         public IActionResult MarkUserAssignment(int assignmentId, string userId)
         {
             MarkSubmittedAssignmentViewModel viewModel = this.assignmentsService.GetById<MarkSubmittedAssignmentViewModel>(assignmentId, userId);
-            viewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
-            viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(assignmentId, userId);
+            viewModel.AssignmentInfo = this.assignmentsService.GetById<AssignmentInfoViewModel>(assignmentId, userId);
+            viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
+            viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(assignmentId, userId);
 
             return this.View(viewModel);
         }
 
         [HttpPost]
         [Authorize(Roles =GlobalConstants.LecturerRoleName)]
-        public async Task<IActionResult> MarkUserAssignment(MarkSubmittedAssignmentViewModel viewModel,string userId)
+        public async Task<IActionResult> MarkUserAssignment(MarkSubmittedAssignmentViewModel viewModel, string userId)
         {
             try
             {
                 viewModel.InputModel.UserId = userId;
                 viewModel.InputModel.AssignmentId = viewModel.AssignmentId;
-
                 int courseId = await this.assignmentsService.MarkSubmittedAssignment(viewModel.InputModel);
 
                 return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId });
             }
             catch (Exception e)
             {
-
                 viewModel = this.assignmentsService.GetById<MarkSubmittedAssignmentViewModel>(viewModel.AssignmentId, userId);
-                viewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
-                viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
-
+                viewModel.AssignmentInfo = this.assignmentsService.GetById<AssignmentInfoViewModel>(viewModel.AssignmentId, userId);
+                viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
+                viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
                 this.TempData["ErrorPoints"] = e.Message;
                 return this.RedirectToAction("MarkUserAssignment", "Assignments", new { AssignmentId = viewModel.AssignmentId, UserId = userId });
             }
@@ -228,13 +214,11 @@
         public IActionResult EditCheckedAssignment(int assignmentId, string userId)
         {
             EditCheckedUserAssignmentViewModel viewModel = this.assignmentsService.GetCheckedBy<EditCheckedUserAssignmentViewModel>(assignmentId, userId);
-
-            viewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
-            viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(assignmentId, userId);
-
             viewModel.InputModel = this.assignmentsService.GetCheckedBy<EditCheckedAssignmentInputModel>(assignmentId, userId);
+            viewModel.AssignmentInfo = this.assignmentsService.GetById<AssignmentInfoViewModel>(assignmentId, userId);
+            viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(assignmentId, userId);
+            viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
 
-            viewModel.AssignmentId = assignmentId;
             return this.View(viewModel);
         }
 
@@ -254,9 +238,9 @@
             catch (Exception e)
             {
                 viewModel.InputModel = this.assignmentsService.GetCheckedBy<EditCheckedAssignmentInputModel>(viewModel.AssignmentId, userId);
-
-                viewModel.ResourceFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
-                viewModel.WorkFiles = this.filesService.GetAllByUserAndAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
+                viewModel.AssignmentInfo = this.assignmentsService.GetById<AssignmentInfoViewModel>(viewModel.AssignmentId, userId);
+                viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
+                viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(viewModel.AssignmentId, userId);
 
                 this.TempData["ErrorPoints"] = e.Message;
                 return this.RedirectToAction("EditCheckedAssignment", "Assignments", new { AssignmentId = viewModel.AssignmentId, UserId = userId });

@@ -24,6 +24,11 @@
             this.dislikesRepository = dislikesRepository;
         }
 
+        public int GetCoutOfAllPosts()
+        {
+            return this.postRepository.All().Count();
+        }
+
         public async Task CreateAsync(CreatePostInputModel inputModel)
         {
             Post post = new Post

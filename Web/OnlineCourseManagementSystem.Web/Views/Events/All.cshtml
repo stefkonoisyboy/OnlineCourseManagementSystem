@@ -9,7 +9,7 @@
 <div class="row">
     @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
     {
-        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff;margin: 0.60rem;">
+        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: 0 0 30px #cbc6c6;">
             <div>
                 <h3>
                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
@@ -51,7 +51,7 @@
 <div class="row">
     @foreach (var eventFinished in this.Model.EventsFinished)
     {
-        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background:#ffffff; margin: 0.60rem;">
+        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: 0 0 30px #cbc6c6;">
             <div>
                 <h3>
                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">

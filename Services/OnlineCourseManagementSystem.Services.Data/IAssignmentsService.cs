@@ -27,6 +27,8 @@
 
         T GetById<T>(int assignmentId, string userId);
 
+        T GetById<T>(int assignmentId);
+
         Task UpdateAsync(EditAssignmentInputModel inputModel);
 
         Task<int> TurnIn(FilesToAssignmentInputModel inputModel);

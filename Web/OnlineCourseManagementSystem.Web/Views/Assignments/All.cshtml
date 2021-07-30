@@ -6,91 +6,87 @@
 <h1 class="title">Assignments</h1>
 
 
-<div class="row">
+<div class="row assignments-container">
     <div class="col">
-        <div class="card card-body bg-dark">
-            @foreach (var assignment in this.Model.UnFinishedAssignments)
-            {
-                <a class="btn" style="background:#ffffff" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
-                    <div style="color:#ff6a00" class="row">
-
-                        <div class="col-md-4">
-                            <p style="color:#000000">@assignment.Title</p>
-                            <p class="text-black-50"> @assignment.CourseName</p>
+       @foreach (var assignment in this.Model.UnfinishedAssignments)
+        {
+            <a class="card card-body" style="background:#ffffff" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+                <div style="color:#ff6a00" class="row">
+                    <div class="col-md-4">
+                        <p style="color:#000000">@assignment.Title</p>
+                        <p class="text-black-50"> @assignment.CourseName</p>
                             @if (assignment.EndDate.Day > DateTime.UtcNow.Day)
                             {
                                 <div class="col-md-4">
-                                   <p> Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")</p>
+                                    <p> Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")</p>
                                 </div>
                             }
-                            else if (assignment.EndDate.Day == DateTime.UtcNow.Day + 1)
-                            {
-                                <div class="col-md-4">
-                                    <p>Due Tomorrow</p>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-md-4 text-danger">
-                                    <p>Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")<p>
-                                </div>
-                            }
-                        </div>
-                        <div class="col-md-3">
-                            @assignment.PossiblePoints Points
-                        </div>
-                        @if (assignment.EndDate < DateTime.UtcNow)
+                        else if (assignment.EndDate.Day == DateTime.UtcNow.Day + 1)
                         {
-                            <div class="col-md-3 text-danger">
-                                Past due
+                            <div class="col-md-4">
+                                <p>Due Tomorrow</p>
                             </div>
                         }
-
+                        else
+                        {
+                            <div class="col-md-4 text-danger">
+                                <p>Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")<p>
+                            </div>
+                        }
                     </div>
-                </a>
-                <pre class="tab"></pre>
-                <pre class="tab"></pre>
-            }
-        </div>
+                    <div class="col-md-3">
+                        @assignment.PossiblePoints Points
+                    </div>
+                    @if (assignment.EndDate < DateTime.UtcNow)
+                    {
+                        <div class="col-md-3 text-danger">
+                            Past due
+                        </div>
+                    }
+
+                </div>
+            </a>
+            <pre class="tab"></pre>
+            <pre class="tab"></pre>
+        }
    </div>
 </div>
 
 <pre class="tab"></pre>
 <pre class="tab"></pre>
 
-<p>
+@*<p>
     <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allFinished">Completed</button>
-</p>
-
-<div class="row">
-
-    <div class="col">
-        <div class="collapse" id="allFinished">
-            <div class="card card-body bg-dark">
-
-                @foreach (var assignment in this.Model.FinishedAssignments)
+</p>*@
+<details>
+    <summary  style="color: darkorange;">
+        Completed
+    </summary>
+    <p>
+        <div class="row">
+            <div class="col">
+               @foreach (var assignment in this.Model.FinishedAssignments)
                 {
-                        <a class="btn" style="background:#ffffff" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
-                            
-                                <div style="color:#000000" class="row">
+                   <a class="card card-body" style="background:#ffffff" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+                       <div style="color:#000000" class="row">
 
-                                    <div class="col-md-5">
-                                        @assignment.CourseName
-                                    </div>
-                                    <div class="col-md-4">
-                                        Points: @assignment.ReceivedPoints/@assignment.PossiblePoints
-                                    </div>
-                                    <div class="col-md-4">
-                                        @assignment.Title
-                                    </div>
-                                </div>
-                        </a>
-                    
-                    <pre class="tab"></pre>
-                    <pre class="tab"></pre>
+                           <div class="col-md-5">
+                               @assignment.CourseName
+                           </div>
+                           <div class="col-md-4">
+                               Points: @assignment.ReceivedPoints/@assignment.PossiblePoints
+                           </div>
+                           <div class="col-md-4">
+                               @assignment.Title
+                           </div>
+                       </div>
+                       <pre class="tab"></pre>
+                       <pre class="tab"></pre>
+                   </a>
+                   
                 }
             </div>
         </div>
-    </div>
-</div>
+    </p>
+</details>
 

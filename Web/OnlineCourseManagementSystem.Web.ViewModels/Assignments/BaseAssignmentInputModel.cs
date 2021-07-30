@@ -7,6 +7,8 @@
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
     public class BaseAssignmentInputModel : IValidatableObject

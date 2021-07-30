@@ -145,17 +145,18 @@ label {
 
 }
 
-.link-container{
+.link-container {
     background: #fff;
     width: 250px;
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
     margin: 10px;
     position: relative;
-
+    /*box-shadow: 0 3px 10px rgba(0, 0, 0, .05);*/
+    box-shadow: 0 0 30px #cbc6c6;
 }
 
 .link{
@@ -175,7 +176,6 @@ a:hover{
     cursor: pointer;
     transform: scale(1.03);
     transition: transform 150ms;
-    box-shadow: 0 0.4rem 1.4rem 0 #ff6a00;
 }
 
 .container-image{
@@ -207,13 +207,13 @@ a:hover{
     align-items: center;
     border-radius: 4px;
     margin: 10px;
+    box-shadow: 0 0 30px #cbc6c6;
 }
 
 .folder-container:hover {
     cursor: pointer;
     transform: scale(1.03);
     transition: transform 150ms;
-    box-shadow: 0 0.4rem 1.4rem 0 #ff6a00;
 }
 
 #btn-scrollTop {
@@ -283,12 +283,16 @@ a:hover{
 
 
 .file{
-    padding: 1rem;
+    padding: 0.5rem;
     width: 40rem;
     background-color:aliceblue;
     display: flex;
     flex-direction: row;
-    margin: 1rem;
+    margin: 10px;
+}
+
+.file:hover{
+    cursor:pointer;
 }
 
 .file-iframe{
@@ -297,6 +301,36 @@ a:hover{
 }
 
 /*Assignments*/
+
+.assignments-container{
+    display: flex;
+    overflow-x:hidden;
+    overflow-y:scroll;
+}
+
+    .assignments-container::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .assignments-container::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    .assignments-container::-webkit-scrollbar-thumb {
+        background-color: orange;
+        border-radius: 10px;
+    }
+
+.assignment{
+}
+
+.assignment:hover{
+    cursor:pointer;
+}
+
+    
+
 .lecture-assignment {
     padding: 1rem;
     margin: 0.5rem;
@@ -305,11 +339,10 @@ a:hover{
     display: flex;
     position: relative;
     flex-direction: row;
+    box-shadow: 0 0 30px #cbc6c6;
 }
 
 .lecture-assignment:hover{
-    transform: scale(1.03);
-    transition: transform 150ms;
     cursor: pointer;
 }
 
@@ -344,6 +377,106 @@ a:hover{
     }
 }
 
+.mark-user-assignment{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 75vw;
+    margin-bottom: 2rem;
+}
+
+.sidebar-assignemt-info {
+    height:inherit;
+    width:inherit;
+    width: 35%;
+    height: 100%;
+    color: white;
+    background: linear-gradient(to top,#7E0F4B, #1A5865);
+    border-radius: 4px;
+    min-width: 35%;
+}
+.file-display-container {
+    width: inherit;
+    height: inherit;
+    width: 80%;
+    height: 70%;
+    background: #9e9c9c;
+    border: solid 5px #868686;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.green-circle-icon {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    background-color: green;
+}
+
+.red-circle-icon {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    background-color: red;
+}
+
+.file-container {
+    background: #6C6F74;
+    color: #FC7F74;
+    margin:5px;
+    border-radius:5px;
+    padding: 0.45rem;
+}
+
+.file-container:hover{
+    cursor:pointer;
+    transform: scale(1.03);
+    transition: transform 750ms background-color linear;
+    background-color:darkslateblue;
+}
+
+.assignment-files-container{
+    overflow-y:scroll;
+    overflow-x:hidden;
+    height: 20%;
+}
+
+    .assignment-files-container::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .assignment-files-container::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    .assignment-files-container::-webkit-scrollbar-thumb {
+        background-color: lightslategrey;
+        border-radius: 10px;
+    }
+
+.instruction-filed {
+    width: 100%;
+    word-break: break-all;
+    height: 15%;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+
+    .instruction-filed::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .instruction-filed::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    .instruction-filed::-webkit-scrollbar-thumb {
+        background-color: lightslategrey;
+        border-radius: 10px;
+    }
 /*Styles used through all the pages*/
 /*Title for the pages*/
 .title {
@@ -386,5 +519,14 @@ a:hover{
     border: 1px;
     box-sizing: border-box;
 }
+
+
+.myHeading {
+    padding: 1rem;
+    color: white;
+    background: linear-gradient(to top right, #7E0F4B, #1A5865 );
+    margin-bottom:3rem;
+}
+
 
 

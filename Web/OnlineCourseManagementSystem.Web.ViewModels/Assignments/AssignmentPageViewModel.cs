@@ -16,6 +16,8 @@
 
         public string Instructions { get; set; }
 
+        public int Points { get; set; }
+
         public int PossiblePoints { get; set; }
 
         public string Feedback { get; set; }
@@ -35,7 +37,10 @@
             configuration.CreateMap<UserAssignment, AssignmentPageViewModel>()
                 .ForMember(x => x.CourseName, y => y.MapFrom(ua => ua.Assignment.Course.Name))
                 .ForMember(x => x.AssignmentId, y => y.MapFrom(ua => ua.AssignmentId))
-                .ForMember(x => x.TurnedOn, y => y.MapFrom(ua => ua.TurnedOn));
+                .ForMember(x => x.TurnedOn, y => y.MapFrom(ua => ua.TurnedOn))
+                .ForMember(x => x.Points, y => y.MapFrom(ua => ua.Points))
+                .ForMember(x => x.PossiblePoints, y => y.MapFrom(ua => ua.Assignment.PossiblePoints));
+
         }
     }
 }

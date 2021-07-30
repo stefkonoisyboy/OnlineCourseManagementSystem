@@ -82,6 +82,7 @@
                     .FirstOrDefault();
         }
 
+
         public IEnumerable<T> GetAllUsersForAssignment<T>(int assignmentId)
         {
             return this.userAssignmentRepository.All()
@@ -227,6 +228,7 @@
                 .All()
                 .Where(ua => ua.Assignment.CourseId == courseId && ua.IsChecked)
                 .To<T>()
+                .Distinct()
                 .ToList();
         }
 
@@ -265,6 +267,15 @@
                 .Where(ua => ua.IsChecked && ua.AssignmentId == assignmentId)
                 .To<T>()
                 .ToList();
+        }
+
+        public T GetById<T>(int assignmentId)
+        {
+            return this.assignmentRepository
+                .All()
+                .Where(a => a.Id == assignmentId)
+                .To<T>()
+                .FirstOrDefault();
         }
     }
 }

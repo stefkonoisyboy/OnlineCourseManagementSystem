@@ -11,8 +11,14 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
 
-    public class EditAssignmentInputModel : BaseAssignmentInputModel, IMapFrom<UserAssignment>
+    public class EditAssignmentInputModel : BaseAssignmentInputModel, IMapFrom<Assignment>, IHaveCustomMappings
     {
         public int AssignmentId { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Assignment, EditAssignmentInputModel>()
+                .ForMember(x => x.AssignmentId, y => y.MapFrom(a => a.Id));
+        }
     }
 }

@@ -13,23 +13,18 @@
     {
         public int AssignmentId { get; set; }
 
-        public IEnumerable<FileAssignmentViewModel> WorkFiles { get; set; }
-
-        public IEnumerable<FileAssignmentViewModel> ResourceFiles { get; set; }
-
         public EditCheckedAssignmentInputModel InputModel { get; set; }
 
         public string UserId { get; set; }
 
-        public DateTime? TurnedOn { get; set; }
+        public string Username { get; set; }
 
-        public int? PossiblePoints { get; set; }
+        public AssignmentInfoViewModel AssignmentInfo { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<UserAssignment, EditCheckedUserAssignmentViewModel>()
-                 .ForMember(x => x.TurnedOn, y => y.MapFrom(ua => ua.TurnedOn))
-                 .ForMember(x => x.PossiblePoints, y => y.MapFrom(ua => ua.Assignment.PossiblePoints));
+                 .ForMember(x => x.Username, y => y.MapFrom(ua => $"{ua.User.FirstName} {ua.User.LastName}"));
         }
     }
 }
