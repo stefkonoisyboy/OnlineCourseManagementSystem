@@ -2,6 +2,7 @@
 @model PostInfoViewModel
 @{
     this.ViewData["Title"] = "Post";
+    int i = 0;
 }
 
 @if (this.TempData.ContainsKey("CreatedComment"))
@@ -44,7 +45,7 @@
 
 @if (this.User.Identity.IsAuthenticated)
 {
-    <a class="btn" style="background:#ffffff; color:#ff6a00; width: auto" asp-controller="Comments" asp-action="Create" asp-route-id="@this.Model.Post.Id">
+    <a class="btn" style="background: #ff6a00; color:#ffffff; width: auto" asp-controller="Comments" asp-action="Create" asp-route-id="@this.Model.Post.Id">
         Add Comment
     </a>
 }
@@ -157,6 +158,9 @@
 
                             }
                         </p>
+                        @{
+                            string targetCollapse = $"allreplies{i++}";
+                        }
                         <div class="row">
                             <article>
                                 <div class="card-footer">
@@ -166,7 +170,7 @@
                                         </a>
                                     </span>
                                     <span>
-                                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allreplies">Replies</button>
+                                        <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#@targetCollapse">Replies</button>
                                     </span>
                                 </div>
                             </article>
@@ -176,7 +180,7 @@
                 </article>
                 <div class="row">
                     <div class="col">
-                        <div class="collapse" id="allreplies">
+                        <div class="collapse" id="@targetCollapse">
                             <div class="card card-body bg-dark">
                                 @foreach (var reply in comment.Replies)
                                 {

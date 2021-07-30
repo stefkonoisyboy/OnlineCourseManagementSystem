@@ -6,7 +6,7 @@
 <h1 class="title" style="color: #ff6a00;background:#ffffff">Edit Assignment</h1>
 <pre class="tab"></pre>
 <pre class="tab"></pre>
-<form asp-controller="Assignments" asp-action="Edit" enctype="multipart/form-data" method="post">
+<form asp-controller="Assignments" asp-action="Edit" asp-route-assignmentId="@this.Model.AssignmentId" asp-route-courseId="@this.Model.CourseId" enctype="multipart/form-data" method="post">
     <div asp-validation-summary="All" class="alert-danger"></div>
 
     <div>
@@ -25,21 +25,21 @@
     <pre class="tab"></pre>
     <div>
         <label asp-for="StartDate"></label>
-        <input asp-for="StartDate" />
+        <input asp-for="StartDate" class="form-control" />
         <span asp-validation-for="StartDate" class="alert-danger"></span>
     </div>
     <pre class="tab"></pre>
     <pre class="tab"></pre>
     <div>
         <label asp-for="EndDate"></label>
-        <input asp-for="EndDate" />
+        <input asp-for="EndDate" class="form-control" />
         <span asp-validation-for="EndDate" class="alert-danger"></span>
     </div>
     <pre class="tab"></pre>
     <pre class="tab"></pre>
     <div>
         <label asp-for="PossiblePoints"> </label>
-        <input asp-for="PossiblePoints" />
+        <input asp-for="PossiblePoints" class="form-control" />
     </div>
     <pre class="tab"></pre>
     <pre class="tab"></pre>

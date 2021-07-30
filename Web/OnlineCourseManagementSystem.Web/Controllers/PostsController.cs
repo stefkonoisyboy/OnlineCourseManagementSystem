@@ -21,7 +21,7 @@
         private readonly ICommentsService commentsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        private readonly int ItemsPerPage = 2;
+        private readonly int itemsPerPage = 2;
 
         public PostsController(IPostsService postsService, ICoursesService coursesService, ICommentsService commentsService ,UserManager<ApplicationUser> userManager)
         {
@@ -63,10 +63,10 @@
         public IActionResult All(int id, string search, int courseId)
         {
             id = Math.Max(1, id);
-            var skip = (id - 1) * this.ItemsPerPage;
+            var skip = (id - 1) * this.itemsPerPage;
             var query = this.postsService.GetAll<PostViewModel>();
 
-            if (search != null)
+            if (!string.IsNullOrEmpty(search))
             {
                 query = this.postsService.SearchByTitle<PostViewModel>(search);
             }
@@ -78,7 +78,7 @@
 
             var posts = query
                 .Skip(skip)
-                .Take(this.ItemsPerPage)
+                .Take(this.itemsPerPage)
                 .ToList();
 
             foreach (var post in posts)
@@ -105,11 +105,12 @@
             }
 
             var postsCount = query.Count();
-            var pagesCount = (int)Math.Ceiling(postsCount / (decimal)this.ItemsPerPage);
+            var pagesCount = (int)Math.Ceiling(postsCount / (decimal)this.itemsPerPage);
             AllPostsViewModel viewModel = new AllPostsViewModel
             {
                 Posts = posts.OrderByDescending(p => p.LastActive.LastActive),
                 Courses = this.coursesService.GetAll<CourseViewModel>(),
+                CountOfAllPosts = this.postsService.GetCoutOfAllPosts(),
                 CurrentPage = id,
                 PagesCount = pagesCount,
                 PostsCount = postsCount,

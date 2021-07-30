@@ -9,114 +9,113 @@
 
 
 <h1 class="title" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
-<div class="row">
+<div class="row" >
     <div class="col-md-4">
     </div>
     <div class="col-md-4">
     </div>
-    @if (this.Model.TurnedOn == null)
-    {
-        <form asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
-            <div class="col-md-4">
-                <button class="btn rounded-pill" style="color:darkorange;background:#ffffff">Turn In</button>
-            </div>
-            <div class="pt-2">
-                <label asp-for="InputModel.Files"></label>
-                <input asp-for="InputModel.Files" id="addFiles" type="file" multiple class="form-control" />
-            </div>
+    <div class="col-md-4">
+        @if (this.Model.TurnedOn == null)
+        {
+            <form asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
+                <div class="col-md-4">
+                    <button class="btn rounded-pill" style="color: #ffffff; background-color:darkorange">Turn In</button>
+                </div>
+                <div class="pt-2">
+                    <label asp-for="InputModel.Files"></label>
+                    <input asp-for="InputModel.Files" id="addFiles" type="file" multiple class="form-control" />
+                </div>
 
-        </form>
-    }
-    else
-    {
-        <form asp-controller="Assignments" asp-action="UndoTurnIn" asp-route-id="@this.Model.AssignmentId" method="post">
-            <div>
-                <button class="btn rounded-pill" style="color:darkorange;background:#ffffff">Undo turn in</button>
-            </div>
-        </form>
-    }
-
+            </form>
+        }
+        else
+        {
+            <form asp-controller="Assignments" asp-action="UndoTurnIn" asp-route-id="@this.Model.AssignmentId" method="post">
+                <div>
+                    <button class="btn rounded-pill" style="color: #ffffff; background-color:darkorange">Undo turn in</button>
+                </div>
+            </form>
+        }
+    </div>
 </div>
 
-<h3 class="text-white">Instructions:</h3>
-<div class="row" style="margin-bottom: 10px">
+<h3 style="color:orange">Instructions:</h3>
+<div class="row" style="margin-bottom: 10px;">
     <div class="col-md-4 container rounded" style="background:#ffffff; color:darkorange">
         @this.Model.Instructions
     </div>
     <div class="col-md-4"></div>
-    <div class="col-md-4 text-white">Points: @this.Model.PossiblePoints</div>
-    @if (this.Model.Feedback == "")
+    @if (this.Model.TurnedOn != null)
     {
-        <div class="col-md-4 text-white" style="left: 67%;">
+        <div class="col-md-4">Points: @this.Model.Points</div>
+    }
+    else
+    {
+        <div class="col-md-4">Points: @this.Model.PossiblePoints</div>
+    }
+
+    @if (!string.IsNullOrEmpty(this.Model.Feedback))
+    {
+        <div class="col-md-4" style="left: 67%;">
             Feedback: @this.Model.Feedback
         </div>
     }
     else
     {
-        <div class="col-md-4 text-white" style="left: 67%;">
+        <div class="col-md-4" style="left: 67%;">
             Feedback: none
         </div>
     }
 </div>
 
-<p class="h3 text-white">Files</p>
+<p class="h3" style="margin: 30px;">Files</p>
 
-<p class="h4 text-white" style="margin-top: 50px">Resorces</p>
-@if (this.Model.ResourceFiles != null)
-{
-    @foreach (var file in this.Model.ResourceFiles)
+<p class="h4" style="margin: 30px">Resorces</p>
+
+<div style="margin-bottom:10px;">
+    @if (this.Model.ResourceFiles != null)
     {
-        if (file.RemoteUrl.EndsWith(".jpg"))
+        @foreach (var file in this.Model.ResourceFiles)
         {
-            <div class="file">
-                <a class="file-block" href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
-                    WorkFile@{j++;}
-                </a>
-            </div>
-        }
-        else
-        {
-            <div class="file">
-                <a href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
-                    WorkFile@{j++;}
-                </a>
-            
-            </div>
+            if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
+            {
+                 <div class="file" src="@file.RemoteUrl" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                     <span>WorkFile</span>
+                 </div>
+            }
+            else
+            {
+                <div class="file" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <span>WorkFile</span>
+                </div>
+            }
         }
     }
-}
-else
-{
-    <p class="text-white">No files</p>
-}
+    else
+    {
+        <p class="">No files</p>
+    }
+</div>
 
-<pre class="tab"></pre>
-<pre class="tab"></pre>
-<h4 class="text-white">My work</h4>
+<h4 style="margin: 30px">My work</h4>
 
 @if (this.Model.WorkFiles != null)
 {
     @foreach (var file in this.Model.WorkFiles)
     {
         <form asp-controller="Files" asp-action="DeleteWorkFileFromAssignment" asp-route-id="@file.FileId" method="post">
-            @if (file.RemoteUrl.EndsWith(".jpg"))
+            @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
             {
-                <div class="file">
-                    <a class="file-block" href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
-                        WorkFiles@{i++;}
-                    </a>
-                    <button class="form-control">Delete</button>
+                <div class="file" src="@file.RemoteUrl" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <span>WorkFile</span>   
+                    <button class="form-control" style="margin-left: 30rem; width: 80px">Delete</button>
                 </div>
             }
             else
             {
-                <div class="file">
-                    <a href="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" download>
-                        WorkFiles@{i++;}
-                    </a>
-
-                    <button class="form-control " style="margin-left: 30rem; width: 80px">Delete</button>
-
+                <div class="file" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <span>WorkFile</span>
+                    <button class="form-control" style="margin-left: 30rem; width: 80px">Delete</button>
                 </div>
             }
         </form>
@@ -124,10 +123,51 @@ else
 }
 else
 {
-    <p class="text-white">No files</p>
+    <p class="">No files</p>
 }
 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="height:fit-content; width:fit-content">
+        <div class="modal-content" style="height:fit-content; width:fit-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Opened File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    $('.file').click(function () {
+        var valueLink = $(this).attr("src");
+        if (valueLink.endsWith("jpg") || valueLink.endsWith("png")) {
+            const img = document.createElement("img");
+            img.src = valueLink;
+            img.style.width = "auto";
+            img.style.height = "auto";
+            img.style.maxWidth = "70%";
+            img.style.maxHeight = "70%";
+            document.getElementById("modalBody").appendChild(img);
+        }
+        else
+        {
+            const iframe = document.createElement("iframe");
+            iframe.src = valueLink;
+            iframe.style.width = "auto";
+            iframe.style.height = "auto";
+            iframe.style.width = "60%";
+            iframe.style.height = "60%";
+            document.getElementById("modalBody").appendChild(iframe);
+        }
+
+    })
+
+    $(".btn-close").click(function () {
+        $(".modal-body").empty();
+    })
+</script>
 
 
 

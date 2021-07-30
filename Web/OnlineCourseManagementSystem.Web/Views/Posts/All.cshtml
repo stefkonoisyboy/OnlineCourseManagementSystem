@@ -16,30 +16,36 @@
                 <h4 class="text-white">
                     Courses Options(@this.Model.Courses.Count())
                 </h4>
-                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#allcourses">Courses</button>
+                <div class="card card-body">
+                    <a asp-controller="Posts" asp-action="All" asp-route-id="1">
+                       See All <span class="badge" style="background:#ff6a00; color:#ffffff">@this.Model.CountOfAllPosts</span>
+                    </a>
+                </div>
+                <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#allcourses">Courses</button>
                 <div class="row">
 
                     <div class="col">
                         <div class="collapse" id="allcourses">
-                            <div class="card card-body bg-dark">
 
-                                @foreach (var course in this.Model.Courses)
-                                {
-                                    <a class="btn" style="background:#ffffff" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId ="@course.Id">
-                                        <div style="color:#000000" class="row">
-                                            <div class="col-md-8">
+                            @foreach (var course in this.Model.Courses)
+                            {
+                                <div class=" card card-body">
+                                    <a class="btn" style="background:#ffffff" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
+                                        <div style="color:#000000" class="col">
+                                            <div>
                                                 @course.Name
+
+                                            </div>
+                                            <div>
                                                 <span class="badge" style="background:#ff6a00; color:#ffffff">
                                                     @course.PostsCount
                                                 </span>
                                             </div>
                                         </div>
                                     </a>
-
                                     <pre class="tab"></pre>
-                                    <pre class="tab"></pre>
-                                }
-                            </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -49,7 +55,7 @@
             <nav class="navbar navbar-expand-lg navbar-light" style="background-color: lightslategrey">
                 <button type="button" class="btn btn-info" id="menu-toggle">Toggle Menu</button>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </nav>
@@ -66,7 +72,7 @@
             <pre class="tab"></pre>
                 @if (!string.IsNullOrWhiteSpace(this.Model.Search))
                 {
-                    <h3 class="text-white">Search for "@this.Model.Search", page @this.Model.CurrentPage, results @this.Model.PostsCount</h3>
+                    <h3 style="color: black">Search for "@this.Model.Search", page @this.Model.CurrentPage, results @this.Model.PostsCount</h3>
                 }
 
                 <form asp-controller="Posts" asp-action="All" asp-route-id="1" method="post">
@@ -83,9 +89,9 @@
 
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <div>
+                    <div style="width:fit-content;">
                         <span>
-                            <a class="btn" style="background:#ffffff; color:#ff6a00;" asp-controller="Posts" asp-action="Create">
+                            <a class="btn" style="background: #ff6a00; color: #ffffff; width: auto;" asp-controller="Posts" asp-action="Create">
                                 Create Post
                             </a>
                         </span>
@@ -176,25 +182,9 @@
                                                 <div class="row">
                                                     <div class="col-md-5">
                                                         Last Active
-                                                        @*@if (post.LastActive == null)
-                                                        {
-                                                            @post.AuthorName
-                                                        }
-                                                        else
-                                                        {
-                                                            @post.LastActive.Name
-                                                        }*@
                                                         @post.LastActive.Name
                                                     </div>
                                                     <div class="col-md-4">
-                                                        @*@if (post.LastActive == null)
-                                                        {
-                                                            @post.CreatedOn
-                                                        }
-                                                        else
-                                                        {
-                                                            @post.LastActive.LastActive
-                                                        }*@
                                                         @post.LastActive.LastActive
                                                     </div>
                                                 </div>
@@ -234,7 +224,7 @@
                         {
                             <li class="page-item">
 
-                                <a asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.PreviousPage" asp-route-search="@this.Model.Search" class="page-link" aria-label="Previous">
+                                <a asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.PreviousPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" class="page-link" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -273,15 +263,15 @@
                                 }
                                 if (i > 0 && pageNumber - 1 != pagesToShow[i - 1])
                                 {
-                                    <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@(pagesToShow[i - 1] + 1)" asp-route-search="@this.Model.Search">...</a></li>
+                                    <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@(pagesToShow[i - 1] + 1)" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">...</a></li>
                                 }
-                                <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@pageNumber" asp-route-search="@this.Model.Search">@pageNumber</a></li>
+                                <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@pageNumber" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">@pageNumber</a></li>
                             }
                         }
                         @if (this.Model.CurrentPage < this.Model.PagesCount)
                         {
                             <li class="page-item">
-                                <a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.NextPage" asp-route-search="@this.Model.Search" aria-label="Next">
+                                <a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.NextPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>

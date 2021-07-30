@@ -26,5 +26,7 @@
         Task Like(int postId, string userId);
 
         Task Dislike(int postId, string userId);
+
+        int GetCoutOfAllPosts();
     }
 }

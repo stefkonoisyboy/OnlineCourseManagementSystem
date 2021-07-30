@@ -18,7 +18,7 @@
 
         IEnumerable<T> GetAllById<T>(int lectureId);
 
-        IEnumerable<T> GetAllByUserAndAssignment<T>(int assignmentId, string userId);
+        IEnumerable<T> GetAllResourceFilesByAssignemt<T>(int assignmentId, string userId);
 
         IEnumerable<T> GetAllUserSubmittedFilesForAssignment<T>(int assignmentId, string userId);
 

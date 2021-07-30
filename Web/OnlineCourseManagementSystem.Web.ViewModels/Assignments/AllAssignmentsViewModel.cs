@@ -6,7 +6,7 @@
 
     public class AllAssignmentsViewModel
     {
-        public IEnumerable<AssignmentViewModel> UnFinishedAssignments { get; set; }
+        public IEnumerable<AssignmentViewModel> UnfinishedAssignments { get; set; }
 
         public IEnumerable<FinishedAssignmentViewModel> FinishedAssignments { get; set; }
     }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
@@ -11,6 +12,8 @@
         public IEnumerable<PostViewModel> Posts { get; set; }
 
         public IEnumerable<CourseViewModel> Courses { get; set; }
+
+        public int CountOfAllPosts { get; set; }
 
         public string Search { get; set; }
 

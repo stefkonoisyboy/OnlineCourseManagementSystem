@@ -52,7 +52,7 @@
                 .ToList();
         }
 
-        public IEnumerable<T> GetAllByUserAndAssignment<T>(int assignmentId, string userId)
+        public IEnumerable<T> GetAllResourceFilesByAssignemt<T>(int assignmentId, string userId)
         {
             return this.fileRepository
                 .All()
