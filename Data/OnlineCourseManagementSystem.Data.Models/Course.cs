@@ -5,6 +5,7 @@
     using System.Text;
 
     using OnlineCourseManagementSystem.Data.Common.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
 
     public class Course : BaseDeletableModel<int>
     {
@@ -19,6 +20,8 @@
             this.Tags = new HashSet<CourseTag>();
             this.Lecturers = new HashSet<CourseLecturer>();
             this.Absences = new HashSet<Absence>();
+            this.Skills = new HashSet<Skill>();
+            this.Reviews = new HashSet<Review>();
         }
 
         public string Name { get; set; }
@@ -31,9 +34,15 @@
 
         public DateTime EndDate { get; set; }
 
+        public int RecommendedDuration { get; set; }
+
+        public string TrailerRemoteUrl { get; set; }
+
         public int SubjectId { get; set; }
 
         public virtual Subject Subject { get; set; }
+
+        public CourseLevel Level { get; set; }
 
         public int FileId { get; set; }
 
@@ -58,5 +67,9 @@
         public virtual ICollection<CourseLecturer> Lecturers { get; set; }
 
         public virtual ICollection<Absence> Absences { get; set; }
+
+        public virtual ICollection<Skill> Skills { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

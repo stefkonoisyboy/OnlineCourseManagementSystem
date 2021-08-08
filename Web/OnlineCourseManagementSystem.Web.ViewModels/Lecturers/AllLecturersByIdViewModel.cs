@@ -9,6 +9,8 @@
 
     public class AllLecturersByIdViewModel : IMapFrom<CourseLecturer>
     {
+        public string LecturerUserProfileImageUrl { get; set; }
+
         public string LecturerUserFirstName { get; set; }
 
         public string LecturerUserLastName { get; set; }

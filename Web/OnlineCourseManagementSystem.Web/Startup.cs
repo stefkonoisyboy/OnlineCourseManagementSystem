@@ -106,6 +106,8 @@
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
             services.AddTransient<IAnswersService, AnswersService>();
+            services.AddTransient<ISkillsService, SkillsService>();
+            services.AddTransient<IReviewsService, ReviewsService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }

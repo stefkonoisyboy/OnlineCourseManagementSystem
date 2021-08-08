@@ -16,6 +16,8 @@
             this.Absences = new HashSet<Absence>();
         }
 
+        public string Description { get; set; }
+
         public string Title { get; set; }
 
         public DateTime StartDate { get; set; }
@@ -25,6 +27,8 @@
         public int CourseId { get; set; }
 
         public virtual Course Course { get; set; }
+
+        public bool IsCompleted { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
 

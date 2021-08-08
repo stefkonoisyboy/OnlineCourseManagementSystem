@@ -13,10 +13,12 @@
     public class LecturersService : ILecturersService
     {
         private readonly IDeletableEntityRepository<Lecturer> lecturersRepository;
+        private readonly IDeletableEntityRepository<CourseLecturer> courseLecturersRepository;
 
-        public LecturersService(IDeletableEntityRepository<Lecturer> lecturersRepository)
+        public LecturersService(IDeletableEntityRepository<Lecturer> lecturersRepository, IDeletableEntityRepository<CourseLecturer> courseLecturersRepository)
         {
             this.lecturersRepository = lecturersRepository;
+            this.courseLecturersRepository = courseLecturersRepository;
         }
 
         public IEnumerable<T> GetAll<T>()
@@ -58,6 +60,17 @@
                    Value = l.Id,
                })
                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByCourseId<T>(int courseId)
+        {
+            return this.courseLecturersRepository
+                .All()
+                .OrderBy(l => l.Lecturer.User.FirstName + ' ' + l.Lecturer.User.LastName)
+                .ThenBy(l => l.Lecturer.User.UserName)
+                .Where(l => l.CourseId == courseId && l.Lecturer.User.Roles.FirstOrDefault().RoleId.EndsWith("Lecturer"))
+                .To<T>()
+                .ToList();
         }
 
         public IEnumerable<T> GetAllById<T>(int courseId)

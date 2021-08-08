@@ -2,53 +2,123 @@
 @using OnlineCourseManagementSystem.Common
 @{
     this.ViewData["Title"] = "Details for the Course";
+    int lecturerIndex = 1;
 }
 
-@if (this.TempData.ContainsKey("Message"))
-{
-    <div class="alert-success">
-        @this.TempData["Message"]
+<style>
+    .row-margin-05 {
+        margin-top: 0.5em;
+    }
+
+    .row-margin-10 {
+        margin-top: 1.0em;
+    }
+
+    .row-margin-20 {
+        margin-top: 2.0em;
+    }
+
+    .row-margin-30 {
+        margin-top: 3.0em;
+    }
+</style>
+
+<body class="bg-light">
+    @if (this.TempData.ContainsKey("Message"))
+    {
+        <div class="alert-success">
+            @this.TempData["Message"]
+        </div>
+    }
+
+    <div class="row text-center shadow-lg p-3 mb-5 bg-white rounded">
+        <h1>
+            <img src="@this.Model.FileRemoteUrl" alt="courseImage" height="80" width="80" />
+            @this.Model.Name
+        </h1>
     </div>
-}
 
-<h3>@this.ViewData["Title"]</h3>
-<h4>@this.Model.Name</h4>
-<p>Start Date: @this.Model.StartDate.ToString("dddd, dd MMMM yyyy")</p>
-<p>EndDate: @this.Model.EndDate.ToString("dddd, dd MMMM yyyy")</p>
-<p>Description: @this.Model.Description</p>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                <h3>What you'll learn</h3>
+                <ul class="list-group">
+                    @foreach (var skill in this.Model.Skills)
+                    {
+                        <li class="list-group-item" style="background-color: white;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg text-success" viewBox="0 0 16 16">
+                                <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z" />
+                            </svg>
+                            <strong>@skill.Text</strong>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="row-margin-20">
+                <p class="text-black-50">Curriculum</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="accordion shadow-lg p-3 mb-5 bg-white rounded" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <strong>Resources</strong>
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">Curriculum</li>
+                                <li class="list-group-item">Course Forums</li>
+                                <li class="list-group-item">Start Certification</li>
+                                <li class="list-group-item">Quiz Results</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-@foreach (var lecturer in this.Model.Lecturers)
-{
-    <h4>@(lecturer.LecturerUserFirstName + ' ' + lecturer.LecturerUserLastName)</h4>
-    <p>@lecturer.LecturerUserBackground</p>
-}
+            <div class="accordion shadow-lg p-3 mb-5 bg-white rounded" id="accordionExample2">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                            <strong>Lecturer</strong>
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample2">
+                        <div class="accordion-body">
+                            @foreach (var lecturer in this.Model.Lecturers)
+                            {
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <img src="@lecturer.LecturerUserProfileImageUrl" alt="userProfileImage" width="60" height="60" style="border-radius: 50%;" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <h4 class="text-info">@(lecturer.LecturerUserFirstName + ' ' + lecturer.LecturerUserLastName)</h4>
+                                        <p class="text-black-50">Biography</p>
+                                    </div>
+                                </div>
+                                <p>@string.Join("", lecturer.LecturerUserBackground.Take(200).ToList())</p>
+                                <div class="text-center">
+                                    <button style="border-radius: 50%;" class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample_@lecturerIndex" aria-expanded="false" aria-controls="collapseExample">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="collapse" id="collapseExample_@lecturerIndex">
+                                    <div>
+                                        <p>@string.Join("", lecturer.LecturerUserBackground.Skip(200).ToList())</p>
+                                    </div>
+                                </div>
+                                lecturerIndex++;
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
-@foreach (var lecture in this.Model.Lectures)
-{
-    <h4>@lecture.Title</h4>
-    <p>Start Date: @lecture.StartDate.ToString("dddd, dd MMMM yyyy")</p>
-    <p>EndDate: @lecture.EndDate.ToString("dddd, dd MMMM yyyy")</p>
-    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-    {
-        <a asp-controller="Lectures" asp-action="AddWord" asp-route-id="@lecture.Id">Add Word Document to the Lecture</a>
-        <a asp-controller="Lectures" asp-action="AddPresentation" asp-route-id="@lecture.Id">Add Presentation to the Lecture</a>
-        <a asp-controller="Lectures" asp-action="AddVideo" asp-route-id="@lecture.Id">Add Video to the Lecture</a>
-        if (lecture.StartDate <= DateTime.UtcNow)
-        {
-            <a class="btn btn-success" asp-controller="Absences" asp-action="Create" asp-route-courseId="@this.Model.Id" asp-route-lectureId="@lecture.Id" asp-route-courseName="@this.Model.Name" asp-route-lectureTitle="@lecture.Title">Mark Attendance</a>
-            <a class="btn btn-success" asp-controller="Absences" asp-action="EditMultiple" asp-route-courseId="@this.Model.Id" asp-route-lectureId="@lecture.Id" asp-route-courseName="@this.Model.Name" asp-route-lectureTitle="@lecture.Title">Update Attendance</a>
-            <a class="btn btn-success" asp-controller="Absences" asp-action="AllByCourseAndLecture" asp-route-courseId="@this.Model.Id" asp-route-lectureId="@lecture.Id" asp-route-courseName="@this.Model.Name" asp-route-lectureTitle="@lecture.Title">View Lecture's Attendance</a>
-        }
-    }
-    @if (this.User.Identity.IsAuthenticated)
-    {
-        <a asp-controller="Lectures" asp-action="AllFilesById" asp-route-id="@lecture.Id">All Resources for the Lecture</a>
-        <a asp-controller="Lectures" asp-action="AllVideosById" asp-route-id="@lecture.Id">All Videos for the Lecture</a>
-    }
-}
-<br />
-<hr />
-@if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-{
-    <a asp-controller="Lectures" asp-action="Create" asp-route-id="@this.Model.Id">Add Lecture to the Course</a>
-}

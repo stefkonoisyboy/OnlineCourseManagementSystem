@@ -23,19 +23,27 @@
 
         string CourseNameByStudentAndCourse(string studentId, int courseId);
 
+        int GetAllActiveCoursesCount(string name);
+
+        int GetAllCoursesByUserIdCount(string userId);
+
         IEnumerable<T> GetAll<T>();
 
         IEnumerable<T> GetAllUnapproved<T>();
 
+        IEnumerable<T> GetAllByNameOrTag<T>(SearchByCourseNameOrTagInputModel input);
+
+        IEnumerable<T> GetAllRecommended<T>();
+
         T GetById<T>(int id);
 
-        IEnumerable<T> GetAllByUser<T>(string userId);
+        IEnumerable<T> GetAllByUser<T>(int id, string userId, int itemsPerPage = 6);
 
         IEnumerable<T> GetAllUpcoming<T>();
 
         IEnumerable<T> GetAllPast<T>();
 
-        IEnumerable<T> GetAllActive<T>();
+        IEnumerable<T> GetAllActive<T>(int page, string name, int itemsPerPage = 5);
 
         IEnumerable<T> GetAllByTag<T>(SearchByTagInputModel input);
 

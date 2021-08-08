@@ -122,6 +122,11 @@
 
         public async Task EnrollAsync(int courseId, string userId)
         {
+            if (this.userCoursesRepository.All().Any(uc => uc.UserId == userId && uc.CourseId == courseId))
+            {
+                return;
+            }
+
             UserCourse userCourse = new UserCourse
             {
                 CourseId = courseId,
@@ -142,14 +147,21 @@
                 .ToList();
         }
 
-        public IEnumerable<T> GetAllActive<T>()
+        public IEnumerable<T> GetAllActive<T>(int page, string name, int itemsPerPage = 5)
         {
-            return this.coursesRepository
-                .All()
-                .OrderByDescending(c => c.StartDate)
-                .Where(c => c.StartDate <= DateTime.UtcNow && c.EndDate >= DateTime.UtcNow && c.IsApproved.Value)
-                .To<T>()
-                .ToList();
+            var query = this.coursesRepository.All().AsQueryable();
+
+            if (name != null)
+            {
+                query = query.Where(q => q.Name.Contains(name) || q.Tags.Any(t => t.Tag.Name.Contains(name)));
+            }
+
+            query = query
+                .Where(q => q.IsApproved.Value && q.StartDate < DateTime.UtcNow)
+                .OrderByDescending(q => q.StartDate)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage);
+
+            return query.To<T>().ToList();
         }
 
         public IEnumerable<SelectListItem> GetAllActive()
@@ -162,6 +174,20 @@
                     Text = c.Name,
                     Value = c.Id.ToString(),
                 });
+        }
+
+        public int GetAllActiveCoursesCount(string name)
+        {
+            if (name != null)
+            {
+                return this.coursesRepository
+               .All()
+               .Count(c => c.StartDate <= DateTime.UtcNow && c.IsApproved.Value && (c.Name.Contains(name) || c.Tags.Any(t => t.Tag.Name.Contains(name))));
+            }
+
+            return this.coursesRepository
+                .All()
+                .Count(c => c.StartDate <= DateTime.UtcNow && c.IsApproved.Value);
         }
 
         public IEnumerable<SelectListItem> GetAllAsSelectListItems()
@@ -177,6 +203,18 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllByNameOrTag<T>(SearchByCourseNameOrTagInputModel input)
+        {
+            var query = this.coursesRepository.All().AsQueryable();
+
+            if (input.Text != null)
+            {
+                query = query.Where(c => c.Name.Contains(input.Text) || c.Tags.Any(t => t.Tag.Name.Contains(input.Text)));
+            }
+
+            return query.To<T>().ToList();
+        }
+
         public IEnumerable<T> GetAllByTag<T>(SearchByTagInputModel input)
         {
             return this.coursesRepository
@@ -187,14 +225,22 @@
                 .ToList();
         }
 
-        public IEnumerable<T> GetAllByUser<T>(string userId)
+        public IEnumerable<T> GetAllByUser<T>(int id, string userId, int itemsPerPage = 6)
         {
             return this.userCoursesRepository
                 .All()
                 .OrderByDescending(c => c.Course.StartDate)
                 .Where(c => c.UserId == userId && c.Course.IsApproved.Value)
+                .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()
                 .ToList();
+        }
+
+        public int GetAllCoursesByUserIdCount(string userId)
+        {
+            return this.userCoursesRepository
+                .All()
+                .Count(uc => uc.UserId == userId);
         }
 
         public IEnumerable<T> GetAllPast<T>()
@@ -203,6 +249,17 @@
                 .All()
                 .OrderByDescending(c => c.StartDate)
                 .Where(c => c.EndDate < DateTime.UtcNow && c.IsApproved.Value)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllRecommended<T>()
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.IsApproved.Value)
+                .OrderByDescending(c => c.Reviews.Average(r => r.Rating))
+                .ThenByDescending(c => c.StartDate)
                 .To<T>()
                 .ToList();
         }

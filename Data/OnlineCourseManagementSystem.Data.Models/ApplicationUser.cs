@@ -34,6 +34,7 @@ namespace OnlineCourseManagementSystem.Data.Models
             this.CreatedChats = new HashSet<Chat>();
             this.Messages = new HashSet<Message>();
             this.Emojis = new HashSet<MessageEmoji>();
+            this.Reviews = new HashSet<Review>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -77,6 +78,8 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual Town Town { get; set; }
 
         public string Address { get; set; }
+
+        public string ProfileImageUrl { get; set; }
 
         public Title Title { get; set; }
 
@@ -125,5 +128,7 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

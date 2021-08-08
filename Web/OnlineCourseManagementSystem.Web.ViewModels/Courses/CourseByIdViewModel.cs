@@ -8,6 +8,7 @@
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
+    using OnlineCourseManagementSystem.Web.ViewModels.Skills;
 
     public class CourseByIdViewModel : IMapFrom<Course>
     {
@@ -15,14 +16,14 @@
 
         public string Name { get; set; }
 
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
-
         public string Description { get; set; }
+
+        public string FileRemoteUrl { get; set; }
 
         public IEnumerable<AllLecturersByIdViewModel> Lecturers { get; set; }
 
         public IEnumerable<AllLecturesByIdViewModel> Lectures { get; set; }
+
+        public IEnumerable<AllSkillsByCourseIdViewModel> Skills { get; set; }
     }
 }

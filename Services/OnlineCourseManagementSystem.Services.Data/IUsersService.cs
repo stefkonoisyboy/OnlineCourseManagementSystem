@@ -7,5 +7,7 @@
     public interface IUsersService
     {
         IEnumerable<T> GetAll<T>();
+
+        T GetById<T>(string id);
     }
 }
