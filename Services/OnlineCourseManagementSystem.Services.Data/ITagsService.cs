@@ -9,5 +9,9 @@
     public interface ITagsService
     {
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
+
+        IEnumerable<T> GetAll<T>();
+
+        IEnumerable<T> GetAllByCourseId<T>(int courseId);
     }
 }

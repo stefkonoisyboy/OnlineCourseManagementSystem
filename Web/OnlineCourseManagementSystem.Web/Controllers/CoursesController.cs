@@ -13,7 +13,11 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
+    using OnlineCourseManagementSystem.Web.ViewModels.Skills;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public class CoursesController : Controller
     {
@@ -21,6 +25,9 @@
         private readonly ITagsService tagsService;
         private readonly ISubjectsService subjectsService;
         private readonly ILecturersService lecturersService;
+        private readonly ISkillsService skillsService;
+        private readonly IReviewsService reviewsService;
+        private readonly IUsersService usersService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public CoursesController(
@@ -28,12 +35,18 @@
             ITagsService tagsService,
             ISubjectsService subjectsService,
             ILecturersService lecturersService,
+            ISkillsService skillsService,
+            IReviewsService reviewsService,
+            IUsersService usersService,
             UserManager<ApplicationUser> userManager)
         {
             this.coursesService = coursesService;
             this.tagsService = tagsService;
             this.subjectsService = subjectsService;
             this.lecturersService = lecturersService;
+            this.skillsService = skillsService;
+            this.reviewsService = reviewsService;
+            this.usersService = usersService;
             this.userManager = userManager;
         }
 
@@ -46,11 +59,51 @@
         }
 
         [Authorize]
+        public IActionResult Details(int id)
+        {
+            CourseDetailsViewModel viewModel = this.coursesService.GetById<CourseDetailsViewModel>(id);
+
+            viewModel.Tags = this.tagsService.GetAllByCourseId<AllTagsByCourseIdViewModel>(id);
+            viewModel.Skills = this.skillsService.GetAllByCourseId<AllSkillsByCourseIdViewModel>(id);
+            viewModel.Reviews = this.reviewsService.GetAllByCourseId<AllReviewsByCourseIdViewModel>(id);
+            viewModel.Lecturers = this.lecturersService.GetAllByCourseId<AllLecturersByCourseIdViewModel>(id);
+            viewModel.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
         public IActionResult All()
         {
             AllCoursesListViewModel viewModel = new AllCoursesListViewModel
             {
                 Courses = this.coursesService.GetAll<AllCoursesViewModel>(),
+            };
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
+        public IActionResult AllUpcomingAndActive(string name = null, int id = 1)
+        {
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
+            const int ItemsPerPage = 5;
+            UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
+            {
+                ListOfActiveCourses = new AllActiveCoursesListViewModel
+                {
+                    ItemsPerPage = ItemsPerPage,
+                    PageNumber = id,
+                    ActiveCoursesCount = this.coursesService.GetAllActiveCoursesCount(name),
+                    ActiveCourses = this.coursesService.GetAllActive<AllActiveCoursesViewModel>(id, name, ItemsPerPage),
+                    Name = name,
+                },
+                UpcomingCourses = this.coursesService.GetAllUpcoming<AllUpcomingCoursesViewModel>(),
+                Tags = this.tagsService.GetAll<AllTagsViewModel>(),
             };
 
             return this.View(viewModel);
@@ -72,19 +125,25 @@
         {
             AllCoursesByUserListViewModel viewModel = new AllCoursesByUserListViewModel
             {
-                Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(id),
+                Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(1, id, 6),
             };
 
             return this.View(viewModel);
         }
 
         [Authorize]
-        public async Task<IActionResult> AllByCurrentUser()
+        public async Task<IActionResult> AllByCurrentUser(int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            const int ItemsPerPage = 6;
             AllCoursesByUserListViewModel viewModel = new AllCoursesByUserListViewModel
             {
-                Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(user.Id),
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                ActiveCoursesCount = this.coursesService.GetAllCoursesByUserIdCount(user.Id),
+                Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(id, user.Id, ItemsPerPage),
+                FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
+                CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
             };
 
             return this.View(viewModel);
@@ -112,16 +171,16 @@
             return this.View(viewModel);
         }
 
-        [Authorize]
-        public IActionResult AllActive()
-        {
-            AllCoursesListViewModel viewModel = new AllCoursesListViewModel
-            {
-                Courses = this.coursesService.GetAllActive<AllCoursesViewModel>(),
-            };
+        //[Authorize]
+        //public IActionResult AllActive()
+        //{
+        //    AllCoursesListViewModel viewModel = new AllCoursesListViewModel
+        //    {
+        //        Courses = this.coursesService.GetAllActive<AllCoursesViewModel>(),
+        //    };
 
-            return this.View(viewModel);
-        }
+        //    return this.View(viewModel);
+        //}
 
         [Authorize]
         [HttpPost]

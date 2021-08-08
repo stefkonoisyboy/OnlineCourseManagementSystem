@@ -16,12 +16,12 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Paging
 
         public int NextPageNumber => this.PageNumber + 1;
 
-        public int PagesCount => (int)Math.Ceiling((double)this.QuestionsCount / this.ItemsPerPage);
+        public int PagesCount => (int)Math.Ceiling((double)this.ActiveCoursesCount / this.ItemsPerPage);
 
-        public int QuestionsCount { get; set; }
+        public int ActiveCoursesCount { get; set; }
 
         public int ItemsPerPage { get; set; }
 
-        public int ExamId { get; set; }
+        public string Name { get; set; }
     }
 }

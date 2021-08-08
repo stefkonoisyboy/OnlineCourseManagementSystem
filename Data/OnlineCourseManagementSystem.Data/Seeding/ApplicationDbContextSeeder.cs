@@ -32,6 +32,8 @@
                               new TagsSeeder(),
                               new CoursesSeeder(),
                               new UserCoursesSeeder(),
+                              new ReviewsSeeder(),
+                              new SkillsSeeder(),
                               new SettingsSeeder(),
                           };
 
