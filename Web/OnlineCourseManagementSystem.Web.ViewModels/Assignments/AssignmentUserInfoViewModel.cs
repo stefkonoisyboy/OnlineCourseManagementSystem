@@ -25,12 +25,14 @@
 
         public bool Turned { get; set; }
 
-        public MarkSubmittedAssignmentInputModel InputModel { get; set; }
+        public bool IsChecked { get; set; }
+
+        //public MarkSubmittedAssignmentInputModel InputModel { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<UserAssignment, AssignmentUserInfoViewModel>()
-                .ForMember(x => x.StudentName, y => y.MapFrom(ua => ua.User.UserName))
+                .ForMember(x => x.StudentName, y => y.MapFrom(ua => $"{ua.User.FirstName} {ua.User.LastName}"))
                 .ForMember(x => x.Turned, y => y.MapFrom(ua => ua.TurnedOn != null))
                 .ForMember(x => x.EndDate, y => y.MapFrom(ua => ua.Assignment.EndDate));
         }

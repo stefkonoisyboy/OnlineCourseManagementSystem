@@ -10,6 +10,9 @@
 
     public class LectureAssignmentViewModel : IMapFrom<UserAssignment>, IHaveCustomMappings
     {
+
+        public string Title { get; set; }
+
         public int AssignmentId { get; set; }
 
         public DateTime StartDate { get; set; }
@@ -20,6 +23,8 @@
 
         public string CourseName { get; set; }
 
+        public IEnumerable<AssignmentUserInfoViewModel> Users { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<UserAssignment, LectureAssignmentViewModel>()
@@ -27,7 +32,8 @@
               .ForMember(x => x.AssignmentId, y => y.MapFrom(x => x.AssignmentId))
               .ForMember(x => x.StartDate, y => y.MapFrom(x => x.Assignment.StartDate))
               .ForMember(x => x.EndDate, y => y.MapFrom(x => x.Assignment.EndDate))
-              .ForMember(x => x.PossiblePoints, y => y.MapFrom(x => x.Assignment.PossiblePoints));
+              .ForMember(x => x.PossiblePoints, y => y.MapFrom(x => x.Assignment.PossiblePoints))
+              .ForMember(x => x.Title, y => y.MapFrom(x => x.Assignment.Title));
         }
     }
 }

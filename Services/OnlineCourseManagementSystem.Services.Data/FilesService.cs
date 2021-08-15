@@ -83,6 +83,11 @@
         {
             ApplicationUser user = this.userRepository.All().FirstOrDefault(s => s.Id == uploadImageInputModel.UserId);
 
+            if (uploadImageInputModel.Images == null)
+            {
+                return;
+            }
+
             foreach (var image in uploadImageInputModel.Images)
             {
                 string fileName = $"gallery_IMG{DateTime.UtcNow.ToString("yyyy/dd/mm/ss")}";

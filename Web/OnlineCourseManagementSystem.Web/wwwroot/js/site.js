@@ -106,3 +106,12 @@ function scrollToBottom() {
 //self.addEventListener("notificationclick", event => {
 //    event.waitUntil(clients.openWindow('/'));
 //})
+
+$().ready(function () {
+    $("#show").hover(function () {
+        $("#create-text").show("1000");
+    }, function () {
+        $("#create-text").hide("1000");
+    });
+});
+

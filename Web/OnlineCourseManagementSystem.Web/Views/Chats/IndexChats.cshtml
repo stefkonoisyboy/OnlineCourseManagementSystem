@@ -19,6 +19,8 @@
 </body>
 
 <script>
+const { timers } = require("jquery");
+
     function showDropdown(myDropDown) {
         try {
             document.getElementById(myDropDown).classList.toggle("show");
@@ -75,5 +77,49 @@
             window.location.href = "https://localhost:44319/Chats/IndexChats"
         };
     }
+
+    function showInputImage() {
+        $().ready(function () {
+            $("#show").hover(function () {
+                $("#image").show("1000");
+                $(".img-fade").css("opacity", "0.4");
+                $(".img-fade").css("transition", "opacity 350ms ease-in");
+            }, function () {
+                $("#image").hide("1000");
+                $(".img-fade").css("opacity", "1");
+                $(".img-fade").css("transition", "opacity 350ms ease-out");
+            });
+        })
+    }
+
+    function setDelay() {
+        setTimeout(function myfunction() {
+            var boxSomeoneWriting = document.getElementById("box-someone-writing");
+            var someoneWritingField = document.getElementById("someone-writing");
+            someoneWritingField.innerHTML = "";
+            boxSomeoneWriting.style.visibility = "hidden";
+        }, 5000);
+    }
+    function showSomeoneWriting(name) {
+
+        var boxSomeoneWriting = document.getElementById("box-someone-writing");
+        boxSomeoneWriting.style.visibility = "visible";
+        var someoneWritingField = document.getElementById("someone-writing");
+        let users = new Array();
+        for (var i = 0; i < users.length; i++) {
+            if (users[i] == name) {
+                console.log("hello");
+                return;
+            }
+        }
+
+        if (!someoneWritingField.innerHTML.includes(name)) {
+            someoneWritingField.innerHTML += " " + name + " is writing";
+        }
+
+        setDelay();
+    }
+
+   
 </script>
 

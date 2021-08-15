@@ -16,48 +16,65 @@
                 <h4 class="text-white">
                     Courses Options(@this.Model.Courses.Count())
                 </h4>
-                <div class="card card-body">
-                    <a asp-controller="Posts" asp-action="All" asp-route-id="1">
-                       See All <span class="badge" style="background:#ff6a00; color:#ffffff">@this.Model.CountOfAllPosts</span>
-                    </a>
-                </div>
-                <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#allcourses">Courses</button>
-                <div class="row">
-
-                    <div class="col">
-                        <div class="collapse" id="allcourses">
-
-                            @foreach (var course in this.Model.Courses)
-                            {
-                                <div class=" card card-body">
-                                    <a class="btn" style="background:#ffffff" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
-                                        <div style="color:#000000" class="col">
-                                            <div>
-                                                @course.Name
-
-                                            </div>
-                                            <div>
-                                                <span class="badge" style="background:#ff6a00; color:#ffffff">
-                                                    @course.PostsCount
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <pre class="tab"></pre>
-                                </div>
-                            }
-                        </div>
+                <a class="p-2 bg-white m-1 rounded-pill d-flex  justify-content-center align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1">
+                    <div class="flex-grow-1">See all</div>
+                    <div>
+                        <span class="badge" style="background:#ff6a00; color:#ffffff">
+                            @this.Model.CountOfAllPosts
+                        </span>
                     </div>
+                </a>
+                <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#allcourses">Courses</button>
+                
+                <div class="collapse" id="allcourses">
+
+                    @foreach (var course in this.Model.Courses)
+                    {
+                        @if (this.Model.CourseId == course.Id )
+                         {
+                            <a class="p-2 m-1 bg-info rounded-pill d-flex justify-content-center align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
+                                <div class="flex-grow-1">@course.Name</div>
+                                <div>
+                                    <span class="badge" style="background:#ff6a00; color:#ffffff">
+                                        @course.PostsCount
+                                    </span>
+                                </div>
+                            </a>
+                         }
+                         else
+                         {
+                         <a class="p-2 m-1 bg-white rounded-pill d-flex justify-content-center align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
+                             <div class="flex-grow-1">@course.Name</div>
+                             <div>
+                                 <span class="badge" style="background:#ff6a00; color:#ffffff">
+                                     @course.PostsCount
+                                 </span>
+                             </div>
+                         </a>
+                         }
+
+                            
+                        }
                 </div>
             </div>
         </div>
         <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: lightslategrey">
-                <button type="button" class="btn btn-info" id="menu-toggle">Toggle Menu</button>
+            <nav class="navbar navbar-expand-lg navbar-light d-flex" style="background-color: lightslategrey">
+                <div class="flex-grow-1">
+                    <button type="button" class="btn btn-info" id="menu-toggle">Toggle Menu</button>
+                </div>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    <a class="mx-2" asp-controller="Posts" asp-action="Create">
+                        <svg style="color:white; transform:scale(1.03); transition: transform 350ms" xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                }
+                @*<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>*@
             </nav>
             <div class="container-fluid" >
                 @if (this.TempData.ContainsKey("CreatedPost"))
@@ -87,16 +104,7 @@
 <pre class="tab"></pre>
 <pre class="tab"></pre>
 
-                @if (this.User.Identity.IsAuthenticated)
-                {
-                    <div style="width:fit-content;">
-                        <span>
-                            <a class="btn" style="background: #ff6a00; color: #ffffff; width: auto;" asp-controller="Posts" asp-action="Create">
-                                Create Post
-                            </a>
-                        </span>
-                    </div>
-                }
+               
 
 <pre class="tab"></pre>
 <pre class="tab"></pre>
@@ -108,110 +116,116 @@
                 else
                 {
                     <div class="container">
-                        <div class="col justify-content-center">
+                        <div class="col">
                             @foreach (var post in this.Model.Posts)
                             {
                                 <article class="row-cols-md-1 rounded" style="background:#d8d8d8">
                                     <div class="card-header">
-                                        <a asp-controller="Posts" asp-action="SeePost" asp-route-id="@post.Id" class="text-dark">@post.Title</a>
-                                        <p>
-                                            <span>@post.AuthorName</span>
-                                            <span>
-                                                <img src="~/icons/calendar.png" />
-                                                <span>@post.CreatedOn</span>
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <form asp-controller="Posts" asp-action="Like" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
-                                                    @if (!this.User.Identity.IsAuthenticated)
-                                                    {
-                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                        </button>
-                                                    }
-                                                    else
-                                                    {
+                                        <div class="d-flex align-items-center">
+                                            <a class="flex-grow-1 my-2" style="color:black" asp-controller="Posts" asp-action="SeePost" asp-route-id="@post.Id">@post.Title</a>
 
-                                                        if (post.Likes.Any(x => x.CreatorName == this.User.Identity.Name))
+                                            @if (this.User.Identity.Name == post.AuthorName)
+                                            {
+                                                <div class="d-flex">
+
+                                                    <form class="mx-1" asp-controller="Posts" asp-action="Delete" asp-route-id="@post.Id" method="post">
+                                                        <button style="outline:none; border:none; background-color:transparent">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                    <a class="mx-1" style="color:black" asp-controller="Posts" asp-action="Edit" asp-route-id="@post.Id">
+                                                        <svg style="cursor:pointer" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                            <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            <p>
+                                                <span>@post.AuthorName</span>
+                                                <span>
+                                                    <img src="~/icons/calendar.png" />
+                                                    <span>@post.CreatedOn</span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <div class="d-flex flex-grow-1">
+                                                <div class="mx-2">
+                                                    <form asp-controller="Posts" asp-action="Like" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
+                                                        @if (!this.User.Identity.IsAuthenticated)
                                                         {
-                                                            <button id="likebtn" class=" btn btn-secondary" style="background:#137cdc">
+                                                            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
                                                                 <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
                                                             </button>
                                                         }
                                                         else
                                                         {
-                                                            <button id="likebtn" class="btn btn-secondary">
-                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                            </button>
-                                                        }
 
-                                                    }
-                                                    <span>Likes</span>
-                                                    <span>@post.Likes.Count()</span>
-                                                </form>
-                                                <form asp-controller="Posts" asp-action="Dislike" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
-                                                    @if (!this.User.Identity.IsAuthenticated)
-                                                    {
-                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                        </button>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (post.Dislikes.Any(x => x.CreatorName == this.User.Identity.Name))
+                                                            if (post.Likes.Any(x => x.CreatorName == this.User.Identity.Name))
+                                                            {
+                                                                <button id="likebtn" class=" btn btn-secondary" style="background:#137cdc">
+                                                                    <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                                </button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button id="likebtn" class="btn btn-secondary">
+                                                                    <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                                                </button>
+                                                            }
+
+                                                        }
+                                                        <span>Likes</span>
+                                                        <span>@post.Likes.Count()</span>
+                                                    </form>
+                                                </div>
+                                                <div class="mx-2">
+                                                    <form asp-controller="Posts" asp-action="Dislike" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
+                                                        @if (!this.User.Identity.IsAuthenticated)
                                                         {
-                                                            <button id="likebtn"  class="btn btn-secondary"style="background:#137cdc">
+                                                            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
                                                                 <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
                                                             </button>
                                                         }
                                                         else
                                                         {
-                                                            <button id="dislikebtn" class="btn btn-secondary">
-                                                                <i class="fa fa-thumbs-down " style="font-size: 30px;"></i>
-                                                            </button>
+                                                            if (post.Dislikes.Any(x => x.CreatorName == this.User.Identity.Name))
+                                                            {
+                                                                <button id="likebtn" class="btn btn-secondary" style="background:#137cdc">
+                                                                    <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                                                </button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button id="dislikebtn" class="btn btn-secondary">
+                                                                    <i class="fa fa-thumbs-down " style="font-size: 30px;"></i>
+                                                                </button>
+                                                            }
                                                         }
-                                                    }
-                                                    <span>Dislikes</span>
-                                                    <span>@post.Dislikes.Count()</span>
-                                                </form>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="row">
-                                                    <div class="col-md-5">
-                                                        Last Active
-                                                        @post.LastActive.Name
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        @post.LastActive.LastActive
-                                                    </div>
+                                                        <span>Dislikes</span>
+                                                        <span>@post.Dislikes.Count()</span>
+                                                    </form>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <article>
-                                            <div class="card-body">
-                                                @if (this.User.Identity.Name == post.AuthorName)
-                                                {
-                                                    <span>
-                                                        <a asp-controller="Posts" asp-action="Edit" asp-route-id="@post.Id" class="btn btn-info">
-                                                            Edit
-                                                        </a>
-                                                    </span>
-                                                    <pre class="tab"></pre>
-                                                    <form asp-controller="Posts" asp-action="Delete" asp-route-id="@post.Id" method="post">
-                                                        <span>
-                                                            <button class="form-control" style="background:#ff0000; color:aliceblue">Delete</button>
-                                                        </span>
-                                                    </form>
-                                                }
+                                            <div>
+                                                <p>
+                                                    Last Active
+                                                    @post.LastActive.Name
+                                                </p>
+                                                <p>
+                                                    @post.LastActive.LastActive
+                                                </p>
                                             </div>
-                                        </article>
+                                        </div>
                                     </div>
-
                                 </article>
-
                                 <pre class="tab"></pre>
                             }
                         </div>

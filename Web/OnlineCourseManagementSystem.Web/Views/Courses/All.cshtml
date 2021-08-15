@@ -29,6 +29,17 @@
                 <div class="card-footer">
                     <a asp-controller="Courses" asp-action="ById" asp-route-id="@course.Id" class="btn btn-outline-primary">Read More about the Course</a>
                 </div>
+                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                {
+                    <div class=" card-footer d-flex">
+                        <a asp-controller="Assignments" asp-action="CreateAssignment" asp-route-id="@course.Id" class="btn btn-outline-primary mx-2">
+                            Create Assignment
+                        </a>
+                         <a class=" btn btn-info rounded h3 mx-2" asp-controller="Assignments" asp-action="AllCreated" asp-route-id="@course.Id">
+                            All Created Assignments
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>

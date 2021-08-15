@@ -147,7 +147,6 @@ label {
 
 .link-container {
     background: #fff;
-    width: 250px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -155,14 +154,30 @@ label {
     border-radius: 4px;
     margin: 10px;
     position: relative;
-    /*box-shadow: 0 3px 10px rgba(0, 0, 0, .05);*/
-    box-shadow: 0 0 30px #cbc6c6;
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.link-container:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 .link{
     color:#ff6a00;
 }
 
+.svg:hover{
+    cursor: pointer;
+    
+}
+
+#create-text {
+    display: none;
+}
+
+.card:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 
 .index-container{
     display: inline-flex;
@@ -182,20 +197,111 @@ a:hover{
     display: flex;
     padding: 0.60rem;
     justify-content: center;
-    background: #e5e5e5;
-    margin-bottom: 1rem;
+    
 }
 
-.image{
-    position: relative;
-    height: 13rem;
-    width: 13rem;
+.image {
+    height: inherit;
+    width: inherit;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.btn-delete{
-    position: relative;
-    background: #e3883a;
-    color: aliceblue;
+
+    .image:hover {
+        opacity: 0.7;
+    }
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.3); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    height:100%;
+    width: 80%;
+    max-width: 700px;
+}
+
+
+/* Caption of Modal Image */
+#caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+
+/* Add Animation */
+.modal-content, #caption {
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {
+        -webkit-transform: scale(0)
+    }
+
+    to {
+        -webkit-transform: scale(1)
+    }
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px) {
+    .modal-content {
+        width: 100%;
+    }
 }
 
 .folder-container {

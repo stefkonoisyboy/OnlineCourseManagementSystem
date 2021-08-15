@@ -14,17 +14,24 @@
         </div>
     }
 
-<div style="display: flex; flex-direction: row; margin-bottom: 1rem;">
-    <h3>Add Album</h3>
-    <button type="button" class="btn" style="background-color: azure ;margin-left: 10px; " data-bs-toggle="modal" data-bs-target="#addAlbumModal">
-        <img src="~/icons/square_add.png" style="max-width: 30px; max-height: 30px" alt="Btn open modal" />
-    </button>
+<div class="d-inline-flex rounded-pill p-2 my-4" id="show" data-bs-toggle="modal" data-bs-target="#addAlbumModal" style="cursor:pointer;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;"> 
+    <tt id="create-text" class="mx-2">
+        Create Album
+    </tt>
+    <svg  xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+        <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z" />
+        <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
+    </svg>
 </div>
+   
     <div class="row">
         @foreach (var album in this.Model.Albums)
         {
-            <a class="text-center folder-container col-md-2" style="color: black;" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">
-                <img src="~/icons/folder_ok.png" alt="Folder" />
+            <a class="d-flex col-md-3 mx-2 justify-content-center align-items-center card card-body col-md-2 p-5" style="color: black;" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
+                    <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                    <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z" />
+                </svg>
                 @album.Name
             </a>
         }
@@ -47,13 +54,10 @@
                         <input asp-for="InputModel.Name" />
                         <span asp-validation-for="InputModel.Name" class="alert-danger"></span>
                     </div>
+                    <button class="btn btn-primary mx-3">
+                        Create
+                    </button>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary">
-                    Create
-                </button>
             </div>
         </div>
     </div>

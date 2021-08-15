@@ -108,6 +108,11 @@
                 CourseId = id,
             };
 
+            foreach (var assignment in assignmetViewModel.CreatedAssignments)
+            {
+                assignment.Users = this.assignmentsService.GetAllUsersForAssignment<AssignmentUserInfoViewModel>(assignment.AssignmentId);
+            }
+
             return this.View(assignmetViewModel);
         }
 
@@ -143,15 +148,15 @@
             return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId});
         }
 
-        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
-        public IActionResult AllUsersForAssignment(int id)
-        {
-            var usersAssignments = this.assignmentsService.GetAllUsersForAssignment<AssignmentUserInfoViewModel>(id);
+        //[Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        //public IActionResult AllUsersForAssignment(int id)
+        //{
+        //    var usersAssignments = this.assignmentsService.GetAllUsersForAssignment<AssignmentUserInfoViewModel>(id);
 
-            this.TempData["AssignmentId"] = id;
+        //    this.TempData["AssignmentId"] = id;
 
-            return this.View(usersAssignments);
-        }
+        //    return this.View(usersAssignments);
+        //}
 
         [Authorize]
         [HttpPost]

@@ -7,34 +7,54 @@
     Album: @Model.AlbumName
 </h1>
 
-<div>
+<div class="my-5">
     @await Html.PartialAsync("_PartialAddImages", new UploadImageInputModel { AlbumId = Model.AlbumId })
 </div>
 
-<pre class="tab"></pre>
-<pre class="tab"></pre>
 
 <div class="row">
     @foreach (var image in this.Model.Images)
     {
-        <div class="container-image col-md-4" style="margin: 1rem;">
-            <img  src="@image.ImageUrl" alt="Image" class="image" />
-            <div class="card-body">
-                <div class="row">
-
-                    <div class="col-md-4">
-                    </div>
-                    <div class="col-md-4">
-
-                        <form asp-controller="Files" asp-action="DeleteImage" asp-route-id="@image.ImageId" method="post">
-                            <button class="btn  btn-delete">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div class="card card-body col-md-3 m-3 d-flex flex-column justify-content-center align-items-center" style="background: #e5e5e5;">
+           <img id="@image.ImageId" onclick="showMyImage(@image.ImageId)" src="@image.ImageUrl" alt="Image" class="image" />
+           <div class="my-2">
+               <form asp-controller="Files" asp-action="DeleteImage" asp-route-id="@image.ImageId" method="post">
+                   <button class="btn bg-white rounded-pill" style="color:black">
+                       Delete
+                   </button>
+               </form>
+           </div>
         </div>
-        <pre class="tab"></pre>
     }
 </div>
+
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+<script>
+    function showMyImage(imgId) {
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = document.getElementById(imgId);
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        img.onclick = function () {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            captionText.innerHTML = this.alt;
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+    }
+</script>

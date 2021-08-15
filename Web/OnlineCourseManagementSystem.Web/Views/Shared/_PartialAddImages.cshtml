@@ -1,15 +1,20 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Files
 @model UploadImageInputModel
 
-<h3>Add Image</h3>
-<form asp-controller="Files" asp-action="AddImageToGallery" asp-route-id="@Model.AlbumId" method="post" enctype="multipart/form-data">
-    <div class="row">
-        <div class="col-md-4" style="margin-bottom: 1rem">
-            <input asp-for="Images" type="file" class="form-control" multiple>
-        </div>
-        <div class="col-md-4">
-            <input  class="form-control" type="submit">
-        </div>
-    </div>
-</form>
+
+<div class="d-inline-flex align-items-center">
+    <label for="input-file" class="d-inline-flex rounded-pill p-2 my-4 mx-5" id="show" style="cursor:pointer;color:black;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+        <tt id="create-text" class="mx-1">
+            Add Image
+        </tt>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+        </svg>
+    </label>
+    <form asp-controller="Files" asp-action="AddImageToGallery" asp-route-id="@Model.AlbumId" method="post" enctype="multipart/form-data">
+        <input hidden id="input-file" asp-for="Images" type="file" class="form-control" multiple>
+        <input class="form-control" type="submit">
+    </form>
+</div>
+
 
