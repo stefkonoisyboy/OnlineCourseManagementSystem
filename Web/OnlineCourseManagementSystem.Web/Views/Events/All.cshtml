@@ -6,52 +6,66 @@
 <h1 class="title">Events</h1>
 
 <h3>Events Coming</h3>
-<div class="row">
-    @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
-    {
-        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: 0 0 30px #cbc6c6;">
-            <div>
-                <h3>
-                    <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
-                        @eventComing.Theme
-                    </a>
-                </h3>
-            </div>
-            <div>
-                <span>
-                    <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
-                </span>
-                <span class="text-black">@eventComing.AuthorName</span>
-            </div>
-            <div class="card-footer">
-                <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
-                    <span>
-                        <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
-                        <span class="text-black-50">
-                            @eventComing.StartDate.ToString("dd MMM yyyy(ddd)")
-                        </span>
-                    </span>
+@if (!this.Model.EventsComing.Any())
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:50vh; color:gray">
+        <h1>No coming events</h1>
+    </div>
+}
 
-                    <span>
-                        <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
-                        <span class="text-black-50">
-                            @eventComing.StartDate.ToString("t") - @eventComing.EndDate.ToString("t")
-                            <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
-                        </span>
-                    </span>
-                </a>
-            </div>
-        </div>
-    }
-</div>
-  
+ <div class="row">
+     @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
+     {
+         <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+             <div>
+                 <h3>
+                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                         @eventComing.Theme
+                     </a>
+                 </h3>
+             </div>
+             <div>
+                 <span>
+                     <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
+                 </span>
+                 <span class="text-black">@eventComing.AuthorName</span>
+             </div>
+             <div class="card-footer">
+                 <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                     <span>
+                         <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
+                         <span class="text-black-50">
+                             @eventComing.StartDate.ToString("dd MMM yyyy(ddd)")
+                         </span>
+                     </span>
+
+                     <span>
+                         <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
+                         <span class="text-black-50">
+                             @eventComing.StartDate.ToString("t") - @eventComing.EndDate.ToString("t")
+                             <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
+                         </span>
+                     </span>
+                 </a>
+             </div>
+         </div>
+     }
+ </div>
 
 
 <h3>Events Finished</h3>
+
+@if(!this.Model.EventsFinished.Any())
+ {
+    <div class="d-flex justify-content-center align-items-center" style="height:50vh; background:#f8f9fa; color:gray">
+        <h1>No finished events</h1> 
+    </div>
+ }
+
 <div class="row">
     @foreach (var eventFinished in this.Model.EventsFinished)
     {
-        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: 0 0 30px #cbc6c6;">
+        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
             <div>
                 <h3>
                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">

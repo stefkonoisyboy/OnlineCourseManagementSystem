@@ -23,7 +23,7 @@
 <div class="row">
     @foreach (var eventCreated in this.Model.Events)
     {
-        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: 0 0 30px #cbc6c6;">
+        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
 
             @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {

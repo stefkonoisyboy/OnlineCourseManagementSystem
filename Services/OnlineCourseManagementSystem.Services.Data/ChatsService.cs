@@ -143,7 +143,15 @@
         public async Task LeaveChat(int chatId, string userId)
         {
             ChatUser chatUser = this.chatUserRepository.All().FirstOrDefault(c => c.ChatId == chatId && c.UserId == userId);
-            this.chatUserRepository.Delete(chatUser);
+            if (chatUser.Chat.ChatType == ChatType.GroupChat)
+            {
+                this.chatUserRepository.HardDelete(chatUser);
+            }
+            else
+            {
+                this.chatUserRepository.Delete(chatUser);
+            }
+
             await this.chatUserRepository.SaveChangesAsync();
         }
 
@@ -283,9 +291,9 @@
 
         public T GetBy<T>(int chatId)
         {
-            return this.chatRepository
+            return this.chatUserRepository
                 .All()
-                .Where(c => c.Id == chatId)
+                .Where(c => c.ChatId == chatId)
                 .To<T>()
                 .FirstOrDefault();
         }
@@ -349,6 +357,15 @@
                 .All()
                 .FirstOrDefault(x => x.Id == chatId)
                 .CreatorId;
+        }
+
+        public T GetByCurrentUser<T>(string userId, int chatId)
+        {
+            return this.chatUserRepository
+                .All()
+                .Where(cu => cu.UserId == userId && cu.ChatId == chatId)
+                .To<T>()
+                .FirstOrDefault();
         }
     }
 }

@@ -51,20 +51,27 @@
             {
                 @if (Chat.IsGroupChat)
                 {
-                    <img style="margin-right: 0.5rem; background: #891aea;height: 40px; width: 40px; border-radius: 50%;" src="@GROUP_CHAT_ICON_URL" />
+                    <svg style="background: #891aea;" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-people-fill mx-1 rounded-circle" viewBox="0 0 16 16">
+                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
+                        <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+                    </svg>
                 }
                 else
                 {
-                    <img style="margin-right: 0.5rem; background:#ff6a00; height: 40px; width: 40px; border-radius: 50%;" src="@NORMAL_CHAT_ICON_URL" />
+                    <svg style="background-color:darkorange" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle mx-1 rounded-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
                 }
             }
             else
             {
-                <img src="@Chat.IconUrl" style="margin-right: 0.5rem; height: 40px; width: 40px; border-radius: 50%;" />
+                <img src="@Chat.IconUrl"class="mx-1 rounded-circle" height="50" width="50" />
             }
         </div>
         <div class="col-md-6">
-            <div style="display:flex; flex-direction:column;margin-right:20px;">
+            <div class="d-flex flex-column mx-1">
                 @if (Chat.IsGroupChat)
                 {
                     <div class="chat-name">
@@ -88,9 +95,6 @@
     </div>
 </div>
 @code {
-    private const string GROUP_CHAT_ICON_URL = "https://image.flaticon.com/icons/png/512/33/33308.png";
-    private const string NORMAL_CHAT_ICON_URL = "https://image.flaticon.com/icons/png/512/709/709722.png";
-
     [Parameter]
     public ChatViewModel Chat { get; set; }
 
