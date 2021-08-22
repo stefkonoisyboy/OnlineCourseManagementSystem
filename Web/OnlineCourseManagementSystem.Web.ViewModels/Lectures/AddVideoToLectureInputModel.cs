@@ -1,5 +1,7 @@
 ﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Lectures
 {
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -13,5 +15,9 @@
 
         [Required]
         public string RemoteUrl { get; set; }
+
+        public IEnumerable<AllRecommendedCoursesByIdViewModel> RecommendedCourses { get; set; }
+
+        public CurrentUserViewModel CurrentUser { get; set; }
     }
 }

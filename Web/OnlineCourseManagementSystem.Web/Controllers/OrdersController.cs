@@ -28,14 +28,8 @@
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
-        [HttpPost]
         public async Task<IActionResult> Create(int id)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View();
-            }
-
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             if (this.ordersService.IsOrderAvailable(id, user.Id))
             {
@@ -47,7 +41,7 @@
                 this.TempData["AlertMessage"] = "Order with such course and client already exists in your cart!";
             }
 
-            return this.Redirect("/");
+            return this.RedirectToAction(nameof(this.AllByUserId));
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
@@ -110,7 +104,7 @@
                 await this.ordersService.DeleteAsync(course, user.Id);
             }
 
-            return this.Redirect($"/Courses/AllByUser/{user.Id}");
+            return this.Redirect($"/Courses/AllByCurrentUser");
         }
     }
 }

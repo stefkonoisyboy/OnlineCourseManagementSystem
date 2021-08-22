@@ -1,0 +1,121 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Files.VideoByIdViewModel
+@{ 
+    this.ViewData["Title"] = "Specific video info";
+    int lectureIndex = 1;
+}
+
+<style>
+    .row-margin-05 {
+        margin-top: 0.5em;
+    }
+
+    .row-margin-10 {
+        margin-top: 1.0em;
+    }
+
+    .row-margin-20 {
+        margin-top: 2.0em;
+    }
+
+    .row-margin-30 {
+        margin-top: 3.0em;
+    }
+
+    .accordion-item .accordion-header button:hover {
+        background-color: orange;
+    }
+</style>
+
+<body class="bg-light">
+    <div class="row">
+        <div class="col-md-8">
+            <h6 style="color: #234465;">@this.Model.LectureCourseName - @this.Model.LectureCourseStartDate.ToString("MMMM yyyy")</h6>
+            <h5 style="color: #337ab7;">@this.Model.LectureTitle</h5>
+            <div>
+                <iframe width="700" height="405" src="@this.Model.RemoteUrl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h4 style="color: #234465;">Program and resources</h4>
+            <div class="accordion accordion-flush shadow-lg p-3 mb-5 bg-white rounded row-margin-10" id="accordionFlushExample">
+                @foreach (var lecture in this.Model.Lectures)
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-heading-@lectureIndex">
+                            <button class="accordion-button bg-danger text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@lectureIndex" aria-expanded="false" aria-controls="flush-collapse-@lectureIndex">
+                                @(lectureIndex + ". " + lecture.Title)
+                            </button>
+                        </h2>
+                        <div id="flush-collapse-@lectureIndex" class="accordion-collapse collapse" aria-labelledby="flush-heading-@lectureIndex" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p style="font-size: 16px; color: orange;">Description</p>
+                                        @if (lecture.Description == null)
+                                        {
+                                            <p>There is still no description for this lecture</p>
+                                        }
+                                        else
+                                        {
+                                            <p>@lecture.Description</p>
+                                        }
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-size: 16px; color: #ffa000;">Resources</p>
+                                        @if (lecture.Files.Count() == 0)
+                                        {
+                                            <p>There are still no resources for this lecture</p>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var file in lecture.Files.Where(f => f.Extension == ".mp4"))
+                                            {
+                                                <a asp-controller="Files" asp-action="VideoById" asp-route-id="@file.Id" asp-route-courseId="@file.LectureCourseId">
+                                                    <p class="text-primary">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z" />
+                                                        </svg>
+                                                        Video - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
+                                                    </p>
+                                                </a>
+                                            }
+
+                                            @foreach (var file in lecture.Files.Where(f => f.Extension == ".pptx"))
+                                            {
+                                                <a asp-controller="Files" asp-action="ById" asp-route-id="@file.Id" asp-route-lectureId="@lecture.Id">
+                                                    <p class="text-primary">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-ppt" viewBox="0 0 16 16">
+                                                            <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
+                                                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                                                        </svg>
+                                                        Presentation - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
+                                                    </p>
+                                                </a>
+                                            }
+
+                                            @foreach (var file in lecture.Files.Where(f => f.Extension == ".docx"))
+                                            {
+                                                <a asp-controller="Files" asp-action="ById" asp-route-id="@file.Id" asp-route-lectureId="@lecture.Id">
+                                                    <p class="text-primary">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-word" viewBox="0 0 16 16">
+                                                            <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
+                                                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                                                        </svg>
+                                                        Document - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
+                                                    </p>
+                                                </a>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    lectureIndex++;
+                }
+            </div>
+        </div>
+    </div>
+</body>

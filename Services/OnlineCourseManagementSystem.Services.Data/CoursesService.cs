@@ -8,6 +8,7 @@
 
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
+    using Ganss.XSS;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
@@ -61,12 +62,24 @@
             Course course = new Course
             {
                 Name = input.Name,
-                Description = input.Description,
-                Price = input.Price,
-                SubjectId = input.SubjectId,
-                StartDate = input.StartDate,
-                EndDate = input.EndDate,
+                Description = new HtmlSanitizer().Sanitize(input.Description),
+                CreatorId = input.CreatorId,
             };
+
+            await this.coursesRepository.AddAsync(course);
+            await this.coursesRepository.SaveChangesAsync();
+        }
+
+        public async Task CreateMetaAsync(CreateMetaInputModel input)
+        {
+            Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == input.CourseId);
+
+            course.Price = input.Price;
+            course.StartDate = input.StartDate;
+            course.SubjectId = input.SubjectId;
+            course.RecommendedDuration = input.RecommendedDuration;
+
+            await this.coursesRepository.SaveChangesAsync();
 
             string fileName = course.Name + Guid.NewGuid().ToString();
             string remoteUrl = await this.UploadImageAsync(input.Image, fileName);
@@ -83,7 +96,6 @@
             await this.filesRepository.SaveChangesAsync();
 
             course.FileId = file.Id;
-            await this.coursesRepository.AddAsync(course);
             await this.coursesRepository.SaveChangesAsync();
 
             foreach (var tagId in input.Tags)
@@ -203,6 +215,31 @@
                 .ToList();
         }
 
+        public IEnumerable<SelectListItem> GetAllAsSelectListItemsByCreatorId(string creatorId)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.CreatorId == creatorId)
+                .OrderBy(c => c.Name)
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString(),
+                })
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByCreatorId<T>(int id, string creatorId, int itemsPerPage = 6)
+        {
+            return this.coursesRepository
+               .All()
+               .OrderByDescending(c => c.StartDate)
+               .Where(c => c.CreatorId == creatorId)
+               .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+               .To<T>()
+               .ToList();
+        }
+
         public IEnumerable<T> GetAllByNameOrTag<T>(SearchByCourseNameOrTagInputModel input)
         {
             var query = this.coursesRepository.All().AsQueryable();
@@ -236,6 +273,13 @@
                 .ToList();
         }
 
+        public int GetAllCoursesByCreatorIdCount(string creatorId)
+        {
+            return this.coursesRepository
+                .All()
+                .Count(c => c.CreatorId == creatorId);
+        }
+
         public int GetAllCoursesByUserIdCount(string userId)
         {
             return this.userCoursesRepository
@@ -260,6 +304,7 @@
                 .Where(c => c.IsApproved.Value)
                 .OrderByDescending(c => c.Reviews.Average(r => r.Rating))
                 .ThenByDescending(c => c.StartDate)
+                .Take(10)
                 .To<T>()
                 .ToList();
         }
@@ -299,14 +344,38 @@
 
             course.Name = input.Name;
             course.Description = input.Description;
-            course.Price = input.Price;
-            course.StartDate = input.StartDate;
-            course.EndDate = input.EndDate;
-            course.SubjectId = input.SubjectId;
 
             await this.coursesRepository.SaveChangesAsync();
-            await this.courseTagsRepository.SaveChangesAsync();
-            await this.courseLecturersRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateMetaAsync(EditMetaInputModel input)
+        {
+            Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == input.Id);
+
+            course.Price = input.Price;
+            course.SubjectId = input.SubjectId;
+            course.StartDate = input.StartDate;
+            course.RecommendedDuration = input.RecommendedDuration;
+
+            await this.coursesRepository.SaveChangesAsync();
+
+            if (input.Image != null)
+            {
+                string fileName = course.Name + Guid.NewGuid().ToString();
+                string remoteUrl = await this.UploadImageAsync(input.Image, fileName);
+
+                File file = this.filesRepository.All().FirstOrDefault(f => f.Id == input.FileId);
+                file.RemoteUrl = remoteUrl;
+
+                await this.filesRepository.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateModifiedOnById(int id)
+        {
+            Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == id);
+            course.ModifiedOn = DateTime.UtcNow;
+            await this.coursesRepository.SaveChangesAsync();
         }
 
         private async Task<string> UploadImageAsync(IFormFile formFile, string fileName)

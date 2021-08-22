@@ -43,11 +43,11 @@
             return file.AlbumId;
         }
 
-        public IEnumerable<T> GetAllById<T>(int lectureId)
+        public IEnumerable<T> GetAllById<T>(int lectureId, int id)
         {
             return this.fileRepository
                 .All()
-                .Where(f => f.LectureId == lectureId)
+                .Where(f => f.LectureId == lectureId && f.Id != id)
                 .To<T>()
                 .ToList();
         }
@@ -126,6 +126,32 @@
             await this.fileRepository.SaveChangesAsync();
 
             return file.AssignmentId;
+        }
+
+        public string GetRemoteUrlById(int id)
+        {
+            return this.fileRepository
+                .All()
+                .FirstOrDefault(f => f.Id == id)
+                .RemoteUrl;
+        }
+
+        public T GetById<T>(int id)
+        {
+            return this.fileRepository
+                .All()
+                .Where(f => f.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+        }
+
+        public async Task<int?> DeleteAsync(int id)
+        {
+            File file = this.fileRepository.All().FirstOrDefault(f => f.Id == id);
+            int? lectureId = file.LectureId;
+            this.fileRepository.Delete(file);
+            await this.fileRepository.SaveChangesAsync();
+            return lectureId;
         }
     }
 }

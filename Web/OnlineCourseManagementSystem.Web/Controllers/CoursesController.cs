@@ -28,6 +28,7 @@
         private readonly ISkillsService skillsService;
         private readonly IReviewsService reviewsService;
         private readonly IUsersService usersService;
+        private readonly IFilesService filesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public CoursesController(
@@ -38,6 +39,7 @@
             ISkillsService skillsService,
             IReviewsService reviewsService,
             IUsersService usersService,
+            IFilesService filesService,
             UserManager<ApplicationUser> userManager)
         {
             this.coursesService = coursesService;
@@ -47,10 +49,11 @@
             this.skillsService = skillsService;
             this.reviewsService = reviewsService;
             this.usersService = usersService;
+            this.filesService = filesService;
             this.userManager = userManager;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Student,Lecturer")]
         public IActionResult ById(int id)
         {
             CourseByIdViewModel viewModel = this.coursesService.GetById<CourseByIdViewModel>(id);
@@ -83,7 +86,7 @@
             return this.View(viewModel);
         }
 
-        [Authorize]
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
         public IActionResult AllUpcomingAndActive(string name = null, int id = 1)
         {
             if (id <= 0)
@@ -131,7 +134,7 @@
             return this.View(viewModel);
         }
 
-        [Authorize]
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
         public async Task<IActionResult> AllByCurrentUser(int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -142,6 +145,24 @@
                 PageNumber = id,
                 ActiveCoursesCount = this.coursesService.GetAllCoursesByUserIdCount(user.Id),
                 Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(id, user.Id, ItemsPerPage),
+                FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
+                CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
+            };
+
+            return this.View(viewModel);
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> AllByCurrentLecturer(int id = 1)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            const int ItemsPerPage = 6;
+            AllCoursesByCurrentLecturerListViewModel viewModel = new AllCoursesByCurrentLecturerListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                LecturerCoursesCount = this.coursesService.GetAllCoursesByCreatorIdCount(user.Id),
+                Courses = this.coursesService.GetAllByCreatorId<AllCoursesByCurrentLecturerViewModel>(id, user.Id, ItemsPerPage),
                 FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
             };
@@ -171,17 +192,6 @@
             return this.View(viewModel);
         }
 
-        //[Authorize]
-        //public IActionResult AllActive()
-        //{
-        //    AllCoursesListViewModel viewModel = new AllCoursesListViewModel
-        //    {
-        //        Courses = this.coursesService.GetAllActive<AllCoursesViewModel>(),
-        //    };
-
-        //    return this.View(viewModel);
-        //}
-
         [Authorize]
         [HttpPost]
         public IActionResult AllByTag(SearchByTagInputModel input)
@@ -195,13 +205,53 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
-        public IActionResult Create()
+        public async Task<IActionResult> Meta()
         {
-            CreateCourseInputModel input = new CreateCourseInputModel
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            CreateMetaInputModel input = new CreateMetaInputModel
             {
                 SubjectsItems = this.subjectsService.GetAllAsSelectListItems(),
-                TagItems = this.tagsService.GetAllAsSelectListItems(),
-                LecturerItems = this.lecturersService.GetAllAsSelectListItems(),
+                TagsItems = this.tagsService.GetAllAsSelectListItems(),
+                LecturersItems = this.lecturersService.GetAllAsSelectListItems(),
+                RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
+                CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
+                CoursesItems = this.coursesService.GetAllAsSelectListItemsByCreatorId(user.Id),
+            };
+
+            return this.View(input);
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> Meta(CreateMetaInputModel input)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            if (!this.ModelState.IsValid)
+            {
+                input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
+                input.TagsItems = this.tagsService.GetAllAsSelectListItems();
+                input.LecturersItems = this.lecturersService.GetAllAsSelectListItems();
+                input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+                input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
+                input.CoursesItems = this.coursesService.GetAllAsSelectListItemsByCreatorId(user.Id);
+                return this.View(input);
+            }
+
+            input.UserId = user.Id;
+            await this.coursesService.CreateMetaAsync(input);
+            this.TempData["Message"] = "Meta information about the course successfully created!";
+
+            return this.RedirectToAction("AllLecturesByCreatorId", "Lectures");
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> Create()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            CreateCourseInputModel input = new CreateCourseInputModel
+            {
+                RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
+                CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
             };
 
             return this.View(input);
@@ -211,50 +261,42 @@
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         public async Task<IActionResult> Create(CreateCourseInputModel input)
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             if (!this.ModelState.IsValid)
             {
-                input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
-                input.TagItems = this.tagsService.GetAllAsSelectListItems();
-                input.LecturerItems = this.lecturersService.GetAllAsSelectListItems();
+                input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+                input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
                 return this.View(input);
             }
 
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             input.UserId = user.Id;
+            input.CreatorId = user.Id;
             await this.coursesService.CreateAsync(input);
             this.TempData["Message"] = "Course is created successfully!";
 
-            return this.Redirect("/");
+            return this.RedirectToAction(nameof(this.Meta));
         }
 
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public IActionResult Edit(int id)
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> Edit(int id)
         {
-            //EditCourseInputModel input = new EditCourseInputModel
-            //{
-            //    Id = id,
-            //    Name = this.coursesService.GetNameById(id),
-            //    Description = this.coursesService.GetDescriptionById(id),
-            //    Price = this.coursesService.GetPriceById(id),
-            //    StartDate = this.coursesService.GetStartDateById(id),
-            //    EndDate = this.coursesService.GetEndDateById(id),
-            //    SubjectId = this.coursesService.GetSubjectIdById(id),
-            //    SubjectsItems = this.subjectsService.GetAllAsSelectListItems(),
-            //};
-
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             EditCourseInputModel input = this.coursesService.GetById<EditCourseInputModel>(id);
-            input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
+            input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
+            input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
 
             return this.View(input);
         }
 
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [HttpPost]
         public async Task<IActionResult> Edit(EditCourseInputModel input, int id)
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             if (!this.ModelState.IsValid)
             {
-                input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
+                input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
+                input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
                 return this.View(input);
             }
 
@@ -262,7 +304,41 @@
             await this.coursesService.UpdateAsync(input);
             this.TempData["Message"] = "Course updated successfully!";
 
-            return this.Redirect($"/Courses/AllUnapproved");
+            return this.RedirectToAction("EditMeta", "Courses", new { id });
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> EditMeta(int id)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            EditMetaInputModel input = this.coursesService.GetById<EditMetaInputModel>(id);
+            input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
+            input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+            input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
+
+            return this.View(input);
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> EditMeta(int id, int fileId, EditMetaInputModel input)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            if (!this.ModelState.IsValid)
+            {
+                input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
+                input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+                input.SubjectsItems = this.subjectsService.GetAllAsSelectListItems();
+                input.FileRemoteUrl = this.filesService.GetRemoteUrlById(fileId);
+                return this.View(input);
+            }
+
+            input.Id = id;
+            input.FileId = fileId;
+            await this.coursesService.UpdateMetaAsync(input);
+            this.TempData["Message"] = "Course meta data updated successfully!";
+
+            return this.RedirectToAction("AllLecturesByCreatorId", "Lectures");
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]

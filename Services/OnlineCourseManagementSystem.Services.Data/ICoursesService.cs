@@ -13,7 +13,13 @@
     {
         Task CreateAsync(CreateCourseInputModel input);
 
+        Task CreateMetaAsync(CreateMetaInputModel input);
+
         Task UpdateAsync(EditCourseInputModel input);
+
+        Task UpdateMetaAsync(EditMetaInputModel input);
+
+        Task UpdateModifiedOnById(int id);
 
         Task DeleteAsync(int id);
 
@@ -27,6 +33,8 @@
 
         int GetAllCoursesByUserIdCount(string userId);
 
+        int GetAllCoursesByCreatorIdCount(string creatorId);
+
         IEnumerable<T> GetAll<T>();
 
         IEnumerable<T> GetAllUnapproved<T>();
@@ -39,6 +47,8 @@
 
         IEnumerable<T> GetAllByUser<T>(int id, string userId, int itemsPerPage = 6);
 
+        IEnumerable<T> GetAllByCreatorId<T>(int id, string creatorId, int itemsPerPage = 6);
+
         IEnumerable<T> GetAllUpcoming<T>();
 
         IEnumerable<T> GetAllPast<T>();
@@ -50,5 +60,7 @@
         IEnumerable<SelectListItem> GetAllActive();
 
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
+
+        IEnumerable<SelectListItem> GetAllAsSelectListItemsByCreatorId(string creatorId);
     }
 }

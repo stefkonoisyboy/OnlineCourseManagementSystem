@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ganss.XSS;
 using OnlineCourseManagementSystem.Data.Models;
 using OnlineCourseManagementSystem.Data.Models.Enumerations;
 using OnlineCourseManagementSystem.Services.Mapping;
@@ -15,6 +16,8 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 {
     public class CourseDetailsViewModel : IMapFrom<Course>
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string TrailerRemoteUrl { get; set; }
@@ -34,6 +37,8 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
         public int LecturesCount { get; set; }
 
         public CourseLevel Level { get; set; }
+
+        public IEnumerable<UserCourse> Users { get; set; }
 
         [IgnoreMap]
         public IEnumerable<AllTagsByCourseIdViewModel> Tags { get; set; }

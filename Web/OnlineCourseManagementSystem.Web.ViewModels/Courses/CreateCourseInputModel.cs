@@ -8,20 +8,22 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
-    public class CreateCourseInputModel : BaseCourseInputModel
+    public class CreateCourseInputModel
     {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
         public string UserId { get; set; }
 
-        [ImageExtensionValidationAttribute(ErrorMessage = "Invalid file format!")]
-        public IFormFile Image { get; set; }
+        public string CreatorId { get; set; }
 
-        public IEnumerable<int> Tags { get; set; }
+        public IEnumerable<AllRecommendedCoursesByIdViewModel> RecommendedCourses { get; set; }
 
-        public IEnumerable<SelectListItem> TagItems { get; set; }
-
-        public IEnumerable<string> Lecturers { get; set; }
-
-        public IEnumerable<SelectListItem> LecturerItems { get; set; }
+        public CurrentUserViewModel CurrentUser { get; set; }
     }
 }
