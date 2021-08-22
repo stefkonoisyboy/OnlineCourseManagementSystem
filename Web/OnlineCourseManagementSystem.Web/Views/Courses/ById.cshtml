@@ -3,6 +3,15 @@
 @{
     this.ViewData["Title"] = "Details for the Course";
     int lecturerIndex = 1;
+    int lectureIndex = 1;
+    int skillsIndex = 1;
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.TempData["Message"]
+    </div>
 }
 
 <style>
@@ -21,63 +30,207 @@
     .row-margin-30 {
         margin-top: 3.0em;
     }
+
+    .accordion-item .accordion-header button:hover {
+        background-color: orange;
+    }
 </style>
 
 <body class="bg-light">
-    @if (this.TempData.ContainsKey("Message"))
-    {
-        <div class="alert-success">
-            @this.TempData["Message"]
-        </div>
-    }
-
-    <div class="row text-center shadow-lg p-3 mb-5 bg-white rounded">
-        <h1>
-            <img src="@this.Model.FileRemoteUrl" alt="courseImage" height="80" width="80" />
-            @this.Model.Name
-        </h1>
+  
+<div class="row text-center shadow-lg p-3 mb-5 rounded" style="background-color: #234465;">
+    <h1 class="text-white">
+        <img src="@this.Model.FileRemoteUrl" alt="courseImage" height="80" width="80" />
+        @this.Model.Name
+    </h1>
+    <p class="text-white" style="text-align: left;">
+        @string.Join("", this.Model.Description.Take(200).ToList())
+    </p>
+    <div class="text-center">
+        <button style="background-color: #234465; border-color: #234465; border-top: none; border-left: none; border-bottom: none; border-right: none;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <p style="color: #ffa000;">
+                LOOK MORE
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                </svg>
+            </p>
+        </button>
     </div>
+    <div class="collapse" id="collapseExample">
+        <div>
+            <p class="text-white" style="text-align: left;">@string.Join("", this.Model.Description.Skip(200).ToList())</p>
+        </div>
+    </div>
+</div>
 
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="shadow-lg p-3 mb-5 bg-white rounded">
                 <h3>What you'll learn</h3>
                 <ul class="list-group">
                     @foreach (var skill in this.Model.Skills)
                     {
-                        <li class="list-group-item" style="background-color: white;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg text-success" viewBox="0 0 16 16">
-                                <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z" />
-                            </svg>
-                            <strong>@skill.Text</strong>
-                        </li>
+                        if (skillsIndex % 2 == 0)
+                        {
+                            <li class="list-group-item bg-warning">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg text-success" viewBox="0 0 16 16">
+                                    <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z" />
+                                </svg>
+                                <strong>@skill.Text</strong>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item bg-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg text-success" viewBox="0 0 16 16">
+                                    <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z" />
+                                </svg>
+                                <strong>@skill.Text</strong>
+                            </li>
+                        }
+
+                        skillsIndex++;
                     }
                 </ul>
             </div>
             <div class="row-margin-20">
                 <p class="text-black-50">Curriculum</p>
+
+                <div class="accordion accordion-flush shadow-lg p-3 mb-5 bg-white rounded row-margin-10" id="accordionFlushExample">
+                    @foreach (var lecture in this.Model.Lectures)
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-heading-@lectureIndex">
+                                <button class="accordion-button bg-danger text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@lectureIndex" aria-expanded="false" aria-controls="flush-collapse-@lectureIndex">
+                                    @(lectureIndex + ". " + lecture.Title)
+                                </button>
+                            </h2>
+                            <div id="flush-collapse-@lectureIndex" class="accordion-collapse collapse" aria-labelledby="flush-heading-@lectureIndex" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p style="font-size: 16px; color: orange;">Description</p>
+                                            @if (lecture.Description == null)
+                                            {
+                                                <p>There is still no description for this lecture</p>
+                                            }
+                                            else
+                                            {
+                                                <p>@lecture.Description</p>
+                                            }
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p style="font-size: 16px; color: #ffa000;">Resources</p>
+                                            @if (lecture.Files.Count() == 0)
+                                            {
+                                                <p>There are still no resources for this lecture</p>
+                                            }
+                                            else
+                                            {
+                                                @foreach (var file in lecture.Files.Where(f => f.Extension == ".mp4"))
+                                                {
+                                                    <a asp-controller="Files" asp-action="VideoById" asp-route-id="@file.Id" asp-route-courseId="@file.LectureCourseId">
+                                                        <div class="text-primary">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z" />
+                                                            </svg>
+                                                            Video - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
+                                                            <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
+                                                                <input type="submit" class="btn btn-danger" value="Delete" />
+                                                            </form>
+                                                        </div>
+                                                    </a>
+                                                }
+
+                                                @foreach (var file in lecture.Files.Where(f => f.Extension == ".pptx"))
+                                                {
+                                                    <a asp-controller="Files" asp-action="ById" asp-route-id="@file.Id" asp-route-lectureId="@lecture.Id">
+                                                        <div class="text-primary">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-ppt" viewBox="0 0 16 16">
+                                                                <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
+                                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                                                            </svg>
+                                                            Presentation - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
+                                                            <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
+                                                                <input type="submit" class="btn btn-danger" value="Delete" />
+                                                            </form>
+                                                        </div>
+                                                    </a>
+                                                }
+
+                                                @foreach (var file in lecture.Files.Where(f => f.Extension == ".docx"))
+                                                {
+                                                    <a asp-controller="Files" asp-action="ById" asp-route-id="@file.Id" asp-route-lectureId="@lecture.Id">
+                                                        <div class="text-primary">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-word" viewBox="0 0 16 16">
+                                                                <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
+                                                                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                                                            </svg>
+                                                            Document - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
+                                                            <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
+                                                                <input type="submit" class="btn btn-danger" value="Delete" />
+                                                            </form>
+                                                        </div>
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        lectureIndex++;
+                    }
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="accordion shadow-lg p-3 mb-5 bg-white rounded" id="accordionExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <strong>Resources</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">Curriculum</li>
-                                <li class="list-group-item">Course Forums</li>
-                                <li class="list-group-item">Start Certification</li>
-                                <li class="list-group-item">Quiz Results</li>
-                            </ul>
+        <div class="col-md-4">
+            @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+            {
+                <div class="accordion shadow-lg p-3 mb-5 bg-white rounded" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>Resources</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item bg-info">Curriculum</li>
+                                    <li class="list-group-item">Course Forums</li>
+                                    <li class="list-group-item">Start Certification</li>
+                                    <li class="list-group-item">Quiz Results</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
+            else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+            {
+                <div class="accordion shadow-lg p-3 mb-5 bg-white rounded" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>Resources</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Dashboard</li>
+                                    <li class="list-group-item">My Courses</li>
+                                    <li class="list-group-item">Messages</li>
+                                    <li class="list-group-item">Profile</li>
+                                    <li class="list-group-item">Logout</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
 
             <div class="accordion shadow-lg p-3 mb-5 bg-white rounded" id="accordionExample2">
                 <div class="accordion-item">
@@ -87,7 +240,7 @@
                         </button>
                     </h2>
                     <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample2">
-                        <div class="accordion-body">
+                        <div class="accordion-body bg-success">
                             @foreach (var lecturer in this.Model.Lecturers)
                             {
                                 <div class="row">
@@ -95,8 +248,8 @@
                                         <img src="@lecturer.LecturerUserProfileImageUrl" alt="userProfileImage" width="60" height="60" style="border-radius: 50%;" />
                                     </div>
                                     <div class="col-md-9">
-                                        <h4 class="text-info">@(lecturer.LecturerUserFirstName + ' ' + lecturer.LecturerUserLastName)</h4>
-                                        <p class="text-black-50">Biography</p>
+                                        <h4 class="text-white">@(lecturer.LecturerUserFirstName + ' ' + lecturer.LecturerUserLastName)</h4>
+                                        <p style="color: orange;">Biography</p>
                                     </div>
                                 </div>
                                 <p>@string.Join("", lecturer.LecturerUserBackground.Take(200).ToList())</p>

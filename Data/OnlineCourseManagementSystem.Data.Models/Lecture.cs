@@ -28,6 +28,10 @@
 
         public virtual Course Course { get; set; }
 
+        public string CreatorId { get; set; }
+
+        public virtual ApplicationUser Creator { get; set; }
+
         public bool IsCompleted { get; set; }
 
         public virtual ICollection<File> Files { get; set; }

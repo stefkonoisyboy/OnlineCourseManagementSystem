@@ -11,17 +11,44 @@
     using Microsoft.AspNetCore.Mvc;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
 
     public class FilesController : Controller
     {
         private readonly IFilesService fileService;
+        private readonly ICoursesService coursesService;
+        private readonly ILecturesService lecturesService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public FilesController(IFilesService fileService, UserManager<ApplicationUser> userManager)
+        public FilesController(
+            IFilesService fileService,
+            ICoursesService coursesService,
+            ILecturesService lecturesService,
+            UserManager<ApplicationUser> userManager)
         {
             this.fileService = fileService;
+            this.coursesService = coursesService;
+            this.lecturesService = lecturesService;
             this.userManager = userManager;
+        }
+
+        [Authorize(Roles = "Lecturer,Student")]
+        public IActionResult ById(int id, int lectureId)
+        {
+            FileByIdViewModel viewModel = this.fileService.GetById<FileByIdViewModel>(id);
+            viewModel.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+            viewModel.Files = this.fileService.GetAllById<AllFilesByLectureIdViewModel>(lectureId, id);
+            return this.View(viewModel);
+        }
+
+        [Authorize(Roles = "Lecturer,Student")]
+        public IActionResult VideoById(int id, int courseId)
+        {
+            VideoByIdViewModel viewModel = this.fileService.GetById<VideoByIdViewModel>(id);
+            viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(courseId);
+            return this.View(viewModel);
         }
 
         public IActionResult AddImageToGallery()
@@ -62,6 +89,14 @@
             int assignmentId = (int)await this.fileService.DeleteWorkFileFromAssignment(id);
 
             return this.RedirectToAction("GetInfo", "Assignments", new { Id = assignmentId });
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            int? lectureId = await this.fileService.DeleteAsync(id);
+            int courseId = this.lecturesService.GetCourseIdByLectureId(lectureId.Value);
+            this.TempData["Message"] = "File successfully deleted!";
+            return this.Redirect($"/Courses/ById/{courseId}");
         }
     }
 }

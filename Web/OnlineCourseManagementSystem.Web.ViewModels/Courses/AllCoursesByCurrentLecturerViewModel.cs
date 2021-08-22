@@ -6,16 +6,12 @@ using System.Text;
 
 namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 {
-    public class AllUpcomingCoursesViewModel : IMapFrom<Course>
+    public class AllCoursesByCurrentLecturerViewModel : IMapFrom<Course>
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public int RecommendedDuration { get; set; }
-
         public string FileRemoteUrl { get; set; }
-
-        public DateTime StartDate { get; set; }
     }
 }

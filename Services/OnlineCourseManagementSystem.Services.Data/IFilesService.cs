@@ -16,7 +16,13 @@
 
         Task<int?> DeleteImageFromGallery(int fileId, string userId);
 
-        IEnumerable<T> GetAllById<T>(int lectureId);
+        Task<int?> DeleteAsync(int id);
+
+        string GetRemoteUrlById(int id);
+
+        T GetById<T>(int id);
+
+        IEnumerable<T> GetAllById<T>(int lectureId, int id);
 
         IEnumerable<T> GetAllResourceFilesByAssignemt<T>(int assignmentId, string userId);
 

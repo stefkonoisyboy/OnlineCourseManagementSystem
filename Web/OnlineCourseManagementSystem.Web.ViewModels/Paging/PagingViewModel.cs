@@ -14,11 +14,23 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Paging
 
         public bool HasNextPage => this.PageNumber < this.PagesCount;
 
+        public bool HasNextPageLectures => this.PageNumber < this.LecturesCount;
+
+        public bool HasNextPageLecturers => this.PageNumber < this.LecturersCount;
+
         public int NextPageNumber => this.PageNumber + 1;
 
         public int PagesCount => (int)Math.Ceiling((double)this.ActiveCoursesCount / this.ItemsPerPage);
 
+        public int LecturesCount => (int)Math.Ceiling((double)this.LecturesByCreatorIdCount / this.ItemsPerPage);
+
+        public int LecturersCount => (int)Math.Ceiling((double)this.LecturerCoursesCount / this.ItemsPerPage);
+
         public int ActiveCoursesCount { get; set; }
+
+        public int LecturerCoursesCount { get; set; }
+
+        public int LecturesByCreatorIdCount { get; set; }
 
         public int ItemsPerPage { get; set; }
 

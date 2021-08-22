@@ -28,6 +28,10 @@
                     return true;
                 }
             }
+            else if (value is null)
+            {
+                return true;
+            }
             else
             {
                 return false;

@@ -30,6 +30,10 @@
 
         public decimal Price { get; set; }
 
+        public string CreatorId { get; set; }
+
+        public virtual ApplicationUser Creator { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
@@ -38,13 +42,13 @@
 
         public string TrailerRemoteUrl { get; set; }
 
-        public int SubjectId { get; set; }
+        public int? SubjectId { get; set; }
 
         public virtual Subject Subject { get; set; }
 
         public CourseLevel Level { get; set; }
 
-        public int FileId { get; set; }
+        public int? FileId { get; set; }
 
         public virtual File File { get; set; }
 

@@ -95,9 +95,9 @@
             Lecture lecture = new Lecture
             {
                 Title = input.Title,
-                StartDate = input.StartDate,
-                EndDate = input.EndDate,
+                Description = input.Description,
                 CourseId = input.CourseId,
+                CreatorId = input.CreatorId,
             };
 
             await this.lecturesRepository.AddAsync(lecture);
@@ -109,6 +109,14 @@
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == id);
             this.lecturesRepository.Delete(lecture);
             await this.lecturesRepository.SaveChangesAsync();
+        }
+
+        public int GetCourseIdByLectureId(int id)
+        {
+            return this.lecturesRepository
+                .All()
+                .FirstOrDefault(l => l.Id == id)
+                .CourseId;
         }
 
         public IEnumerable<T> GetAllById<T>(int courseId)
@@ -126,8 +134,8 @@
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == input.Id);
 
             lecture.Title = input.Title;
-            lecture.StartDate = input.StartDate;
-            lecture.EndDate = input.EndDate;
+            lecture.Description = input.Description;
+            lecture.CourseId = input.CourseId;
 
             await this.lecturesRepository.SaveChangesAsync();
         }
@@ -141,6 +149,24 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllByCreatorId<T>(int page, string creatorId, int items = 3)
+        {
+            return this.lecturesRepository
+                .All()
+                .Where(l => l.CreatorId == creatorId)
+                .Skip((page - 1) * items).Take(items)
+                .OrderByDescending(l => l.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
+        public int GetLecturesCountByCreatorId(string creatorId)
+        {
+            return this.lecturesRepository
+                .All()
+                .Count(l => l.CreatorId == creatorId);
+        }
+
         public IEnumerable<T> GetAllInInterval<T>(DateTime startDate, DateTime endDate)
         {
             return this.lecturesRepository
@@ -150,6 +176,32 @@
                 .ThenBy(l => l.EndDate)
                 .To<T>()
                 .ToList();
+        }
+
+        public IEnumerable<T> GetAllByFileId<T>(int id)
+        {
+            return this.lecturesRepository
+                .All()
+                .Where(l => l.Files.Any(f => f.Id == id))
+                .OrderBy(l => l.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
+        public T GetById<T>(int id)
+        {
+            return this.lecturesRepository
+                .All()
+                .Where(l => l.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+        }
+
+        public async Task UpdateModifiedOnById(int id)
+        {
+            Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == id);
+            lecture.ModifiedOn = DateTime.UtcNow;
+            await this.lecturesRepository.SaveChangesAsync();
         }
 
         private async Task<string> UploadWordFileAsync(IFormFile formFile, string fileName)

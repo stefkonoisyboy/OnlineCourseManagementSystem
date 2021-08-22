@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210818104700_AddedCreatorToCourses")]
+    partial class AddedCreatorToCourses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1101,9 +1103,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
@@ -1131,8 +1130,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("CreatorId");
 
                     b.HasIndex("IsDeleted");
 
@@ -2222,13 +2219,7 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
-                        .WithMany("Lectures")
-                        .HasForeignKey("CreatorId");
-
                     b.Navigation("Course");
-
-                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Lecturer", b =>
@@ -2527,8 +2518,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Lecturer");
 
                     b.Navigation("LecturerExams");
-
-                    b.Navigation("Lectures");
 
                     b.Navigation("Likes");
 

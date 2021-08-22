@@ -6,6 +6,8 @@
 
     using Microsoft.AspNetCore.Http;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public class AddFileToLectureInputModel
     {
@@ -14,5 +16,9 @@
         public int LectureId { get; set; }
 
         public IFormFile File { get; set; }
+
+        public IEnumerable<AllRecommendedCoursesByIdViewModel> RecommendedCourses { get; set; }
+
+        public CurrentUserViewModel CurrentUser { get; set; }
     }
 }
