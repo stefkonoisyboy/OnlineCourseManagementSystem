@@ -36,5 +36,24 @@
                 .To<T>()
                 .FirstOrDefault();
         }
+
+        public string GetFullNameById(string id)
+        {
+            return this.usersRepository
+                .All()
+                .FirstOrDefault(u => u.Id == id)
+                .FirstName + ' ' + this.usersRepository
+                .All()
+                .FirstOrDefault(u => u.Id == id)
+                .LastName;
+        }
+
+        public string GetProfileImageUrlById(string id)
+        {
+            return this.usersRepository
+               .All()
+               .FirstOrDefault(u => u.Id == id)
+               .ProfileImageUrl;
+        }
     }
 }

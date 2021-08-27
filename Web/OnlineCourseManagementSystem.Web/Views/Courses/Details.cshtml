@@ -7,6 +7,13 @@
     var user = await this.userManager.GetUserAsync(this.User);
 }
 
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.TempData["Message"]
+    </div>
+}
+
 <head>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -41,7 +48,75 @@
     .row-margin-30 {
         margin-top: 3.0em;
     }
+
+    .starFade {
+        background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarFade.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .starFadeN {
+        background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarFade.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+    }
+
+    .starGlow {
+        background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarGlow.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .starGlowN {
+        background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarGlow.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+    }
 </style>
+<div class="modal fade" id="staticBackdropRate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropRateLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropRateLabel">Add a review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="@this.Model.CurrentUser.ProfileImageUrl" alt="profile-image" height="50" width="50" />
+                    </div>
+                    <div class="col-md-10">
+                        <form method="post" asp-controller="Reviews" asp-action="Add">
+                            @Html.AntiForgeryToken()
+
+                            <div onmouseout="CRateSelected()">
+                                <span class="starFade" id="Rate1" onclick="CRate(1)" onmouseover="CRateOver(1)" onmouseout="CRateOut(1)"></span><span class="starFade" id="Rate2" onclick="CRate(2)" onmouseover="CRateOver(2)" onmouseout="CRateOut(2)"></span><span class="starFade" id="Rate3" onclick="CRate(3)" onmouseover="CRateOver(3)" onmouseout="CRateOut(3)"></span><span class="starFade" id="Rate4" onclick="CRate(4)" onmouseover="CRateOver(4)" onmouseout="CRateOut(4)"></span><span class="starFade" id="Rate5" onclick="CRate(5)" onmouseover="CRateOver(5)" onmouseout="CRateOut(5)"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="Content" id="Content" rows="5" class="form-control"></textarea>
+                            </div>
+
+                            <div class="modal-footer">
+                                <input type="hidden" name="CourseId" value="@this.Model.Id" />
+                                <input type="hidden" name="Rating" id="Rating" value="0" />
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-info">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <header class="shadow-lg p-3 mb-5 rounded text-white" style="background-color: #234465;">
     <div class="row">
@@ -257,16 +332,16 @@
                     </ul>
                 </div>
                 <div class="col-md-5">
-                    <div class="row shadow-lg p-3 mb-5 bg-danger text-white rounded" style="position: relative; left: 30px;">
+                    <div class="row shadow-lg p-3 mb-5 text-white rounded" style="position: relative; left: 30px; background-color: #ef5350;">
                         <div class="col-md-10">
                             <h3>Testimonials</h3>
-                            <p class="text-black-50">A few words from our past students</p>
-                            <div class="swiper-container mySwiper">
+                            <p class="font-italic">A few words from our past students</p>
+                            <div class="swiper mySwiper">
                                 <div class="swiper-wrapper">
                                     @foreach (var review in this.Model.Reviews)
                                     {
                                         <div class="swiper-slide">
-                                            <div class="bg-danger">
+                                            <div>
                                                 <p>@review.Content</p>
                                             </div>
                                             <div class="row">
@@ -436,11 +511,14 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-light" style="border-radius: 50%;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                    <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-                                </svg>
-                            </button>
+                            @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                            {
+                                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#staticBackdropRate" style="border-radius: 50%;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
+                                    </svg>
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -559,7 +637,7 @@
     </div>
 
     <strong>Featured</strong>
-    <div class="swiper-container mySwiper2 row-margin-10">
+    <div class="swiper mySwiper2 row-margin-10">
         <div class="swiper-wrapper">
             @foreach (var course in this.Model.RecommendedCourses)
             {
@@ -750,5 +828,43 @@
                 clickable: true,
             },
         });
+    </script>
+
+    <script>
+        function SubmitComment() {
+            if ($("#Rating").val() == "0") {
+                alert("Please rate this service provider.");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        function CRate(r) {
+            $("#Rating").val(r);
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+            // unselect remaining
+            for (var i = r + 1; i <= 5; i++) {
+                $("#Rate" + i).attr('class', 'starFade');
+            }
+        }
+        function CRateOver(r) {
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+        }
+        function CRateOut(r) {
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starFade');
+            }
+        }
+        function CRateSelected() {
+            var setRating = $("#Rating").val();
+            for (var i = 1; i <= setRating; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+        }
     </script>
 }

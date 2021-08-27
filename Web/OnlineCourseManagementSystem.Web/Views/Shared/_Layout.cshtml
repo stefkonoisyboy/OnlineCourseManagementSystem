@@ -1,5 +1,11 @@
 ﻿@using OnlineCourseManagementSystem.Common
+@using Microsoft.AspNetCore.Identity
+@using OnlineCourseManagementSystem.Data.Models
+@using OnlineCourseManagementSystem.Web.ViewModels.Users 
+@inject UserManager<ApplicationUser> userManager
+@inject OnlineCourseManagementSystem.Services.Data.IUsersService usersService
 @{
+   
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +25,9 @@
 
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
+    <!--Sidebar-->
+    @*<link rel="stylesheet" href="~/css/sidebar.css" asp-append-version="true" />*@
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -28,89 +37,221 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                        {
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-white text-white text-center border-bottom box-shadow mb-3">
+            <div class="row">
+                <div class="col-md-1">
+                    @this.ViewBag.FullName
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a class="navbar-brand" href="#">
+                                <img height="70" width="70" src="https://tse1.mm.bing.net/th?id=OIP.B4uDqkFwAxtC3D6OYdlCVQHaF8&pid=Api&P=0&w=213&h=172" alt="logo" />
+                            </a>
+                        </div>
+                        <div class="col-md-10">
+                            <ul style="margin-top: 20px;" class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">About</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Contact</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="coursesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Courses
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="coursesDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Courses" asp-action="AllUpcomingAndActive">Upcoming and Active</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a></li>
+                                        }
+
+                                        @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-controller="Courses" asp-action="Create">Create Course</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-controller="Courses" asp-action="Meta">Add Meta</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" asp-controller="Lectures" asp-action="AllLecturesByCreatorId">Lectures</a>
+                                    </li>
+                                }
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="examsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Exams
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="examsDropdown">
+                                        @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="AllByUser">My Exams</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="MyResults">My Results</a></li>
+                                        }
+
+                                        @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="All">All Exams</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" asp-controller="Posts" asp-action="All" asp-route-id="1">Forum</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--Do not touch!-->
+                @*@if (this.User.Identity.IsAuthenticated)
+                {
+                    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                    string fullName = this.usersService.GetFullNameById(user.Id);
+                    string profileImageUrl = this.usersService.GetProfileImageUrlById(user.Id);
+
+                    <div class="col-md-2">
+                        <ul style="margin-top: 20px;" class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link active dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if (profileImageUrl == null)
+                                    {
+                                        <img src="https://tse1.mm.bing.net/th?id=OIP.Lq4lOlvWKjVrJMnQXo1aXwHaHa&pid=Api&P=0&w=300&h=300" height="30" width="30" alt="default-profile-image" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@profileImageUrl" height="30" width="30" alt="profile-image" />
+                                    }
+                                    @(fullName)
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                                    @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Exams" asp-action="AllByUser">My Exams</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-controller="Exams" asp-action="MyResults">My Results</a></li>
+                                    }
+
+                                    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Exams" asp-action="All">All Exams</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+                }*@
+            </div>
+        </nav>
+
+
+        @*<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <partial name="_LoginPartial" />
+                        <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Users" asp-action="All">Users</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Students" asp-action="All">Students</a>
+                                <a class="nav-link text-dark" href="/counter">Counter</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Parents" asp-action="All">Parents</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Administration" asp-controller="Lecturers" asp-action="All">Lecturers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllUnapproved">Unapproved Courses</a>
-                            </li>
-                        }
-                        @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Create">Create a Course</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Channels" asp-action="IndexLecturers">Q&A</a>
-                            </li>
-                        }
-                        @if (this.User.IsInRole(GlobalConstants.ParentRoleName))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Absences" asp-action="AllByStudentInInterval">View Attendance</a>
-                            </li>
-                        }
-                        @if (this.User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllByCurrentUser">Your Courses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="All">All Courses</a>
-                            </li>
+                            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Users" asp-action="All">Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Students" asp-action="All">Students</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Parents" asp-action="All">Parents</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Administration" asp-controller="Lecturers" asp-action="All">Lecturers</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllUnapproved">Unapproved Courses</a>
+                                </li>
+                            }
                             @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="All">Exams</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Create">Create a Course</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Channels" asp-action="IndexLecturers">Q&A</a>
                                 </li>
                             }
-                            else if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                            @if (this.User.IsInRole(GlobalConstants.ParentRoleName))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="AllByUser">Exams</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="MyResults">My results</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Absences" asp-action="AllByStudentInInterval">View Attendance</a>
                                 </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllUpcoming">All Upcoming Courses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllPast">All Past Courses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllActive">All Active Courses</a>
-                            </li>
-                        }
-                    </ul>
+                            @if (this.User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllByCurrentUser">Your Courses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="All">All Courses</a>
+                                </li>
+                                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="All">Exams</a>
+                                    </li>
+                                }
+                                else if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="AllByUser">Exams</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="MyResults">My results</a>
+                                    </li>
+                                }
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllUpcoming">All Upcoming Courses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllPast">All Past Courses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="AllActive">All Active Courses</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>*@
     </header>
 
     <div class="container">
@@ -121,10 +262,10 @@
     </div>
 
     @*<footer class="border-top footer text-muted" style="position:relative">
-        <div class="container">
-            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
+            <div class="container">
+                &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
 
     @await this.RenderSectionAsync("Scripts", required: false)
     <script>

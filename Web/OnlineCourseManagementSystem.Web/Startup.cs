@@ -130,6 +130,7 @@
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
+                app.UseWebAssemblyDebugging();
             }
             else
             {
@@ -138,6 +139,7 @@
             }
 
             app.UseHttpsRedirection();
+            app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
@@ -152,6 +154,7 @@
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
+                        endpoints.MapFallbackToFile("index.html");
                         endpoints.MapBlazorHub();
                         endpoints.MapHub<ChatHub>("hubs/ChatHub");
                     });
