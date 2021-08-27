@@ -73,7 +73,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-heading_@i">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_@i" aria-expanded="false" aria-controls="flush-collapse_@i">
-                    @if (i >= this.Model.Answers.Count())
+                    @if (!this.Model.Answers.Any(a => a.QuestionId == this.Model.Questions.ToList()[i].Id))
                     {
                         <div class="text-danger">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
@@ -84,7 +84,7 @@
                             Question #@(i + 1) (Wrong) - 0 p.
                         </div>
                     }
-                    else if (this.Model.Answers.ToList()[i].IsCorrect)
+                    else if (this.Model.Answers.FirstOrDefault(a => a.QuestionId == this.Model.Questions.ToList()[i].Id).IsCorrect)
                     {
                         <div class="text-success">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-check-lg" viewBox="0 0 16 16">
@@ -110,7 +110,7 @@
             </h2>
             <div id="flush-collapse_@i" class="accordion-collapse collapse" aria-labelledby="flush-heading_@i" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
-                    @if (i >= this.Model.Answers.Count())
+                    @if (!this.Model.Answers.Any(a => a.QuestionId == this.Model.Questions.ToList()[i].Id))
                     {
                         <strong style="font-size: 20px;">@this.Model.Questions.ToList()[i].SanitizedText</strong>
                         @foreach (var choice in this.Model.Questions.ToList()[i].Choices)
@@ -140,12 +140,12 @@
                         <hr />
                         <p class="text-right">Points: 0 / @this.Model.Questions.ToList()[i].Points</p>
                     }
-                    else if (this.Model.Answers.ToList()[i].IsCorrect)
+                    else if (this.Model.Answers.FirstOrDefault(a => a.QuestionId == this.Model.Questions.ToList()[i].Id).IsCorrect)
                     {
                         <strong style="font-size: 20px;">@this.Model.Questions.ToList()[i].SanitizedText</strong>
                         @foreach (var choice in this.Model.Questions.ToList()[i].Choices)
                         {
-                            if (choice.Text == this.Model.Answers.ToList()[i].Text)
+                            if (choice.Text == this.Model.Answers.FirstOrDefault(a => a.QuestionId == this.Model.Questions.ToList()[i].Id).Text)
                             {
                                 <div class="form-check text-success">
                                     <input class="form-check-input" type="radio" name="flexRadioDisabled_@choice.Id" id="flexRadioDisabled_@choice.Id" checked disabled>
@@ -175,7 +175,7 @@
                         <strong style="font-size: 20px;">@this.Model.Questions.ToList()[i].SanitizedText</strong>
                         @foreach (var choice in this.Model.Questions.ToList()[i].Choices)
                         {
-                            if (choice.Text == this.Model.Answers.ToList()[i].Text)
+                            if (choice.Text == this.Model.Answers.FirstOrDefault(a => a.QuestionId == this.Model.Questions.ToList()[i].Id).Text)
                             {
                                 <div class="form-check text-danger">
                                     <input class="form-check-input" type="radio" name="flexRadioDisabled_@choice.Id" id="flexRadioDisabled_@choice.Id" checked disabled>

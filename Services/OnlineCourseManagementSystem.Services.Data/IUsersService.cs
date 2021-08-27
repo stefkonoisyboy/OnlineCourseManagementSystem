@@ -9,5 +9,9 @@
         IEnumerable<T> GetAll<T>();
 
         T GetById<T>(string id);
+
+        string GetFullNameById(string id);
+
+        string GetProfileImageUrlById(string id);
     }
 }

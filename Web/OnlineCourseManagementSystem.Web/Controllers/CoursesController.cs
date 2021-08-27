@@ -62,8 +62,9 @@
         }
 
         [Authorize]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             CourseDetailsViewModel viewModel = this.coursesService.GetById<CourseDetailsViewModel>(id);
 
             viewModel.Tags = this.tagsService.GetAllByCourseId<AllTagsByCourseIdViewModel>(id);
@@ -71,6 +72,7 @@
             viewModel.Reviews = this.reviewsService.GetAllByCourseId<AllReviewsByCourseIdViewModel>(id);
             viewModel.Lecturers = this.lecturersService.GetAllByCourseId<AllLecturersByCourseIdViewModel>(id);
             viewModel.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+            viewModel.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
 
             return this.View(viewModel);
         }

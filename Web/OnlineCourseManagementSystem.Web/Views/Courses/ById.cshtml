@@ -135,9 +135,12 @@
                                                                 <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z" />
                                                             </svg>
                                                             Video - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
-                                                            <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
-                                                                <input type="submit" class="btn btn-danger" value="Delete" />
-                                                            </form>
+                                                            @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                                            {
+                                                                <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
+                                                                    <input type="submit" class="btn btn-danger" value="Delete" />
+                                                                </form>
+                                                            }
                                                         </div>
                                                     </a>
                                                 }
@@ -151,9 +154,12 @@
                                                                 <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
                                                             </svg>
                                                             Presentation - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
-                                                            <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
-                                                                <input type="submit" class="btn btn-danger" value="Delete" />
-                                                            </form>
+                                                            @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                                            {
+                                                                <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
+                                                                    <input type="submit" class="btn btn-danger" value="Delete" />
+                                                                </form>
+                                                            }
                                                         </div>
                                                     </a>
                                                 }
@@ -167,9 +173,12 @@
                                                                 <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
                                                             </svg>
                                                             Document - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)
-                                                            <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
-                                                                <input type="submit" class="btn btn-danger" value="Delete" />
-                                                            </form>
+                                                            @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                                            {
+                                                                <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
+                                                                    <input type="submit" class="btn btn-danger" value="Delete" />
+                                                                </form>
+                                                            }
                                                         </div>
                                                     </a>
                                                 }

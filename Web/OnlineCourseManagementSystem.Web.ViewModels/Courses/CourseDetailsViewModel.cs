@@ -7,6 +7,7 @@ using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
 using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
 using OnlineCourseManagementSystem.Web.ViewModels.Skills;
 using OnlineCourseManagementSystem.Web.ViewModels.Tags;
+using OnlineCourseManagementSystem.Web.ViewModels.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,5 +55,8 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 
         [IgnoreMap]
         public IEnumerable<AllRecommendedCoursesByIdViewModel> RecommendedCourses { get; set; }
+
+        [IgnoreMap]
+        public CurrentUserViewModel CurrentUser { get; set; }
     }
 }
