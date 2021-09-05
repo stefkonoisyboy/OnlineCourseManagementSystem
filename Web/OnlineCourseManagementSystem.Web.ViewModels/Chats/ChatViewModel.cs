@@ -38,8 +38,5 @@
                 .ForMember(x => x.IconUrl, y => y.MapFrom(cu => cu.Chat.IconRemoteUrl))
                 .ForMember(x => x.CreatorId, y => y.MapFrom(cu => cu.Chat.CreatorId));
         }
-
-
-        
     }
 }

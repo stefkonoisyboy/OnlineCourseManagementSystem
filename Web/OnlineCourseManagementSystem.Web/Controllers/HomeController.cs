@@ -1,8 +1,12 @@
 ﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -11,6 +15,7 @@
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels;
     using OnlineCourseManagementSystem.Web.ViewModels.Assignments;
+    using OnlineCourseManagementSystem.Web.ViewModels.ContactMessages;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Home;
     using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
@@ -23,6 +28,7 @@
         private readonly ICoursesService coursesService;
         private readonly IReviewsService reviewsService;
         private readonly IUsersService usersService;
+        private readonly IContactMessagesService contactMessagesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public HomeController(
@@ -31,6 +37,7 @@
             ICoursesService coursesService,
             IReviewsService reviewsService,
             IUsersService usersService,
+            IContactMessagesService contactMessagesService,
             UserManager<ApplicationUser> userManager)
         {
             this.assignmentsService = assignmentsService;
@@ -38,6 +45,7 @@
             this.coursesService = coursesService;
             this.reviewsService = reviewsService;
             this.usersService = usersService;
+            this.contactMessagesService = contactMessagesService;
             this.userManager = userManager;
         }
 
@@ -72,6 +80,31 @@
         }
 
         public IActionResult Privacy()
+        {
+            return this.View();
+        }
+
+        public IActionResult Contact()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Contact(CreateContactMessageInputModel inputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(inputModel);
+            }
+
+            await this.contactMessagesService.CreateAsync(inputModel);
+            this.TempData["Success-ContactMessage-Create"] = "Successfully created contact message!";
+
+            return this.View();
+        }
+
+        public IActionResult About()
         {
             return this.View();
         }

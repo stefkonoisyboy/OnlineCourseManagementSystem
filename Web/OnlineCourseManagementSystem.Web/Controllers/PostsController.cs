@@ -60,7 +60,7 @@
             return this.RedirectToAction("All", "Posts");
         }
 
-        public IActionResult All(int id, string search, int courseId)
+        public IActionResult All(string search, int courseId, int id = 1)
         {
             id = Math.Max(1, id);
             var skip = (id - 1) * this.itemsPerPage;

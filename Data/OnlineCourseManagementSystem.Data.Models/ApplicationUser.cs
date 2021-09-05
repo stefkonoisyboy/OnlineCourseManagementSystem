@@ -37,6 +37,7 @@ namespace OnlineCourseManagementSystem.Data.Models
             this.Reviews = new HashSet<Review>();
             this.CoursesCreated = new HashSet<Course>();
             this.Lectures = new HashSet<Lecture>();
+            this.ContactMessages = new HashSet<ContactMessage>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -136,5 +137,7 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<Course> CoursesCreated { get; set; }
 
         public virtual ICollection<Lecture> Lectures { get; set; }
+
+        public virtual ICollection<ContactMessage> ContactMessages { get; set; }
     }
 }

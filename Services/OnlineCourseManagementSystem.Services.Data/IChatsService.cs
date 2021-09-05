@@ -43,5 +43,7 @@
         IEnumerable<T> GetAllPinnedBy<T>(string userId);
 
         T GetByCurrentUser<T>(string userId, int chatId);
+
+        string GetIconUrl(string userId, int chatId);
     }
 }

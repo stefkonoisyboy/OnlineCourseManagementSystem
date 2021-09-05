@@ -1,0 +1,111 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.ContactMessages
+@model CreateContactMessageInputModel
+
+@{
+    this.ViewData["Title"] = "Contact";
+}
+
+<style>
+    body {
+        background-image: url("https://qazaqadebieti.kz/wp-content/uploads/2015/05/photodune-6745579-modern-creative-man-relaxing-on-workspace-m.jpg");
+    }
+
+    .form-control-material {
+        border: none;
+        background-color: transparent;
+        border-bottom: 3px solid gray;
+        padding: 16px 0 0;
+        height: 48px;
+    }
+
+    label {
+        color: black;
+        font-size: 13px;
+    }
+</style>
+
+@if (this.TempData.ContainsKey("Success-ContactMessage-Create"))
+{
+   <div class="alert alert-success alert-dismissible">
+         <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+         @this.TempData["Success-ContactMessage-Create"]
+    </div>
+ }
+
+<div class="d-flex justify-content-start text-white align-items-center p-4 flex-fill" style="background:#64b5f6;">
+    <div class="d-flex ml-4 align-items-sm-center">
+        <svg style="background:#2196f3" xmlns="http://www.w3.org/2000/svg" height="50" width="50" class="p-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+        <div class="ml-3">
+            <h1>Contact us</h1>
+            <h6>Feel free to send us a message anytime</h6>
+        </div>
+    </div>
+</div>
+<div class="d-flex">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2985.0958510581445!2d24.732798115391855!3d41.567170079248015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ac50b70837ad1b%3A0xfa4b120e2379fb88!2z0J_QnNCTICLQktCw0YHQuNC7INCb0LXQstGB0LrQuCIg0LPRgC4g0KHQvNC-0LvRj9C9!5e0!3m2!1sbg!2sbg!4v1630416696412!5m2!1sbg!2sbg" style="border:0;" class="flex-fill" height="400" allowfullscreen="" loading="lazy"></iframe>
+</div>
+
+<div class="d-flex justify-content-center my-3">
+    <div class="card p-2 w-50 h-25">
+        <div class="card-header">
+            <h5>Send a message</h5>
+        </div>
+        <form asp-controller="Home" asp-action="Contact" method="post">
+            <div class="card-body d-flex">
+                <div class="mr-5">
+                    <div class="form-group">
+                        <label for="fname" asp-for="@this.Model.FirstName">First name:</label>
+                        <input id="fname" asp-for="@this.Model.FirstName" class="form-control form-control-material" type="text" placeholder="First name" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="@this.Model.FirstName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname" asp-for="@this.Model.LastName">Last name:</label>
+                        <input id="lname" asp-for="@this.Model.LastName" class="form-control form-control-material" type="text" placeholder="Last name" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="@this.Model.LastName"></span>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label for="phone" asp-for="@this.Model.Phone">Phone:</label>
+                        <input id="phone" asp-for="@this.Model.Phone" class="form-control form-control-material" type="tel" placeholder="Phone" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="@this.Model.Phone"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="umessage" asp-for="@this.Model.Content">Your message:</label>
+                        <textarea id="umessage" asp-for="@this.Model.Content" class="form-control form-control-material" placeholder="Your message"></textarea>
+                        <span class="text-danger" asp-validation-for="@this.Model.Content"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-info">SEND MESSAGE</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    //$(".form-control").click(function () {
+    //    var selectedId = $(this).attr("id");
+    //    $(selectedId).toggleClass("select");
+    //})
+
+
+
+    //window.onclick = function (event) {
+    //    if (!(event.target.matches("input") || event.target.matches("textarea"))) {
+    //        var lines = document.getElementsByTagName("hr");
+    //        for (var i = 0; i < lines.length; i++) {
+    //            var line = lines[i];
+    //            if (line.classList.contains("select")) {
+    //                line.classList.remove("select");
+    //            }
+    //        }
+    //    }
+    //}
+
+</script>

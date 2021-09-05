@@ -56,10 +56,10 @@
                                     <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">About</a>
+                                    <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="About">About</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Contact</a>
+                                    <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Contact">Contact</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
@@ -114,54 +114,95 @@
                                     <a class="nav-link active" aria-current="page" asp-controller="Chats" asp-action="IndexChats">Messages</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" asp-controller="Posts" asp-action="All" asp-route-id="1">Forum</a>
+                                    <a class="nav-link active" aria-current="page" asp-controller="Posts" asp-action="All">Forum</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Profile</a>
-                                </li>
+                                @if (this.User.Identity.IsAuthenticated)
+                                {
+                                    <li class="nav-item dropdown d-flex">
+                                        @{
+                                            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                                        }
+
+                                        @if (string.IsNullOrEmpty(user.ProfileImageUrl))
+                                        {
+                                            <span class="rounded-circle d-flex justify-content-center align-items-center bg-secondary" style="width:50px; height:50px">
+                                                <span class="text-white bold">@(user.FirstName.Substring(0,1).ToUpper()+user.LastName.Substring(0,1).ToUpper())</span>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                <img class="rounded-circle" width="50" height="50" src="@user.ProfileImageUrl" alt="User ProfileImage" />
+                                            </span>
+                                        }
+                                        <a class="nav-link active dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Profile
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                                            <li>
+                                                <a class="dropdown-item" aria-current="page" href="#">Your profile</a>
+                                            </li>
+                                            <li class="dropdown-divider"></li>
+                                            <li class="dropdown-item d-flex">
+                                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
+                                                    <button type="submit" class="nav-link btn border-0 bg-transparent flex-fill" style="color:black;">Logout</button>
+                                                </form>
+                                            </li>
+                                            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                            {
+                                                <li>
+                                                    <hr class="dropdown-divider" />
+                                                </li>
+                                                <li>
+                                                    <a class="nav-link active" asp-controller="ContactMessages" asp-action="All">Contact Messages</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!--Do not touch!-->
                 @*@if (this.User.Identity.IsAuthenticated)
-                {
-                    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-                    string fullName = this.usersService.GetFullNameById(user.Id);
-                    string profileImageUrl = this.usersService.GetProfileImageUrlById(user.Id);
+                    {
+                        ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                        string fullName = this.usersService.GetFullNameById(user.Id);
+                        string profileImageUrl = this.usersService.GetProfileImageUrlById(user.Id);
 
-                    <div class="col-md-2">
-                        <ul style="margin-top: 20px;" class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link active dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    @if (profileImageUrl == null)
-                                    {
-                                        <img src="https://tse1.mm.bing.net/th?id=OIP.Lq4lOlvWKjVrJMnQXo1aXwHaHa&pid=Api&P=0&w=300&h=300" height="30" width="30" alt="default-profile-image" />
-                                    }
-                                    else
-                                    {
-                                        <img src="@profileImageUrl" height="30" width="30" alt="profile-image" />
-                                    }
-                                    @(fullName)
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                                    @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
-                                    {
-                                        <li><a class="dropdown-item" asp-controller="Exams" asp-action="AllByUser">My Exams</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-controller="Exams" asp-action="MyResults">My Results</a></li>
-                                    }
+                        <div class="col-md-2">
+                            <ul style="margin-top: 20px;" class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @if (profileImageUrl == null)
+                                        {
+                                            <img src="https://tse1.mm.bing.net/th?id=OIP.Lq4lOlvWKjVrJMnQXo1aXwHaHa&pid=Api&P=0&w=300&h=300" height="30" width="30" alt="default-profile-image" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@profileImageUrl" height="30" width="30" alt="profile-image" />
+                                        }
+                                        @(fullName)
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                                        @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="AllByUser">My Exams</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="MyResults">My Results</a></li>
+                                        }
 
-                                    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-                                    {
-                                        <li><a class="dropdown-item" asp-controller="Exams" asp-action="All">All Exams</a></li>
-                                    }
-                                </ul>
-                            </li>
-                        </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
-                }*@
+                                        @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="All">All Exams</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                            <partial name="_LoginPartial" />
+                        </div>
+                    }*@
             </div>
         </nav>
 
@@ -254,6 +295,50 @@
             </nav>*@
     </header>
 
+    @if ((string)this.ViewData["Title"] == "Messages")
+    {
+        ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+        <div class="d-flex justify-content-center align-items-center text-white p-3" style="background:#42a5f5;">
+            
+            <div class="ml-5 d-flex flex-grow-1">
+                @if (string.IsNullOrEmpty(user.ProfileImageUrl))
+                {
+                    <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:100px; height:100px;">
+                        <h3 class="text-center">@(user.FirstName.Substring(0,1)+user.LastName.Substring(0,1)) </h3>
+                    </div>
+                }
+                else
+                {
+                    <img class="rounded-circle" src="@user.ProfileImageUrl" width="100" height="100" alt="Profile Image" />
+                }
+                <div class="ml-2">
+                    <h3>@user.FirstName @user.LastName</h3>
+                    <a href="#" class="text-decoration-underline">View public profile</a>
+                </div>
+            </div>
+            <div class="mr-5 p-1 rounded" style="background:#2196f3; font-size: 12px;">
+                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <span>Admin</span>
+                }
+
+                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                {
+                    <span>Lecturer</span>
+                }
+
+                @if (this.User.IsInRole(GlobalConstants.ParentRoleName))
+                {
+                    <span>Parent</span>
+                }
+
+                @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                {
+                    <span>Student</span>
+                }
+            </div>
+        </div>
+    }
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
@@ -261,11 +346,82 @@
         </main>
     </div>
 
-    @*<footer class="border-top footer text-muted" style="position:relative">
-            <div class="container">
-                &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer bg-dark border-top text-muted" style="position:relative">
+        <div class="container">
+            <div class="row">
+                <div class=" col-sm-6 col-md-3 mt-3">
+                    <h5 style="color:#536161;">Corporate</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a asp-controller="Home" asp-action="About">About</a>
+                        </li>
+                        <li>
+                            <a href="#">Certificates</a>
+                        </li>
+                        <li>
+                            <a href="#">Lecturers</a>
+                        </li>
+                        <li>
+                            <a href="#">Partners</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Home" asp-action="Contact">Contact us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-3 mt-3">
+                    <h5 style="color:#536161;">Explore</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#">Courses</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Posts" asp-action="All">Forum</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                        </li>
+                        @if (!this.User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a href="#">Register</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="#">Profile</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-6 mt-3">
+                    <h5 style="color:#536161;">Newsletter</h5>
+                    <div class="d-flex">
+                        <input type="email" class="form-control flex-grow-1" style="border-radius:3px 0 0 3px; " name="name" placeholder="Enter your email" />
+                        <button class="btn btn-secondary" style="border-radius: 0 3px 3px 0;">SUBSCRIBE</button>
+                    </div>
+                    <p class="mt-5">
+                        <a href="https://www.facebook.com/" class="mr-3">
+                            <i class="fa fa-facebook px-2 rounded-circle btn-link"></i>
+                        </a>
+                        <a href="https://www.instagram.com/" class="mr-3">
+                            <i class="fa fa-instagram btn-link"></i>
+                        </a>
+                        <a href="https://twitter.com/" class="mr-3">
+                            <i class="fa fa-twitter btn-link"></i>
+                        </a>
+                        <a href="https://github.com/">
+                            <i class="fa fa-github rounded-circle btn-link"></i>
+                        </a>
+                    </p>
+                </div>
             </div>
-        </footer>*@
+        </div>
+    </footer>
 
     @await this.RenderSectionAsync("Scripts", required: false)
     <script>
@@ -318,21 +474,6 @@
             }
         }
     </script>
-    @*<script type="text/javascript">
-            let liketbtn = document.querySelector('#likebtn');
-            let dislikebtn = document.querySelector('#dislikebtn');
-
-            let input1 = document.querySelector('#input1');
-            let input2 = document.querySelector("#input2");
-
-            liketbtn.addEventListener('click', () => {
-                input1.value = parseInt(input1.value) + 1;
-            })
-
-            dislikebtn.addEventListener('click', () => {
-                input2.value = parseInt(input2.value) + 1;
-            })
-        </script>*@
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </body>
 </html>

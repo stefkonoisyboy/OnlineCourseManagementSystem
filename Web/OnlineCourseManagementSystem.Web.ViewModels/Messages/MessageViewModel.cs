@@ -16,6 +16,8 @@
 
         public string CreatorName { get; set; }
 
+        public string CreatorProfileImageUrl { get; set; }
+
         public string CreatorId { get; set; }
 
         public bool IsModified { get; set; }
@@ -26,7 +28,8 @@
         {
             configuration.CreateMap<Message, MessageViewModel>()
                 .ForMember(x => x.CreatorName, y => y.MapFrom(m => $"{m.Creator.FirstName} {m.Creator.LastName}"))
-                .ForMember(x => x.IsModified, y => y.MapFrom(m => m.ModifiedOn != null));
+                .ForMember(x => x.IsModified, y => y.MapFrom(m => m.ModifiedOn != null))
+                .ForMember(x => x.CreatorProfileImageUrl, y => y.MapFrom(m => m.Creator.ProfileImageUrl));
         }
     }
 }

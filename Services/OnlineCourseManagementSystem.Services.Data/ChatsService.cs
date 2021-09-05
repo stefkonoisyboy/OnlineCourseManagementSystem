@@ -32,6 +32,11 @@
 
         public async Task CreateAsync(CreateChatInputModel inputModel)
         {
+            if (!inputModel.FriendsToAdd.Any())
+            {
+                return;
+            }
+
             List<string> addedUsersId = inputModel.FriendsToAdd.ToList();
             addedUsersId.Add(inputModel.CreatorId);
             this.CheckExistingChat(inputModel.CreatorId, addedUsersId.AsEnumerable());
@@ -300,6 +305,11 @@
 
         public async Task AddUsersToChat(AddUsersToChatInputModel inputModel)
         {
+            if (!inputModel.UsersId.Any())
+            {
+                return;
+            }
+
             Chat chat = this.chatRepository
                 .All()
                 .FirstOrDefault(c => c.Id == inputModel.ChatId);
@@ -366,6 +376,17 @@
                 .Where(cu => cu.UserId == userId && cu.ChatId == chatId)
                 .To<T>()
                 .FirstOrDefault();
+        }
+
+        public string GetIconUrl(string userId, int chatId)
+        {
+            string iconUrl = this.chatUserRepository
+                .All()
+                .Where(c => c.ChatId == chatId && c.UserId != userId && c.Chat.ChatType != ChatType.GroupChat)
+                .Select(c => c.User.ProfileImageUrl)
+                .FirstOrDefault();
+
+            return iconUrl;
         }
     }
 }

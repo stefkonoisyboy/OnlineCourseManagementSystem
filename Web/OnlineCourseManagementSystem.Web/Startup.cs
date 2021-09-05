@@ -108,6 +108,7 @@
             services.AddTransient<IAnswersService, AnswersService>();
             services.AddTransient<ISkillsService, SkillsService>();
             services.AddTransient<IReviewsService, ReviewsService>();
+            services.AddTransient<IContactMessagesService, ContactMessagesService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }
