@@ -2,36 +2,36 @@
 @inject IJSRuntime JS
 <style>
     .chat-item {
-        display: flex;
-        flex-direction: column;
-        padding: 0.45rem;
-        opacity: 0.45;
-        width: 50%;
-        font-size: 13px;
-        margin: 2px 0 2px 0;
-        justify-content: start;
-        align-items: start;
+        width: 300px;
+        height: 50px;
+        border-bottom: 1px solid gray;
+        font-weight: bold;
     }
 
         .chat-item:hover {
-            opacity: 1;
-            background: #3e4148;
-            cursor: pointer;
-            border-radius: 4px;
+            cursor:pointer;
         }
 
-    .chat-item-selected {
-        opacity: 1;
-        background: #3e4148;
-        cursor: pointer;
-        border-radius: 4px;
-    }
+   .chat-item-selected{
+       color:white;
+       background:#42a5f5;
+   }
 
     .chat-name {
+        font-weight:bold;
         white-space: nowrap;
         width: 100px;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size:10px;
+    }
+
+    .last-message{
+        font-weight:bold;
+        white-space:nowrap;
+        width:100px;
+        overflow:hidden;
+        text-overflow:ellipsis;
     }
 </style>
 
@@ -44,56 +44,40 @@
     selected = "chat-item-selected";
 }
 
-<div class="chat-item @selected" oncontextmenu="return false;">
-    <div class="row">
-        <div class="col-md-3">
-            @if (string.IsNullOrEmpty(Chat.IconUrl))
-            {
-                @if (Chat.IsGroupChat)
-                {
-                    <svg style="background: #891aea;" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-people-fill mx-1 rounded-circle" viewBox="0 0 16 16">
+<div class="d-flex align-items-center chat-item @selected py-2 my-1 mx-1">
+    @if (string.IsNullOrEmpty(this.Chat.IconUrl))
+    {
+        if (this.Chat.IsGroupChat)
+        {
+            <div class="bg-secondary" style="width:50px; height:50px;">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                         <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
                         <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
                         <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
                     </svg>
-                }
-                else
-                {
-                    <svg style="background-color:darkorange" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle mx-1 rounded-circle" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                    </svg>
-                }
-            }
-            else
-            {
-                <img src="@Chat.IconUrl"class="mx-1 rounded-circle" height="50" width="50" />
-            }
-        </div>
-        <div class="col-md-6">
-            <div class="d-flex flex-column mx-1">
-                @if (Chat.IsGroupChat)
-                {
-                    <div class="chat-name">
-                        @Chat.Name
-                    </div>
-                }
-                else
-                {
-                    <div class="chat-name">
-                        @Chat.Name
-                    </div>
-                }
-                <div>
-                    @Chat.UsersPerChatCount users
-                </div>
+                </span>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="dropbtn" @onclick="() => this.ChatSettingsDropdownToggle(Chat.ChatId)" @onclick:stopPropagation></div>
-        </div>
+        }
+        else
+        {
+            <div class="bg-secondary d-flex justify-content-center align-items-center" style="width:50px;height:50px;">
+                <span>
+                    @this.Chat.Name.Substring(0, 1)
+                </span>
+            </div>
+        }
+    }
+    else
+    {
+        <img src="@this.Chat.IconUrl" alt="Chat Icon" width="50" height="50" />
+    }
+    <div class="ml-2 d-flex" style="font-size:10px;">
+        <h6 class="flex-grow-1 chat-name">@this.Chat.Name</h6>
+        <div class="dropbtn ml-5" @onclick="() => this.ChatSettingsDropdownToggle(Chat.ChatId)" @onclick:stopPropagation></div>
     </div>
 </div>
+
 @code {
     [Parameter]
     public ChatViewModel Chat { get; set; }
@@ -108,6 +92,8 @@
     {
         string dropDown = $"myDropDown{chatId}";
         await this.JS.InvokeVoidAsync("showDropdown", dropDown);
-
     }
+
+    [Parameter]
+    public string LastMessage { get; set; }
 }

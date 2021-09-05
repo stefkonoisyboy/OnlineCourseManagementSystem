@@ -5,6 +5,7 @@
 @{
     ApplicationUser user = await this.userManager.GetUserAsync(this.User);
     string userFullName = $"{user.FirstName} {user.LastName}";
+    this.ViewData["Title"] = "Messages";
 }
 
 
@@ -19,8 +20,6 @@
 </body>
 
 <script>
-const { timers } = require("jquery");
-
     function showDropdown(myDropDown) {
         try {
             document.getElementById(myDropDown).classList.toggle("show");
