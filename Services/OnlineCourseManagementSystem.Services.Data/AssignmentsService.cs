@@ -277,5 +277,14 @@
                 .To<T>()
                 .FirstOrDefault();
         }
+
+        public IEnumerable<T> GetAllByAdmin<T>()
+        {
+            return this.assignmentRepository
+                .All()
+                .OrderByDescending(c => c.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
     }
 }

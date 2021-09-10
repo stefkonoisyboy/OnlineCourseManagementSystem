@@ -229,6 +229,15 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllByAdmin<T>()
+        {
+            return this.coursesRepository
+                .All()
+                .OrderByDescending(c => c.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
         public IEnumerable<T> GetAllByCreatorId<T>(int id, string creatorId, int itemsPerPage = 6)
         {
             return this.coursesRepository

@@ -44,5 +44,7 @@
         T GetCheckedBy<T>(int assignmentId, string userId);
 
         IEnumerable<T> GetAllCheckedUserAssignments<T>(int assignmentId);
+
+        IEnumerable<T> GetAllByAdmin<T>();
     }
 }

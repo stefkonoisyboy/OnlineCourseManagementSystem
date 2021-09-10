@@ -62,5 +62,7 @@
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
 
         IEnumerable<SelectListItem> GetAllAsSelectListItemsByCreatorId(string creatorId);
+
+        IEnumerable<T> GetAllByAdmin<T>();
     }
 }

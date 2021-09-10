@@ -14,6 +14,8 @@
 
         public string Phone { get; set; }
 
+        public string Content { get; set; }
+
         public bool IsSeen { get; set; }
 
         public string SeenByUserFullName { get; set; }

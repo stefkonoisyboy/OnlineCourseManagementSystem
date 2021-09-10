@@ -31,19 +31,20 @@
                     <div class="col-md-8">
                     </div>
                     <div class="col-md-4">
-                        <div style="background:#4f4c4c">
+                        <div class="m-1">
+                            <form asp-controller="Events" asp-action="Disapprove" asp-route-id="@eventCreated.Id" method="post">
+                                <button class="btn-danger form-control">
+                                    Disapprove
+                                </button>
+                            </form>
+                        </div>
+                        <div class="m-1">
                             <form asp-controller="Events" asp-action="Approve" asp-route-id="@eventCreated.Id" method="post">
                                 <button class="btn-success form-control">
                                     Approve
                                 </button>
                             </form>
-                            <form asp-controller="Events" asp-action="Disapprove" asp-route-id="@eventCreated.Id" method="post">
-                                <button class="btn-danger form-control">
-                                    DisApprove
-                                </button>
-                            </form>
                         </div>
-
                     </div>
                 </div>
             }

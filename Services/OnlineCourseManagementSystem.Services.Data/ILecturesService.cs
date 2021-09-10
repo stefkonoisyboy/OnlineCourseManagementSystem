@@ -38,5 +38,7 @@
         IEnumerable<T> GetAllVideosById<T>(int lectureId);
 
         IEnumerable<T> GetAllInInterval<T>(DateTime startDate, DateTime endDate);
+
+        IEnumerable<T> GetAllByAdmin<T>();
     }
 }

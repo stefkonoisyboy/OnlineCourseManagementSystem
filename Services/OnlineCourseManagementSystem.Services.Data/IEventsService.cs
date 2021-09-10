@@ -24,5 +24,7 @@
         IEnumerable<T> GetAllComing<T>();
 
         IEnumerable<T> GetAllFinished<T>();
+
+        IEnumerable<T> GetAllByAdmin<T>();
     }
 }

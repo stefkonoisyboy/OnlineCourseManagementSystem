@@ -16,7 +16,7 @@
     {
         private readonly IDeletableEntityRepository<Event> eventsRepository;
         private readonly CloudinaryService cloudinaryService;
-        private const string FILES_FOLDER = "events";
+        private const string FILESFOLDER = "events";
 
         public EventsService(IDeletableEntityRepository<Event> eventRepository, Cloudinary cloudinaryUtility)
         {
@@ -40,7 +40,7 @@
             {
                 string extension = System.IO.Path.GetExtension(file.FileName);
                 string fileName = $"Events_{Guid.NewGuid()}" + extension;
-                string remoteUrl = await this.cloudinaryService.UploadFile(file, fileName, extension, FILES_FOLDER);
+                string remoteUrl = await this.cloudinaryService.UploadFile(file, fileName, extension, FILESFOLDER);
 
                 File uploadFile = new File
                 {
@@ -119,6 +119,15 @@
             return this.eventsRepository
                 .All()
                 .OrderByDescending(e => e.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByAdmin<T>()
+        {
+            return this.eventsRepository
+                .All()
+                .OrderByDescending(c => c.CreatedOn)
                 .To<T>()
                 .ToList();
         }
