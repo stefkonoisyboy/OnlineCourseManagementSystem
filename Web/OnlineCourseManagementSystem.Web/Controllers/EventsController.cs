@@ -63,6 +63,7 @@
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             AllEventsCreatedViewModel viewModel = new AllEventsCreatedViewModel();
+
             if (user.LecturerId == null)
             {
                 viewModel.Events = this.eventsService.GetAll<EventViewModel>();

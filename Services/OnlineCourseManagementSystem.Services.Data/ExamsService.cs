@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
@@ -61,6 +62,15 @@
             return this.examsRepository
                 .All()
                 .OrderByDescending(e => e.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByAdmin<T>()
+        {
+            return this.examsRepository
+                .All()
+                .OrderByDescending(c => c.CreatedOn)
                 .To<T>()
                 .ToList();
         }

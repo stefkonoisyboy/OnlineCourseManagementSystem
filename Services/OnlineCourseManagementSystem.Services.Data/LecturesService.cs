@@ -197,6 +197,15 @@
                 .FirstOrDefault();
         }
 
+        public IEnumerable<T> GetAllByAdmin<T>()
+        {
+            return this.lecturesRepository
+                .All()
+                .OrderByDescending(l => l.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
         public async Task UpdateModifiedOnById(int id)
         {
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == id);
@@ -257,5 +266,7 @@
 
             return result?.SecureUrl.AbsoluteUri;
         }
+
+        
     }
 }

@@ -13,5 +13,7 @@
         string GetFullNameById(string id);
 
         string GetProfileImageUrlById(string id);
+
+        //T GetCourseCreatorById<T>(int courseId);
     }
 }

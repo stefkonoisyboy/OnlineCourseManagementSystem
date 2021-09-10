@@ -12,10 +12,14 @@
     public class UsersService : IUsersService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
+        private readonly IDeletableEntityRepository<Course> courseRepository;
 
-        public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository)
+        public UsersService(
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            IDeletableEntityRepository<Course> courseRepository)
         {
             this.usersRepository = usersRepository;
+            this.courseRepository = courseRepository;
         }
 
         public IEnumerable<T> GetAll<T>()
@@ -37,6 +41,12 @@
                 .FirstOrDefault();
         }
 
+        //public T GetCourseCreatorById<T>(int courseId)
+        //{
+        //    var creator = this.courseRepository.All().FirstOrDefault(c => c.Id == courseId).Creator;
+        //    return this.
+        //}
+
         public string GetFullNameById(string id)
         {
             return this.usersRepository
@@ -55,5 +65,6 @@
                .FirstOrDefault(u => u.Id == id)
                .ProfileImageUrl;
         }
+
     }
 }

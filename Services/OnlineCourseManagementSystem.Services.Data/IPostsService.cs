@@ -28,5 +28,7 @@
         Task Dislike(int postId, string userId);
 
         int GetCoutOfAllPosts();
+
+        IEnumerable<T> GetAllByAdmin<T>();
     }
 }

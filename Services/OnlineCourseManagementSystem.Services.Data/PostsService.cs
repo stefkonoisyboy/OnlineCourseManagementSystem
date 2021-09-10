@@ -177,5 +177,14 @@
 
             await this.postRepository.SaveChangesAsync();
         }
+
+        public IEnumerable<T> GetAllByAdmin<T>()
+        {
+            return this.postRepository
+                .All()
+                .OrderByDescending(p => p.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
     }
 }

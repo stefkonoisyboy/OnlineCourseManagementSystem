@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using OnlineCourseManagementSystem.Web.ViewModels.Exams;
 
@@ -44,5 +45,7 @@
         IEnumerable<T> GetAllByUserId<T>(string userId);
 
         IEnumerable<T> GetAllByCurrentUserId<T>(string userId);
+
+        IEnumerable<T> GetAllByAdmin<T>();
     }
 }
