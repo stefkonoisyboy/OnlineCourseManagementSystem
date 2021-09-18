@@ -12,22 +12,20 @@
     </div>
 }
 
-<h1 class="text-center myHeading" >Assignment</h1>
+<h1 class="text-center" >Assignment</h1>
 <div class="mark-user-assignment">
     <div class="file-display-container" id="displayed-file">
         No file choosen
     </div>
     <div class="sidebar-assignemt-info">
-        <div style="margin-left: 15px; ">
-            <div style="display:grid; grid-row-gap: 40px; grid-template-columns: auto auto auto;">
-                <div>
+        <div class="m-2">
+            <div class="d-flex">
+                <div class="flex-grow-1">
                     User: @this.Model.Username
                 </div>
-                <div>
-                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#MarkUser" style="background:linear-gradient(to top,#36126E, #17B5B5);">
-                        Mark
-                    </button>
-                </div>
+                <button type="button" class="btn bg-white" data-bs-toggle="modal" data-bs-target="#MarkUser">
+                    Mark
+                </button>
             </div>
             <div class="text-white">
                 Assignment info:
@@ -102,47 +100,65 @@
             </div>
 
         </div>
-        <div style="background: linear-gradient(to top,#36126E, #17B5B5); border-radius: 5px; margin-bottom: 10px;" data-bs-toggle="collapse" data-bs-target="#collapseResourceFiles" aria-expanded="false" aria-controls="collapseResourceFiles">
+        <div class="bg-white my-1" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseResourceFiles" aria-expanded="false" aria-controls="collapseResourceFiles">
             Resource files
         </div>
-        
-        <div class="assignment-files-container collapse" id="collapseResourceFiles">
-            @foreach (var file in this.Model.AssignmentInfo.ResourceFiles)
+
+        <div class="assignment-files-container collapse mx-1 rounded" id="collapseResourceFiles">
+            @if (this.Model.AssignmentInfo.ResourceFiles.Any())
             {
-                @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
+                @foreach (var file in this.Model.AssignmentInfo.ResourceFiles)
                 {
-                    <div class="file-container" src="@file.RemoteUrl">
-                        Resource file
-                    </div>
+                    @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
+                    {
+                        <div class="file-container" src="@file.RemoteUrl">
+                            Resource file
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
+                            Resource file
+                        </div>
+                    }
                 }
-                else
-                {
-                    <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
-                        Resource file
-                    </div>
-                }
+            }
+            else
+            {
+                <div class="default-open-view mt-5" id="default">
+                    No files.
+                </div>
             }
         </div>
 
-        <div style="background: linear-gradient(to top, #36126E, #17B5B5); border-radius: 5px; margin-bottom: 10px;" data-bs-toggle="collapse" data-bs-target="#collapseWorkFiles" aria-expanded="false" aria-controls="collapseWorkFiles">
+        <div class="bg-white my-1" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseWorkFiles" aria-expanded="false" aria-controls="collapseWorkFiles">
             Work files
         </div>
 
-        <div class="assignment-files-container collapse" id="collapseWorkFiles">
-            @foreach (var file in this.Model.AssignmentInfo.WorkFiles)
+        <div class="assignment-files-container collapse mx-1 rounded" id="collapseWorkFiles">
+            @if (this.Model.AssignmentInfo.WorkFiles.Any())
             {
-                @if (file.RemoteUrl.EndsWith(".jpg") || file.RemoteUrl.EndsWith(".png"))
+                @foreach (var file in this.Model.AssignmentInfo.WorkFiles)
                 {
-                    <div class="file-container" src="@file.RemoteUrl">
-                        Work File
-                    </div>
+                    @if (file.RemoteUrl.EndsWith(".jpg") || file.RemoteUrl.EndsWith(".png"))
+                    {
+                        <div class="file-container" src="@file.RemoteUrl">
+                            Work File
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
+                            Work File
+                        </div>
+                    }
                 }
-                else
-                {
-                    <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
-                        Work File
-                    </div>
-                }
+            }
+            else
+            {
+                <div class="default-open-view mt-5" id="default">
+                    No files.
+                </div>
             }
         </div>
     </div>

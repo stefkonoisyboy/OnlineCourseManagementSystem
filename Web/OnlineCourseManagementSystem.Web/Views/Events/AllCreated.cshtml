@@ -25,7 +25,7 @@
     {
         <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
 
-            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            @*@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 <div class="row">
                     <div class="col-md-8">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-            }
+            }*@
             <div>
                 <h3>
                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">

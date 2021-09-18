@@ -11,15 +11,19 @@
     {
         Task CreateAsync(CreateEventInputModel inputModel);
 
+        Task DeleteAsync(int eventId);
+
+        Task UpdateAsync(EditEventInputModel inputModel);
+
         IEnumerable<T> GetAllCreatedByUserId<T>(string userId);
 
         IEnumerable<T> GetAll<T>();
 
         T GetById<T>(int eventId);
 
-        Task Approve(int eventId);
+        Task ApproveAsync(int eventId);
 
-        Task Disapprove(int eventId);
+        Task DisapproveAsync(int eventId);
 
         IEnumerable<T> GetAllComing<T>();
 

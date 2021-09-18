@@ -19,6 +19,45 @@
     .row-margin-30 {
         margin-top: 3.0em;
     }
+
+    .assignment-options{
+        display:none;
+        flex-direction:row;
+        justify-content:end;
+        position:absolute;
+        left:10%;
+        bottom:100%;
+        font-size:12px;
+        z-index:20;
+        -webkit-animation: toggleUp 1s linear normal;
+        animation:toggleUp 1s ease-in normal;
+    }
+
+    .assignment-option{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        border-radius:3px 3px 0 0;
+    }
+
+    .assignment-option:hover{
+        transform:scale(1.03);
+        transition:transform 350ms;
+    }
+
+    .show{
+        display:flex;
+
+    }
+
+    @@keyframes toggleUp{
+        from{
+            opacity:0;
+        }
+        to{
+            opacity:1;
+        }
+    }
 </style>
 
 <head>
@@ -48,13 +87,24 @@
             </button>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-5">
         <div class="col-md-9">
             <div class="row">
                 @foreach (var course in this.Model.Courses)
                 {
-                    <div class="col-md-4">
-                        <div class="card bg-white shadow-lg p-3 mb-5 rounded">
+                    <div class="col-md-4 ">
+                        <div class="card bg-white shadow-lg p-3 rounded position-relative">
+                            <div class="assignment-options" id="view-@course.Id">
+                                <div class="assignment-option mx-1 p-2" style="background:#42a5f5;">
+                                    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                    {
+                                        <a class="text-white" asp-controller="Assignments" asp-action="AllCreated" asp-route-id="@course.Id">Created Assignments</a>
+                                    }
+                                </div>
+                            </div>
+                            <div class="card-header d-flex justify-content-start">
+                                <button class="btn btn-primary" id="btn-options" onclick="openOptions(@course.Id)">Options</button>
+                            </div>
                             <div class="row-margin-10">
                                 <img src="@course.FileRemoteUrl" height="100" width="100" class="card-img-top" alt="courseImage">
                                 <div class="card-body">
@@ -312,5 +362,33 @@
                 clickable: true,
             },
         });
+    </script>
+    <script type="text/javascript">
+        function openOptions(id) {
+            removeOpenedOptions();
+            var assignmentOptions = document.getElementById("view-"+id);
+            assignmentOptions.classList.toggle("show");
+        }
+        function removeOpenedOptions(id) {
+            var allAssignmentOptions = document.getElementsByClassName("assignment-options");
+            for (var i = 0; i < allAssignmentOptions.length; i++) {
+                allAssignmentOptions[i].classList.remove(["show"]);
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        window.onclick = function (event) {
+            if (!event.target.matches("#btn-options")) {
+                var allAssignmentOptions = document.getElementsByClassName("assignment-options");
+                var i;
+                for (i = 0; i < allAssignmentOptions.length; i++) {
+                    var assignmentOption = allAssignmentOptions[i];
+                    if (assignmentOption.classList.contains("show")) {
+                        assignmentOption.classList.remove("show");
+                    }
+                }
+
+            }
+        }
     </script>
 }

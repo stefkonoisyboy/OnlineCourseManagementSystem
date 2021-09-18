@@ -12,7 +12,7 @@
     {
         public string RemoteUrl { get; set; }
 
-        public int FileId { get; set; }
+        public int Id { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

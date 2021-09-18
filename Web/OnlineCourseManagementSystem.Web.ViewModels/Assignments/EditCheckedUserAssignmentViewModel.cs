@@ -13,6 +13,8 @@
     {
         public int AssignmentId { get; set; }
 
+        public int CourseId { get; set; }
+
         public EditCheckedAssignmentInputModel InputModel { get; set; }
 
         public string UserId { get; set; }
@@ -24,7 +26,8 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<UserAssignment, EditCheckedUserAssignmentViewModel>()
-                 .ForMember(x => x.Username, y => y.MapFrom(ua => $"{ua.User.FirstName} {ua.User.LastName}"));
+                 .ForMember(x => x.Username, y => y.MapFrom(ua => $"{ua.User.FirstName} {ua.User.LastName}"))
+                 .ForMember(x => x.CourseId, y => y.MapFrom(ua => ua.Assignment.CourseId));
         }
     }
 }

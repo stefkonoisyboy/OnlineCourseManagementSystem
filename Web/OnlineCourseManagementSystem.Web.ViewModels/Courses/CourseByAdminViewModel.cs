@@ -26,7 +26,7 @@
 
         public DateTime EndDate { get; set; }
 
-        public int RecomendedDuration { get; set; }
+        public int RecommendedDuration { get; set; }
 
         public SubjectViewModel Subject { get; set; }
 

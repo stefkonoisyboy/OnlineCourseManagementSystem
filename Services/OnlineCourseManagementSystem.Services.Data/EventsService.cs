@@ -14,9 +14,9 @@
 
     public class EventsService : IEventsService
     {
+        private const string FILESFOLDER = "events";
         private readonly IDeletableEntityRepository<Event> eventsRepository;
         private readonly CloudinaryService cloudinaryService;
-        private const string FILESFOLDER = "events";
 
         public EventsService(IDeletableEntityRepository<Event> eventRepository, Cloudinary cloudinaryUtility)
         {
@@ -74,7 +74,7 @@
                 .FirstOrDefault();
         }
 
-        public async Task Approve(int eventId)
+        public async Task ApproveAsync(int eventId)
         {
             Event @event = this.eventsRepository
                 .All()
@@ -85,7 +85,7 @@
             await this.eventsRepository.SaveChangesAsync();
         }
 
-        public async Task Disapprove(int eventId)
+        public async Task DisapproveAsync(int eventId)
         {
             Event @event = this.eventsRepository
                 .All()
@@ -130,6 +130,46 @@
                 .OrderByDescending(c => c.CreatedOn)
                 .To<T>()
                 .ToList();
+        }
+
+        public async Task DeleteAsync(int eventId)
+        {
+            Event @event = this.eventsRepository.All().FirstOrDefault(e => e.Id == eventId);
+
+            this.eventsRepository.Delete(@event);
+            await this.eventsRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(EditEventInputModel inputModel)
+        {
+            Event @event = this.eventsRepository.All().FirstOrDefault(e => e.Id == inputModel.Id);
+
+            @event.Theme = inputModel.Theme;
+            @event.StartDate = inputModel.StartDate;
+            @event.EndDate = inputModel.EndDate;
+            @event.Address = inputModel.Address;
+            @event.Description = inputModel.Description;
+
+            if (inputModel.FilesToAdd != null)
+            {
+                foreach (var file in inputModel.FilesToAdd)
+                {
+                    string extension = System.IO.Path.GetExtension(file.FileName);
+                    string fileName = $"Events_{Guid.NewGuid()}" + extension;
+                    string remoteUrl = await this.cloudinaryService.UploadFile(file, fileName, extension, FILESFOLDER);
+
+                    File uploadFile = new File
+                    {
+                        Extension = extension,
+                        RemoteUrl = remoteUrl,
+                    };
+
+                    @event.Files.Add(uploadFile);
+                }
+            }
+
+            this.eventsRepository.Update(@event);
+            await this.eventsRepository.SaveChangesAsync();
         }
     }
 }
