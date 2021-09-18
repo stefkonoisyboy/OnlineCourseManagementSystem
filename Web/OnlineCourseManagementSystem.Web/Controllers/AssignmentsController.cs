@@ -104,7 +104,7 @@
             AllLectureAssignmetViewModel assignmetViewModel = new AllLectureAssignmetViewModel
             {
                 CreatedAssignments = this.assignmentsService.GetAllBy<LectureAssignmentViewModel>(id),
-                CheckedAssignmets = this.assignmentsService.GetAllCheckedBy<LectureAssignmentViewModel>(id),
+                //CheckedAssignmets = this.assignmentsService.GetAllCheckedBy<LectureAssignmentViewModel>(id),
                 CourseId = id,
             };
 
@@ -117,7 +117,7 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Authorize(Roles =GlobalConstants.LecturerRoleName)]
         public async Task<IActionResult> Delete(int id)
         {
             int courseId = await this.assignmentsService.DeleteAssignment(id);
@@ -223,13 +223,13 @@
             viewModel.AssignmentInfo = this.assignmentsService.GetById<AssignmentInfoViewModel>(assignmentId, userId);
             viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(assignmentId, userId);
             viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
-
+            Console.WriteLine(viewModel.CourseId);
             return this.View(viewModel);
         }
 
         [HttpPost]
         [Authorize(Roles =GlobalConstants.LecturerRoleName)]
-        public async Task<IActionResult> EditCheckedAssignment(EditCheckedUserAssignmentViewModel viewModel, string userId)
+        public async Task<IActionResult> EditCheckedAssignment(EditCheckedUserAssignmentViewModel viewModel, string userId, int courseId)
         {
             try
             {
@@ -238,7 +238,7 @@
                 await this.assignmentsService.UpdateCheckedAsync(viewModel.InputModel);
                 this.TempData["EditedCheckedAssignment"] = "Successfully editted marked Assignment";
 
-                return this.RedirectToAction("AllCheckedUsersForAssignment", "Assignments", new { Id = viewModel.AssignmentId });
+                return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId });
             }
             catch (Exception e)
             {
@@ -252,11 +252,24 @@
             }
         }
 
-        public IActionResult AllCheckedUsersForAssignment(int id)
+        [Authorize]
+        public async Task<IActionResult> CurrentUserAllAssignmentsByCourse(int courseId)
         {
-            var userAssignments = this.assignmentsService.GetAllCheckedUserAssignments<CheckedUserAssignmentsViewModel>(id);
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllAssignmentsViewModel allAssignmentsViewModel = new AllAssignmentsViewModel
+            {
+                UnfinishedAssignments = this.assignmentsService.GetAllByCourseAndUser<AssignmentViewModel>(courseId, user.Id),
+                FinishedAssignments = this.assignmentsService.GetAllFinishedByCourseAndUser<FinishedAssignmentViewModel>(courseId, user.Id),
+            };
 
-            return this.View(userAssignments);
+            return this.View(allAssignmentsViewModel);
         }
+
+        //public IActionResult AllCheckedUsersForAssignment(int id)
+        //{
+        //    var userAssignments = this.assignmentsService.GetAllCheckedUserAssignments<CheckedUserAssignmentsViewModel>(id);
+
+        //    return this.View(userAssignments);
+        //}
     }
 }

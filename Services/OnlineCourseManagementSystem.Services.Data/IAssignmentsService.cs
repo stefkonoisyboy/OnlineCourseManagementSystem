@@ -19,6 +19,10 @@
 
         IEnumerable<T> GetAllBy<T>(int courseId);
 
+        IEnumerable<T> GetAllByCourseAndUser<T>(int courseId, string userId);
+
+        IEnumerable<T> GetAllFinishedByCourseAndUser<T>(int courseId, string userId);
+
         Task<int> DeleteAssignment(int assignmetId);
 
         IEnumerable<T> GetAllBy<T>(string userId);

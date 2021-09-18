@@ -64,7 +64,7 @@
                         else
                         {
 
-                            <div id="@file.FileId" onclick="showFile(@file.FileId)"  src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ class="p-2 my-1 d-flex align-items-center rounded-2 bg-secondary" style="cursor:pointer;">
+                            <div id="@file.FileId" onclick="showFile(@file.FileId)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ class="p-2 my-1 d-flex align-items-center rounded-2 bg-secondary" style="cursor:pointer;">
                                 <p class="flex-grow-1">Resource File</p>
                             </div>
                         }
@@ -87,7 +87,7 @@
                         @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
                         {
 
-                            <div id="@file.FileId"  onclick="showFile(@file.FileId)" src="@file.RemoteUrl" class="p-2 my-1 d-flex align-items-center bg-secondary rounded-2" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ style="cursor:pointer;">
+                            <div id="@file.FileId" onclick="showFile(@file.FileId)" src="@file.RemoteUrl" class="p-2 my-1 d-flex align-items-center bg-secondary rounded-2" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ style="cursor:pointer;">
                                 <div class="flex-grow-1">
                                     <p>Work File</p>
                                 </div>
@@ -122,7 +122,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="d-inline-block">
         @if (this.Model.TurnedOn != null)
         {
@@ -150,56 +150,58 @@
 
 <div id="myModal" class="modal" style="">
     <span class="close">&times;</span>
-    <iframe class="modal-content" id="file" frameborder='0' >
+    <iframe class="modal-content" id="file" frameborder='0'>
     </iframe>
-    <img class="modal-content"  id="img01">
+    <img class="modal-content" id="img01">
     <div id="caption"></div>
 </div>
 
 
 @*<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="height:fit-content; width:fit-content">
-        <div class="modal-content" style="height:fit-content; width:fit-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Opened File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modalBody">
+        <div class="modal-dialog" style="height:fit-content; width:fit-content">
+            <div class="modal-content" style="height:fit-content; width:fit-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Opened File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                </div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
+@section Scripts{
+    <script>
+        function showFile(fileId) {
+            var file = document.getElementById(fileId);
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var modalFile = document.getElementById("file");
 
-<script>
-    function showFile(fileId) {
-        var file = document.getElementById(fileId);
-        var modal = document.getElementById("myModal");
-        var modalImg = document.getElementById("img01");
-        var modalFile = document.getElementById("file");
+            var captionText = document.getElementById("caption");
 
-        var captionText = document.getElementById("caption");
+            modal.style.display = "block";
+            if (file.getAttribute("src").includes(".jpg") || file.getAttribute("src").includes(".png")) {
+                modalImg.src = file.getAttribute("src");
+                modalImg.style.display = "block";
+            }
+            else {
+                modalFile.src = file.getAttribute("src");
+                modalFile.style.display = "block";
+            }
 
-        modal.style.display = "block";
-        if (file.getAttribute("src").includes(".jpg") || file.getAttribute("src").includes(".png")) {
-            modalImg.src = file.getAttribute("src");
-            modalImg.style.display = "block";
+            captionText.innerHTML = file.getAttribute("alt");
+
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function () {
+                modal.style.display = "none";
+                modalImg.style.display = "none";
+                modalFile.style.display = "none";
+            }
         }
-        else {
-            modalFile.src = file.getAttribute("src");
-            modalFile.style.display = "block";
-        }
+    </script>
+}
 
-        captionText.innerHTML = file.getAttribute("alt");
-
-        var span = document.getElementsByClassName("close")[0];
-
-        span.onclick = function () {
-            modal.style.display = "none";
-            modalImg.style.display = "none";
-            modalFile.style.display = "none";
-        }
-    }
-</script>
 
 
 

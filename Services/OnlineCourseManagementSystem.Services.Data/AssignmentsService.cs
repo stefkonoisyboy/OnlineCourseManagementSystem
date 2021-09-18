@@ -86,17 +86,16 @@
         public IEnumerable<T> GetAllUsersForAssignment<T>(int assignmentId)
         {
             return this.userAssignmentRepository.All()
-                .Where(a => a.AssignmentId == assignmentId && a.IsChecked == false)
+                .Where(a => a.AssignmentId == assignmentId)
                 .To<T>()
                 .ToList();
         }
 
         public IEnumerable<T> GetAllBy<T>(int courseId)
         {
-
             return this.userAssignmentRepository
                 .All()
-                .Where(x => x.IsChecked == false && x.Assignment.CourseId == courseId)
+                .Where(x => x.Assignment.CourseId == courseId)
                 .To<T>()
                 .Distinct()
                 .ToList();
@@ -283,6 +282,25 @@
             return this.assignmentRepository
                 .All()
                 .OrderByDescending(c => c.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByCourseAndUser<T>(int courseId, string userId)
+        {
+            return this.userAssignmentRepository
+                .All()
+                .Where(ua => ua.UserId == userId && ua.Assignment.CourseId == courseId)
+                .OrderByDescending(ua => ua.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllFinishedByCourseAndUser<T>(int courseId, string userId)
+        {
+            return this.userAssignmentRepository
+                .All()
+                .Where(ua => ua.UserId == userId && ua.Assignment.CourseId == courseId && ua.IsChecked && ua.TurnedOn != null)
                 .To<T>()
                 .ToList();
         }

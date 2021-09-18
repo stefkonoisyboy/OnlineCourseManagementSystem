@@ -1,550 +1,654 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Admins
 @model AdminItemsViewModel
-@{ 
+@{
     this.ViewData["Title"] = "Admin Actions";
 }
 
 <style>
     .item {
-        border:1px solid #707070;
+        border: 1px solid #707070;
         width: 200px;
-        height:60px;
+        height: 60px;
         background: #D5D5D5;
-        padding:0.75rem;
-        display:flex;
-        justify-content:center;
-        align-items:center;
+        padding: 0.75rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .item:hover{
-        cursor:pointer;
-    }
+        .item:hover {
+            cursor: pointer;
+        }
 
-    .item-heading{
-        font-size:18px;
+    .item-heading {
+        font-size: 18px;
     }
 
     .item-active {
         background: #42a5f5;
-        color:white;
+        color: white;
     }
 
-    .open-view{
-        display:none;
-        margin-bottom:20vh;
+    .open-view {
+        display: none;
+        margin-bottom: 20vh;
     }
 
-    .show{
-        display:block;
+    .show {
+        display: block;
     }
+
     .loader {
-  display:none;
-  border: 12px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 12px solid #3498db;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
-}
-
-    .badge-pill{
-        background-color:white;
-        padding:0 4px 0 4px;
-        width:30px;
-        color:black;
+        display: none;
+        border: 12px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 12px solid #3498db;
+        width: 60px;
+        height: 60px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
     }
 
-    .default-open-view{
-        background:#f8f9fa;
-        color:#adb5bd;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        border-radius:3px;
-        padding:5rem;
+    .badge-pill {
+        background-color: white;
+        padding: 0 4px 0 4px;
+        width: 30px;
+        color: black;
+    }
+
+    .default-open-view {
+        background: #f8f9fa;
+        color: #adb5bd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 3px;
+        padding: 5rem;
     }
 
     /* Safari */
     @@-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
 
-@@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 
     .svg-btn {
         width: 30px;
         height: 30px;
-        margin-right:5px;
-        margin-left:5px;
+        margin-right: 5px;
+        margin-left: 5px;
     }
+
         .svg-btn:hover {
             cursor: pointer;
             transform: scale(1.03);
             transition: transform 350ms ease-out;
         }
+
+    a svg {
+        color: black;
+    }
 </style>
 
-<h1 class="text-center mb-4">Admins Actions</h1>
-  <div class="row d-flex justify-content-center">
-      <div class="col-md-2 item" id="courses">
-          <div class="flex-grow-1 item-heading">
-              Courses
-          </div>
-          <div>
-              <span class="badge badge-pill">@this.Model.Courses.Count()</span>
-          </div>
-      </div>
-      <div class="col-md-2 item" id="events">
-          <div class="flex-grow-1 item-heading">
-              Events
-          </div>
-          <div>
-              <span class="badge badge-pill">@this.Model.Events.Count()</span>
-          </div>
-      </div>
-      <div class="col-md-2 item" id="posts">
-          <div class="flex-grow-1 item-heading">
-              Posts
-          </div>
-          <div>
-              <span class="badge badge-pill">@this.Model.Events.Count()</span>
-          </div>
-      </div>
-      <div class="col-md-2 item" id="lectures">
-          <div class="flex-grow-1 item-heading">
-              Lectures
-          </div>
-          <div>
-              <span class="badge badge-pill">@this.Model.Lectures.Count()</span>
-          </div>
-      </div>
-      <div class="col-md-2 item" id="exams">
-          <div class="flex-grow-1 item-heading">
-              Exams
-          </div>
-          <div>
-              <span class="badge badge-pill">@this.Model.Exams.Count()</span>
-          </div>
-      </div>
-      <div class="col-md-2 item" id="assignments">
-          <div class="flex-grow-1 item-heading">
-              Assignments
-          </div>
-          <div>
-              <span class="badge badge-pill">@this.Model.Assignments.Count()</span>
-          </div>
-      </div>
-  </div>
-  <div class="d-flex justify-content-center my-5">
-      <div class="loader" id="loader"></div>
-  </div>
-  <div class="default-open-view mt-5" id="default">
-      Nothing choosen, try selecting option.
-  </div>
-  <div class="container-open-view mt-5">
-      <div class="open-view mt-4" id="courses-view">
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <td>Name</td>
-                      <td>Creator</td>
-                      <td>Price</td>
-                      <td>StartDate</td>
-                      <td>EndDate</td>
-                      <td>Recomended Duration</td>
-                      <td>Subject</td>
-                      <td>Course level</td>
-                      <td>IsApproved</td>
-                      <td>Actions</td>
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach (var course in this.Model.Courses)
-                  {
-                      <tr>
-                          <td>@course.Name</td>
-                          <td>
-                              <a href="#">@(course.Creator.FirstName+" "+course.Creator.LastName)</a>
-                          </td>
-                          <td>
-                              @course.Price
-                          </td>
-                          <td>
-                              @course.StartDate.ToString("D")
-                          </td>
-                          <td>
-                              @course.EndDate.ToString("D")
-                          </td>
-                          <td>
-                              @course.RecomendedDuration
-                          </td>
-                          <td>
-                              @*Connect to Subject*@
-                              <a href="#">@course.Subject.Name</a>
-                          </td>
-                          <td>
-                              @course.CourseLevel
-                          </td>
-                          <td>
-                              @if(course.IsApproved)
-                               {
-                                   <span class="badge badge-success">Approved</span>
-                               }
-                               else
-                               {
-                                  <span class="badge badge-danger">Unapproved</span>
-                               }
-                          </td>
-                          <td class="d-flex flex-column justify-content-center">
-                              <div class="d-flex justify-content-center mb-1">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
-                              </div>
-                              <div class="mb-1">
-                                  @if (course.IsApproved)
-                                  {
-                                      <button class="btn btn-danger">Disapprove</button>
-                                  }
-                                  else
-                                  {
-                                      <button class="btn btn-success">Approve</button>
-                                  }
-                              </div>
-                              <button class="btn btn-primary">View</button>
-                          </td>
-                      </tr>
-                  }
-              </tbody>
-          </table>
-      </div>
-      <div class="open-view mt-4" id="events-view">
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <td>Theme</td>
-                      <td>Creator</td>
-                      <td>StartDate</td>
-                      <td>EndDate</td>
-                      <td>Address</td>
-                      <td>IsApproved</td>
-                      <td>Actions</td>
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach (var eventViewModel in this.Model.Events)
-                  {
-                      <tr>
-                          <td>
-                              @eventViewModel.Theme
-                          </td>
-                          <td>
-                              @*Connect to Profile*@
-                              <a href="#">@(eventViewModel.Creator.FirstName + " " + eventViewModel.Creator.LastName)</a>
-                          </td>
-                          <td>
-                              @eventViewModel.StartDate.ToString("D")
-                          </td>
-                          <td>
-                              @eventViewModel.EndDate.ToString("D")
-                          </td>
-                          <td>
-                              @eventViewModel.Address
-                          </td>
-                          <td>
-                              @if(eventViewModel.IsApproved)
-                               {
-                                  <span class="badge badge-success">Approved</span>
-                               }
-                               else
-                               {
-                                  <span class="badge badge-danger">Unapproved</span>
-                               }
-                          </td>
-                          <td class="d-flex flex-column justify-content-center">
-                              <div class="d-flex justify-content-center mb-1">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
-                              </div>
-                              <div class="mb-1">
-                                  @if (eventViewModel.IsApproved)
-                                  {
-                                      <button class="btn btn-danger">Disapprove</button>
-                                  }
-                                  else
-                                  {
-                                      <button class="btn btn-success">Approve</button>
-                                  }
-                              </div>
-                              <button class="btn btn-primary">View</button>
-                          </td>
-                      </tr>
-                  }
-              </tbody>
-          </table>
-      </div>
-      <div class="open-view mt-4" id="posts-view">
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <td>Title</td>
-                      <td>Creator</td>
-                      <td>Course</td>
-                      <td>Actions</td>
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach (var post in this.Model.Posts)
-                  {
-                      <tr>
-                          <td>
-                              @post.Title
-                          </td>
-                          <td>
-                              @* Connect Author *@
-                              <a href="#">@(post.Author.FirstName+" "+post.Author.LastName)</a>
-                          </td>
-                          <td>
-                              @* Connect Course *@
-                              <a href="#">@post.Course.Name</a>
-                          </td>
-                          <td class="d-flex flex-column justify-content-center ">
-                              <div class="d-flex justify-content-center mb-1">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
-                              </div>
-                              <button class="btn btn-primary">View</button>
-                          </td>
-                      </tr>
-                  }
-              </tbody>
-          </table>
-      </div>
-      <div class="open-view mt-4" id="lectures-view">
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <td>Title</td>
-                      <td>Creator</td>
-                      <td>StartDate</td>
-                      <td>EndDate</td>
-                      <td>Course</td>
-                      <td>IsCompleted</td>
-                      <td>Actions</td>
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach (var lecture in this.Model.Lectures)
-                  {
-                      <tr>
-                          <td>
-                              @lecture.Title
-                          </td>
-                          <td>
-                              @* Connect Creator *@
-                              <a href="#">@(lecture.Creator.FirstName+" "+lecture.Creator.LastName)</a>
-                          </td>
-                          <td>
-                              @lecture.StartDate
-                          </td>
-                          <td>
-                              @lecture.EndDate
-                          </td>
-                          <td>
-                              <a href="#">@lecture.Course.Name</a>
-                          </td>
-                          <td>
-                              @if(lecture.IsCompleted)
-                               {
-                                    <span class="badge badge-success">Completed</span>
-                               }
-                               else
-                               {
-                                  <span class="badge badge-danger">Not completed</span>
-                               }
-                          </td>
-                          <td class="d-flex flex-column justify-content-center ">
-                              <div class="d-flex justify-content-around mb-1">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
-                              </div>
-                              <button class="btn btn-primary">View</button>
-                          </td>
-                      </tr>
-                  }
-              </tbody>
-          </table>
-      </div>
-      <div class="open-view mt-4" id="exams-view">
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <td>Name</td>
-                      <td>Lecturer</td>
-                      <td>Course</td>
-                      <td>StartDate</td>
-                      <td>EndDate</td>
-                      <td>Duration</td>
-                      <td>IsActive</td>
-                      <td>Count of users</td>
-                      <td>Actions</td>
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach (var exam in this.Model.Exams)
-                  {
-                      <tr>
-                          <td>
-                              @exam.Name
-                          </td>
-                          <td>
-                              @* Connect Lecturer *@
-                              <a href="#">@(exam.Lecturer.FirstName+" "+exam.Lecturer.LastName)</a>
-                          </td>
-                          <td>
-                              <a href="#">@exam.Course.Name</a>
-                          </td>
-                          <td>
-                              @exam.StartDate
-                          </td>
-                          <td>
-                              @exam.EndDate
-                          </td>
-                          <td>
-                              @exam.Duration
-                          </td>
-                          <td>
-                              @if (exam.IsActive)
-                               {
-                                 <span class="badge badge-success">Active</span>
-                               }
-                               else
-                               {
-                                  <span class="badge badge-danger">Unactive</span>
-                               }
-                          </td>
-                          <td>
-                              @exam.CountOfUsers
-                          </td>
-                          <td class="d-flex flex-column justify-content-center ">
-                              <div class="d-flex justify-content-center mb-1">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
-                              </div>
-                              <button class="btn btn-primary">View</button>
-                          </td>
-                      </tr>
-                  }
-              </tbody>
-          </table>
-      </div>
-      <div class="open-view mt-4" id="assignments-view">
-          <table class="table table-bordered">
-             <thead>
-                 <tr>
-                     <td>Title</td>
-                     <td>Course</td>
-                     <td>StartDate</td>
-                     <td>EndDate</td>
-                     <td>Possible Points</td>
-                     <td>Actions</td>
-                 </tr>
-             </thead>
-             <tbody>
-                 @foreach (var assignment in this.Model.Assignments)
-                 {
-                     <tr>
-                         <td>
-                             @assignment.Title
-                         </td>
-                         <td>
-                             @assignment.Course.Name
-                         </td>
-                         <td>
-                             @assignment.StartDate
-                         </td>
-                         <td>
-                             @assignment.EndDate
-                         </td>
-                         <td>
-                             @assignment.PossiblePoints
-                         </td>
-                         <td>
+<h1 class="text-center mb-4">Admin Actions</h1>
 
-                         </td>
-                     </tr>
-                 }
-             </tbody> 
-          </table>
-      </div>
-  </div>
-  <div style="height:20vh;"></div>
-<script>
-    var items = document.getElementsByClassName("item");
-    var defaultOpenView = document.getElementById("default");
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a id="message" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Message"]
+    </div>
+}
 
-    for (var i = 0; i < items.length; i++) {
-        items[i].addEventListener("click", function () {
-            defaultOpenView.style.display = "none";
-            removeSelected();
-            removeOpenView();
-            if (!this.classList.contains("item-active")) {
-                var openView = document.getElementById(this.id + "-view");
-                this.classList.toggle("item-active");
-                var loader = document.getElementById("loader");
-                loader.style.display = "block";
-                setTimeout(function load() {
-                    loader.style.display = "none";
-                    openView.classList.toggle("show");
-                }, 1000);
-            }
-        })
-    }
+<div class="row d-flex justify-content-center">
+    <div class="col-md-2 item" id="courses">
+        <div class="flex-grow-1 item-heading">
+            Courses
+        </div>
+        <div>
+            <span class="badge badge-pill">@this.Model.Courses.Count()</span>
+        </div>
+    </div>
+    <div class="col-md-2 item" id="events">
+        <div class="flex-grow-1 item-heading">
+            Events
+        </div>
+        <div>
+            <span class="badge badge-pill">@this.Model.Events.Count()</span>
+        </div>
+    </div>
+    <div class="col-md-2 item" id="posts">
+        <div class="flex-grow-1 item-heading">
+            Posts
+        </div>
+        <div>
+            <span class="badge badge-pill">@this.Model.Posts.Count()</span>
+        </div>
+    </div>
+    <div class="col-md-2 item" id="lectures">
+        <div class="flex-grow-1 item-heading">
+            Lectures
+        </div>
+        <div>
+            <span class="badge badge-pill">@this.Model.Lectures.Count()</span>
+        </div>
+    </div>
+    <div class="col-md-2 item" id="exams">
+        <div class="flex-grow-1 item-heading">
+            Exams
+        </div>
+        <div>
+            <span class="badge badge-pill">@this.Model.Exams.Count()</span>
+        </div>
+    </div>
+    <div class="col-md-2 item dis" id="assignments">
+        <div class="flex-grow-1 item-heading">
+            Assignments
+        </div>
+        <div>
+            <span class="badge badge-pill">@this.Model.Assignments.Count()</span>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center my-5">
+    <div class="loader" id="loader"></div>
+</div>
+<div class="default-open-view mt-5" id="default">
+    Nothing choosen, try selecting option.
+</div>
+<div class="container-open-view mt-5">
+    <div class="open-view mt-4" id="courses-view">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Creator</td>
+                    <td>Price</td>
+                    <td>StartDate</td>
+                    <td>EndDate</td>
+                    <td>Recomended Duration</td>
+                    <td>Subject</td>
+                    <td>Course level</td>
+                    <td>IsApproved</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var course in this.Model.Courses)
+                {
+                    <tr>
+                        <td>@course.Name</td>
+                        <td>
+                            <a asp-controller="Users" asp-action="Profile">@(course.Creator.FirstName+" "+course.Creator.LastName)</a>
+                        </td>
+                        <td>
+                            @course.Price
+                        </td>
+                        <td>
+                            @course.StartDate.ToString("D")
+                        </td>
+                        <td>
+                            @course.EndDate.ToString("D")
+                        </td>
+                        <td>
+                            @course.RecommendedDuration
+                        </td>
+                        <td>
+                            @*Connect to Subject*@
+                            <a href="#">@course.Subject.Name</a>
+                        </td>
+                        <td>
+                            @course.CourseLevel
+                        </td>
+                        <td>
+                            @if (course.IsApproved)
+                            {
+                                <span class="badge badge-success">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Unapproved</span>
+                            }
+                        </td>
+                        <td class="d-flex flex-column justify-content-center">
+                            <div class="d-flex justify-content-center mb-1">
+                                <a asp-controller="Admins" asp-action="EditCourse" asp-route-id="@course.Id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+                                <form asp-controller="Admins" asp-action="DeleteCourse" asp-route-id="@course.Id" class="hide-submit" method="post">
+                                    <label>
+                                        <input type="submit" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </label>
+                                </form>
+                            </div>
+                            @if (!course.IsApproved)
+                            {
+                                <form asp-controller="Admins" asp-action="ApproveCourse" asp-route-id="@course.Id" method="post">
+                                    <button class="btn btn-success mb-1">Approve</button>
+                                </form>
+                            }
+                            <a class="btn btn-primary" asp-controller="Courses" asp-action="ById">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="open-view mt-4" id="events-view">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Theme</td>
+                    <td>Creator</td>
+                    <td>StartDate</td>
+                    <td>EndDate</td>
+                    <td>Address</td>
+                    <td>IsApproved</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventViewModel in this.Model.Events)
+                {
+                    <tr>
+                        <td>
+                            @eventViewModel.Theme
+                        </td>
+                        <td>
+                            @*Connect to Profile*@
+                            <a href="#">@(eventViewModel.Creator.FirstName + " " + eventViewModel.Creator.LastName)</a>
+                        </td>
+                        <td>
+                            @eventViewModel.StartDate.ToString("D")
+                        </td>
+                        <td>
+                            @eventViewModel.EndDate.ToString("D")
+                        </td>
+                        <td>
+                            @eventViewModel.Address
+                        </td>
+                        <td>
+                            @if (eventViewModel.IsApproved)
+                            {
+                                <span class="badge badge-success">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Unapproved</span>
+                            }
+                        </td>
+                        <td class="d-flex flex-column justify-content-center">
+                            <div class="d-flex justify-content-center mb-1">
+                                <a asp-controller="Admins" asp-action="EditEvent" asp-route-id="@eventViewModel.Id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+                                <form asp-controller="Admins" asp-action="DeleteEvent" asp-route-id="@eventViewModel.Id" class="hide-submit" method="post">
+                                    <label>
+                                        <input type="submit" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </label>
+                                </form>
+                            </div>
+                            @if (eventViewModel.IsApproved)
+                            {
+                                <form asp-controller="Admins" asp-action="DisapproveEvent" asp-route-id="@eventViewModel.Id" method="post">
+                                    <button class="btn btn-danger mb-1">Disapprove</button>
+                                </form>
 
-    function removeSelected() {
+                            }
+                            else
+                            {
+                                <form asp-controller="Admins" asp-action="ApproveEvent" asp-route-id="@eventViewModel.Id" method="post">
+                                    <button class="btn btn-success mb-1">Approve</button>
+                                </form>
+                            }
+                            <a class="btn btn-primary" asp-controller="Events" asp-action="EventInfo">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="open-view mt-4" id="posts-view">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Creator</td>
+                    <td>Course</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in this.Model.Posts)
+                {
+                    <tr>
+                        <td>
+                            @post.Title
+                        </td>
+                        <td>
+                            @* Connect Author *@
+                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@post.Author.Id">@(post.Author.FirstName+" "+post.Author.LastName)</a>
+                        </td>
+                        <td>
+                            @* Connect Course *@
+                            <a asp-controller="Courses" asp-action="ById" asp-route-id="@post.Course.Id">@post.Course.Name</a>
+                        </td>
+                        <td class="d-flex flex-column justify-content-center">
+                            <div class="d-flex justify-content-center mb-1">
+                                <a asp-controller="Admins" asp-action="EditPost" asp-route-id="@post.Id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+                                <form asp-controller="Admins" asp-action="DeletePost" asp-route-id="@post.Id" class="hide-submit" method="post">
+                                    <label>
+                                        <input type="submit" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </label>
+                                </form>
+                            </div>
+                            <a class="btn btn-primary" asp-controller="Posts" asp-action="SeePost" asp-route-id="@post.Id">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="open-view mt-4" id="lectures-view">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Creator</td>
+                    <td>StartDate</td>
+                    <td>EndDate</td>
+                    <td>Course</td>
+                    <td>IsCompleted</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lecture in this.Model.Lectures)
+                {
+                    <tr>
+                        <td>
+                            @lecture.Title
+                        </td>
+                        <td>
+                            @* Connect Creator *@
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@lecture.Creator.Id">@(lecture.Creator.FirstName+" "+lecture.Creator.LastName)</a>
+                        </td>
+                        <td>
+                            @lecture.StartDate.ToString("D")
+                        </td>
+                        <td>
+                            @lecture.EndDate.ToString("D")
+                        </td>
+                        <td>
+                            <a asp-controller="Courses" asp-action="ById" asp-route-id="@lecture.Course.Id">@lecture.Course.Name</a>
+                        </td>
+                        <td>
+                            @if (lecture.IsCompleted)
+                            {
+                                <span class="badge badge-success">Completed</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Not completed</span>
+                            }
+                        </td>
+                        <td class="d-flex flex-column justify-content-center ">
+                            <div class="d-flex justify-content-around mb-1">
+                                <a asp-controller="Admins" asp-action="EditLecture" asp-route-id="@lecture.Id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+                                <form asp-controller="Admins" asp-action="DeleteLecture" asp-route-id="@lecture.Id" class="hide-submit" method="post">
+                                    <label>
+                                        <input type="submit" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </label>
+                                </form>
+                            </div>
+                            <a class="btn btn-primary" asp-controller="Lectures" asp-action="AllVideosById" asp-route-id="@lecture.Id">Lecture</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="open-view mt-4" id="exams-view">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Lecturer</td>
+                    <td>Course</td>
+                    <td>StartDate</td>
+                    <td>EndDate</td>
+                    <td>Duration</td>
+                    <td>IsActive</td>
+                    <td>Count of users</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var exam in this.Model.Exams)
+                {
+                    <tr>
+                        <td>
+                            @exam.Name
+                        </td>
+                        <td>
+                            @* Connect Lecturer *@
+                            <a asp-controller="User" asp-action="Profile" asp-route-id="@exam.Lecturer.Id">@(exam.Lecturer.FirstName+" "+exam.Lecturer.LastName)</a>
+                        </td>
+                        <td>
+                            <a asp-controller="Courses" asp-action="ById" asp-route-id="@exam.Course.Id">@exam.Course.Name</a>
+                        </td>
+                        <td>
+                            @exam.StartDate.ToString("D")
+                        </td>
+                        <td>
+                            @exam.EndDate.ToString("D")
+                        </td>
+                        <td>
+                            @exam.Duration
+                        </td>
+                        <td>
+                            @if (exam.IsActive)
+                            {
+                                <span class="badge badge-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Unactive</span>
+                            }
+                        </td>
+                        <td>
+                            @exam.CountOfUsers
+                        </td>
+                        <td class="d-flex flex-column justify-content-center ">
+                            <div class="d-flex justify-content-center mb-1">
+                                <a asp-controller="Admins" asp-action="EditExam" asp-route-id="@exam.Id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+
+                                <form asp-controller="Admins" asp-action="DeleteExam" asp-route-id="@exam.Id" class="hide-submit" method="post">
+                                    <label>
+                                        <input type="submit" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </label>
+                                </form>
+                            </div>
+                            <a class="btn btn-primary" asp-controller="Exams" asp-action="Details" asp-route-id="@exam.Id">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="open-view mt-4" id="assignments-view">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Course</td>
+                    <td>StartDate</td>
+                    <td>EndDate</td>
+                    <td>Possible Points</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var assignment in this.Model.Assignments)
+                {
+                    <tr>
+                        <td>
+                            @assignment.Title
+                        </td>
+                        <td>
+                            <a asp-controller="Courses" asp-action="ById" asp-route-id="@assignment.Course.Id"> @assignment.Course.Name</a>
+                        </td>
+                        <td>
+                            @assignment.StartDate.ToString("D")
+                        </td>
+                        <td>
+                            @assignment.EndDate.ToString("D")
+                        </td>
+                        <td>
+                            @assignment.PossiblePoints
+                        </td>
+                        <td class="d-flex flex-column justify-content-center ">
+                            <div class="d-flex justify-content-around mb-1">
+                                <a asp-controller="Admins" asp-action="EditAssignment" asp-route-id="@assignment.Id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+
+                                <form asp-controller="Admins" asp-action="DeleteAssignment" asp-route-id="@assignment.Id" class="hide-submit" method="post">
+                                    <label>
+                                        <input type="submit" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </label>
+                                </form>
+                            </div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewAssignment">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="viewAssignment" tabindex="-1" aria-labelledby="assignmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignmentModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="height:20vh;"></div>
+@section Scripts{
+    <script>
+        document.getElementById("message").getAttribute("href") += window.location.href;
+    </script>
+    <script>
+        var items = document.getElementsByClassName("item");
+        var defaultOpenView = document.getElementById("default");
+
         for (var i = 0; i < items.length; i++) {
-            items[i].classList.remove(["item-active"]);
+            items[i].addEventListener("click", function () {
+                defaultOpenView.style.display = "none";
+                removeSelected();
+                removeOpenView();
+                if (!this.classList.contains("item-active")) {
+                    var openView = document.getElementById(this.id + "-view");
+                    this.classList.toggle("item-active");
+                    var loader = document.getElementById("loader");
+                    loader.style.display = "block";
+                    setTimeout(function load() {
+                        loader.style.display = "none";
+                        openView.classList.toggle("show");
+                    }, 1000);
+                }
+            })
         }
-    }
 
-    function checkOneAtleastSelected() {
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].classList.contains("item-active")) {
-                return true;
+        function removeSelected() {
+            for (var i = 0; i < items.length; i++) {
+                items[i].classList.remove(["item-active"]);
             }
         }
 
-        return false;
-    }
+        function checkOneAtleastSelected() {
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].classList.contains("item-active")) {
+                    return true;
+                }
+            }
 
-    function removeOpenView() {
-        var openViews = document.getElementsByClassName("open-view");
-        for (var i = 0; i < openViews.length; i++) {
-            openViews[i].classList.remove(["show"]);
+            return false;
         }
-    }
-</script>
+
+        function removeOpenView() {
+            var openViews = document.getElementsByClassName("open-view");
+            for (var i = 0; i < openViews.length; i++) {
+                openViews[i].classList.remove(["show"]);
+            }
+        }
+
+    </script>
+}

@@ -1,0 +1,130 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Events
+@model EditEventInputModel
+@{
+    this.ViewData["Title"] = "Edit Event";
+}
+
+<h1 class="text-center">Edit Event</h1>
+
+<form asp-controller="Admins" asp-action="EditEvent" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Theme"></label>
+        <input asp-for="Theme" />
+        <span asp-validation-for="Theme" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" />
+        <span asp-validation-for="StartDate"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" />
+        <span asp-validation-for="EndDate"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+        <span asp-validation-for="Address"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <input asp-for="FilesToAdd" id="input-event-file" type="file" multiple class="form-control" hidden />
+
+    <label for="input-event-file" class="d-inline-flex rounded-pill p-2 my-2 justify-content-end align-items-center" id="show" style="cursor:pointer;color:black;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+        <tt id="create-text" class="mx-1">
+            Upload Files
+        </tt>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+        </svg>
+    </label>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary">Edit</button>
+    </div>
+</form>
+<div id="myModal" class="modal" style="">
+    <span class="close">&times;</span>
+    <iframe class="modal-content" id="file" frameborder='0'>
+    </iframe>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+<h3 class="my-5">Files Inlcuded</h3>
+@if (this.Model.Files != null)
+{
+    <div>
+        @foreach (var file in this.Model.Files)
+        {
+            @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
+            {
+
+                <div id="@file.Id" onclick="showFile(@file.Id)" src="@file.RemoteUrl" class="p-2 my-1 d-flex align-items-center bg-secondary rounded-2" style="cursor:pointer;">
+                    <div class="flex-grow-1">
+                        <p>File</p>
+                    </div>
+                    <div>
+                        <form asp-controller="Files" asp-action="DeleteWorkFileFromAssignment" asp-route-id="@file.Id" method="post">
+                            <button class="btn bg-white">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div id="@file.Id" onclick="showFile(@file.Id)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" class="p-2 my-1 d-flex align-items-center rounded-2 bg-secondary" style="cursor:pointer;">
+                    <div class="flex-grow-1">
+                        <p>File</p>
+                    </div>
+                    <div>
+                        <form asp-controller="Files" asp-action="DeleteWorkFileFromAssignment" asp-route-id="@file.Id" method="post">
+                            <button class="btn bg-white">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+
+
+@section Scripts{
+    <script>
+        function showFile(fileId) {
+            var file = document.getElementById(fileId);
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var modalFile = document.getElementById("file");
+
+            var captionText = document.getElementById("caption");
+
+            modal.style.display = "block";
+            if (file.getAttribute("src").includes(".jpg") || file.getAttribute("src").includes(".png")) {
+                modalImg.src = file.getAttribute("src");
+                modalImg.style.display = "block";
+            }
+            else {
+                modalFile.src = file.getAttribute("src");
+                modalFile.style.display = "block";
+            }
+
+            captionText.innerHTML = file.getAttribute("alt");
+
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function () {
+                modal.style.display = "none";
+                modalImg.style.display = "none";
+                modalFile.style.display = "none";
+            }
+        }
+    </script>
+}

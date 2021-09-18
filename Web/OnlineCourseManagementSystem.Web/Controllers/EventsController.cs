@@ -58,20 +58,13 @@
             return this.View(viewModel);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Lecturer,Administrator")]
         public async Task<IActionResult> AllCreated()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             AllEventsCreatedViewModel viewModel = new AllEventsCreatedViewModel();
 
-            if (user.LecturerId == null)
-            {
-                viewModel.Events = this.eventsService.GetAll<EventViewModel>();
-            }
-            else
-            {
-                viewModel.Events = this.eventsService.GetAllCreatedByUserId<EventViewModel>(user.Id);
-            }
+            viewModel.Events = this.eventsService.GetAllCreatedByUserId<EventViewModel>(user.Id);
 
             return this.View(viewModel);
         }
@@ -80,20 +73,6 @@
         {
             var @event = this.eventsService.GetById<EventInfoViewModel>(id);
             return this.View(@event);
-        }
-
-        public async Task<IActionResult> Approve(int id)
-        {
-            await this.eventsService.Approve(id);
-
-            return this.RedirectToAction("AllCreated", "Events");
-        }
-
-        public async Task<IActionResult> Disapprove(int id)
-        {
-            await this.eventsService.Disapprove(id);
-
-            return this.RedirectToAction("AllCreated", "Events");
         }
     }
 }

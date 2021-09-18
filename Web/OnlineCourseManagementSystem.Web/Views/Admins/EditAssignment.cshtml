@@ -1,0 +1,49 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
+@model EditAssignmentInputModel
+@{ 
+    this.ViewData["Title"] = "Edit Assignment";
+}
+
+<h1 class="text-center">Edit Assignment</h1>
+<form class="mt-5" asp-controller="Admins" asp-action="EditAssignment" enctype="multipart/form-data" method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+
+    <div>
+        <label asp-for="Title"></label>
+        <textarea asp-for="Title" class="form-control"></textarea>
+        <span asp-validation-for="Title" class="alert-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Instructions"></label>
+        <pre class="tab"></pre>
+        <textarea class="form-control" asp-for="Instructions"></textarea>
+        <span asp-validation-for="Instructions" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="alert-danger"></span>
+    </div>
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <label asp-for="PossiblePoints"> </label>
+        <input asp-for="PossiblePoints" class="form-control" />
+    </div>
+    <input asp-for="AssignmentId" type="hidden"  />
+    <pre class="tab"></pre>
+    <pre class="tab"></pre>
+    <div>
+        <button class="btn btn-info form-control">Edit Assignment</button>
+    </div>
+</form>

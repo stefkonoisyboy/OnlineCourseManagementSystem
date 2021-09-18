@@ -53,7 +53,7 @@
             this.userManager = userManager;
         }
 
-        [Authorize(Roles = "Student,Lecturer")]
+        [Authorize(Roles = "Student,Lecturer,Administrator")]
         public IActionResult ById(int id)
         {
             CourseByIdViewModel viewModel = this.coursesService.GetById<CourseByIdViewModel>(id);

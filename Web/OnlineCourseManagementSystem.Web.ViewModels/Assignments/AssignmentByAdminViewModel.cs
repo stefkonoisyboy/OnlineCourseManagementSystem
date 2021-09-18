@@ -10,6 +10,8 @@
 
     public class AssignmentByAdminViewModel : IMapFrom<Assignment>
     {
+        public int Id { get; set; }
+
         public string Title { get; set; }
 
         public CourseViewModel Course { get; set; }

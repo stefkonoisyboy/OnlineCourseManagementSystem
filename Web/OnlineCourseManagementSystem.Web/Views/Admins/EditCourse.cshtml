@@ -1,0 +1,160 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Courses
+@model EditCourseAsAdminInputModel 
+@{
+    this.ViewData["Title"] = "Edit Course";
+}
+<style>
+    .section {
+        width: 20px;
+        height: 20px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        border-radius:50%;
+        color:white;
+    }
+
+    .circle {
+        border-radius: 50%;
+        background-color: gray;
+        width: 20px;
+        height: 20px;
+        overflow:hidden;
+    }
+
+    .circles-section{
+        display:flex;
+        justify-content:center;
+    }
+
+    #form-edit-meta-section{
+        display:none;
+    }
+
+    #form-edit-overview-section{
+        display:block;
+    }
+
+    
+    #backBtn{
+        display:none;
+    }
+</style>
+
+<h1 class="text-center">Edit Course</h1>
+
+<div class="d-flex justify-content-center align-items-center position-relative my-5">
+    <div class="p-5 bg-success section " id="edit-overview-section">
+        Overview
+    </div>
+    <div style="width:90px;">
+
+    </div>
+    <div class="bg-secondary p-1 position-absolute" style="width:100px; top:45%;z-index:-1;">
+        <p> </p>
+    </div>
+    <div class="p-5 bg-secondary section" id="edit-meta-section">
+        Meta
+    </div>
+</div>
+<form asp-controller="Admins" asp-action="EditCourse" method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+    <div class="form-edit" id="form-edit-overview-section">
+        <h3>Edit Overview</h3>
+        <div class="form-group">
+            <label asp-for="@this.Model.EditCourseInputModel.Name"></label>
+            <input asp-for="@this.Model.EditCourseInputModel.Name" type="text" class="form-control" />
+            <span asp-validation-for="@this.Model.EditCourseInputModel.Name"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@this.Model.EditCourseInputModel.Description"></label>
+            <textarea asp-for="@this.Model.EditCourseInputModel.Description" class="form-control"></textarea>
+            <span asp-validation-for="@this.Model.EditCourseInputModel.Description"></span>
+        </div>
+        <input type="hidden" asp-for="@this.Model.EditCourseInputModel.Id" />
+    </div>
+    <div class="form-edit" id="form-edit-meta-section">
+        <h3>Edit Meta</h3>
+
+        <div class="form-group">
+            <label class="text-dark" asp-for="@this.Model.EditMetaInputModel.Price"></label>
+            <input asp-for="@this.Model.EditMetaInputModel.Price" class="form-control" />
+            <span asp-validation-for="@this.Model.EditMetaInputModel.Price" class="alert-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="text-dark" asp-for="EditMetaInputModel.SubjectId">Subject</label>
+            <select asp-for="EditMetaInputModel.SubjectId" asp-items="@this.Model.EditMetaInputModel.SubjectsItems" class="form-select"></select>
+            <span asp-validation-for="EditMetaInputModel.SubjectId" class="alert-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="text-dark" asp-for="EditMetaInputModel.StartDate"></label>
+            <input asp-for="EditMetaInputModel.StartDate" class="form-control" />
+            <span asp-validation-for="EditMetaInputModel.StartDate" class="alert-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="text-dark" asp-for="EditMetaInputModel.RecommendedDuration"></label>
+            <input asp-for="EditMetaInputModel.RecommendedDuration" class="form-control" />
+            <span asp-validation-for="EditMetaInputModel.RecommendedDuration" class="alert-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="text-dark" asp-for="EditMetaInputModel.Image"></label>
+            <input asp-for="EditMetaInputModel.Image" class="form-control" />
+            <span asp-validation-for="EditMetaInputModel.Image" class="alert-danger"></span>
+        </div>
+
+
+        <input type="hidden" asp-for="EditMetaInputModel.Id" />
+        <div class="d-flex">
+            <div class="flex-grow-1">
+                <img src="EditMetaInputModel.FileRemoteUrl" alt="course-image" />
+            </div>
+            <button class="btn btn-success" style="height:40px">Save&Edit</button>
+        </div>
+    </div>
+</form>
+
+
+<div class="d-flex align-items-center">
+    <div class="flex-grow-1">
+        <button class="btn btn-secondary " id="backBtn" onclick="moveBack()">Back</button>
+    </div>
+    <button class="btn btn-success" id="continueBtn" onclick="saveAndContinue()">Continue</button>
+</div>
+
+
+@section  Scripts{ 
+    <script type="text/javascript">
+        var metaSection = document.getElementById("edit-meta-section");
+        var overviewSection = document.getElementById("edit-overview-section");
+        var formMeta = document.getElementById("form-edit-meta-section")
+        var formOverview = document.getElementById("form-edit-overview-section")
+        var backBtn = document.getElementById("backBtn");
+        var continueBtn = document.getElementById("continueBtn");
+
+
+        function saveAndContinue() {
+            overviewSection.classList.remove(["bg-success"]);
+            overviewSection.classList.add(["bg-secondary"]);
+            formOverview.style.display = "none";
+
+            metaSection.classList.add(["bg-success"]);
+            formMeta.style.display = "block";
+            backBtn.style.display = "block";
+            continueBtn.style.display = "none";
+        }
+
+        function moveBack() {
+            metaSection.classList.remove(["bg-success"]);
+            formMeta.style.display = "none";
+            metaSection.classList.add(["bg-secondary"]);
+
+            overviewSection.classList.add(["bg-success"]);
+            formOverview.style.display = "block";
+            backBtn.style.display = "none";
+        }
+    </script>
+}

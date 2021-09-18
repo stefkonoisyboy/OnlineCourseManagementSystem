@@ -1,0 +1,28 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Posts 
+@model EditPostInputModel
+@{
+    this.ViewData["Title"] = "Edit Post";
+}
+
+<h1 class="text-center">Edit Post</h1>
+
+<form class="mt-5" asp-controller="Admins" asp-action="EditPost" method="post">
+    <div class="form-group">
+        <label asp-for="Content"> </label>
+        <textarea asp-for="Content" class="form-control"></textarea>
+        <span asp-validation-for="Content" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" placeholder="Enter the Title of the Post" />
+        <span class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CourseId"></label>
+        <select asp-items="@this.Model.CourseItems" multiple="multiple" class="multi-select form-control custom-radio" id="CourseId" asp-for="CourseId">
+        </select>
+        <span asp-validation-for="CourseId" class="alert-danger"></span>
+    </div>
+    <input asp-for="PostId" type="hidden" />
+    <button class="btn btn-info">Edit Post</button>
+</form>

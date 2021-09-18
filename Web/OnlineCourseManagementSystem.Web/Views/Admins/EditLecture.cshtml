@@ -1,0 +1,33 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Lectures
+@model EditLectureInputModel
+@{
+    this.ViewData["Title"] = "Edit Lecture";
+}
+
+<h1 class="text-center">Edit Lecture</h1>
+<form asp-controller="Admins" asp-action="EditLecture" method="post" class="shadow-lg p-5 bg-white rounded mt-5">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="CourseId" class="text-dark"></label>
+        <select asp-for="CourseId" asp-items="this.Model.CoursesItems" class="form-select"></select>
+        <span asp-validation-for="CourseId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Title" class="text-dark"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="text-dark"></label>
+        <textarea asp-for="Description" class="form-control" rows="10"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-primary float-end">Save</button>
+</form>
+
