@@ -14,6 +14,13 @@
     </div>
 }
 
+@if (this.TempData.ContainsKey("Alert"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        @this.TempData["Alert"]
+    </div>
+}
+
 <style>
     .row-margin-05 {
         margin-top: 0.5em;
@@ -34,36 +41,75 @@
     .accordion-item .accordion-header button:hover {
         background-color: orange;
     }
+
+    .bg-yellow {
+        background-color: #ffc107;
+    }
+
+    .bg-red {
+        background-color: #dc3545;
+    }
 </style>
 
 <body class="bg-light">
-  
-<div class="row text-center shadow-lg p-3 mb-5 rounded" style="background-color: #234465;">
-    <h1 class="text-white">
-        <img src="@this.Model.FileRemoteUrl" alt="courseImage" height="80" width="80" />
-        @this.Model.Name
-    </h1>
-    <p class="text-white" style="text-align: left;">
-        @string.Join("", this.Model.Description.Take(200).ToList())
-    </p>
-    <div class="text-center">
-        <button style="background-color: #234465; border-color: #234465; border-top: none; border-left: none; border-bottom: none; border-right: none;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            <p style="color: #ffa000;">
-                LOOK MORE
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
-                </svg>
-            </p>
-        </button>
-    </div>
-    <div class="collapse" id="collapseExample">
-        <div>
-            <p class="text-white" style="text-align: left;">@string.Join("", this.Model.Description.Skip(200).ToList())</p>
+
+    <div class="row text-center text-white shadow-lg p-3 mb-5 rounded" style="background-color: #234465;">
+        <h1 class="text-white">
+            <img src="@this.Model.FileRemoteUrl" alt="courseImage" height="80" width="80" />
+            @this.Model.Name
+        </h1>
+        <p class="text-white" style="text-align: left; color: white;">
+            @Html.Raw(string.Join("", this.Model.Description.Take(200).ToList()))
+        </p>
+        <div class="text-center">
+            <button style="background-color: #234465; border-color: #234465; border-top: none; border-left: none; border-bottom: none; border-right: none;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <p style="color: #ffa000;">
+                    LOOK MORE
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                    </svg>
+                </p>
+            </button>
+        </div>
+        <div class="collapse" id="collapseExample">
+            <div>
+                <p class="text-white" style="text-align: left;">@Html.Raw(string.Join("", this.Model.Description.Skip(200).ToList()))</p>
+            </div>
         </div>
     </div>
-</div>
 
-    <div class="row">
+    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+    {
+        <div class="text-center">
+            <a asp-controller="Exams" asp-action="AddToCertificate" class="btn btn-success" style="font-size: 20px;">ADD EXAM TO CERTIFICATE</a>
+        </div>
+    }
+    else if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+    {
+        <div class="text-center">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success" style="font-size: 20px;">START CERTIFICATE</button>
+        </div>
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Start Certificate</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        You are going to start a certification exam. Once you click the 'Confirm' button, the exam will start.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a asp-controller="Exams" asp-action="StartCertificate" asp-route-id="@this.Model.Id" class="btn btn-primary">Confirm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row row-margin-20">
         <div class="col-md-8">
             <div class="shadow-lg p-3 mb-5 bg-white rounded">
                 <h3>What you'll learn</h3>
@@ -96,16 +142,16 @@
             <div class="row-margin-20">
                 <p class="text-black-50">Curriculum</p>
 
-                <div class="accordion accordion-flush shadow-lg p-3 mb-5 bg-white rounded row-margin-10" id="accordionFlushExample">
+                <div class="accordion shadow-lg p-3 mb-5 bg-white rounded row-margin-10" id="accordionExample">
                     @foreach (var lecture in this.Model.Lectures)
                     {
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="flush-heading-@lectureIndex">
-                                <button class="accordion-button bg-danger text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@lectureIndex" aria-expanded="false" aria-controls="flush-collapse-@lectureIndex">
+                                <button class="accordion-button bg-red acc-button text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@lectureIndex" aria-expanded="false" aria-controls="flush-collapse-@lectureIndex">
                                     @(lectureIndex + ". " + lecture.Title)
                                 </button>
                             </h2>
-                            <div id="flush-collapse-@lectureIndex" class="accordion-collapse collapse" aria-labelledby="flush-heading-@lectureIndex" data-bs-parent="#accordionFlushExample">
+                            <div id="flush-collapse-@lectureIndex" class="accordion-collapse collapse" aria-labelledby="flush-heading-@lectureIndex" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -116,12 +162,12 @@
                                             }
                                             else
                                             {
-                                                <p>@lecture.Description</p>
+                                                <p>@Html.Raw(lecture.Description)</p>
                                             }
                                         </div>
                                         <div class="col-md-6">
                                             <p style="font-size: 16px; color: #ffa000;">Resources</p>
-                                            @if (lecture.Files.Count() == 0)
+                                            @if (lecture.Files.Count() == 0 && lecture.Exams.Count() == 0)
                                             {
                                                 <p>There are still no resources for this lecture</p>
                                             }
@@ -176,6 +222,24 @@
                                                             @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
                                                             {
                                                                 <form method="post" asp-controller="Files" asp-action="Delete" asp-route-id="@file.Id">
+                                                                    <input type="submit" class="btn btn-danger" value="Delete" />
+                                                                </form>
+                                                            }
+                                                        </div>
+                                                    </a>
+                                                }
+
+                                                @foreach (var exam in lecture.Exams)
+                                                {
+                                                    <a asp-controller="Exams" asp-action="TakeExam" asp-route-id="@exam.Id">
+                                                        <div class="text-primary">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
+                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                                                            </svg>
+                                                            Quiz - @exam.CreatedOn.ToString("dd MMMM yyyy") - @(exam.CreatorFirstName + ' ' + exam.CreatorLastName)
+                                                            @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                                            {
+                                                                <form method="post" asp-controller="Exams" asp-action="Delete" asp-route-id="@exam.Id">
                                                                     <input type="submit" class="btn btn-danger" value="Delete" />
                                                                 </form>
                                                             }
@@ -282,5 +346,38 @@
             </div>
         </div>
     </div>
+
+    @section Scripts {
+        <script type="text/javascript">
+            window.addEventListener("click", function (e) {
+                if (e.target.classList.contains("bg-red")) {
+                    e.target.classList.remove("bg-red");
+                    e.target.classList.add("bg-yellow");
+
+                    const buttons = this.document.querySelectorAll("button.acc-button");
+
+                    buttons.forEach((button) => {
+                        if (button != e.target) {
+                            button.classList.remove("bg-yellow");
+                            button.classList.add("bg-red");
+                        }
+                    });
+                }
+                else if (e.target.classList.contains("bg-yellow")) {
+                    e.target.classList.remove("bg-yellow");
+                    e.target.classList.add("bg-red");
+
+                    const buttons = this.document.querySelectorAll("button.acc-button");
+
+                    buttons.forEach((button) => {
+                        if (button != e.target) {
+                            button.classList.remove("bg-yellow");
+                            button.classList.add("bg-red");
+                        }
+                    });
+                }
+            });
+        </script>
+    }
 </body>
 

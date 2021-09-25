@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.ViewModels.Exams;
 
     public interface IExamsService
@@ -22,6 +23,10 @@
 
         Task MarkAsSeenAsync(int id);
 
+        Task AddExamToLectureAsync(int lectureId, AddExamToLectureInputModel input);
+
+        Task AddExamToCertificateAsync(AddExamToCertificateInputModel input);
+
         string GetNameById(int id);
 
         string GetCourseNameById(int id);
@@ -30,9 +35,21 @@
 
         int GetPointsByUserIdAndExamId(string userId, int examId);
 
+        int GetCourseIdByExam(int examId);
+
+        int GetCertificatedExamIdByCourse(int courseId);
+
         double GetCountOfUsersWithLowerGradesOnCertainExam(int examId, double grade);
 
         int GetCountOfAllUsersWhoPassedCertainExam(int examId);
+
+        bool IsExamAddedToLecture(int examId, int lectureId);
+
+        bool HasUserMadeCertainExam(int examId, string userId);
+
+        bool IsExamCertificated(int examId);
+
+        bool CanStartCertificate(int courseId);
 
         DateTime GetStartDateById(int id);
 
@@ -46,6 +63,10 @@
 
         IEnumerable<T> GetAllByCurrentUserId<T>(string userId);
 
+        IEnumerable<T> GetAllByLectureId<T>(int lectureId);
+
         IEnumerable<T> GetAllByAdmin<T>();
+
+        IEnumerable<SelectListItem> GetAllExamsAsSelectListItemsByCreatorId(string creatorId);
     }
 }

@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Data.Models.Enumerations;
@@ -19,6 +20,7 @@
         private readonly IDeletableEntityRepository<Answer> answersRepository;
         private readonly IDeletableEntityRepository<Question> questionsRepository;
         private readonly IDeletableEntityRepository<UserExam> userExamsRepository;
+        private readonly IDeletableEntityRepository<Lecture> lecturesRepository;
         private readonly IDeletableEntityRepository<Choice> choicesRepository;
 
         public ExamsService(
@@ -26,13 +28,42 @@
             IDeletableEntityRepository<Answer> answersRepository,
             IDeletableEntityRepository<Question> questionsRepository,
             IDeletableEntityRepository<UserExam> userExamsRepository,
+            IDeletableEntityRepository<Lecture> lecturesRepository,
             IDeletableEntityRepository<Choice> choicesRepository)
         {
             this.examsRepository = examsRepository;
             this.answersRepository = answersRepository;
             this.questionsRepository = questionsRepository;
             this.userExamsRepository = userExamsRepository;
+            this.lecturesRepository = lecturesRepository;
             this.choicesRepository = choicesRepository;
+        }
+
+        public async Task AddExamToCertificateAsync(AddExamToCertificateInputModel input)
+        {
+            Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == input.ExamId);
+            exam.IsCertificated = true;
+            await this.examsRepository.SaveChangesAsync();
+        }
+
+        public async Task AddExamToLectureAsync(int lectureId, AddExamToLectureInputModel input)
+        {
+            Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == input.ExamId);
+            exam.LectureId = lectureId;
+            await this.examsRepository.SaveChangesAsync();
+        }
+
+        public bool CanStartCertificate(int courseId)
+        {
+            int lecturesCount = this.lecturesRepository
+                .All()
+                .Count(l => l.CourseId == courseId);
+
+            int completedLecturesCount = this.lecturesRepository
+                .All()
+                .Count(l => l.CourseId == courseId && l.IsCompleted);
+
+            return lecturesCount == completedLecturesCount;
         }
 
         public async Task CreateAsync(CreateExamInputModel input)
@@ -44,6 +75,7 @@
                 LecturerId = input.LecturerId,
                 StartDate = input.StartDate,
                 Duration = input.Duration,
+                CreatorId = input.CreatorId,
             };
 
             await this.examsRepository.AddAsync(exam);
@@ -85,6 +117,16 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllByLectureId<T>(int lectureId)
+        {
+            return this.examsRepository
+                .All()
+                .Where(e => e.LectureId == lectureId)
+                .OrderByDescending(e => e.CreatedOn)
+                .To<T>()
+                .ToList();
+        }
+
         // Todo: Add check if exams are active when switching to production environment
         public IEnumerable<T> GetAllByUserId<T>(string userId)
         {
@@ -93,6 +135,20 @@
                 .Where(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId))
                 .OrderByDescending(e => e.StartDate)
                 .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<SelectListItem> GetAllExamsAsSelectListItemsByCreatorId(string creatorId)
+        {
+            return this.examsRepository
+                .All()
+                .Where(e => e.CreatorId == creatorId)
+                .OrderByDescending(e => e.CreatedOn)
+                .Select(e => new SelectListItem
+                {
+                    Text = e.Name,
+                    Value = e.Id.ToString(),
+                })
                 .ToList();
         }
 
@@ -114,6 +170,14 @@
                 .FirstOrDefault();
         }
 
+        public int GetCertificatedExamIdByCourse(int courseId)
+        {
+            return this.examsRepository
+                .All()
+                .FirstOrDefault(e => e.CourseId == courseId && e.IsCertificated.Value)
+                .Id;
+        }
+
         public int GetCountOfAllUsersWhoPassedCertainExam(int examId)
         {
             return this.userExamsRepository
@@ -126,6 +190,19 @@
             return this.userExamsRepository
                 .All()
                 .Count(ue => ue.ExamId == examId && ue.Grade < grade);
+        }
+
+        public int GetCourseIdByExam(int examId)
+        {
+            return this.examsRepository
+                .All()
+                .FirstOrDefault(e => e.Id == examId)
+                .CourseId
+                .HasValue ? this.examsRepository
+                .All()
+                .FirstOrDefault(e => e.Id == examId)
+                .CourseId
+                .Value : -1;
         }
 
         public string GetCourseNameById(int id)
@@ -166,6 +243,26 @@
                 .All()
                 .FirstOrDefault(e => e.Id == id)
                 .StartDate;
+        }
+
+        public bool HasUserMadeCertainExam(int examId, string userId)
+        {
+            return this.userExamsRepository
+                .All()
+                .Any(ue => ue.ExamId == examId && ue.UserId == userId);
+        }
+
+        public bool IsExamAddedToLecture(int examId, int lectureId)
+        {
+            Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == examId);
+
+            return exam.LectureId == lectureId ? true : false;
+        }
+
+        public bool IsExamCertificated(int examId)
+        {
+            Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == examId);
+            return exam.IsCertificated.HasValue ? exam.IsCertificated.Value : false;
         }
 
         public async Task MarkAsSeenAsync(int id)
@@ -273,6 +370,14 @@
                     Grade = grade,
                     Status = Status.Graded,
                 };
+
+                Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == userExam.ExamId);
+                if (exam.LectureId != null)
+                {
+                    Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == exam.LectureId);
+                    lecture.IsCompleted = true;
+                    await this.lecturesRepository.SaveChangesAsync();
+                }
 
                 await this.userExamsRepository.AddAsync(userExam);
                 await this.userExamsRepository.SaveChangesAsync();

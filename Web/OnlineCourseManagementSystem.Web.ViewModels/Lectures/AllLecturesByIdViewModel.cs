@@ -6,6 +6,7 @@
 
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Exams;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
 
     public class AllLecturesByIdViewModel : IMapFrom<Lecture>
@@ -21,5 +22,7 @@
         public DateTime EndDate { get; set; }
 
         public IEnumerable<AllFilesByLectureIdViewModel> Files { get; set; }
+
+        public IEnumerable<AllExamsByLectureIdViewModel> Exams { get; set; }
     }
 }

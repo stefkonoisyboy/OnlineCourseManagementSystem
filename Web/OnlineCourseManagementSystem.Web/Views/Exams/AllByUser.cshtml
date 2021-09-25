@@ -4,6 +4,13 @@
     int i = 1;
 }
 
+@if (this.TempData.ContainsKey("Alert"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        @this.TempData["Alert"]
+    </div>
+}
+
 <style>
     /*
     * Table styles

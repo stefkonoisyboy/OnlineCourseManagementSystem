@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using AutoMapper;
     using Ganss.XSS;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
@@ -20,10 +21,13 @@
 
         public string FileRemoteUrl { get; set; }
 
+        [IgnoreMap]
         public IEnumerable<AllLecturersByIdViewModel> Lecturers { get; set; }
 
+        [IgnoreMap]
         public IEnumerable<AllLecturesByIdViewModel> Lectures { get; set; }
 
+        [IgnoreMap]
         public IEnumerable<AllSkillsByCourseIdViewModel> Skills { get; set; }
     }
 }

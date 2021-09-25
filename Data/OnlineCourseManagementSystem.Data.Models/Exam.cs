@@ -24,9 +24,17 @@
 
         public virtual ApplicationUser Lecturer { get; set; }
 
-        public int CourseId { get; set; }
+        public int? CourseId { get; set; }
 
         public virtual Course Course { get; set; }
+
+        public int? LectureId { get; set; }
+
+        public virtual Lecture Lecture { get; set; }
+
+        public string CreatorId { get; set; }
+
+        public virtual ApplicationUser Creator { get; set; }
 
         public DateTime StartDate { get; set; }
 
@@ -35,6 +43,8 @@
         public int Duration { get; set; }
 
         public bool IsActive => DateTime.UtcNow >= this.StartDate && DateTime.UtcNow <= this.EndDate;
+
+        public bool? IsCertificated { get; set; }
 
         public virtual ICollection<UserExam> Users { get; set; }
 

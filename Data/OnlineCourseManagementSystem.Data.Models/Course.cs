@@ -22,6 +22,7 @@
             this.Absences = new HashSet<Absence>();
             this.Skills = new HashSet<Skill>();
             this.Reviews = new HashSet<Review>();
+            this.Certificates = new HashSet<Certificate>();
         }
 
         public string Name { get; set; }
@@ -75,5 +76,7 @@
         public virtual ICollection<Skill> Skills { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
+
+        public virtual ICollection<Certificate> Certificates { get; set; }
     }
 }
