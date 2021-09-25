@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210923145443_AddedLectureToExam")]
+    partial class AddedLectureToExam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -497,45 +499,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("AudienceComments");
-                });
-
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Certificate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Grade")
-                        .HasColumnType("float");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Certificates");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Channel", b =>
@@ -1083,9 +1046,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
-
-                    b.Property<bool?>("IsCertificated")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2101,23 +2061,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Certificate", b =>
-                {
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Course", "Course")
-                        .WithMany("Certificates")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "User")
-                        .WithMany("Certificates")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Channel", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
@@ -2633,8 +2576,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.Navigation("AudienceComments");
 
-                    b.Navigation("Certificates");
-
                     b.Navigation("Channels");
 
                     b.Navigation("Chats");
@@ -2728,8 +2669,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Absences");
 
                     b.Navigation("Assignments");
-
-                    b.Navigation("Certificates");
 
                     b.Navigation("Exams");
 

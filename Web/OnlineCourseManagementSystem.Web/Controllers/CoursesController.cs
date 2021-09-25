@@ -14,6 +14,7 @@
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
     using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
     using OnlineCourseManagementSystem.Web.ViewModels.Skills;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
@@ -29,6 +30,7 @@
         private readonly IReviewsService reviewsService;
         private readonly IUsersService usersService;
         private readonly IFilesService filesService;
+        private readonly ILecturesService lecturesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public CoursesController(
@@ -40,6 +42,7 @@
             IReviewsService reviewsService,
             IUsersService usersService,
             IFilesService filesService,
+            ILecturesService lecturesService,
             UserManager<ApplicationUser> userManager)
         {
             this.coursesService = coursesService;
@@ -50,6 +53,7 @@
             this.reviewsService = reviewsService;
             this.usersService = usersService;
             this.filesService = filesService;
+            this.lecturesService = lecturesService;
             this.userManager = userManager;
         }
 
@@ -57,6 +61,10 @@
         public IActionResult ById(int id)
         {
             CourseByIdViewModel viewModel = this.coursesService.GetById<CourseByIdViewModel>(id);
+
+            viewModel.Skills = this.skillsService.GetAllByCourseId<AllSkillsByCourseIdViewModel>(id);
+            viewModel.Lecturers = this.lecturersService.GetAllByCourseId<AllLecturersByIdViewModel>(id);
+            viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(id);
 
             return this.View(viewModel);
         }

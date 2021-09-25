@@ -9,6 +9,13 @@
     ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 }
 
+@if (this.TempData.ContainsKey("Alert"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        @this.TempData["Alert"]
+    </div>
+}
+
 <!DOCTYPE html>
 <html>
 <head>

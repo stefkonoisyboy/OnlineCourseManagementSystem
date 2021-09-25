@@ -27,6 +27,8 @@
 
         int GetCourseIdByLectureId(int id);
 
+        string GetNameById(int id);
+
         T GetById<T>(int id);
 
         IEnumerable<T> GetAllById<T>(int courseId);

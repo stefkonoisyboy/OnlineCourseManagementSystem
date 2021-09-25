@@ -99,6 +99,8 @@
 
         public virtual DbSet<ContactMessage> ContactMessages { get; set; }
 
+        public virtual DbSet<Certificate> Certificates { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
@@ -124,6 +126,12 @@
         {
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
+
+            builder.Entity<Exam>()
+                .HasOne(e => e.Creator)
+                .WithMany(c => c.ExamsCreated)
+                .HasForeignKey(e => e.CreatorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             this.ConfigureUserIdentityRelations(builder);
 

@@ -1,14 +1,6 @@
-﻿@model OnlineCourseManagementSystem.Web.ViewModels.Lectures.AllLecturesByCreatorIdListViewModel
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Exams.AddExamToLectureInputModel
 @{
-    this.ViewData["Title"] = "Lectures";
-    int lectureIndex = 1;
-}
-
-@if (this.TempData.ContainsKey("Message"))
-{
-    <div class="alert alert-success alert-dismissible">
-        @this.TempData["Message"]
-    </div>
+    this.ViewData["Title"] = "Add to Lecture";
 }
 
 <head>
@@ -46,45 +38,6 @@
         margin-top: 3.0em;
     }
 </style>
-
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Lecture</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" asp-action="Create">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-
-                    <div class="form-group">
-                        <label asp-for="Input.CourseId" class="text-dark"></label>
-                        <select asp-for="Input.CourseId" asp-items="this.Model.Input.CoursesItems" class="form-select"></select>
-                        <span asp-validation-for="Input.CourseId" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Input.Title" class="text-dark"></label>
-                        <input asp-for="Input.Title" class="form-control" />
-                        <span asp-validation-for="Input.Title" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Input.Description" class="text-dark"></label>
-                        <textarea asp-for="Input.Description" class="form-control" rows="10"></textarea>
-                        <span asp-validation-for="Input.Description" class="text-danger"></span>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <body class="bg-light">
     <div class="row shadow-lg p-3 mb-5 bg-info rounded">
@@ -136,179 +89,17 @@
                 </li>
             </ul>
 
-            <div class="row row-margin-20">
-                <div class="col-md-2">
-                    <p style="font-size: 15px;" class="text-black-50">@this.Model.LecturesByCreatorIdCount Lectures</p>
+            <form method="post" class="shadow-lg p-5 mb-5 bg-white rounded">
+                <div asp-validation-summary="All" class="alert-danger"></div>
+
+                <div class="form-group">
+                    <label class="text-dark" asp-for="ExamId"></label>
+                    <select class="form-select" asp-for="ExamId" asp-items="this.Model.Exams"></select>
+                    <span asp-validation-for="ExamId" class="alert-danger"></span>
                 </div>
-                <div class="col-md-8">
 
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-info text-white" style="font-size: 12px;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">ADD LECTURE</button>
-                </div>
-            </div>
-
-            <div class="row shadow-lg p-3 mb-5 bg-white rounded">
-                @foreach (var lecture in this.Model.Lectures)
-                {
-                    <div class="modal fade" id="staticBackdropContent-@lecture.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelContent-@lecture.Id" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabelContent-@lecture.Id">Add Content</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <a asp-action="AddPresentation" asp-route-id="@lecture.Id">
-                                                <div class="shadow-lg p-3 mb-5 bg-info rounded">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-ppt" viewBox="0 0 16 16">
-                                                        <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
-                                                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
-                                                    </svg>
-                                                    Presentation
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a asp-action="AddWord" asp-route-id="@lecture.Id">
-                                                <div class="shadow-lg p-3 mb-5 bg-danger rounded">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-word" viewBox="0 0 16 16">
-                                                        <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
-                                                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                                                    </svg>
-                                                    Document
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a asp-action="AddVideo" asp-route-id="@lecture.Id">
-                                                <div class="shadow-lg p-3 mb-5 bg-success rounded">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z" />
-                                                    </svg>
-                                                    Video
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a asp-controller="Exams" asp-action="AddToLecture" asp-route-lectureId="@lecture.Id">
-                                                <div class="shadow-lg p-3 mb-5 bg-primary rounded">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
-                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                                    </svg>
-                                                    Quiz
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a>
-                                                <div class="shadow-lg p-3 mb-5 bg-warning rounded">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trophy-fill" viewBox="0 0 16 16">
-                                                        <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935z" />
-                                                    </svg>
-                                                    Certification
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary float-end" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    if (lectureIndex % 2 != 0)
-                    {
-                        <div class="col-md-2">
-                            <button class="shadow-lg p-3 mb-5 bg-danger rounded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="col-md-10 shadow-lg p-3 mb-5 bg-danger rounded">
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <img src="@lecture.CourseFileRemoteUrl" alt="courseProfileImageUrl" width="50" height="50" />
-                                        </div>
-                                        <div class="col-md-10">
-                                            <h5>
-                                                <strong>@lecture.Title</strong>
-                                            </h5>
-                                            <p style="font-size: 12px;">Last updated: @lecture.DifferenceBetweenNowAndModifiedOn</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <a asp-action="Edit" asp-route-id="@lecture.Id" class="btn btn-warning" style="font-size: 12px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                                        </svg>
-                                        EDIT
-                                    </a>
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdropContent-@lecture.Id" class="btn btn-primary row-margin-10 text-center" style="font-size: 12px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                            <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-                                        </svg>
-                                        ADD CONTENT
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col-md-2">
-                            <button class="shadow-lg p-3 mb-5 bg-success rounded">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="col-md-10 shadow-lg p-3 mb-5 bg-success rounded">
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <img src="@lecture.CourseFileRemoteUrl" alt="courseProfileImageUrl" width="50" height="50" />
-                                        </div>
-                                        <div class="col-md-10">
-                                            <h5>
-                                                <strong>@lecture.Title</strong>
-                                            </h5>
-                                            <p style="font-size: 12px;">Last updated: @lecture.DifferenceBetweenNowAndModifiedOn</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <a asp-action="Edit" asp-route-id="@lecture.Id" class="btn btn-warning" style="font-size: 12px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                                        </svg>
-                                        EDIT
-                                    </a>
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdropContent-@lecture.Id" class="btn btn-primary row-margin-10 text-center" style="font-size: 12px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                            <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-                                        </svg>
-                                        ADD CONTENT
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-                    lectureIndex++;
-                }
-            </div>
-
-            <partial name="_AllLecturesByCreatorIdPagingPartial" model="this.Model" />
+                <input type="submit" value="Save" class="btn btn-info float-end" />
+            </form>
         </div>
         <div class="col-md-4">
             <div class="accordion" id="accordionExample">

@@ -13,8 +13,10 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Answers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Exams;
     using OnlineCourseManagementSystem.Web.ViewModels.Questions;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public class ExamsController : Controller
     {
@@ -23,6 +25,8 @@
         private readonly ILecturersService lecturersService;
         private readonly IQuestionsService questionsService;
         private readonly IAnswersService answersService;
+        private readonly IUsersService usersService;
+        private readonly ILecturesService lecturesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ExamsController(
@@ -31,6 +35,8 @@
             ILecturersService lecturersService,
             IQuestionsService questionsService,
             IAnswersService answersService,
+            IUsersService usersService,
+            ILecturesService lecturesService,
             UserManager<ApplicationUser> userManager)
         {
             this.examsService = examsService;
@@ -38,6 +44,8 @@
             this.lecturersService = lecturersService;
             this.questionsService = questionsService;
             this.answersService = answersService;
+            this.usersService = usersService;
+            this.lecturesService = lecturesService;
             this.userManager = userManager;
         }
 
@@ -63,11 +71,47 @@
             }
 
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            input.CreatorId = user.Id;
             input.LecturerId = user.Id;
             await this.examsService.CreateAsync(input);
             this.TempData["Message"] = "Exam successfully created!";
 
             return this.RedirectToAction(nameof(this.All));
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> AddToLecture(int lectureId)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            AddExamToLectureInputModel input = new AddExamToLectureInputModel
+            {
+                Exams = this.examsService.GetAllExamsAsSelectListItemsByCreatorId(user.Id),
+                RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
+                CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
+            };
+
+            return this.View(input);
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> AddToLecture(int lectureId, AddExamToLectureInputModel input)
+        {
+            int courseId = this.lecturesService.GetCourseIdByLectureId(lectureId);
+            string lectureName = this.lecturesService.GetNameById(lectureId);
+
+            if (this.examsService.IsExamAddedToLecture(input.ExamId, lectureId))
+            {
+                this.TempData["Alert"] = $"Exam has been already added to Lecture: {lectureName}";
+            }
+            else
+            {
+                await this.examsService.AddExamToLectureAsync(lectureId, input);
+                this.TempData["Message"] = $"Exam added successfully to Lecture: {lectureName}";
+            }
+
+            return this.RedirectToAction("ById", "Courses", new { id = courseId });
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
@@ -155,16 +199,24 @@
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
-            TakeExamInputModel input = new TakeExamInputModel
+            if (this.examsService.HasUserMadeCertainExam(id, user.Id))
             {
-                ExamId = id,
-                Duration = this.examsService.GetDurationById(id),
-                Name = this.examsService.GetNameById(id),
-                Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id),
-                Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id),
-            };
+                this.TempData["Alert"] = "You have already done this exam!";
+                return this.RedirectToAction(nameof(this.AllByUser));
+            }
+            else
+            {
+                TakeExamInputModel input = new TakeExamInputModel
+                {
+                    ExamId = id,
+                    Duration = this.examsService.GetDurationById(id),
+                    Name = this.examsService.GetNameById(id),
+                    Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id),
+                    Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id),
+                };
 
-            return this.View(input);
+                return this.View(input);
+            }
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
@@ -172,15 +224,58 @@
         public async Task<IActionResult> TakeExam(int id, IFormCollection formCollection)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            await this.examsService.TakeExamAsync(id, user.Id, formCollection);
-            ResultFromExamViewModel viewModel = this.examsService.GetByExamIdAndUserId<ResultFromExamViewModel>(user.Id, id);
-            viewModel.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id);
-            viewModel.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id);
-            int usersCountOnCertainExam = this.examsService.GetCountOfAllUsersWhoPassedCertainExam(id);
-            double usersCountWithLowerGradesOnCertainExam = this.examsService.GetCountOfUsersWithLowerGradesOnCertainExam(id, viewModel.Grade);
-            viewModel.CompareRateInPercents = ((double)(usersCountWithLowerGradesOnCertainExam / usersCountOnCertainExam)) * 100;
 
-            return this.View("Result", viewModel);
+            if (this.examsService.HasUserMadeCertainExam(id, user.Id))
+            {
+                this.TempData["Alert"] = "You have already done this exam!";
+                return this.RedirectToAction(nameof(this.AllByUser));
+            }
+            else
+            {
+                await this.examsService.TakeExamAsync(id, user.Id, formCollection);
+                ResultFromExamViewModel viewModel = this.examsService.GetByExamIdAndUserId<ResultFromExamViewModel>(user.Id, id);
+                viewModel.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id);
+                viewModel.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id);
+                int usersCountOnCertainExam = this.examsService.GetCountOfAllUsersWhoPassedCertainExam(id);
+                double usersCountWithLowerGradesOnCertainExam = this.examsService.GetCountOfUsersWithLowerGradesOnCertainExam(id, viewModel.Grade);
+                viewModel.CompareRateInPercents = ((double)(usersCountWithLowerGradesOnCertainExam / usersCountOnCertainExam)) * 100;
+
+                return this.View("Result", viewModel);
+            }
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> AddToCertificate()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            AddExamToCertificateInputModel input = new AddExamToCertificateInputModel
+            {
+                Exams = this.examsService.GetAllExamsAsSelectListItemsByCreatorId(user.Id),
+                RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
+                CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
+            };
+
+            return this.View(input);
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [HttpPost]
+        public async Task<IActionResult> AddToCertificate(AddExamToCertificateInputModel input)
+        {
+            int courseId = this.examsService.GetCourseIdByExam(input.ExamId);
+
+            if (this.examsService.IsExamCertificated(input.ExamId))
+            {
+                this.TempData["Alert"] = "Exam has already been certificated!";
+                return this.RedirectToAction("ById", "Courses", new { id = courseId });
+            }
+            else
+            {
+                await this.examsService.AddExamToCertificateAsync(input);
+                this.TempData["Message"] = "Exam has been successfully certificated!";
+                return this.RedirectToAction("ById", "Courses", new { id = courseId });
+            }
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
@@ -195,6 +290,22 @@
             viewModel.CompareRateInPercents = ((double)(usersCountWithLowerGradesOnCertainExam / usersCountOnCertainExam)) * 100;
 
             return this.View("Result", viewModel);
+        }
+
+        // TODO: Make certifications page where users can see their certifications, followed courses and completed courses
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        public IActionResult StartCertificate(int id)
+        {
+            if (!this.examsService.CanStartCertificate(id))
+            {
+                this.TempData["Alert"] = "Cannot start certificate until you complete all lectures in this course!";
+                return this.RedirectToAction("ById", "Courses", new { id });
+            }
+            else
+            {
+                int examId = this.examsService.GetCertificatedExamIdByCourse(id);
+                return this.RedirectToAction(nameof(this.TakeExam), new { id = examId });
+            }
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]

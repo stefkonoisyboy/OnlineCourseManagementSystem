@@ -153,7 +153,7 @@
         {
             return this.lecturesRepository
                 .All()
-                .Where(l => l.CreatorId == creatorId)
+                .Where(l => l.CreatorId == creatorId && l.Course.CreatorId == creatorId)
                 .Skip((page - 1) * items).Take(items)
                 .OrderByDescending(l => l.CreatedOn)
                 .To<T>()
@@ -204,6 +204,14 @@
                 .OrderByDescending(l => l.CreatedOn)
                 .To<T>()
                 .ToList();
+        }
+
+        public string GetNameById(int id)
+        {
+            return this.lecturesRepository
+                .All()
+                .FirstOrDefault(l => l.Id == id)
+                .Title;
         }
 
         public async Task UpdateModifiedOnById(int id)
@@ -266,7 +274,5 @@
 
             return result?.SecureUrl.AbsoluteUri;
         }
-
-        
     }
 }

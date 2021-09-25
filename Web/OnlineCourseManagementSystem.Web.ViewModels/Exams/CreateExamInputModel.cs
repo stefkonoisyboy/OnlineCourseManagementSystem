@@ -32,5 +32,7 @@
 
         [Required]
         public int Duration { get; set; }
+
+        public string CreatorId { get; set; }
     }
 }
