@@ -10,12 +10,12 @@
 
     public class LikeViewModel : IMapFrom<Like>, IHaveCustomMappings
     {
-        public string CreatorName { get; set; }
+        public string UserId { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Like, LikeViewModel>()
-                .ForMember(x => x.CreatorName, y => y.MapFrom(l => l.Creator.UserName));
+                .ForMember(x => x.UserId, y => y.MapFrom(l => l.Creator.Id));
         }
     }
 }

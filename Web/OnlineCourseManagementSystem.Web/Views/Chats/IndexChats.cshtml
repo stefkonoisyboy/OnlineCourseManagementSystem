@@ -6,6 +6,7 @@
     ApplicationUser user = await this.userManager.GetUserAsync(this.User);
     string userFullName = $"{user.FirstName} {user.LastName}";
     this.ViewData["Title"] = "Messages";
+    this.ViewData["CurrentUserHeading"] = "Messages";
 }
 
 
