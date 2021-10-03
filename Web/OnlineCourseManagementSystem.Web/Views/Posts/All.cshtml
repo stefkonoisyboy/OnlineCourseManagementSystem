@@ -1,300 +1,323 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Posts
+@using Microsoft.AspNetCore.Identity
+@using OnlineCourseManagementSystem.Data.Models
+@inject UserManager<ApplicationUser> userManager
 @model AllPostsViewModel
 @{
     this.ViewData["Title"] = "Forum";
+    string userId = this.userManager.GetUserId(this.User);
 }
 
-<div class="d-flex">
+<style>
+    .myBtn {
+        padding: 0.5rem;
+    }
 
-</div>
-<h1 class="title" >Forum</h1>
+        .myBtn:hover {
+            cursor: pointer;
+            background: #f5f5f5;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        }
 
-<div class="d-flex" id="wrapper">
+    .course-choice {
+        padding: 0.5rem;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    }
+</style>
 
-        <div class="border-right" style="background-color: lightslategrey" id="sidebar-wrapper">
-            <div class="sidebar-heading text-white">
-                Categories
-            </div>
-            <div class="list-group list-group-flush">
-                <h4 class="text-white">
-                    Courses Options(@this.Model.Courses.Count())
-                </h4>
-                <a class="p-2 bg-white m-1 rounded-pill d-flex  justify-content-center align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1">
-                    <div class="flex-grow-1">See all</div>
-                    <div>
-                        <span class="badge" style="background:#ff6a00; color:#ffffff">
-                            @this.Model.CountOfAllPosts
-                        </span>
-                    </div>
-                </a>
-                <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#allcourses">Courses</button>
-                
-                <div class="collapse" id="allcourses">
+<div class="d-flex mt-4" id="wrapper">
+    <div class="border-right bg-transparent" id="sidebar-wrapper" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+        <div class="list-group list-group-flush">
+            <h4 class="text-white">
+                Courses Options(@this.Model.Courses.Count())
+            </h4>
+            <a class="course-choice m-2 rounded d-flex align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1">
+                <div class="flex-grow-1">See all</div>
+                <div>
+                    <span class="badge badge-primary">
+                        @this.Model.CountOfAllPosts
+                    </span>
+                </div>
+            </a>
+            <button type="button" class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#allcourses">Courses</button>
 
-                    @foreach (var course in this.Model.Courses)
+            <div class="collapse" id="allcourses">
+
+                @foreach (var course in this.Model.Courses)
+                {
+                    @if (this.Model.CourseId == course.Id)
                     {
-                        @if (this.Model.CourseId == course.Id )
-                         {
-                            <a class="p-2 m-1 bg-info rounded-pill d-flex justify-content-center align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
-                                <div class="flex-grow-1">@course.Name</div>
-                                <div>
-                                    <span class="badge" style="background:#ff6a00; color:#ffffff">
-                                        @course.PostsCount
-                                    </span>
-                                </div>
-                            </a>
-                         }
-                         else
-                         {
-                         <a class="p-2 m-1 bg-white rounded-pill d-flex justify-content-center align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
-                             <div class="flex-grow-1">@course.Name</div>
-                             <div>
-                                 <span class="badge" style="background:#ff6a00; color:#ffffff">
-                                     @course.PostsCount
-                                 </span>
-                             </div>
-                         </a>
-                         }
-
-                            
-                        }
-                </div>
-            </div>
-        </div>
-        <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light d-flex" style="background-color: lightslategrey">
-                <div class="flex-grow-1">
-                    <button type="button" class="btn btn-info" id="menu-toggle">Toggle Menu</button>
-                </div>
-
-                @if (this.User.Identity.IsAuthenticated)
-                {
-                    <a class="mx-2" asp-controller="Posts" asp-action="Create">
-                        <svg style="color:white; transform:scale(1.03); transition: transform 350ms" xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
+                        <a class=" course-choice m-1 rounded d-flex align-items-center" style="background:#42a5f5;color:white;" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
+                            <div class="flex-grow-1">@course.Name</div>
+                            <div>
+                                <span class="badge" style="background:#2196f3;color:white">
+                                    @course.PostsCount
+                                </span>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="course-choice m-1 bg-white rounded d-flex justify-content-center align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1" asp-route-courseId="@course.Id">
+                            <div class="flex-grow-1">@course.Name</div>
+                            <div>
+                                <span class="badge badge-primary">
+                                    @course.PostsCount
+                                </span>
+                            </div>
+                        </a>
+                    }
                 }
-                @*<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>*@
-            </nav>
-            <div class="container-fluid" >
-                @if (this.TempData.ContainsKey("CreatedPost"))
-                {
-                    <div class="alert alert-success alert-dismissible">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        @this.TempData["CreatedPost"]
-                    </div>
-                }
-
-            <pre class="tab"></pre>
-            <pre class="tab"></pre>
-                @if (!string.IsNullOrWhiteSpace(this.Model.Search))
-                {
-                    <h3 style="color: black">Search for "@this.Model.Search", page @this.Model.CurrentPage, results @this.Model.PostsCount</h3>
-                }
-
-                <form asp-controller="Posts" asp-action="All" asp-route-id="1" method="post">
-                    <div class="input-group mb-4">
-                        <input type="search" name="search" class="form-control" value="@this.Model.Search" placeholder="Enter title...." />
-                        <div class="input-group-append">
-                            <input type="submit" value="Search" class="btn btn-outline-secondary" />
-                        </div>
-                    </div>
-                </form>
-
-<pre class="tab"></pre>
-<pre class="tab"></pre>
-
-               
-
-<pre class="tab"></pre>
-<pre class="tab"></pre>
-
-                @if (!this.Model.Posts.Any())
-                {
-                    <h1 class="text-center text-white">No Posts</h1>
-                }
-                else
-                {
-                    <div class="container">
-                        <div class="col">
-                            @foreach (var post in this.Model.Posts)
-                            {
-                                <article class="row-cols-md-1 rounded" style="background:#d8d8d8">
-                                    <div class="card-header">
-                                        <div class="d-flex align-items-center">
-                                            <a class="flex-grow-1 my-2" style="color:black" asp-controller="Posts" asp-action="SeePost" asp-route-id="@post.Id">@post.Title</a>
-
-                                            @if (this.User.Identity.Name == post.AuthorName)
-                                            {
-                                                <div class="d-flex">
-
-                                                    <form class="mx-1" asp-controller="Posts" asp-action="Delete" asp-route-id="@post.Id" method="post">
-                                                        <button style="outline:none; border:none; background-color:transparent">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                    <a class="mx-1" style="color:black" asp-controller="Posts" asp-action="Edit" asp-route-id="@post.Id">
-                                                        <svg style="cursor:pointer" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                            <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                                                        </svg>
-                                                    </a>
-                                                </div>
-                                            }
-                                        </div>
-                                        <div>
-                                            <p>
-                                                <span>@post.AuthorName</span>
-                                                <span>
-                                                    <img src="~/icons/calendar.png" />
-                                                    <span>@post.CreatedOn</span>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <div class="d-flex flex-grow-1">
-                                                <div class="mx-2">
-                                                    <form asp-controller="Posts" asp-action="Like" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
-                                                        @if (!this.User.Identity.IsAuthenticated)
-                                                        {
-                                                            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                            </button>
-                                                        }
-                                                        else
-                                                        {
-
-                                                            if (post.Likes.Any(x => x.CreatorName == this.User.Identity.Name))
-                                                            {
-                                                                <button id="likebtn" class=" btn btn-secondary" style="background:#137cdc">
-                                                                    <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                                </button>
-                                                            }
-                                                            else
-                                                            {
-                                                                <button id="likebtn" class="btn btn-secondary">
-                                                                    <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                                </button>
-                                                            }
-
-                                                        }
-                                                        <span>Likes</span>
-                                                        <span>@post.Likes.Count()</span>
-                                                    </form>
-                                                </div>
-                                                <div class="mx-2">
-                                                    <form asp-controller="Posts" asp-action="Dislike" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
-                                                        @if (!this.User.Identity.IsAuthenticated)
-                                                        {
-                                                            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                            </button>
-                                                        }
-                                                        else
-                                                        {
-                                                            if (post.Dislikes.Any(x => x.CreatorName == this.User.Identity.Name))
-                                                            {
-                                                                <button id="likebtn" class="btn btn-secondary" style="background:#137cdc">
-                                                                    <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                                </button>
-                                                            }
-                                                            else
-                                                            {
-                                                                <button id="dislikebtn" class="btn btn-secondary">
-                                                                    <i class="fa fa-thumbs-down " style="font-size: 30px;"></i>
-                                                                </button>
-                                                            }
-                                                        }
-                                                        <span>Dislikes</span>
-                                                        <span>@post.Dislikes.Count()</span>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <p>
-                                                    Last Active
-                                                    @post.LastActive.Name
-                                                </p>
-                                                <p>
-                                                    @post.LastActive.LastActive
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
-                                <pre class="tab"></pre>
-                            }
-                        </div>
-                    </div>
-                }
-
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        @if (this.Model.CurrentPage > 1)
-                        {
-                            <li class="page-item">
-
-                                <a asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.PreviousPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" class="page-link" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        }
-                        @{
-                            const int MorePagesToShow = 3;
-                            var pagesToShow = new List<int>();
-                            for (var i = 1; i <= MorePagesToShow; i++)
-                            {
-                                pagesToShow.Add(i);
-                            }
-                            for (var i = this.Model.CurrentPage - MorePagesToShow; i <= this.Model.CurrentPage + MorePagesToShow; i++)
-                            {
-                                if (i > 0)
-                                {
-                                    pagesToShow.Add(i);
-                                }
-                            }
-                            for (var i = this.Model.PagesCount - MorePagesToShow + 1; i <= this.Model.PagesCount; i++)
-                            {
-                                if (i > 0)
-                                {
-                                    pagesToShow.Add(i);
-                                }
-                            }
-                            pagesToShow = pagesToShow.Where(x => x <= this.Model.PagesCount).Distinct().OrderBy(x => x).ToList();
-                        }
-                        @{
-                            @for (var i = 0; i < pagesToShow.Count; i++)
-                            {
-                                var className = string.Empty;
-                                var pageNumber = pagesToShow[i];
-                                if (pageNumber == this.Model.CurrentPage)
-                                {
-                                    className = "active";
-                                }
-                                if (i > 0 && pageNumber - 1 != pagesToShow[i - 1])
-                                {
-                                    <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@(pagesToShow[i - 1] + 1)" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">...</a></li>
-                                }
-                                <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@pageNumber" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">@pageNumber</a></li>
-                            }
-                        }
-                        @if (this.Model.CurrentPage < this.Model.PagesCount)
-                        {
-                            <li class="page-item">
-                                <a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.NextPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
             </div>
         </div>
     </div>
+    <div id="page-content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light d-flex bg-transparent">
+            <div class="flex-grow-1">
+                <button type="button" class="btn btn-info" id="menu-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                <a class="mx-2 d-inline-block myBtn" style="color:black; font-size:14px; font-weight:bold;" asp-controller="Posts" asp-action="Create">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    NEW TOPIC
+                </a>
+            }
+            @*<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>*@
+        </nav>
+        <div class="container-fluid">
+            @if (this.TempData.ContainsKey("CreatedPost"))
+            {
+                <div class="alert alert-success alert-dismissible mb-3">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    @this.TempData["CreatedPost"]
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(this.Model.Search))
+            {
+                <h3 style="color: black">Search for "@this.Model.Search", page @this.Model.CurrentPage, results @this.Model.PostsCount</h3>
+            }
+
+            <form class="my-5" asp-controller="Posts" asp-action="All" asp-route-id="1" method="post">
+                <div class="input-group mb-4">
+                    <input type="search" name="search" class="form-control" value="@this.Model.Search" placeholder="Enter title...." />
+                    <div class="input-group-append">
+                        <input type="submit" value="Search" class="btn btn-outline-secondary" />
+                    </div>
+                </div>
+            </form>
+
+            @if (!this.Model.Posts.Any())
+            {
+                <h1 class="text-center text-white">No Posts</h1>
+            }
+            else
+            {
+                foreach (var post in this.Model.Posts)
+                {
+                    <div class="d-flex align-items-center p-2 my-1" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                         @if (userId == post.AuthorId)
+                          {
+                             <div class="d-flex">
+                                 <form class="mx-1" asp-controller="Posts" asp-action="Delete" asp-route-id="@post.Id" method="post">
+                                     <button style="outline:none; border:none; background-color:transparent">
+                                         <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                         </svg>
+                                     </button>
+                                 </form>
+                                 <a class="mx-1" style="color:black" asp-controller="Posts" asp-action="Edit" asp-route-id="@post.Id">
+                                     <svg style="cursor:pointer" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                                         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                         <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                     </svg>
+                                 </a>
+                             </div>
+                          }
+                        <div class="mx-2 p-2 rounded-circle" style="background:#e0e0e0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
+                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                            </svg>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <div class="d-flex">
+                                <h6 class="flex-grow-1" style="width:10rem; text-overflow: ellipsis;">
+                                    <a class="my-2" style="color:black" asp-controller="Posts" asp-action="SeePost" asp-route-id="@post.Id">@post.Title</a>
+                                </h6>
+                               
+                            </div>
+                            <div class="d-block d-md-flex align-items-center" style="font-size:12px">
+                                <div>posted by @post.AuthorName |</div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    @if (post.CreatedOn.Date == DateTime.UtcNow.Date)
+                                    {
+                                        <span class="badge text-black-50">Today @post.CreatedOn.ToString("HH:mm")</span>
+                                    }
+                                    else if (post.CreatedOn.Date.Day == DateTime.UtcNow.Date.Day - 1 && post.CreatedOn.Date.Month == DateTime.UtcNow.Month)
+                                    {
+                                        <span class="badge text-black-50">Tonight @post.CreatedOn.ToString("HH:mm")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge text-black-50">@post.CreatedOn.ToString("d")</span>
+                                    }
+                                    |
+                                </div>
+                                <div>
+                                    Last Active: @post.LastActive.Name
+                                    @if (post.CreatedOn.Date == DateTime.UtcNow.Date)
+                                    {
+                                        <span class="badge text-black-50">Today @post.CreatedOn.ToString("HH:mm")</span>
+                                    }
+                                    else if (post.CreatedOn.Date.Day == DateTime.UtcNow.Date.Day - 1 && post.CreatedOn.Date.Month == DateTime.UtcNow.Month)
+                                    {
+                                        <span class="badge text-black-50">Tonight @post.CreatedOn.ToString("HH:mm")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge text-black-50">@post.CreatedOn.ToString("d")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex mx-1">
+                            <a class="my-2 myBtn" style="color:black; height:50px;" asp-controller="Posts" asp-action="SeePost" asp-route-id="@post.Id">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-fill" viewBox="0 0 16 16">
+                                    <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z" />
+                                </svg>
+                                <span class="badge text-black-50 mx-1">@post.CommentsCount</span>
+                            </a>
+                            <div class="mx-1">
+                                @if (this.User.Identity.IsAuthenticated)
+                                {
+                                    <form class="my-1" asp-controller="Posts" asp-action="Like" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
+                                        <button class="btn border-0">
+                                           @if (post.Likes.Any(l => l.UserId == userId))
+                                           {
+                                               <svg style="color: #42a5f5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                                   <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                               </svg>
+                                           }
+                                           else
+                                           {
+                                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                                   <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                               </svg>
+                                           }
+                                        </button>
+                                        <span class="badge text-black-50 mx-1">@post.Likes.Count()</span>
+                                    </form>
+                                    <form class="my-1" asp-controller="Posts" asp-action="Dislike" asp-route-id="@post.Id" asp-route-currentPage="@this.Model.CurrentPage" asp-route-courseId="@this.Model.CourseId" asp-route-search="@this.Model.Search" method="post">
+                                        <button class="btn border-0">
+                                            @if (post.Dislikes.Any(l => l.UserId == userId))
+                                            {
+                                                <svg style="color: #42a5f5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                                </svg>
+                                            }
+                                            else
+                                            {
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                                </svg>
+                                            }
+                                        </button>
+                                        <span class="badge text-black-50 mx-1">@post.Dislikes.Count()</span>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                    </svg>
+                                    <span class="badge text-black-50 mx-1">@post.Likes.Count()</span>
+
+                                    <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                    </svg>
+                                    <span class="badge text-black-50 mx-1">@post.Dislikes.Count()</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="d-flex justify-content-center mt-5">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    @if (this.Model.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.PreviousPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" class="page-link" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @{
+                        const int MorePagesToShow = 3;
+                        var pagesToShow = new List<int>();
+                        for (var i = 1; i <= MorePagesToShow; i++)
+                        {
+                            pagesToShow.Add(i);
+                        }
+                        for (var i = this.Model.CurrentPage - MorePagesToShow; i <= this.Model.CurrentPage + MorePagesToShow; i++)
+                        {
+                            if (i > 0)
+                            {
+                                pagesToShow.Add(i);
+                            }
+                        }
+                        for (var i = this.Model.PagesCount - MorePagesToShow + 1; i <= this.Model.PagesCount; i++)
+                        {
+                            if (i > 0)
+                            {
+                                pagesToShow.Add(i);
+                            }
+                        }
+                        pagesToShow = pagesToShow.Where(x => x <= this.Model.PagesCount).Distinct().OrderBy(x => x).ToList();
+                    }
+                    @{
+                        @for (var i = 0; i < pagesToShow.Count; i++)
+                        {
+                            var className = string.Empty;
+                            var pageNumber = pagesToShow[i];
+                            if (pageNumber == this.Model.CurrentPage)
+                            {
+                                className = "active";
+                            }
+                            if (i > 0 && pageNumber - 1 != pagesToShow[i - 1])
+                            {
+                                <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@(pagesToShow[i - 1] + 1)" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">...</a></li>
+                            }
+                            <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@pageNumber" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">@pageNumber</a></li>
+                        }
+                    }
+                    @if (this.Model.CurrentPage < this.Model.PagesCount)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.NextPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

@@ -33,7 +33,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Comment, CommentViewModel>()
-                 .ForMember(x => x.AuthorName, y => y.MapFrom(c => c.Author.UserName));
+                 .ForMember(x => x.AuthorName, y => y.MapFrom(c => $"{c.Author.FirstName} {c.Author.LastName}"));
         }
     }
 }

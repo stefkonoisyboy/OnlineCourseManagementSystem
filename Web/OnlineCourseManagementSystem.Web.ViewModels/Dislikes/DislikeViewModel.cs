@@ -10,12 +10,12 @@
 
     public class DislikeViewModel : IMapFrom<Dislike>, IHaveCustomMappings
     {
-        public string CreatorName { get; set; }
+        public string UserId { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Dislike, DislikeViewModel>()
-                .ForMember(x => x.CreatorName, y => y.MapFrom(d => d.Creator.UserName));
+                .ForMember(x => x.UserId, y => y.MapFrom(d => d.Creator.Id));
         }
     }
 }

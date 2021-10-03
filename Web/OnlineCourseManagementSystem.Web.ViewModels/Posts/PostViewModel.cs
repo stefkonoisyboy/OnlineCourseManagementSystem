@@ -25,6 +25,8 @@
 
         public string AuthorName { get; set; }
 
+        public string AuthorId { get; set; }
+
         public IEnumerable<LikeViewModel> Likes { get; set; }
 
         public IEnumerable<DislikeViewModel> Dislikes { get; set; }
@@ -33,11 +35,14 @@
 
         public LastActiveViewModel LastActive { get; set; }
 
+        public int CommentsCount { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Post, PostViewModel>()
-                .ForMember(x => x.AuthorName, y => y.MapFrom(p => p.Author.UserName))
-                .ForMember(x => x.Id, y => y.MapFrom(p => p.Id));
+                .ForMember(x => x.AuthorName, y => y.MapFrom(p => $"{p.Author.FirstName} {p.Author.LastName}"))
+                .ForMember(x => x.Id, y => y.MapFrom(p => p.Id))
+                .ForMember(x => x.CommentsCount, y => y.MapFrom(p => p.Comments.Count));
         }
     }
 }

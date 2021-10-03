@@ -1108,7 +1108,6 @@
         }
 
         this.AddUsersToChatInputModel = new AddUsersToChatInputModel();
-        this.MarkedUsersToAdd = new Dictionary<string, bool>();
         await this.Load();
     }
 
@@ -1236,16 +1235,21 @@
                 this.CurrentChat.Users = this.chatsService.GetUsersByChat<UserViewModel>(this.CurrentChat.ChatId);
                 this.CurrentChat.Name = this.chatsService.GetNameBy(this.CurrentChat.ChatId, this.UserId);
             }
+
             this.StateHasChanged();
         });
     }
 
     void LoadUsersNotAddedToChat()
     {
+        this.MarkedUsersToAdd = new Dictionary<string, bool>();
         this.UsersToAdd = this.chatsService.GetAllUsersNotAddedBy(this.CurrentChat.ChatId).ToList();
         foreach (var user in this.UsersToAdd)
         {
-            this.MarkedUsersToAdd[user.Id] = false;
+            if (!this.MarkedUsersToAdd.ContainsKey(user.Id))
+            {
+                this.MarkedUsersToAdd.Add(user.Id, false);
+            }
         }
     }
 

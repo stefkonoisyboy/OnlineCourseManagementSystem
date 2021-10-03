@@ -28,7 +28,7 @@
 
 
 
-///Button to scrool to the Top
+///Button to scroll to the Top
 
 //window.onscroll = function () {
 //    scrollFunction()

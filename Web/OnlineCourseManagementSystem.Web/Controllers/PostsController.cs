@@ -21,7 +21,7 @@
         private readonly ICommentsService commentsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        private readonly int itemsPerPage = 2;
+        private readonly int itemsPerPage = 5;
 
         public PostsController(IPostsService postsService, ICoursesService coursesService, ICommentsService commentsService ,UserManager<ApplicationUser> userManager)
         {
