@@ -70,6 +70,9 @@
             input.CoursesItems = this.coursesService.GetAllAsSelectListItemsByCreatorId(user.Id);
             input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
             input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.View(input);
         }
 
@@ -83,6 +86,9 @@
                 input.CoursesItems = this.coursesService.GetAllAsSelectListItemsByCreatorId(user.Id);
                 input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
                 input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+
+                this.ViewData["CurrentUserHeading"] = "Messages";
+
                 return this.View(input);
             }
 
@@ -102,6 +108,9 @@
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                 RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
             };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.View(input);
         }
 
@@ -124,6 +133,8 @@
             await this.lecturesService.AddWordFileAsync(input);
             await this.lecturesService.UpdateModifiedOnById(id);
 
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.Redirect($"/Courses/ById/{courseId}");
         }
 
@@ -136,6 +147,9 @@
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                 RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
             };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.View(input);
         }
 
@@ -158,6 +172,8 @@
             await this.lecturesService.AddPresentationFileAsync(input);
             await this.lecturesService.UpdateModifiedOnById(id);
 
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.Redirect($"/Courses/ById/{courseId}");
         }
 
@@ -170,6 +186,9 @@
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                 RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
             };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.View(input);
         }
 
@@ -191,6 +210,8 @@
             int courseId = this.lecturesService.GetCourseIdByLectureId(id);
             await this.lecturesService.AddVideoAsync(input);
             await this.lecturesService.UpdateModifiedOnById(id);
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.Redirect($"/Courses/ById/{courseId}");
         }
@@ -214,6 +235,8 @@
                     CreatorId = user.Id,
                 },
             };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.View(viewModel);
         }

@@ -109,6 +109,9 @@
             services.AddTransient<ISkillsService, SkillsService>();
             services.AddTransient<IReviewsService, ReviewsService>();
             services.AddTransient<IContactMessagesService, ContactMessagesService>();
+            services.AddTransient<ICompletitionsService, CompletitionsService>();
+            services.AddTransient<ICertificatesService, CertificatesService>();
+            services.AddTransient<IMessageQAsService, MessageQAsService>();
 
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
         }
@@ -158,6 +161,7 @@
                         endpoints.MapFallbackToFile("index.html");
                         endpoints.MapBlazorHub();
                         endpoints.MapHub<ChatHub>("hubs/ChatHub");
+                        endpoints.MapHub<QAHub>("hubs/QAHub");
                     });
         }
     }

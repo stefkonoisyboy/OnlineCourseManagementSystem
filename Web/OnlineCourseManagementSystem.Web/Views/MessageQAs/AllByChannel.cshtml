@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using OnlineCourseManagementSystem.Data.Models
+@using OnlineCourseManagementSystem.Web.Views.Shared.Components
+@using System.Security.Claims
+@inject UserManager<ApplicationUser> userManager
+@inject RoleManager<ApplicationRole> roleManager
+@{
+    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+}
+
+<body class="bg-light">
+    <component type="typeof(AllByChannel)" render-mode="ServerPrerendered" param-Id="this.ViewBag.Id" param-UserId="user.Id" param-Role="this.ViewBag.RoleName" />
+</body>

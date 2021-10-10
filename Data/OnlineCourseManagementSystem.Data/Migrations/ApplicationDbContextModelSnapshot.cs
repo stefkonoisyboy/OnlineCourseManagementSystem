@@ -749,6 +749,42 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Completition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LectureId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LectureId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Completitions");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.ContactMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -1293,6 +1329,9 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("MessageQAId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -1308,6 +1347,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.HasIndex("CreatorId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("MessageQAId");
 
                     b.HasIndex("PostId");
 
@@ -1400,6 +1441,62 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.HasIndex("MessageId");
 
                     b.ToTable("MessageEmojis");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.MessageQA", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ChannelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsAnswered")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsHighlighted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsStarred")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChannelId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("MessageQAs");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Order", b =>
@@ -2191,6 +2288,23 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Completition", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Lecture", "Lecture")
+                        .WithMany("Completitions")
+                        .HasForeignKey("LectureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "User")
+                        .WithMany("Completitions")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Lecture");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.ContactMessage", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "SeenByUser")
@@ -2390,6 +2504,10 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                         .WithMany("Likes")
                         .HasForeignKey("CreatorId");
 
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.MessageQA", "MessageQA")
+                        .WithMany("Likes")
+                        .HasForeignKey("MessageQAId");
+
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId");
@@ -2399,6 +2517,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Comment");
 
                     b.Navigation("Creator");
+
+                    b.Navigation("MessageQA");
 
                     b.Navigation("Post");
                 });
@@ -2449,6 +2569,29 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Emoji");
 
                     b.Navigation("Message");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.MessageQA", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Channel", "Channel")
+                        .WithMany("MessageQAs")
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
+                        .WithMany("MessageQAs")
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.MessageQA", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Order", b =>
@@ -2643,6 +2786,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.Navigation("Comments");
 
+                    b.Navigation("Completitions");
+
                     b.Navigation("ContactMessages");
 
                     b.Navigation("Courses");
@@ -2675,6 +2820,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.Navigation("Logins");
 
+                    b.Navigation("MessageQAs");
+
                     b.Navigation("Messages");
 
                     b.Navigation("Orders");
@@ -2705,6 +2852,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Channel", b =>
                 {
                     b.Navigation("AudienceComments");
+
+                    b.Navigation("MessageQAs");
 
                     b.Navigation("Users");
                 });
@@ -2780,6 +2929,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.Navigation("Comments");
 
+                    b.Navigation("Completitions");
+
                     b.Navigation("Exams");
 
                     b.Navigation("Files");
@@ -2793,6 +2944,11 @@ namespace OnlineCourseManagementSystem.Data.Migrations
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Message", b =>
                 {
                     b.Navigation("Emojis");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.MessageQA", b =>
+                {
+                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Parent", b =>

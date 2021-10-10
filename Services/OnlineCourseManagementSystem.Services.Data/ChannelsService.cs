@@ -23,6 +23,21 @@ namespace OnlineCourseManagementSystem.Services.Data
 
         public async Task CreateAsync(CreateChannelInputModel input)
         {
+            if (this.channelsRepository.All().Any(c => c.Code == input.Code))
+            {
+                throw new InvalidOperationException("Channel with such a code already exists!");
+            }
+
+            if (input.StartDate <= DateTime.UtcNow)
+            {
+                throw new ArgumentException("Start Date should be greater than Current Date!");
+            }
+
+            if (input.StartDate >= input.EndDate)
+            {
+                throw new ArgumentException("End Date should be greater than Start Date!");
+            }
+
             Channel channel = new Channel
             {
                 Code = input.Code,
@@ -45,6 +60,13 @@ namespace OnlineCourseManagementSystem.Services.Data
             await this.userChannelsRepository.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            Channel channel = this.channelsRepository.All().FirstOrDefault(c => c.Id == id);
+            this.channelsRepository.Delete(channel);
+            await this.channelsRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<T> GetAllByCreatorId<T>(string creatorId)
         {
             return this.channelsRepository
@@ -63,6 +85,49 @@ namespace OnlineCourseManagementSystem.Services.Data
                 .OrderByDescending(c => c.CreatedOn)
                 .To<T>()
                 .ToList();
+        }
+
+        public T GetById<T>(int id)
+        {
+            return this.channelsRepository
+                .All()
+                .Where(c => c.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+        }
+
+        public bool IsUserInChannel(string userId, int channelId)
+        {
+            if (!this.userChannelsRepository.All().Any(uc => uc.UserId == userId && uc.ChannelId == channelId))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task JoinChannelAsync(JoinChannelInputModel input)
+        {
+            Channel channel = this.channelsRepository.All().FirstOrDefault(c => c.Code == input.Code);
+
+            if (channel == null)
+            {
+                throw new InvalidOperationException("Channel with such a code does not exist!");
+            }
+
+            if (this.userChannelsRepository.All().Any(uc => uc.UserId == input.UserId && uc.ChannelId == channel.Id))
+            {
+                throw new InvalidOperationException("You have already joined this channel!");
+            }
+
+            UserChannel userChannel = new UserChannel
+            {
+                ChannelId = channel.Id,
+                UserId = input.UserId,
+            };
+
+            await this.userChannelsRepository.AddAsync(userChannel);
+            await this.userChannelsRepository.SaveChangesAsync();
         }
     }
 }

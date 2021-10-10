@@ -23,5 +23,9 @@
         public int? AudienceCommentId { get; set; }
 
         public virtual AudienceComment AudienceComment { get; set; }
+
+        public int? MessageQAId { get; set; }
+
+        public virtual MessageQA MessageQA { get; set; }
     }
 }

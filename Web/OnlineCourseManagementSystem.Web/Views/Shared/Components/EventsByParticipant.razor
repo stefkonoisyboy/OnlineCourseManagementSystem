@@ -1,0 +1,291 @@
+﻿@inject IChannelsService channelsService
+@inject NavigationManager navigationManager 
+
+<style>
+    .calendarIconDiv {
+        text-align: center;
+        float: left;
+        width: 50px;
+        height: 50px;
+        border: 1px solid #909090;
+        border-radius: 100%;
+        margin-right: 7px;
+        background-color: aliceblue;
+    }
+
+    .svg {
+        position: relative;
+        top: 10px;
+        line-height: 100px;
+        color: lawngreen;
+        font-size: 20px;
+    }
+</style>
+
+@if (className == "green")
+{
+    <div class="alert alert-success alert-dismissible">
+        @errorMessage
+    </div>
+}
+else if (className == "red")
+{
+    <div class="alert alert-danger alert-dismissible">
+        @errorMessage
+    </div>
+}
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Schedule Channel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="this.input" OnValidSubmit="Submit">
+                    <div class="text-danger">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                    </div>
+
+                    <div class="bg-info mb-4" style="border-radius: 30px;">
+                        <div class="row">
+                            <div class="col-md-1 mt-2">
+
+                            </div>
+                            <div class="col-md-10 mt-3">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <InputText @bind-Value="this.input.Code" class="form-control" placeholder="Enter your code here" style="border-radius: 20px;"></InputText>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-success" style="border-radius: 50%;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+
+    </div>
+    <div class="col-md-2">
+        <button style="border-radius: 20px;" type="button" class="btn btn-success mt-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            + Join Channel
+        </button>
+    </div>
+</div>
+@if (this.Model.Channels.Count() == 0)
+{
+    <h1 class="text-center">No events yet</h1>
+}
+else
+{
+    if (this.Model.Channels.Any(c => c.StartDate > DateTime.UtcNow || (DateTime.UtcNow >= c.StartDate && DateTime.UtcNow <= c.EndDate)))
+    {
+        <p class="text-black-50 mb-2">Active and Upcoming</p>
+        <ul class="list-group">
+            @foreach (var channel in this.Model.Channels.Where(c => DateTime.UtcNow >= c.StartDate && DateTime.UtcNow <= c.EndDate))
+            {
+                <li class="list-group-item" style="border-radius: 20px;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row mt-4">
+                                <div class="col-md-1">
+                                    <div class="calendarIconDiv">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar text-success svg" viewBox="0 0 16 16">
+                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p style="font-weight: bold;">@channel.Name</p>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <p class="text-black-50">#@channel.Code</p>
+                                        </div>
+                                        <p class="font-italic">@channel.StartDate.ToString("dd") - @channel.EndDate.ToString("dd MMM yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <button @onclick="() => this.Navigate(channel.Id)" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                                        </svg>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+
+        <ul class="list-group">
+            @foreach (var channel in this.Model.Channels.Where(c => c.StartDate > DateTime.UtcNow))
+            {
+                <li class="list-group-item" style="border-radius: 20px;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row mt-4">
+                                <div class="col-md-1">
+                                    <div class="calendarIconDiv">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="svg bi bi-calendar text-success" viewBox="0 0 16 16">
+                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p style="font-weight: bold;">@channel.Name</p>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <p class="text-black-50">#@channel.Code</p>
+                                        </div>
+                                        <p class="font-italic"><strong class="text-black-50">Upcoming: </strong>@channel.StartDate.ToString("dd") - @channel.EndDate.ToString("dd MMM yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <button @onclick="() => this.Navigate(channel.Id)" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                                        </svg>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+
+    if (this.Model.Channels.Any(c => c.EndDate < DateTime.UtcNow))
+    {
+        <p class="text-black-50 mb-2">Past</p>
+        <ul class="list-group">
+            @foreach (var channel in this.Model.Channels.Where(c => c.EndDate < DateTime.UtcNow))
+            {
+                <li class="list-group-item" style="border-radius: 20px;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="row mt-4">
+                                <div class="col-md-1">
+                                    <div class="calendarIconDiv">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="svg bi bi-calendar text-secondary" viewBox="0 0 16 16">
+                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <p style="font-weight: bold;">@channel.Name</p>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <p class="text-black-50">#@channel.Code</p>
+                                        </div>
+                                        <p class="font-italic">@channel.StartDate.ToString("dd") - @channel.EndDate.ToString("dd MMM yyyy")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <button @onclick="() => this.Navigate(channel.Id)" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                                        </svg>
+                                        Open
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+}
+
+@code {
+    private string errorMessage = string.Empty;
+    private string className = string.Empty;
+
+    private AllChannelsByParticipantIdListViewModel Model = new AllChannelsByParticipantIdListViewModel();
+    private JoinChannelInputModel input = new JoinChannelInputModel();
+
+    protected override void OnInitialized()
+    {
+        this.Load();
+    }
+
+    async Task Submit()
+    {
+        try
+        {
+            input.UserId = this.UserId;
+            await this.channelsService.JoinChannelAsync(this.input);
+            this.errorMessage = "You have successfully joined channel!";
+            this.className = "green";
+            Load();
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            this.errorMessage = ex.Message;
+            this.className = "red";
+            this.StateHasChanged();
+        }
+    }
+
+    void Load()
+    {
+        this.Model.Channels = this.channelsService.GetAllByParticipantId<GetAllChannelsByParticipantIdViewModel>(this.UserId);
+    }
+
+    void Navigate(int id)
+    {
+        this.navigationManager.NavigateTo($"/MessageQAs/AllByChannel/{id}", true);
+    }
+
+    [Parameter]
+    public string UserId { get; set; }
+}

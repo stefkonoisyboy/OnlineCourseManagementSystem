@@ -53,7 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\OnlineCourseManagementSystem.Client\OnlineCourseManagementSystem.Client.csproj" />
     <ProjectReference Include="..\..\OnlineCourseManagementSystem.Common\OnlineCourseManagementSystem.Common.csproj" />
     <ProjectReference Include="..\..\Data\OnlineCourseManagementSystem.Data.Models\OnlineCourseManagementSystem.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\OnlineCourseManagementSystem.Data\OnlineCourseManagementSystem.Data.csproj" />
@@ -196,5 +195,9 @@
     <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\velocity.js" />
     <None Include="wwwroot\MDB-Free_4.19.2\src\js\vendor\free\waves.js" />
     <None Include="wwwroot\MDB-Free_4.19.2\Useful_Resources.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\Components\QA\" />
   </ItemGroup>
 </Project>

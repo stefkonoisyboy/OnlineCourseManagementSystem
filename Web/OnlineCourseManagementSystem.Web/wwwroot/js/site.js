@@ -107,6 +107,8 @@ function scrollToBottom() {
 //    event.waitUntil(clients.openWindow('/'));
 //})
 
+
+
 $().ready(function () {
     $("#show").hover(function () {
         $("#create-text").show("1000");
@@ -114,4 +116,45 @@ $().ready(function () {
         $("#create-text").hide("1000");
     });
 });
+
+//$(() => {
+//    let connection = new signalR.HubConnectionBuilder().withUrl("hubs/QAHub").build();
+//    console.log("Hello world!");
+//    connection.start();
+
+//    connection.on("refreshMessages", function () {
+//        console.log("Hi guys!");
+//        loadData();
+//    });
+
+//    function loadData() {
+//        var tr = '';
+//        let div = '';
+
+//        $.ajax({
+//            url: `/MessageQAs/AllByChannel/12`,
+//            method: 'GET',
+//            dataType: "json",
+//            success: (result) => {
+//                $.each(result, (k, v) => {
+//                    tr = tr + `<tr>
+//                        <td>${v.content}</td>
+//                        <td>${v.creatorLastName}</td>
+//                        <td>
+//                           <h6>  ${v.creatorFirstName}</h6>
+//                        </td>
+//                    </tr>`;
+//                    console.log("What's up!");
+//                    console.log(v.content);
+//                });
+
+//                $("#tableBody").html(tr);
+//            },
+//            error: (error) => {
+//                console.log(error);
+//                console.log("Error");
+//            }
+//        });
+//    }
+//});
 

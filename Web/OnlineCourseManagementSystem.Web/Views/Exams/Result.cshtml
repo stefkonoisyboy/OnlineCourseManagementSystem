@@ -1,6 +1,14 @@
 ﻿@model OnlineCourseManagementSystem.Web.ViewModels.Exams.ResultFromExamViewModel
-@{ 
+@{
+    this.ViewData["Title"] = "My Result";
+}
 
+@if (this.TempData.ContainsKey("Alert"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Alert"]
+    </div>
 }
 
 <h2>
@@ -9,6 +17,14 @@
     </svg>
     Result from @this.Model.ExamName (of @(this.Model.UserFirstName + ' ' + this.Model.UserLastName))
 </h2>
+
+@if (this.Model.ExamIsCertificated.HasValue && this.Model.ExamIsCertificated.Value)
+{
+    <div class="text-center">
+        <a asp-controller="Certificates" asp-action="ByCurrentUserAndCourse" asp-route-courseId="@this.Model.ExamCourseId" class="btn btn-warning" style="font-size: 20px;">GO TO CERTIFICATE</a>
+    </div>
+}
+
 <hr />
 <div class="row">
     <div class="col-md-3">

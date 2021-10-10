@@ -28,6 +28,7 @@
 
         public int CourseLecturesCount { get; set; }
 
+        [IgnoreMap]
         public double CompletedLecturesCount { get; set; }
 
         public double Progress => (double)((double)(this.CompletedLecturesCount / this.CourseLecturesCount) * 100);

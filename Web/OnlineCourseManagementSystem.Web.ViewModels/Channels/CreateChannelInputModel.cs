@@ -9,12 +9,14 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
     {
         [Required]
         [MinLength(3)]
-        [MaxLength(10)]
+        [MaxLength(20)]
+        [Display(Name = "Event code")]
         public string Code { get; set; }
 
         [Required]
         [MinLength(5)]
         [MaxLength(50)]
+        [Display(Name = "Event name")]
         public string Name { get; set; }
 
         [Required]

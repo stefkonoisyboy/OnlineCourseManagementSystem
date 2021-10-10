@@ -31,6 +31,7 @@
         private readonly IUsersService usersService;
         private readonly IFilesService filesService;
         private readonly ILecturesService lecturesService;
+        private readonly ICompletitionsService completitionsService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public CoursesController(
@@ -43,6 +44,7 @@
             IUsersService usersService,
             IFilesService filesService,
             ILecturesService lecturesService,
+            ICompletitionsService completitionsService,
             UserManager<ApplicationUser> userManager)
         {
             this.coursesService = coursesService;
@@ -54,6 +56,7 @@
             this.usersService = usersService;
             this.filesService = filesService;
             this.lecturesService = lecturesService;
+            this.completitionsService = completitionsService;
             this.userManager = userManager;
         }
 
@@ -96,7 +99,7 @@
             return this.View(viewModel);
         }
 
-        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Authorize]
         public IActionResult AllUpcomingAndActive(string name = null, int id = 1)
         {
             if (id <= 0)
@@ -141,6 +144,11 @@
                 Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(1, id, 6),
             };
 
+            foreach (var course in viewModel.Courses)
+            {
+                course.CompletedLecturesCount = this.completitionsService.GetAllCompletitionsCountByCourseIdAndUserId(course.CourseId, id);
+            }
+
             return this.View(viewModel);
         }
 
@@ -159,6 +167,13 @@
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
             };
 
+            foreach (var course in viewModel.Courses)
+            {
+                course.CompletedLecturesCount = this.completitionsService.GetAllCompletitionsCountByCourseIdAndUserId(course.CourseId, user.Id);
+            }
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.View(viewModel);
         }
 
@@ -176,6 +191,8 @@
                 FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
             };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.View(viewModel);
         }
@@ -228,6 +245,8 @@
                 CoursesItems = this.coursesService.GetAllAsSelectListItemsByCreatorId(user.Id),
             };
 
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.View(input);
         }
 
@@ -250,6 +269,7 @@
             input.UserId = user.Id;
             await this.coursesService.CreateMetaAsync(input);
             this.TempData["Message"] = "Meta information about the course successfully created!";
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.RedirectToAction("AllLecturesByCreatorId", "Lectures");
         }
@@ -263,6 +283,8 @@
                 RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
             };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.View(input);
         }
@@ -283,6 +305,7 @@
             input.CreatorId = user.Id;
             await this.coursesService.CreateAsync(input);
             this.TempData["Message"] = "Course is created successfully!";
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.RedirectToAction(nameof(this.Meta));
         }

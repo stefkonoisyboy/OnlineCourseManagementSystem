@@ -10,6 +10,14 @@ namespace OnlineCourseManagementSystem.Services.Data
     {
         Task CreateAsync(CreateChannelInputModel input);
 
+        Task DeleteAsync(int id);
+
+        Task JoinChannelAsync(JoinChannelInputModel input);
+
+        bool IsUserInChannel(string userId, int channelId);
+
+        T GetById<T>(int id);
+
         IEnumerable<T> GetAllByParticipantId<T>(string participantId);
 
         IEnumerable<T> GetAllByCreatorId<T>(string creatorId);

@@ -21,103 +21,92 @@ namespace OnlineCourseManagementSystem.Data.Seeding
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "3",
-                    //CourseId = 8,
-                    CourseId = 5,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 3,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 8,
-                    CourseId = 5,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "angata").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 4,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "3",
-                    //CourseId = 8,
-                    CourseId = 5,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 5,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 8,
-                    CourseId = 6,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "angata").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 3,
-                    CourseId = 6,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 4,
-                    CourseId = 6,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "angata").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    CourseId = 5,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    CourseId = 6,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "angata").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 7,
-                    CourseId = 6,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 9,
-                    CourseId = 6,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "angata").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 17,
-                    CourseId = 5,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 18,
-                    CourseId = 5,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
                 new Review
                 {
                     Content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus aut consectetur consequatur cum cupiditate debitis doloribus, error ex explicabo harum illum minima mollitia nisi",
-                    UserId = "4",
-                    //CourseId = 19,
-                    CourseId = 5,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "angata").Id,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                     Rating = 2,
                 },
             };

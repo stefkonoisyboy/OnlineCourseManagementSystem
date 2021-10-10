@@ -39,6 +39,10 @@
 
         IEnumerable<T> GetAllUnapproved<T>();
 
+        IEnumerable<T> GetAllCompletedByUserId<T>(string userId);
+
+        IEnumerable<T> GetAllFollewedByUserId<T>(string userId);
+
         IEnumerable<T> GetAllByNameOrTag<T>(SearchByCourseNameOrTagInputModel input);
 
         IEnumerable<T> GetAllRecommended<T>();

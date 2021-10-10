@@ -15,6 +15,7 @@
             this.Assignments = new HashSet<Assignment>();
             this.Absences = new HashSet<Absence>();
             this.Exams = new HashSet<Exam>();
+            this.Completitions = new HashSet<Completition>();
         }
 
         public string Description { get; set; }
@@ -44,5 +45,7 @@
         public virtual ICollection<Absence> Absences { get; set; }
 
         public virtual ICollection<Exam> Exams { get; set; }
+
+        public virtual ICollection<Completition> Completitions { get; set; }
     }
 }
