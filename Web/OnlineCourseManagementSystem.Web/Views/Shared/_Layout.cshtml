@@ -20,6 +20,8 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/lib/aspnet/signalr/dist/browser/signalr.js" asp-append-version="true"></script>
+    <script src="~/lib/aspnet/signalr/dist/browser/signalr.min.js"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 
@@ -122,30 +124,47 @@
                                         <a class="nav-link active" aria-current="page" asp-controller="Lectures" asp-action="AllLecturesByCreatorId">Lectures</a>
                                     </li>
                                 }
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link active dropdown-toggle" href="#" id="examsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Exams
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="examsDropdown">
-                                        @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
-                                        {
-                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="AllByUser">My Exams</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="MyResults">My Results</a></li>
-                                        }
+                                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName) || this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link active dropdown-toggle" href="#" id="examsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Exams
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="examsDropdown">
+                                            @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                            {
+                                                <li><a class="dropdown-item" asp-controller="Exams" asp-action="AllByUser">My Exams</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" asp-controller="Exams" asp-action="MyResults">My Results</a></li>
+                                            }
 
-                                        @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-                                        {
-                                            <li><a class="dropdown-item" asp-controller="Exams" asp-action="All">All Exams</a></li>
-                                        }
-                                    </ul>
-                                </li>
+                                            @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                            {
+                                                <li><a class="dropdown-item" asp-controller="Exams" asp-action="All">All Exams</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
                                 <li class="nav-item">
                                     <a class="nav-link active" aria-current="page" asp-controller="Chats" asp-action="IndexChats">Messages</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link active" aria-current="page" asp-controller="Posts" asp-action="All">Forum</a>
                                 </li>
+                                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                {
+                                    string userId = this.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" asp-controller="Channels" asp-action="AllByCreator" asp-route-id="@userId">Q&A</a>
+                                    </li>
+                                }
+                                else if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" asp-controller="Channels" asp-action="AllByParticipant">Q&A</a>
+                                    </li>
+                                }
                                 @if (this.User.Identity.IsAuthenticated)
                                 {
                                     <li class="nav-item dropdown d-flex">
@@ -170,8 +189,15 @@
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                                             <li>
-                                                <a asp-controller="Users" asp-action="ManageAccountById" class="dropdown-item" aria-current="page">Your profile</a>
+                                                <a asp-controller="Users" asp-action="ManageAccountById" class="dropdown-item" aria-current="page">Your Profile</a>
                                             </li>
+                                            @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                            {
+                                                <li class="dropdown-divider"></li>
+                                                <li>
+                                                    <a asp-controller="Users" asp-action="CoursesInfo" class="dropdown-item" aria-current="page">Your Courses</a>
+                                                </li>
+                                            }
                                             <li class="dropdown-divider"></li>
                                             <li>
                                                 <form class="form-inline hide-submit " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
@@ -525,7 +551,7 @@
             }
         }
     </script>
-    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+
 </body>
 </html>
 

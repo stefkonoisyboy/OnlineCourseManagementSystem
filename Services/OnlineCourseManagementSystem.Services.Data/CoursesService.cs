@@ -24,6 +24,7 @@
         private readonly IDeletableEntityRepository<File> filesRepository;
         private readonly IDeletableEntityRepository<CourseLecturer> courseLecturersRepository;
         private readonly IDeletableEntityRepository<UserCourse> userCoursesRepository;
+        private readonly IDeletableEntityRepository<Completition> completitionsRepository;
         private readonly Cloudinary cloudinary;
 
         public CoursesService(
@@ -32,6 +33,7 @@
             IDeletableEntityRepository<File> filesRepository,
             IDeletableEntityRepository<CourseLecturer> courseLecturersRepository,
             IDeletableEntityRepository<UserCourse> userCoursesRepository,
+            IDeletableEntityRepository<Completition> completitionsRepository,
             Cloudinary cloudinary)
         {
             this.coursesRepository = coursesRepository;
@@ -39,6 +41,7 @@
             this.filesRepository = filesRepository;
             this.courseLecturersRepository = courseLecturersRepository;
             this.userCoursesRepository = userCoursesRepository;
+            this.completitionsRepository = completitionsRepository;
             this.cloudinary = cloudinary;
         }
 
@@ -153,7 +156,6 @@
         {
             return this.coursesRepository
                 .All()
-                .Where(c => c.IsApproved.Value)
                 .OrderByDescending(c => c.StartDate)
                 .To<T>()
                 .ToList();
@@ -169,7 +171,7 @@
             }
 
             query = query
-                .Where(q => q.IsApproved.Value && q.StartDate < DateTime.UtcNow)
+                .Where(q => q.StartDate < DateTime.UtcNow)
                 .OrderByDescending(q => q.StartDate)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage);
 
@@ -194,12 +196,12 @@
             {
                 return this.coursesRepository
                .All()
-               .Count(c => c.StartDate <= DateTime.UtcNow && c.IsApproved.Value && (c.Name.Contains(name) || c.Tags.Any(t => t.Tag.Name.Contains(name))));
+               .Count(c => c.StartDate <= DateTime.UtcNow && (c.Name.Contains(name) || c.Tags.Any(t => t.Tag.Name.Contains(name))));
             }
 
             return this.coursesRepository
                 .All()
-                .Count(c => c.StartDate <= DateTime.UtcNow && c.IsApproved.Value);
+                .Count(c => c.StartDate <= DateTime.UtcNow);
         }
 
         public IEnumerable<SelectListItem> GetAllAsSelectListItems()
@@ -266,7 +268,7 @@
             return this.coursesRepository
                 .All()
                 .OrderByDescending(c => c.StartDate)
-                .Where(c => c.Tags.Any(t => t.Tag.Name == input.Name) && c.IsApproved.Value)
+                .Where(c => c.Tags.Any(t => t.Tag.Name == input.Name))
                 .To<T>()
                 .ToList();
         }
@@ -276,8 +278,17 @@
             return this.userCoursesRepository
                 .All()
                 .OrderByDescending(c => c.Course.StartDate)
-                .Where(c => c.UserId == userId && c.Course.IsApproved.Value)
+                .Where(c => c.UserId == userId)
                 .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllCompletedByUserId<T>(string userId)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.Users.Any(u => u.UserId == userId) && c.Lectures.Count() > 0 && c.Lectures.Count() == this.completitionsRepository.All().Count(comp => comp.UserId == userId && comp.Lecture.CourseId == c.Id))
                 .To<T>()
                 .ToList();
         }
@@ -296,12 +307,21 @@
                 .Count(uc => uc.UserId == userId);
         }
 
+        public IEnumerable<T> GetAllFollewedByUserId<T>(string userId)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.Users.Any(u => u.UserId == userId))
+                .To<T>()
+                .ToList();
+        }
+
         public IEnumerable<T> GetAllPast<T>()
         {
             return this.coursesRepository
                 .All()
                 .OrderByDescending(c => c.StartDate)
-                .Where(c => c.EndDate < DateTime.UtcNow && c.IsApproved.Value)
+                .Where(c => c.EndDate < DateTime.UtcNow)
                 .To<T>()
                 .ToList();
         }
@@ -310,7 +330,6 @@
         {
             return this.coursesRepository
                 .All()
-                .Where(c => c.IsApproved.Value)
                 .OrderByDescending(c => c.Reviews.Average(r => r.Rating))
                 .ThenByDescending(c => c.StartDate)
                 .Take(10)
@@ -323,7 +342,6 @@
             return this.coursesRepository
                 .All()
                 .OrderByDescending(c => c.StartDate)
-                .Where(c => c.IsApproved.HasValue == false)
                 .To<T>()
                 .ToList();
         }
@@ -333,7 +351,7 @@
             return this.coursesRepository
                 .All()
                 .OrderByDescending(c => c.StartDate)
-                .Where(c => c.StartDate > DateTime.UtcNow && c.IsApproved.Value)
+                .Where(c => c.StartDate > DateTime.UtcNow)
                 .To<T>()
                 .ToList();
         }

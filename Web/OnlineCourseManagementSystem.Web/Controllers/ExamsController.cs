@@ -91,6 +91,8 @@
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
             };
 
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
             return this.View(input);
         }
 
@@ -110,6 +112,8 @@
                 await this.examsService.AddExamToLectureAsync(lectureId, input);
                 this.TempData["Message"] = $"Exam added successfully to Lecture: {lectureName}";
             }
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.RedirectToAction("ById", "Courses", new { id = courseId });
         }
@@ -294,9 +298,11 @@
 
         // TODO: Make certifications page where users can see their certifications, followed courses and completed courses
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
-        public IActionResult StartCertificate(int id)
+        public async Task<IActionResult> StartCertificate(int id)
         {
-            if (!this.examsService.CanStartCertificate(id))
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            if (!this.examsService.CanStartCertificate(id, user.Id))
             {
                 this.TempData["Alert"] = "Cannot start certificate until you complete all lectures in this course!";
                 return this.RedirectToAction("ById", "Courses", new { id });

@@ -1,0 +1,1094 @@
+﻿@inject IMessageQAsService messagesService
+@inject IUsersService usersService
+@inject IChannelsService channelsService
+@inject NavigationManager navigationManager
+@using OnlineCourseManagementSystem.Common
+@using OnlineCourseManagementSystem.Web.ViewModels.MessageQAs
+@using OnlineCourseManagementSystem.Data.Models
+
+@if (this.className == "green")
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.errorMessage
+    </div>
+}
+else if (this.className == "red")
+{
+    <div class="alert alert-danger alert-dismissible">
+        @this.errorMessage
+    </div>
+}
+
+@if (this.canOpen)
+{
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-black-50" id="staticBackdropLabel">Replies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="height: 600px; overflow-y: scroll;">
+                    <ul class="list-group">
+                        <li class="list-group-item bg-white">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            @if (messageById.CreatorProfileImageUrl == null)
+                                            {
+                                                <div class="d-flex justify-content-center align-items-center rounded-circle bg-light" style="width:40px; height:40px;">
+                                                    <h3 class="text-center">@(messageById.CreatorFirstName.Substring(0,1)+ messageById.CreatorLastName.Substring(0,1))</h3>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <img class="rounded-circle" src="@messageById.CreatorProfileImageUrl" width="40" height="40" alt="Profile Image" />
+                                            }
+                                        </div>
+                                        <div class="col-md-9">
+                                            <p><strong>@(messageById.CreatorFirstName + ' ' + messageById.CreatorLastName)</strong></p>
+                                            <p class="text-black-50" style="font-size: 12px;">@messageById.DifferenceBetweenNowAndCreatedOn</p>
+                                        </div>
+                                    </div>
+                                    <p>@messageById.Content</p>
+
+                                </div>
+                                <div class="col-md-5">
+
+                                </div>
+                            </div>
+                        </li>
+
+                        @foreach (var reply in this.replies.Where(r => r.ParentId == messageById.Id))
+                        {
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                @if (reply.CreatorProfileImageUrl == null)
+                                                {
+                                                    <div class="d-flex justify-content-center align-items-center rounded-circle bg-light" style="width:40px; height:40px;">
+                                                        <h3 class="text-center">@(reply.CreatorFirstName.Substring(0,1)+ reply.CreatorLastName.Substring(0,1))</h3>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <img class="rounded-circle" src="@reply.CreatorProfileImageUrl" width="40" height="40" alt="Profile Image" />
+                                                }
+                                            </div>
+                                            <div class="col-md-9">
+                                                <p><strong>@(reply.CreatorFirstName + ' ' + reply.CreatorLastName)</strong></p>
+                                                <p class="text-black-50" style="font-size: 12px;">@reply.DifferenceBetweenNowAndCreatedOn</p>
+                                            </div>
+                                        </div>
+                                        @if (!this.openEditForm)
+                                        {
+                                            <p>@reply.Content</p>
+                                        }
+                                        else
+                                        {
+                                            <EditForm Model="this.editMessage" OnValidSubmit="() => this.Edit(reply.Id)">
+                                                <div class="text-danger">
+                                                    <DataAnnotationsValidator />
+                                                    <ValidationSummary />
+                                                </div>
+
+                                                <InputText @bind-Value="this.editMessage.Content" class="form-control" style="border-top: none; border-left: none; border-right: none;"></InputText>
+                                                <div class="row mt-3">
+                                                    <div class="col-md-6">
+                                                        <button @onclick="this.Cancel" class="btn btn-secondary">Cancel</button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </div>
+                                                </div>
+                                            </EditForm>
+                                        }
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="row mb-2">
+                                            <div class="col-md-5"></div>
+                                            <div class="col-md-7">
+                                                <button @onclick="() => this.LikeMessage(reply.Id)" class="btn btn-light" style="border-radius: 20px;">
+                                                    <p>
+                                                        @reply.LikesCount
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                                            <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
+                                                        </svg>
+                                                    </p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @if (this.Role == GlobalConstants.StudentRoleName && !this.openEditForm)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-3">
+
+                                                </div>
+                                                <div class="col-md-3">
+
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button @onclick="() => this.Withdraw(reply.Id, reply.CreatorId)" class="btn btn-danger">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (this.Role == GlobalConstants.LecturerRoleName && !this.openEditForm)
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <button @onclick="() => this.Delete(reply.Id)" class="btn btn-danger">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button @onclick="() => this.OpenEditForm(reply.Id)" class="btn btn-warning">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3">
+
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+                    </ul>
+                    <div>
+                        <hr />
+                        <EditForm Model="this.createReply" OnValidSubmit="() => this.CreateReply(messageById.Id)">
+                            <div class="text-danger">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+                            </div>
+
+                            <InputText @bind-Value="this.createReply.Content" placeholder="Type your reply" class="form-control w-100" style="border-left: none; border-top: none; border-right: none;"></InputText>
+                            <div class="row w-100 mt-3">
+                                <div class="col-md-6">
+                                    <p>
+                                        @if (this.Model.CurrentUser.ProfileImageUrl == null)
+                                        {
+                                            <div class="d-flex justify-content-center align-items-center rounded-circle bg-light" style="width:40px; height:40px;">
+                                                <h3 class="text-center">@(this.Model.CurrentUser.FirstName.Substring(0,1)+ this.Model.CurrentUser.LastName.Substring(0,1))</h3>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <img class="rounded-circle" src="@this.Model.CurrentUser.ProfileImageUrl" width="40" height="40" alt="Profile Image" />
+                                        }
+                                        @(this.Model.CurrentUser.FirstName + ' ' + this.Model.CurrentUser.LastName)
+                                    </p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-10"></div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-success">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-square-fill" viewBox="0 0 16 16">
+                                                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm5.5 10a.5.5 0 0 0 .832.374l4.5-4a.5.5 0 0 0 0-.748l-4.5-4A.5.5 0 0 0 5.5 4v8z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </EditForm>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row mt-3">
+    <div class="col-md-3">
+        <div style="position: fixed; left: 0;">
+            <div class="mb-3">
+                <p>@this.channel.Name</p>
+                <p class="text-black-50">@(this.channel.StartDate.ToString("dd") + " - " + this.channel.EndDate.ToString("dd MMM yyyy"))</p>
+                <p class="text-black-50">#@this.channel.Code</p>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-light">
+                    <span class="text-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                            <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                    </span>
+                    <span>Live interaction</span>
+                </button>
+                <button @onclick="this.SwitchEvent" class="btn btn-light">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z" />
+                        </svg>
+                    </span>
+                    <span>Switch event</span>
+                </button>
+                <hr />
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <p class="text-black-50">Ask the speaker</p>
+
+        <EditForm Model="this.input" OnValidSubmit="Submit">
+            <div class="text-danger">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+            </div>
+
+            <div class="text-center">
+                <div class="shadow-lg p-5 mb-5 bg-white" style="border-radius: 40px;">
+                    <div class="row">
+                        <div class="col-md-2">
+                            @if (this.Model.CurrentUser.ProfileImageUrl == null)
+                            {
+                                <div class="d-flex justify-content-center align-items-center rounded-circle bg-light" style="width:40px; height:40px;">
+                                    <h3 class="text-center">@(this.Model.CurrentUser.FirstName.Substring(0,1)+this.Model.CurrentUser.LastName.Substring(0,1))</h3>
+                                </div>
+                            }
+                            else
+                            {
+                                <img class="rounded-circle" src="@this.Model.CurrentUser.ProfileImageUrl" width="40" height="40" alt="Profile Image" />
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <InputText @bind-Value="this.input.Content" class="form-control" placeholder="Type your question" style="border-top: none; border-left: none; border-right: none;"></InputText>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success">ASK</button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </EditForm>
+
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <div class="row">
+                    @if (!this.openSearchForm)
+                    {
+                        <div class="col-md-4">
+                            <button @onclick="this.NavigateToPopular" class="btn btn-primary">
+                                Popular
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button @onclick="this.NavigateToRecent" class="btn btn-primary">
+                                Recent
+                            </button>
+                        </div>
+                        @if (this.Role == GlobalConstants.LecturerRoleName)
+                        {
+                            <div class="col-md-4">
+                                <button @onclick="this.NavigateToArchive" class="btn btn-primary">
+                                    Archive
+                                </button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-3">
+                            <button @onclick="this.CloseSearchForm" class="btn btn-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control bg-light" style="border-left: none; border-right: none; border-top: none;" @bind-value="this.searchTerm" @bind-value:event="oninput" />
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        @if (!this.openSearchForm)
+                        {
+                            <button @onclick="this.OpenSearchForm" class="btn btn-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg>
+                            </button>
+                        }
+                    </div>
+                    @if (this.Role == GlobalConstants.LecturerRoleName)
+                    {
+                        <div class="col-md-4">
+                            <button @onclick="this.ArchiveAll" class="btn btn-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16">
+                                    <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                    <div class="col-md-4">
+                        @if (this.openSearchForm)
+                        {
+                            <p class="text-black-50">
+                                @this.FilteredMessages.Count() out of @this.Model.Messages.Count() questions
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="text-black-50">
+                                @this.Model.Messages.Count() questions
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (this.Model.Messages.Count() == 0)
+        {
+            <div class="text-center">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQ3LjM4MTQgMTAuMDY5N0M0Ni44MzIxIDExLjM5MzcgNDYuNTU4NiAxMi43ODA0IDQ2LjU1ODYgMTQuMjM4M0M0Ni41NTg2IDE2LjQ1MzEgNDcuMjAzMSAxOC41MjczIDQ4LjUwMzkgMjAuNDQ5MkM0OS44MDQ3IDIyLjM3MTEgNTEuNTg1OSAyNCA1My44MTI1IDI1LjMxMjVDNTMuNjQ4NCAyNS45MTAyIDUzLjQ3MjcgMjYuNDYwOSA1My4yNSAyN0M1My4wNTEzIDI3LjQ5NjcgNTIuODYzIDI3Ljg5OTggNTIuNzA0NyAyOC4yMzg4TDUyLjY3NTggMjguMzAwOEM1Mi41IDI4LjY0MDYgNTIuMjY1NiAyOS4wMTU2IDUxLjk3MjcgMjkuNDM3NUM1MS42Nzk3IDI5Ljg1OTQgNTEuNDY4OCAzMC4xNDA2IDUxLjMwNDcgMzAuMzE2NEM1MS4yNTE5IDMwLjM3OCA1MS4xODI2IDMwLjQ1NjEgNTEuMDk4NiAzMC41NTA4QzUwLjk1ODkgMzAuNzA4MiA1MC43Nzg2IDMwLjkxMTMgNTAuNTY2NCAzMS4xNjAyQzUwLjM3ODYgMzEuMzgwMyA1MC4yMjMxIDMxLjU1MzkgNTAuMTA1NiAzMS42ODVDNTAuMDEwNSAzMS43OTEyIDQ5Ljk0MDQgMzEuODY5NCA0OS44OTg0IDMxLjkyMTlDNDkuODc4MyAzMS45MjE5IDQ5Ljg0MSAzMS45NzM1IDQ5Ljc3MTggMzIuMDY5NEM0OS43NjAyIDMyLjA4NTQgNDkuNzQ3OCAzMi4xMDI3IDQ5LjczNDQgMzIuMTIxMUM0OS42NDA2IDMyLjI1IDQ5LjU5MzggMzIuMzIwMyA0OS41OTM4IDMyLjMyMDNMNDkuNDY0OCAzMi41MTk1QzQ5LjM5NDUgMzIuNjI1IDQ5LjM1OTQgMzIuNjk1MyA0OS4zNzExIDMyLjcxODhDNDkuMzcxMSAzMi43NTM5IDQ5LjM3MTEgMzIuODI0MiA0OS4zMzU5IDMyLjk1MzFDNDkuMzAwOCAzMy4wODIgNDkuMzAwOCAzMy4xNTIzIDQ5LjMzNTkgMzMuMjIyN1YzMy4yNDYxQzQ5LjM5NDUgMzMuNDkyMiA0OS41MTE3IDMzLjY5MTQgNDkuNjc1OCAzMy44NTU1QzQ5LjgzOTggMzMuOTk2MSA1MC4wMzkxIDM0LjA4OTggNTAuMjUgMzQuMDg5OEg1MC4zNTU1QzUxLjI5MyAzMy45NjA5IDUyLjEwMTYgMzMuNzk2OSA1Mi44MDQ3IDMzLjYwOTRDNTYuNTY2NCAzMi42MjUgNTkuODU5NCAzMC44MzIgNjIuNjgzNiAyOC4yNjU2QzYzLjc2MTcgMjguMzk0NSA2NC44MDQ3IDI4LjQ0MTQgNjUuODAwOCAyOC40NDE0QzY5LjI5MyAyOC40NDE0IDcyLjUxNTYgMjcuODA4NiA3NS40Njg4IDI2LjU1NDdDNzUuOTY3NSAyNi4zNDI5IDc2LjQ0ODggMjYuMTE4MSA3Ni45MTI2IDI1Ljg4MDNDODEuOTg4OCAzMi41ODU5IDg1IDQwLjk0MTMgODUgNTBDODUgNzIuMDkxNCA2Ny4wOTE0IDkwIDQ1IDkwQzIyLjkwODYgOTAgNSA3Mi4wOTE0IDUgNTBDNSAyNy45MDg2IDIyLjkwODYgMTAgNDUgMTBDNDUuNzk5NSAxMCA0Ni41OTM1IDEwLjAyMzUgNDcuMzgxNCAxMC4wNjk3WiIgZmlsbD0iIzdGN0Y3RiIgZmlsbC1vcGFjaXR5PSIwLjE2Ii8+CjxwYXRoIGQ9Ik00Mi44MjAzIDY5LjQ4MDNDNDEuMTY4IDY5LjE1MjIgMzkuNTI3NCA2OC41NjYyIDM3Ljk5MjIgNjcuODM5N0MzNS40NDkyIDY2LjY2NzggMzQuMzAwOCA2My45MzczIDM1LjAyNzQgNjEuMjY1NEMzNS4wODU5IDYxLjAzMTEgMzUuMjAzMSA2MC43ODUgMzUuMzkwNiA2MC42MzI2QzM3LjAzMTMgNTkuMzY3IDM3LjUgNTcuNTUwNiAzNy44Mzk5IDU1LjY2MzlDMzcuOTEwMiA1NS4yNjU0IDM4LjE2OCA1NC44NTUzIDM4LjQ0OTIgNTQuNTYyM0MzOS4zNjMzIDUzLjY0ODMgMzkuOTYwOSA0OS45Njg2IDM5LjMxNjQgNDguODc4N0MzOS4yNDYxIDQ4Ljc0OTggMzkuMTE3MiA0OC42Njc4IDM5LjA4MiA0OC41NTA2QzM4Ljk1MzEgNDguMTg3MyAzOC43NTM5IDQ3LjgxMjMgMzguNzQyMiA0Ny40NDlDMzguNzA3IDQ1LjU2MjMgMzguOTA2MyA0My42NTIyIDM4LjY3MTkgNDEuNzc3MkMzOC4zNDM4IDM5LjE1MjIgMzcuMTAxNiAzNi45MDIyIDM0LjYwNTUgMzUuNzQyQzMwLjQzMzYgMzMuNzk2NyAyNi4yMzgzIDM0LjA4OTcgMjIuMjQyMiAzNi4yNDU5QzE5Ljg5ODQgMzcuNTExNSAxOS4xODM2IDM5Ljg0MzYgMTguOTg0NCA0Mi4zMTYyQzE4Ljg1NTUgNDQuMDM4OSAxOC45NjA5IDQ1Ljc3MzMgMTguOTQ5MiA0Ny41MTk0QzE4Ljk0OTIgNDcuODEyMyAxOC45NzI3IDQ4LjE2MzkgMTguODIwMyA0OC4zODY1QzE3Ljc4OTEgNDkuOTY4NiAxOC4xNDA2IDUxLjY2NzggMTguNTE1NiA1My4zMjAxQzE4LjYwOTQgNTMuNzMwMyAxOC45NjA5IDU0LjE2MzkgMTkuMzEyNSA1NC40MjE3QzE5Ljg3NSA1NC44MzE5IDIwLjE1NjMgNTUuMzI0IDIwLjE5MTQgNTYuMDAzN0MyMC4yODUyIDU3LjgwODQgMjEuMDM1MiA1OS4yODUgMjIuNDQxNCA2MC40MzM0QzIyLjY4NzUgNjAuNjMyNiAyMi45Njg4IDYwLjkwMjIgMjMuMDM5MSA2MS4xOTUxQzIzLjcxODggNjMuNzczMyAyMy4wOTc3IDY2LjMzOTcgMjAuNDg0NCA2Ny40NDEyQzE4LjQzMzYgNjguMzA4NCAxNi4zNDc3IDY5LjA1ODQgMTQuMjM4MyA2OS43NjE1QzEzLjA4OTggNzAuMTM2NSAxMi4wNTg2IDcwLjY3NTYgMTEuMTc5NyA3MS4zNjdDMTguMjkzIDgyLjUyMzMgMzAuNzg1MiA4OS45NDEyIDQ1IDg5Ljk0MTJDNDcuNzc3NCA4OS45NDEyIDUwLjQ3MjcgODkuNjQ4MyA1My4wNjI1IDg5LjEzMjZDNTIuNzIyNyA4NC42OTEyIDUxLjY0NDUgNzguODU1MyA0OS45MTAyIDc1LjA5MzZDNDguNTAzOSA3MS45OTk4IDQ2LjE3MTkgNzAuMTYgNDIuODIwMyA2OS40ODAzWiIgZmlsbD0iIzdGN0Y3RiIgZmlsbC1vcGFjaXR5PSIwLjIiLz4KPHBhdGggZD0iTTc3LjAwMzkgNzMuOTU2N0M3Ni4wODk4IDczLjMyMzkgNzUuMDExNyA3Mi44OTAzIDczLjc2OTUgNzIuNjQ0MkM3Mi4zNTE1IDcyLjM1MTMgNzAuOTU3IDcxLjg0NzQgNjkuNjQ0NSA3MS4yNjE0QzY3LjQ4ODMgNzAuMjc3MSA2Ni40OTIyIDY3LjkzMzMgNjcuMTAxNSA2NS42NDgyQzY3LjE2MDEgNjUuNDQ4OSA2Ny4yNjU2IDY1LjIzOCA2Ny40MDYyIDY1LjEwOTFDNjguODEyNSA2NC4wMzEgNjkuMjEwOSA2Mi40ODQxIDY5LjUxNTYgNjAuODY2OUM2OS41ODU5IDYwLjUyNzEgNjkuNzg1MSA2MC4xNjM4IDcwLjA0MjkgNTkuOTI5NEM3MC44Mzk4IDU5LjE1NiA3MS4zNDM3IDU2LjAwMzYgNzAuNzgxMiA1NS4wNjYxQzcwLjcyMjYgNTQuOTYwNiA3MC42MTcyIDU0Ljg5MDMgNzAuNTgyIDU0Ljc3MzFDNzAuNDc2NSA1NC40Njg1IDcwLjI4OSA1NC4xNDAzIDcwLjI4OSA1My44MzU2QzcwLjI1MzkgNTIuMjE4NSA3MC40MTc5IDUwLjU3NzggNzAuMjMwNCA0OC45OTU4QzY5Ljk2MDkgNDYuNzQ1OCA2OC44OTQ1IDQ0LjgzNTYgNjYuNzYxNyA0My44Mjc4QzYzLjE5OTIgNDIuMTUyMSA1OS42MTMzIDQyLjQyMTYgNTYuMTkxNCA0NC4yNjE0QzU0LjE5OTIgNDUuMzM5NiA1My41NjY0IDQ3LjM0MzUgNTMuNDAyMyA0OS40NDExQzUzLjI5NjkgNTAuOTE3NyA1My4zNzg5IDUyLjM5NDIgNTMuMzY3MiA1My44ODI1QzUzLjM2NzIgNTQuMTI4NiA1My4zOTA2IDU0LjQ0NSA1My4yNjE3IDU0LjYyMDhDNTIuMzgyOCA1NS45OTE5IDUyLjY2NDEgNTcuNDA5OSA1Mi45OTIyIDU4LjgyNzhDNTMuMDYyNSA1OS4xOTExIDUzLjM2NzIgNTkuNTQyNyA1My42NzE5IDU5Ljc2NTNDNTQuMTUyMyA2MC4xMjg2IDU0LjM4NjcgNjAuNTM4OCA1NC40MzM2IDYxLjExM0M1NC41MDM5IDYyLjY1OTkgNTUuMTQ4NCA2My45MDIxIDU2LjM1NTUgNjQuODk4MkM1Ni41NjY0IDY1LjA3MzkgNTYuODAwOCA2NS4yOTY2IDU2Ljg4MjggNjUuNTQyN0M1Ny40NTcgNjcuNzM0MSA1Ni45MTggNjkuOTQ4OSA1NC42OTE0IDcwLjg3NDdDNTMuNDE0MSA3MS40MTM4IDUyLjEwMTYgNzEuODU5MSA1MC43ODkxIDcyLjMyNzhDNTEuMTg3NSA3Mi45MDIxIDUxLjU1MDggNzMuNTExNCA1MS44NTU1IDc0LjE3OTRDNTMuNjcxOSA3OC4xMTY5IDU0Ljc3MzQgODMuOTg4IDU1LjE3MTkgODguNjE2OUM2My45ODQ0IDg2LjMwODMgNzEuNjM2NyA4MS4wNTgzIDc3LjAwMzkgNzMuOTU2N1oiIGZpbGw9IiM3RjdGN0YiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNzUuNDY4OCAxLjk4MDQ3Qzc4LjQyMTkgMy4yMzQzNyA4MC43NjU2IDQuOTQ1MzEgODIuNDc2NiA3LjEyNUM4NC4xOTkyIDkuMzA0NjkgODUuMDY2NCAxMS42NjAyIDg1LjA1NDcgMTQuMzIwM0M4NS4wNTQ3IDE2Ljg3NSA4NC4xODc1IDE5LjIzMDUgODIuNDc2NiAyMS40MTAyQzgwLjc2NTYgMjMuNTg5OCA3OC40MjE5IDI1LjMwMDggNzUuNDY4OCAyNi41NTQ3QzcyLjUxNTYgMjcuODA4NiA2OS4yOTMgMjguNDQxNCA2NS44MDA4IDI4LjQ0MTRDNjQuODA0NyAyOC40NDE0IDYzLjc2MTcgMjguMzk0NSA2Mi42ODM2IDI4LjI2NTZDNTkuODU5NCAzMC44MzIgNTYuNTY2NCAzMi42MjUgNTIuODA0NyAzMy42MDk0QzUyLjEwMTYgMzMuNzk2OSA1MS4yOTMgMzMuOTYwOSA1MC4zNTU1IDM0LjA4OThINTAuMjVDNTAuMDM5MSAzNC4wODk4IDQ5LjgzOTggMzMuOTk2MSA0OS42NzU4IDMzLjg1NTVDNDkuNTExNyAzMy42OTE0IDQ5LjM5NDUgMzMuNDkyMiA0OS4zMzU5IDMzLjI0NjFWMzMuMjIyN0M0OS4zMDA4IDMzLjE1MjMgNDkuMzAwOCAzMy4wODIgNDkuMzM1OSAzMi45NTMxQzQ5LjM3MTEgMzIuODI0MiA0OS4zNzExIDMyLjc1MzkgNDkuMzcxMSAzMi43MTg4QzQ5LjM1OTQgMzIuNjk1MyA0OS4zOTQ1IDMyLjYyNSA0OS40NjQ4IDMyLjUxOTVMNDkuNTkzOCAzMi4zMjAzQzQ5LjU5MzggMzIuMzIwMyA0OS42NDA2IDMyLjI1IDQ5LjczNDQgMzIuMTIxMUM0OS43NDc4IDMyLjEwMjcgNDkuNzYwMiAzMi4wODU0IDQ5Ljc3MTggMzIuMDY5NEM0OS44NDEgMzEuOTczNSA0OS44Nzg0IDMxLjkyMTkgNDkuODk4NCAzMS45MjE5QzQ5Ljk0MDQgMzEuODY5NCA1MC4wMTA1IDMxLjc5MTIgNTAuMTA1NiAzMS42ODVDNTAuMjIzMSAzMS41NTM5IDUwLjM3ODYgMzEuMzgwMyA1MC41NjY0IDMxLjE2MDJDNTAuNzc4NiAzMC45MTEzIDUwLjk1ODkgMzAuNzA4MiA1MS4wOTg2IDMwLjU1MDhDNTEuMTgyNiAzMC40NTYxIDUxLjI1MTkgMzAuMzc4IDUxLjMwNDcgMzAuMzE2NEM1MS40Njg4IDMwLjE0MDYgNTEuNjc5NyAyOS44NTk0IDUxLjk3MjcgMjkuNDM3NUM1Mi4yNjU2IDI5LjAxNTYgNTIuNSAyOC42NDA2IDUyLjY3NTggMjguMzAwOEM1Mi42ODUzIDI4LjI4MDQgNTIuNjk1IDI4LjI1OTcgNTIuNzA0NyAyOC4yMzg4QzUyLjg2MyAyNy44OTk4IDUzLjA1MTMgMjcuNDk2NyA1My4yNSAyN0M1My40NzI3IDI2LjQ2MDkgNTMuNjQ4NCAyNS45MTAyIDUzLjgxMjUgMjUuMzEyNUM1MS41ODU5IDI0IDQ5LjgwNDcgMjIuMzcxMSA0OC41MDM5IDIwLjQ0OTJDNDcuMjAzMSAxOC41MjczIDQ2LjU1ODYgMTYuNDUzMSA0Ni41NTg2IDE0LjIzODNDNDYuNTU4NiAxMS42NjAyIDQ3LjQxNDEgOS4zMDQ2OSA0OS4xMzY3IDcuMTI1QzUwLjg0NzcgNC45NDUzMSA1My4xOTE0IDMuMjM0MzcgNTYuMTQ0NSAxLjk4MDQ3QzU5LjA5NzcgMC43MjY1NjIgNjIuMzIwMyAwLjA5Mzc1IDY1LjgxMjUgMC4wOTM3NUM2OS4zMDQ3IDAuMDkzNzUgNzIuNTE1NiAwLjcyNjU2MiA3NS40Njg4IDEuOTgwNDdaTTY3LjUxMTcgMTAuNzY5NUM2Ny41MTE3IDkuNzM4MjggNjYuODQzOCA5LjEyODkxIDY1LjczMDUgOS4xMjg5MUM2NC40NTYgOS4xMjg5MSA2NC4xMjc0IDkuODM4MzIgNjMuODIxNCAxMC40OTlDNjMuNTUzNCAxMS4wNzc2IDYzLjMwMjggMTEuNjE4OCA2Mi40NDkyIDExLjYxMzNDNjEuODA0NyAxMS42MTMzIDYxLjI0MjIgMTEuMjI2NiA2MS4yNDIyIDEwLjQ2NDhDNjEuMjQyMiA4LjU4OTg0IDYzLjMyODEgNi45Mzc1IDY1LjYwMTYgNi45Mzc1QzY3Ljk5MjIgNi45Mzc1IDcwLjMzNTkgOC4wNzQyMiA3MC4zMzU5IDEwLjc1NzhDNzAuMzM1OSAxMi40ODIzIDY4Ljk5MDcgMTMuNDY1OCA2Ny45NzM5IDE0LjIwOTJDNjcuNTMyOCAxNC41MzE3IDY3LjE1MzUgMTQuODA5IDY2Ljk3MjcgMTUuMDgyQzY2Ljg0MDIgMTUuMjc1NiA2Ni43NTggMTUuNDkxOCA2Ni42NzgzIDE1LjcwMTNDNjYuNDgzIDE2LjIxNDYgNjYuMzAzMSAxNi42ODc1IDY1LjQzNzUgMTYuNjg3NUM2NC42NTI0IDE2LjY4NzUgNjQuMjUzOSAxNi4wMTk1IDY0LjI1MzkgMTUuNDEwMkM2NC4yNTM5IDE0LjIyNjMgNjUuMTQ2NSAxMy41MjQxIDY1Ljk5NzIgMTIuODU0N0M2Ni43NzE4IDEyLjI0NTMgNjcuNTExNyAxMS42NjMxIDY3LjUxMTcgMTAuNzY5NVpNNjUuNTE5NSAxNy45MDYzQzY2LjM3NSAxNy45MDYzIDY3LjA1NDcgMTguNjA5NCA2Ny4wNTQ3IDE5LjQ3NjZDNjcuMDU0NyAyMC4zNDM4IDY2LjM3NSAyMS4wNDY5IDY1LjUxOTUgMjEuMDQ2OUM2NC42NjQxIDIxLjA0NjkgNjMuOTg0NCAyMC4zMjAzIDYzLjk4NDQgMTkuNDc2NkM2My45ODQ0IDE4LjYwOTQgNjQuNjY0MSAxNy45MDYzIDY1LjUxOTUgMTcuOTA2M1oiIGZpbGw9IiM3RjdGN0YiIGZpbGwtb3BhY2l0eT0iMC40OCIvPgo8L3N2Zz4K" alt="No Questions" />
+                <p class="text-black-50">There are no questions asked yet.</p>
+                <h3>Ask the first one!</h3>
+            </div>
+        }
+        else
+        {
+            @if (this.openSearchForm)
+            {
+                <div id="tableBody">
+                    @foreach (var message in this.FilteredMessages)
+                    {
+                        <div @onmouseover="() => this.ChangeVisibility(true)" @onmouseout="() => this.ChangeVisibility(false)" class="shadow-lg p-3 mb-5 @message.ClassName rounded">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            @if (message.CreatorProfileImageUrl == null)
+                                            {
+                                                <div class="d-flex justify-content-center align-items-center rounded-circle bg-light" style="width:40px; height:40px;">
+                                                    <h3 class="text-center">@(message.CreatorFirstName.Substring(0,1)+message.CreatorLastName.Substring(0,1))</h3>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <img class="rounded-circle" src="@message.CreatorProfileImageUrl" width="40" height="40" alt="Profile Image" />
+                                            }
+                                        </div>
+                                        <div class="col-md-9">
+                                            <p><strong>@(message.CreatorFirstName + ' ' + message.CreatorLastName)</strong></p>
+                                            <p class="text-black-50" style="font-size: 12px;">@message.DifferenceBetweenNowAndCreatedOn</p>
+                                        </div>
+                                    </div>
+                                    @if (!this.openEditForm)
+                                    {
+                                        <p>@message.Content</p>
+                                        <button @onclick="() => this.GetInfoForModal(message.Id)" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-white" style="border: none;">
+                                            <p class="text-black-50">@message.Replies replies</p>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <EditForm Model="this.editMessage" OnValidSubmit="() => this.Edit(message.Id)">
+                                            <div class="text-danger">
+                                                <DataAnnotationsValidator />
+                                                <ValidationSummary />
+                                            </div>
+
+                                            <InputText @bind-Value="this.editMessage.Content" class="form-control" style="border-top: none; border-left: none; border-right: none;"></InputText>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <button @onclick="this.Cancel" class="btn btn-secondary">Cancel</button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </div>
+                                        </EditForm>
+                                    }
+                                </div>
+                                <div class="col-md-5">
+                                    @if (this.isVisible && !this.openEditForm && this.Role == GlobalConstants.LecturerRoleName)
+                                    {
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <button @onclick="() => this.ChangeStarredStatus(message.Id)" class="btn btn-light" style="border-radius: 50%;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                                        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button @onclick="() => this.ChangeHighlightedStatus(message.Id)" class="btn btn-info" style="border-radius: 50%;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button @onclick="() => this.ChangeAnsweredStatus(message.Id)" class="btn btn-white text-success" style="border-radius: 50%;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="row mb-2">
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-7">
+                                            <button @onclick="() => this.LikeMessage(message.Id)" class="btn btn-light" style="border-radius: 20px;">
+                                                <p>
+                                                    @message.LikesCount
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
+                                                    </svg>
+                                                </p>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    @if (this.Role == GlobalConstants.StudentRoleName)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.Withdraw(message.Id, message.CreatorId)" class="btn btn-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <button @onclick="() => this.GetInfoForModal(message.Id)" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
+                                                        <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (this.Role == GlobalConstants.LecturerRoleName && !this.openEditForm)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.Delete(message.Id)" class="btn btn-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <button @onclick="() => this.GetInfoForModal(message.Id)" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
+                                                        <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.OpenEditForm(message.Id)" class="btn btn-warning">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.ArchiveMessage(message.Id)" class="btn btn-info">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+                                                        <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div id="tableBody">
+                    @foreach (var message in this.Model.Messages)
+                    {
+                        <div @onmouseover="() => this.ChangeVisibility(true)" @onmouseout="() => this.ChangeVisibility(false)" class="shadow-lg p-3 mb-5 @message.ClassName rounded">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            @if (message.CreatorProfileImageUrl == null)
+                                            {
+                                                <div class="d-flex justify-content-center align-items-center rounded-circle bg-light" style="width:40px; height:40px;">
+                                                    <h3 class="text-center">@(message.CreatorFirstName.Substring(0,1)+message.CreatorLastName.Substring(0,1))</h3>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <img class="rounded-circle" src="@message.CreatorProfileImageUrl" width="40" height="40" alt="Profile Image" />
+                                            }
+                                        </div>
+                                        <div class="col-md-9">
+                                            <p><strong>@(message.CreatorFirstName + ' ' + message.CreatorLastName)</strong></p>
+                                            <p class="text-black-50" style="font-size: 12px;">@message.DifferenceBetweenNowAndCreatedOn</p>
+                                        </div>
+                                    </div>
+                                    @if (!this.openEditForm)
+                                    {
+                                        <p>@message.Content</p>
+                                        <button @onclick="() => this.GetInfoForModal(message.Id)" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-white" style="border: none;">
+                                            <p class="text-black-50">@message.Replies replies</p>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <EditForm Model="this.editMessage" OnValidSubmit="() => this.Edit(message.Id)">
+                                            <div class="text-danger">
+                                                <DataAnnotationsValidator />
+                                                <ValidationSummary />
+                                            </div>
+
+                                            <InputText @bind-Value="this.editMessage.Content" class="form-control" style="border-top: none; border-left: none; border-right: none;"></InputText>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <button @onclick="this.Cancel" class="btn btn-secondary">Cancel</button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </div>
+                                        </EditForm>
+                                    }
+                                </div>
+                                <div class="col-md-5">
+                                    @if (this.isVisible && !this.openEditForm && this.Role == GlobalConstants.LecturerRoleName)
+                                    {
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <button @onclick="() => this.ChangeStarredStatus(message.Id)" class="btn btn-light" style="border-radius: 50%;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                                        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button @onclick="() => this.ChangeHighlightedStatus(message.Id)" class="btn btn-info" style="border-radius: 50%;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button @onclick="() => this.ChangeAnsweredStatus(message.Id)" class="btn btn-white text-success" style="border-radius: 50%;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="row mb-2">
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-7">
+                                            <button @onclick="() => this.LikeMessage(message.Id)" class="btn btn-light" style="border-radius: 20px;">
+                                                <p>
+                                                    @message.LikesCount
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                                                        <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
+                                                    </svg>
+                                                </p>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    @if (this.Role == GlobalConstants.StudentRoleName)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.Withdraw(message.Id, message.CreatorId)" class="btn btn-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <button @onclick="() => this.GetInfoForModal(message.Id)" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
+                                                        <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (this.Role == GlobalConstants.LecturerRoleName && !this.openEditForm)
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.Delete(message.Id)" class="btn btn-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <button @onclick="() => this.GetInfoForModal(message.Id)" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
+                                                        <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.OpenEditForm(message.Id)" class="btn btn-warning">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button @onclick="() => this.ArchiveMessage(message.Id)" class="btn btn-info">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+                                                        <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+    <div class="col-md-3">
+
+    </div>
+</div>
+
+@code {
+    private string errorMessage = string.Empty;
+    private string className = string.Empty;
+    private bool canOpen = false;
+    private bool isVisible = false;
+    private bool openEditForm = false;
+    private bool openSearchForm = false;
+    private string searchTerm = string.Empty;
+    private bool isLight = true;
+
+    private HubConnection hubConnection;
+
+    private AllMessagesByChannleIdListViewModel Model = new AllMessagesByChannleIdListViewModel();
+    private ChannelByIdViewModel channel = new ChannelByIdViewModel();
+    private MessageByIdViewModel messageById = new MessageByIdViewModel();
+    private IEnumerable<AllRepliesByParentIdViewModel> replies = new List<AllRepliesByParentIdViewModel>();
+    private CreateMessageQAInputModel input = new CreateMessageQAInputModel();
+    private CreateReplyInputModel createReply = new CreateReplyInputModel();
+    private EditMessageQAInputModel editMessage = new EditMessageQAInputModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.Load();
+        this.hubConnection = new HubConnectionBuilder()
+            .WithUrl(this.navigationManager.BaseUri + "hubs/QAHub")
+            .Build();
+
+        this.hubConnection.On("SendMessage", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("UpdateMessage", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("WithdrawMessage", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("DeleteMessage", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("SendReply", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("ChangeStarredStatus", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("ChangeHighlightedStatus", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("ChangeAnsweredStatus", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("LikeMessage", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("ArchiveMessage", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        this.hubConnection.On("ArchiveAllMessages", () =>
+        {
+            this.Load();
+            this.StateHasChanged();
+        });
+
+        await this.hubConnection.StartAsync();
+    }
+
+    void Load()
+    {
+        this.channel = this.channelsService.GetById<ChannelByIdViewModel>(this.Id);
+        this.Model.Messages = this.messagesService.GetAllRecentMessagesByChannelId<AllMessagesByChannelIdViewModel>(this.Id);
+
+        foreach (var message in this.Model.Messages)
+        {
+            message.Replies = this.messagesService.GetCountOfRepliesForGivenMessage(message.Id);
+        }
+
+        this.Model.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(this.UserId);
+        this.replies = this.messagesService.GetAllReplies<AllRepliesByParentIdViewModel>();
+    }
+
+    async Task Submit()
+    {
+        try
+        {
+            this.input.ChannelId = this.Id;
+            this.input.CreatorId = this.UserId;
+            await this.messagesService.CreateAsync(this.input);
+
+            if (this.IsConnected)
+            {
+                await this.hubConnection.SendAsync("SendMessage");
+            }
+
+            this.errorMessage = "You have successfully asked a question!";
+            this.className = "green";
+        }
+        catch (Exception ex)
+        {
+            this.errorMessage = ex.Message;
+            this.className = "red";
+        }
+    }
+
+    async Task Edit(int messageId)
+    {
+        await this.messagesService.UpdateAsync(this.editMessage);
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("UpdateMessage");
+        }
+
+        this.errorMessage = "You have successfully updated a question!";
+        this.className = "green";
+        this.openEditForm = false;
+    }
+
+    async Task Withdraw(int messageId, string creatorId)
+    {
+        if (creatorId != this.UserId)
+        {
+            this.errorMessage = "You can withdraw your own questions only!";
+            this.className = "red";
+            return;
+        }
+
+        await this.messagesService.WithdrawAsync(messageId);
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("WithdrawMessage");
+        }
+
+        this.errorMessage = "You have successfully withdrawn your question!";
+        this.className = "green";
+    }
+
+    async Task Delete(int messageId)
+    {
+        await this.messagesService.DeleteAsync(messageId);
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("DeleteMessage");
+        }
+
+        this.errorMessage = "You have successfully deleted question!";
+        this.className = "green";
+    }
+
+    async Task CreateReply(int messageId)
+    {
+        try
+        {
+            this.createReply.ChannelId = this.Id;
+            this.createReply.CreatorId = this.UserId;
+            this.createReply.ParentId = messageId;
+            await this.messagesService.CreateReplyAsync(this.createReply);
+
+            if (this.IsConnected)
+            {
+                await this.hubConnection.SendAsync("SendReply");
+            }
+
+            this.errorMessage = "You have successfully replied to question!";
+            this.className = "green";
+        }
+        catch (Exception ex)
+        {
+            this.errorMessage = ex.Message;
+            this.className = "red";
+        }
+    }
+
+    async Task ChangeStarredStatus(int messageId)
+    {
+        if (!this.messagesService.GetStarredStatus(messageId))
+        {
+            await this.messagesService.MarkAsStarredAsync(messageId, true);
+        }
+        else
+        {
+            await this.messagesService.MarkAsStarredAsync(messageId, false);
+        }
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("ChangeStarredStatus");
+        }
+    }
+
+    async Task ChangeHighlightedStatus(int messageId)
+    {
+        if (!this.messagesService.GetHighlightedStatus(messageId))
+        {
+            await this.messagesService.MarkAsHighlightedAsync(messageId, true);
+        }
+        else
+        {
+            await this.messagesService.MarkAsHighlightedAsync(messageId, false);
+        }
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("ChangeHighlightedStatus");
+        }
+    }
+
+    async Task ChangeAnsweredStatus(int messageId)
+    {
+        if (!this.messagesService.GetAnsweredStatus(messageId))
+        {
+            await this.messagesService.MarkAsAnsweredAsync(messageId, true);
+        }
+        else
+        {
+            await this.messagesService.MarkAsAnsweredAsync(messageId, false);
+        }
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("ChangeAnsweredStatus");
+        }
+    }
+
+    async Task LikeMessage(int messageId)
+    {
+        if (this.messagesService.HasUserLikedMessage(this.UserId, messageId))
+        {
+            await this.messagesService.DeleteLikeAsync(this.UserId, messageId);
+        }
+        else
+        {
+            await this.messagesService.CreateLikeAsync(this.UserId, messageId);
+        }
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("LikeMessage");
+        }
+    }
+
+    async Task ArchiveMessage(int messageId)
+    {
+        await this.messagesService.ArchiveAsync(messageId);
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("ArchiveMessage");
+        }
+
+        this.errorMessage = "You have successfully archived a message!";
+        this.className = "green";
+    }
+
+    async Task ArchiveAll()
+    {
+        await this.messagesService.ArchiveAllAsync();
+
+        if (this.IsConnected)
+        {
+            await this.hubConnection.SendAsync("ArchiveAllMessages");
+        }
+
+        this.errorMessage = "You have successfully archived all messages!";
+        this.className = "green";
+    }
+
+    void GetInfoForModal(int messageId)
+    {
+        this.messageById = this.messagesService.GetById<MessageByIdViewModel>(messageId);
+        this.canOpen = true;
+        this.StateHasChanged();
+    }
+
+    void ChangeVisibility(bool visibility)
+    {
+        this.isVisible = visibility;
+        this.StateHasChanged();
+    }
+
+    void OpenEditForm(int messageId)
+    {
+        this.editMessage = this.messagesService.GetById<EditMessageQAInputModel>(messageId);
+        this.openEditForm = true;
+        this.StateHasChanged();
+    }
+
+    void Cancel()
+    {
+        this.openEditForm = false;
+        this.StateHasChanged();
+    }
+
+    void NavigateToPopular()
+    {
+        this.navigationManager.NavigateTo($"/MessageQAs/AllByChannel/{this.Id}", true);
+    }
+
+    void NavigateToRecent()
+    {
+        this.navigationManager.NavigateTo($"/MessageQAs/Recent/{this.Id}", true);
+    }
+
+    void NavigateToArchive()
+    {
+        this.navigationManager.NavigateTo($"/MessageQAs/Archive/{this.Id}", true);
+    }
+
+    void OpenSearchForm()
+    {
+        this.openSearchForm = true;
+        this.StateHasChanged();
+    }
+
+    void CloseSearchForm()
+    {
+        this.openSearchForm = false;
+        this.StateHasChanged();
+    }
+
+    void SwitchEvent()
+    {
+        if (this.Role == GlobalConstants.StudentRoleName)
+        {
+            this.navigationManager.NavigateTo("/Channels/AllByParticipant", true);
+        }
+        else
+        {
+            this.navigationManager.NavigateTo("/Channels/AllByCreator", true);
+        }
+    }
+
+    void ChangeBackgroundColor()
+    {
+        this.isLight = !this.isLight;
+        this.StateHasChanged();
+    }
+
+    string GetBackgroundColor()
+    {
+        return this.isLight ? "bg-light" : "bg-dark";
+    }
+
+    public List<AllMessagesByChannelIdViewModel> FilteredMessages =>
+        this.Model.Messages.Where(m => m.Content.ToLower().Contains(this.searchTerm.ToLower())).ToList();
+
+    public bool IsConnected => this.hubConnection.State == HubConnectionState.Connected;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    [Parameter]
+    public string Role { get; set; }
+} 

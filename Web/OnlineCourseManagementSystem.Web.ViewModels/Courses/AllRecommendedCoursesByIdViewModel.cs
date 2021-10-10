@@ -19,7 +19,7 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Course, AllRecommendedCoursesByIdViewModel>()
-                .ForMember(all => all.AverageRaiting, opt => opt.MapFrom(c => c.Reviews.Average(r => r.Rating)));
+                .ForMember(all => all.AverageRaiting, opt => opt.MapFrom(c => c.Reviews.Count() > 0 ? c.Reviews.Average(r => r.Rating) : 0));
         }
     }
 }

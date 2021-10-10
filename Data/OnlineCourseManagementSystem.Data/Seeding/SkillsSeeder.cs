@@ -22,32 +22,27 @@
                 new Skill
                 {
                     Text = "Basics of GIT and how to become a STAR.",
-                    //CourseId = 8,
-                    CourseId = 6,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                 },
                 new Skill
                 {
                     Text = "Database connections & some other nice features.",
-                    //CourseId = 8,
-                    CourseId = 6,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                 },
                 new Skill
                 {
                     Text = "Eaque ex exercitationem quia reprehenderit?",
-                    //CourseId = 8,
-                    CourseId = 6,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                 },
                 new Skill
                 {
                     Text = "Ab distinctio nemo, provident quia quibusdam ullam.",
-                    //CourseId = 8,
-                    CourseId = 6,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                 },
                 new Skill
                 {
                     Text = "Conclusion & Notes.",
-                    //CourseId = 8,
-                    CourseId = 6,
+                    CourseId = dbContext.Courses.FirstOrDefault().Id,
                 },
             };
 

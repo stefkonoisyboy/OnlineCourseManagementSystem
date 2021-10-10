@@ -21,6 +21,10 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
 
         public string ExamName { get; set; }
 
+        public bool? ExamIsCertificated { get; set; }
+
+        public int ExamCourseId { get; set; }
+
         public string ExamCourseName { get; set; }
 
         public int ExamDuration { get; set; }

@@ -11,6 +11,7 @@ namespace OnlineCourseManagementSystem.Data.Models
         {
             this.AudienceComments = new HashSet<AudienceComment>();
             this.Users = new HashSet<UserChannel>();
+            this.MessageQAs = new HashSet<MessageQA>();
         }
 
         public string Code { get; set; }
@@ -28,5 +29,7 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<AudienceComment> AudienceComments { get; set; }
 
         public virtual ICollection<UserChannel> Users { get; set; }
+
+        public virtual ICollection<MessageQA> MessageQAs { get; set; }
     }
 }

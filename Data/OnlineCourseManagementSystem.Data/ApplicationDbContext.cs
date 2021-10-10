@@ -101,6 +101,10 @@
 
         public virtual DbSet<Certificate> Certificates { get; set; }
 
+        public virtual DbSet<Completition> Completitions { get; set; }
+
+        public virtual DbSet<MessageQA> MessageQAs { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

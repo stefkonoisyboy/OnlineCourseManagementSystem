@@ -22,12 +22,12 @@
                 new UserCourse
                 {
                     CourseId = dbContext.Courses.FirstOrDefault().Id,
-                    UserId = dbContext.Users.FirstOrDefault(u => u.StudentId == "student1").Id,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "dimi03").Id,
                 },
                 new UserCourse
                 {
                     CourseId = dbContext.Courses.FirstOrDefault().Id,
-                    UserId = dbContext.Users.FirstOrDefault(u => u.StudentId == "student2").Id,
+                    UserId = dbContext.Users.FirstOrDefault(u => u.UserName == "angata").Id,
                 },
             };
 

@@ -8,6 +8,8 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
 {
     public class GetAllChannelsByParticipantIdViewModel : IMapFrom<Channel>
     {
+        public int Id { get; set; }
+
         public string Code { get; set; }
 
         public string Name { get; set; }

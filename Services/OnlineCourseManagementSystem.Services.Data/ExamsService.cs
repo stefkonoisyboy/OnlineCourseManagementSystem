@@ -22,6 +22,8 @@
         private readonly IDeletableEntityRepository<UserExam> userExamsRepository;
         private readonly IDeletableEntityRepository<Lecture> lecturesRepository;
         private readonly IDeletableEntityRepository<Choice> choicesRepository;
+        private readonly IDeletableEntityRepository<Completition> completitionsRepository;
+        private readonly IDeletableEntityRepository<Certificate> certificationsRepository;
 
         public ExamsService(
             IDeletableEntityRepository<Exam> examsRepository,
@@ -29,7 +31,9 @@
             IDeletableEntityRepository<Question> questionsRepository,
             IDeletableEntityRepository<UserExam> userExamsRepository,
             IDeletableEntityRepository<Lecture> lecturesRepository,
-            IDeletableEntityRepository<Choice> choicesRepository)
+            IDeletableEntityRepository<Choice> choicesRepository,
+            IDeletableEntityRepository<Completition> completitionsRepository,
+            IDeletableEntityRepository<Certificate> certificationsRepository)
         {
             this.examsRepository = examsRepository;
             this.answersRepository = answersRepository;
@@ -37,6 +41,8 @@
             this.userExamsRepository = userExamsRepository;
             this.lecturesRepository = lecturesRepository;
             this.choicesRepository = choicesRepository;
+            this.completitionsRepository = completitionsRepository;
+            this.certificationsRepository = certificationsRepository;
         }
 
         public async Task AddExamToCertificateAsync(AddExamToCertificateInputModel input)
@@ -53,15 +59,15 @@
             await this.examsRepository.SaveChangesAsync();
         }
 
-        public bool CanStartCertificate(int courseId)
+        public bool CanStartCertificate(int courseId, string userId)
         {
             int lecturesCount = this.lecturesRepository
                 .All()
                 .Count(l => l.CourseId == courseId);
 
-            int completedLecturesCount = this.lecturesRepository
+            int completedLecturesCount = this.completitionsRepository
                 .All()
-                .Count(l => l.CourseId == courseId && l.IsCompleted);
+                .Count(c => c.Lecture.CourseId == courseId && c.UserId == userId);
 
             return lecturesCount == completedLecturesCount;
         }
@@ -174,8 +180,11 @@
         {
             return this.examsRepository
                 .All()
-                .FirstOrDefault(e => e.CourseId == courseId && e.IsCertificated.Value)
-                .Id;
+                .FirstOrDefault(e => e.CourseId == courseId && e.IsCertificated.Value) == null
+                ? this.examsRepository
+                .All()
+                .FirstOrDefault(e => e.CourseId == courseId && e.IsCertificated.Value).Id
+                : 0;
         }
 
         public int GetCountOfAllUsersWhoPassedCertainExam(int examId)
@@ -219,6 +228,22 @@
                 .All()
                 .FirstOrDefault(e => e.Id == id)
                 .Duration;
+        }
+
+        public int GetExamIdByUserIdAndCourseId(string userId, int courseId)
+        {
+            return this.userExamsRepository
+                .All()
+                .FirstOrDefault(ue => ue.UserId == userId && ue.Exam.CourseId == courseId)
+                .ExamId;
+        }
+
+        public double GetGradeByUserIdAndCourseId(string userId, int courseId)
+        {
+            return this.userExamsRepository
+                .All()
+                .FirstOrDefault(ue => ue.UserId == userId && ue.Exam.CourseId == courseId)
+                .Grade;
         }
 
         public string GetNameById(int id)
@@ -374,9 +399,27 @@
                 Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == userExam.ExamId);
                 if (exam.LectureId != null)
                 {
-                    Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == exam.LectureId);
-                    lecture.IsCompleted = true;
-                    await this.lecturesRepository.SaveChangesAsync();
+                    Completition completition = new Completition
+                    {
+                        UserId = userId,
+                        LectureId = exam.LectureId.Value,
+                    };
+
+                    await this.completitionsRepository.AddAsync(completition);
+                    await this.completitionsRepository.SaveChangesAsync();
+                }
+
+                if (exam.IsCertificated.Value)
+                {
+                    Certificate certificate = new Certificate
+                    {
+                        UserId = userId,
+                        CourseId = exam.CourseId.Value,
+                        Grade = grade,
+                    };
+
+                    await this.certificationsRepository.AddAsync(certificate);
+                    await this.certificationsRepository.SaveChangesAsync();
                 }
 
                 await this.userExamsRepository.AddAsync(userExam);

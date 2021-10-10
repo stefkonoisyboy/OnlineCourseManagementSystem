@@ -41,6 +41,10 @@
 
         double GetCountOfUsersWithLowerGradesOnCertainExam(int examId, double grade);
 
+        double GetGradeByUserIdAndCourseId(string userId, int courseId);
+
+        int GetExamIdByUserIdAndCourseId(string userId, int courseId);
+
         int GetCountOfAllUsersWhoPassedCertainExam(int examId);
 
         bool IsExamAddedToLecture(int examId, int lectureId);
@@ -49,7 +53,7 @@
 
         bool IsExamCertificated(int examId);
 
-        bool CanStartCertificate(int courseId);
+        bool CanStartCertificate(int courseId, string userId);
 
         DateTime GetStartDateById(int id);
 
