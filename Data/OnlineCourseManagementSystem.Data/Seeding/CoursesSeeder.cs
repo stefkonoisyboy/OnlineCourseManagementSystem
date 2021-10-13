@@ -41,6 +41,7 @@
                     Extension = "jpg",
                     RemoteUrl = "https://res.cloudinary.com/dm2yls09j/image/upload/v1618063399/courses-files/uw8x7mykwfut5czhakp7.jpg",
                 },
+                CreatorId = dbContext.Users.FirstOrDefault(u => u.UserName == "niki").Id,
             };
 
             Course course2 = new Course
@@ -69,6 +70,7 @@
                     Extension = "docx",
                     RemoteUrl = "https://res.cloudinary.com/dm2yls09j/image/upload/v1618066729/courses-files/k5xy0emqwjdu4nn7jduf.jpg",
                 },
+                CreatorId = dbContext.Users.FirstOrDefault(u => u.UserName == "niki").Id,
             };
 
             dbContext.Courses.Add(course1);

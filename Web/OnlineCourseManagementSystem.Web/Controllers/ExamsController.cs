@@ -249,7 +249,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
-        public async Task<IActionResult> AddToCertificate()
+        public async Task<IActionResult> AddToCertificate(int courseId)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
@@ -258,6 +258,7 @@
                 Exams = this.examsService.GetAllExamsAsSelectListItemsByCreatorId(user.Id),
                 RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
+                CourseId = courseId,
             };
 
             return this.View(input);
@@ -265,9 +266,13 @@
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [HttpPost]
-        public async Task<IActionResult> AddToCertificate(AddExamToCertificateInputModel input)
+        public async Task<IActionResult> AddToCertificate(AddExamToCertificateInputModel input, int courseId)
         {
-            int courseId = this.examsService.GetCourseIdByExam(input.ExamId);
+            if (this.examsService.CheckAlreadyUsedExam(input.ExamId, courseId))
+            {
+                this.TempData["Alert"] = "Exam has already been used!";
+                return this.RedirectToAction("ById", "Courses", new { id = courseId });
+            }
 
             if (this.examsService.IsExamCertificated(input.ExamId))
             {

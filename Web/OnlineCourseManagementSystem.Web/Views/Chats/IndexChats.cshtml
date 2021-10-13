@@ -17,7 +17,7 @@
 </style>
 
 <body>
-    <component type="typeof(Chats)" render-mode="ServerPrerendered" param-UserId="user.Id" param-UserFullName="userFullName" />
+    <component type="typeof(Chats)" render-mode="ServerPrerendered" param-UserId="user.Id" param-UserFullName="userFullName" param-UserProfileUrl="user.ProfileImageUrl" />
 </body>
 
 <script>
@@ -70,11 +70,12 @@
     function showNotification(name, message) {
         const notification = new Notification(name, {
             body: message,
-            icon: "https://th.bing.com/th/id/OIP.LS8ICLspAEXYBgx_C67y-wHaDj?pid=ImgDet&rs=1"
+            icon: "https://tse1.mm.bing.net/th?id=OIP.B4uDqkFwAxtC3D6OYdlCVQHaF8&pid=Api&P=0&w=213&h=172"
         });
 
         notification.onclick = (e) => {
-            window.location.href = "https://localhost:44319/Chats/IndexChats"
+            var currentURL = window.location.href;
+            window.location.href = currentURL;
         };
     }
 

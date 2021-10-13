@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
+
     using AutoMapper;
     using Ganss.XSS;
     using OnlineCourseManagementSystem.Data.Models;
@@ -13,6 +15,11 @@
 
     public class CourseByIdViewModel : IMapFrom<Course>
     {
+        public CourseByIdViewModel()
+        {
+            this.Skills = new List<AllSkillsByCourseIdViewModel>().ToList();
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }

@@ -89,7 +89,7 @@
                 </li>
             </ul>
 
-            <form method="post" class="shadow-lg p-5 mb-5 bg-white rounded">
+            <form asp-route-courseId="@this.Model.CourseId" method="post" class="shadow-lg p-5 mb-5 bg-white rounded">
                 <div asp-validation-summary="All" class="alert-danger"></div>
 
                 <div class="form-group">

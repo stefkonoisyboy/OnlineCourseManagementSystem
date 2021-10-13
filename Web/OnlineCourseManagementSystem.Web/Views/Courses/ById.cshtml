@@ -81,7 +81,7 @@
     @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
     {
         <div class="text-center">
-            <a asp-controller="Exams" asp-action="AddToCertificate" class="btn btn-success" style="font-size: 20px;">ADD EXAM TO CERTIFICATE</a>
+            <a asp-controller="Exams" asp-action="AddToCertificate" asp-route-courseId="@this.Model.Id" class="btn btn-success" style="font-size: 20px;">ADD EXAM TO CERTIFICATE</a>
         </div>
     }
     else if (this.User.IsInRole(GlobalConstants.StudentRoleName))

@@ -1118,7 +1118,7 @@
         this.hubConnection = new HubConnectionBuilder()
             .WithUrl(this.NavigationManager.BaseUri + "hubs/ChatHub")
             .Build();
-        this.hubConnection.On<string, string, int, string, int, DateTime>("SendMessage", (name, message, messageId, creatorId, room, createdOn) =>
+        this.hubConnection.On<string, string, int, string, int, DateTime, string>("SendMessage", (name, message, messageId, creatorId, room, createdOn, userIconUrl) =>
         {
             MessageViewModel messageViewModel = new MessageViewModel()
             {
@@ -1128,6 +1128,7 @@
                 Id = messageId,
                 IsModified = false,
                 CreatedOn = createdOn,
+                CreatorProfileImageUrl = userIconUrl,
             };
 
             if (!this.Rooms.ContainsKey(room))
@@ -1141,10 +1142,7 @@
             {
                 if (!this.chatsService.GetByCurrentUser<ChatUserViewModel>(this.UserId, room).IsMuted)
                 {
-                    if (this.UserId != messageViewModel.CreatorId)
-                    {
-                        this.JS.InvokeVoidAsync("showNotification", name, message);
-                    }
+                    this.JS.InvokeVoidAsync("showNotification", name, message);
                 }
             }
 
@@ -1356,7 +1354,7 @@
 
             int messageId = await this.messagesService.Create(this.CreateMessageInputModel);
 
-            await this.hubConnection.SendAsync("SendMessage", this.UserFullName, this.CreateMessageInputModel.Content, messageId, this.UserId, this.CurrentChat.ChatId, DateTime.UtcNow);
+            await this.hubConnection.SendAsync("SendMessage", this.UserFullName, this.CreateMessageInputModel.Content, messageId, this.UserId, this.CurrentChat.ChatId, DateTime.UtcNow,this.UserProfileUrl);
             this.CreateMessageInputModel.Content = string.Empty;
         }
     }
@@ -1371,7 +1369,6 @@
 
         if (!string.IsNullOrEmpty(this.EditMessageInputModel.Content) && !string.IsNullOrWhiteSpace(this.EditMessageInputModel.Content))
         {
-
             try
             {
                 await this.messagesService.UpdateAsync(this.EditMessageInputModel);
@@ -1444,6 +1441,9 @@
 
     [Parameter]
     public string UserId { get; set; }
+
+    [Parameter]
+    public string UserProfileUrl { get; set; }
 
     [Parameter]
     public string UserFullName { get; set; }
