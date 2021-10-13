@@ -194,7 +194,7 @@
                     <tr>
                         <td>@course.Name</td>
                         <td>
-                            <a asp-controller="Users" asp-action="Profile">@(course.Creator.FirstName+" "+course.Creator.LastName)</a>
+                            <a asp-controller="Users" asp-action="ManageAccountById">@(course.Creator.FirstName+" "+course.Creator.LastName)</a>
                         </td>
                         <td>
                             @course.Price
@@ -247,7 +247,7 @@
                                     <button class="btn btn-success mb-1">Approve</button>
                                 </form>
                             }
-                            <a class="btn btn-primary" asp-controller="Courses" asp-action="ById">View</a>
+                            <a class="btn btn-primary" asp-controller="Courses" asp-action="ById" asp-route-id="@course.Id">View</a>
                         </td>
                     </tr>
                 }
@@ -352,7 +352,7 @@
                         </td>
                         <td>
                             @* Connect Author *@
-                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@post.Author.Id">@(post.Author.FirstName+" "+post.Author.LastName)</a>
+                            <a asp-controller="Users" asp-action="ManageAccountById" asp-route-id="@post.Author.Id">@(post.Author.FirstName+" "+post.Author.LastName)</a>
                         </td>
                         <td>
                             @* Connect Course *@
@@ -402,8 +402,7 @@
                             @lecture.Title
                         </td>
                         <td>
-                            @* Connect Creator *@
-                            <a asp-controller="User" asp-action="Profile" asp-route-id="@lecture.Creator.Id">@(lecture.Creator.FirstName+" "+lecture.Creator.LastName)</a>
+                            @(lecture.Creator.FirstName+" "+lecture.Creator.LastName)
                         </td>
                         <td>
                             @lecture.StartDate.ToString("D")
@@ -471,7 +470,7 @@
                         </td>
                         <td>
                             @* Connect Lecturer *@
-                            <a asp-controller="User" asp-action="Profile" asp-route-id="@exam.Lecturer.Id">@(exam.Lecturer.FirstName+" "+exam.Lecturer.LastName)</a>
+                            @(exam.Lecturer.FirstName+" "+exam.Lecturer.LastName)
                         </td>
                         <td>
                             <a asp-controller="Courses" asp-action="ById" asp-route-id="@exam.Course.Id">@exam.Course.Name</a>

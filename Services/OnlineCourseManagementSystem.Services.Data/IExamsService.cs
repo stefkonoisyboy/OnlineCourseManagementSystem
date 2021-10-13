@@ -72,5 +72,7 @@
         IEnumerable<T> GetAllByAdmin<T>();
 
         IEnumerable<SelectListItem> GetAllExamsAsSelectListItemsByCreatorId(string creatorId);
+
+        bool CheckAlreadyUsedExam(int examId, int courseId);
     }
 }

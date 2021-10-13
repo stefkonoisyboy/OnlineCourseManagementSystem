@@ -27,7 +27,7 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 
         public string Description { get; set; }
 
-        public double AverageRaiting => this.Reviews.Average(r => r.Rating);
+        public double AverageRaiting => this.Reviews.Count() == 0 ? 0 : this.Reviews.Average(r => r.Rating);
 
         public int RecommendedDuration { get; set; }
 

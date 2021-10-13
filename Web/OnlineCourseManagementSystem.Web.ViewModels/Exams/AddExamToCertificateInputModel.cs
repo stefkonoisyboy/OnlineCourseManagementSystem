@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineCourseManagementSystem.Web.ViewModels.Courses;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+
     public class AddExamToCertificateInputModel
     {
         [Display(Name = "Exam")]
@@ -18,5 +19,7 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
         public IEnumerable<AllRecommendedCoursesByIdViewModel> RecommendedCourses { get; set; }
 
         public CurrentUserViewModel CurrentUser { get; set; }
+
+        public int CourseId { get; set; }
     }
 }

@@ -49,6 +49,7 @@
         {
             Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == input.ExamId);
             exam.IsCertificated = true;
+            exam.CourseId = input.CourseId;
             await this.examsRepository.SaveChangesAsync();
         }
 
@@ -70,6 +71,11 @@
                 .Count(c => c.Lecture.CourseId == courseId && c.UserId == userId);
 
             return lecturesCount == completedLecturesCount;
+        }
+
+        public bool CheckAlreadyUsedExam(int examId, int courseId)
+        {
+            return this.examsRepository.All().Any(e => e.Id == examId && e.CourseId == courseId);
         }
 
         public async Task CreateAsync(CreateExamInputModel input)
@@ -181,10 +187,9 @@
             return this.examsRepository
                 .All()
                 .FirstOrDefault(e => e.CourseId == courseId && e.IsCertificated.Value) == null
-                ? this.examsRepository
-                .All()
-                .FirstOrDefault(e => e.CourseId == courseId && e.IsCertificated.Value).Id
-                : 0;
+                ? 0 : this.examsRepository
+                    .All()
+                    .FirstOrDefault(e => e.CourseId == courseId && e.IsCertificated.Value).Id;
         }
 
         public int GetCountOfAllUsersWhoPassedCertainExam(int examId)
