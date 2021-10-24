@@ -21,6 +21,8 @@
 
         public DateTime EndDate { get; set; }
 
+        public string VideoRoomId { get; set; }
+
         public IEnumerable<AllFilesByLectureIdViewModel> Files { get; set; }
 
         public IEnumerable<AllExamsByLectureIdViewModel> Exams { get; set; }

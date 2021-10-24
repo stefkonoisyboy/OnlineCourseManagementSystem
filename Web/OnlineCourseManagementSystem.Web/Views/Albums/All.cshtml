@@ -4,30 +4,31 @@
     this.ViewData["Title"] = "Album";
 }
 
-<div class="album-container">
-    <h1 class="title">Gallery</h1>
-    @if (this.TempData.ContainsKey("AlbumExist"))
-    {
-        <div class="alert alert-danger alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            @this.TempData["AlbumExist"]
-        </div>
-    }
+<h1 class="text-center my-5">Gallery</h1>
 
-<div class="d-inline-flex rounded-pill p-2 my-4" id="show" data-bs-toggle="modal" data-bs-target="#addAlbumModal" style="cursor:pointer;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;"> 
-    <tt id="create-text" class="mx-2">
-        Create Album
-    </tt>
-    <svg  xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
-        <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z" />
-        <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
-    </svg>
-</div>
-   
+@if (this.TempData.ContainsKey("AlbumExist"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["AlbumExist"]
+    </div>
+}
+
+<div class="album-container" style="margin-bottom:30vh;">
+    <div class="d-inline-flex rounded-pill p-2 my-4" id="show" data-bs-toggle="modal" data-bs-target="#addAlbumModal" style="cursor:pointer;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+        <tt id="create-text" class="mx-2">
+            Create Album
+        </tt>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+            <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z" />
+            <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
+        </svg>
+    </div>
+
     <div class="row">
         @foreach (var album in this.Model.Albums)
         {
-            <a class="d-flex col-md-3 mx-2 justify-content-center align-items-center card card-body col-md-2 p-5" style="color: black;" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">
+            <a class="d-flex col-12 col-md-3 mx-2 justify-content-center align-items-center card card-body p-5" style="color: black;" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">
                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
                     <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
                     <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z" />
@@ -44,19 +45,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addAlbumModal">Add Album</h5>
-                <p class="text-success" style="background: #e7e7e7; display: flex; border-radius: 5px">Here using the button create,you can create album and add it to your gallery</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form asp-controller="Albums" asp-action="CreateAlbum" method="post" class="form-album-container">
-                    <div>
-                        <label class="h3" style="color: black" asp-for="InputModel.Name"></label>
-                        <input asp-for="InputModel.Name" />
-                        <span asp-validation-for="InputModel.Name" class="alert-danger"></span>
-                    </div>
-                    <button class="btn btn-primary mx-3">
-                        Create
-                    </button>
+                <form class="d-flex" asp-controller="Albums" asp-action="CreateAlbum" method="post">
+                  <label class=" mx-1" style="color: black" asp-for="InputModel.Name"></label>
+                  <input class="form-control mx-1" asp-for="InputModel.Name" />
+                  <span asp-validation-for="InputModel.Name" class="alert-danger"></span>
+                  <button class="btn btn-primary mx-3">
+                      Create
+                  </button>
                 </form>
             </div>
         </div>

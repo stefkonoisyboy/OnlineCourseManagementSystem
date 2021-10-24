@@ -1,0 +1,78 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.VideoConferences
+@using OnlineCourseManagementSystem.Web.Interop
+@inject IJSRuntime JavaScript
+@inject NavigationManager NavigationManager
+<h5 class="d-flex align-items-center"> 
+    <svg xmlns="http://www.w3.org/2000/svg" class="mx-1" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+    Settings
+  </h5>
+<button class="btn btn-info my-1 w-100" @onclick="() => this.GetMessageTest()">Get devices</button>
+<div class="dropdown my-1 pb-4">
+    <button class="btn btn-lg btn-secondary dropdown-toggle twilio-btn-red w-100"
+            type="button" id="dropdownMenuButton"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span>@(this.IsLoading ? "Loading cameras..." : "Select Camera")</span>
+        @if (this.IsLoading)
+        {
+            <span id="loading" class="spinner-border spinner-border-sm"
+                  role="status" aria-hidden="true"></span>
+        }
+    </button>
+
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        @if (this.HasDevices)
+        {
+            foreach (var device in this.Devices!)
+            {
+                <button class="dropdown-item @(this.activeCamera == device.DeviceId ? "active" : "")" id="@device.DeviceId" @onclick="@(async () => await SelectCamera(device.DeviceId))">
+                    @device.Label
+                </button>
+            }
+        }
+    </div>
+</div>
+
+@code{
+    private string activeCamera;
+
+    [Parameter]
+    public EventCallback<string> CameraChanged { get; set; }
+
+    protected Device[] Devices { get; private set; }
+
+    protected CameraState State { get; private set; }
+
+    protected bool HasDevices => this.State == CameraState.FoundCameras;
+
+    protected bool IsLoading => this.State == CameraState.LoadingCameras;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this.Devices = await this.JavaScript.GetVideoDevicesAsync();
+            this.State = this.Devices != null && this.Devices.Length > 0
+                   ? CameraState.FoundCameras
+                   : CameraState.Error;
+        }
+    }
+
+    private void GetMessageTest()
+    {
+        this.StateHasChanged();
+    }
+
+    protected async ValueTask SelectCamera(string deviceId)
+    {
+        await this.JavaScript.StartVideoAsync(deviceId, "#camera");
+        this.activeCamera = deviceId;
+
+        if (this.CameraChanged.HasDelegate)
+        {
+            await this.CameraChanged.InvokeAsync(this.activeCamera);
+        }
+    }
+}

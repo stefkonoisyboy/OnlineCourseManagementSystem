@@ -1,10 +1,11 @@
 ﻿namespace OnlineCourseManagementSystem.Services.Data
 {
-    using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public interface IUsersService
     {

@@ -113,7 +113,6 @@
                 .ToList();
         }
 
-
         public async Task UpdateAsync(EditAssignmentInputModel inputModel)
         {
             Assignment assignment = this.assignmentRepository.All().FirstOrDefault(x => x.Id == inputModel.AssignmentId);

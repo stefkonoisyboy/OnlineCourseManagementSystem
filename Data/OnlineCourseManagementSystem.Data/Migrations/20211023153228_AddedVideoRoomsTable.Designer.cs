@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211023153228_AddedVideoRoomsTable")]
+    partial class AddedVideoRoomsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1262,6 +1264,9 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("VideoRoomId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
@@ -2047,6 +2052,48 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.ToTable("UserExams");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.VideoRoom", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("LectureId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LectureId")
+                        .IsUnique()
+                        .HasFilter("[LectureId] IS NOT NULL");
+
+                    b.ToTable("VideoRooms");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationRole", null)
@@ -2761,6 +2808,22 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.VideoRoom", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
+                        .WithMany("VideoRooms")
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Lecture", "Lecture")
+                        .WithOne("VideoRoom")
+                        .HasForeignKey("OnlineCourseManagementSystem.Data.Models.VideoRoom", "LectureId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Lecture");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Album", b =>
                 {
                     b.Navigation("Images");
@@ -2835,6 +2898,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Roles");
 
                     b.Navigation("Student");
+
+                    b.Navigation("VideoRooms");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Assignment", b =>
@@ -2934,6 +2999,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Exams");
 
                     b.Navigation("Files");
+
+                    b.Navigation("VideoRoom");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Lecturer", b =>

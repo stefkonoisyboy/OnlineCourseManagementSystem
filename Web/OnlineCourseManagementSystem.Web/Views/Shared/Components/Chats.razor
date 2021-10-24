@@ -59,7 +59,7 @@
         .chat-sidebar::-webkit-scrollbar-thumb {
             background-color: #2196f3;
             border-radius: 10px;
-            width:5px;
+            width: 5px;
         }
 
     .all-chats {
@@ -94,7 +94,7 @@
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         color: white;
         background: white;
-        color:black;
+        color: black;
         border-radius: 5px;
         height: 28rem;
         width: inherit;
@@ -159,7 +159,7 @@
     }
 
     .content-messages::-webkit-scrollbar-thumb {
-        background-color:#2196f3;
+        background-color: #2196f3;
         border-radius: 10px;
         width: 5px;
     }
@@ -186,7 +186,7 @@
     }
 
     .friend-item {
-        color:#2196f3;
+        color: #2196f3;
         margin: 5px;
         padding: 0.5rem;
         display: flex;
@@ -196,9 +196,9 @@
 
         .friend-item:hover {
             background: #42a5f5;
-            color:white;
-            transform:scale(1.05);
-            transition:transform 350ms ease-out;
+            color: white;
+            transform: scale(1.05);
+            transition: transform 350ms ease-out;
             cursor: pointer;
         }
 
@@ -499,27 +499,28 @@
         position: relative;
     }
 
-    .modal-content{
-        background:#42a5f5;
+    .modal-content {
+        background: #42a5f5;
     }
 
-    .modal-body{
-        background-color:white;
-        color:black;
-        display:flex;
-        flex-direction:column;
-        justify-content:start;
+    .modal-body {
+        background-color: white;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
     }
 
     .modal-footer {
-        background-color:white;
+        background-color: white;
     }
 
-    .btn{
-        background:#42a5f5;
-        color:white;
+    .btn {
+        background: #42a5f5;
+        color: white;
     }
 </style>
+
 <div class="d-block d-md-flex  mt-5">
     @* Chats *@
 
@@ -668,7 +669,7 @@
                 @{
                     DateTime current = new DateTime();
                 }
-                @foreach (var message in this.Rooms[this.CurrentChat.ChatId].OrderBy(m => m.CreatedOn)) 
+                @foreach (var message in this.Rooms[this.CurrentChat.ChatId].OrderBy(m => m.CreatedOn))
                 {
                     if (current.Date != message.CreatedOn.Date)
                     {
@@ -940,7 +941,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Error Message</h5>
             </div>
-            <div class="modal-body" style="background:#2f3136; color: white;">
+            <div class="modal-body">
                 @this.errorMessage
             </div>
             <div class="modal-footer" style="background:#535760">
@@ -1072,7 +1073,7 @@
     async Task CreateChat()
     {
         this.InputModel.CreatorId = UserId;
-        if(!this.MarkedUsers.Where(f=>f.Value).Any())
+        if (!this.MarkedUsers.Where(f => f.Value).Any())
         {
             return;
         }
@@ -1092,7 +1093,7 @@
 
     async Task AddUsersToChat()
     {
-        if (!this.MarkedUsersToAdd.Where(u=>u.Value).Any())
+        if (!this.MarkedUsersToAdd.Where(u => u.Value).Any())
         {
             return;
         }
@@ -1354,7 +1355,7 @@
 
             int messageId = await this.messagesService.Create(this.CreateMessageInputModel);
 
-            await this.hubConnection.SendAsync("SendMessage", this.UserFullName, this.CreateMessageInputModel.Content, messageId, this.UserId, this.CurrentChat.ChatId, DateTime.UtcNow,this.UserProfileUrl);
+            await this.hubConnection.SendAsync("SendMessage", this.UserFullName, this.CreateMessageInputModel.Content, messageId, this.UserId, this.CurrentChat.ChatId, DateTime.UtcNow, this.UserProfileUrl);
             this.CreateMessageInputModel.Content = string.Empty;
         }
     }

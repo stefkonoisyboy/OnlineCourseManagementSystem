@@ -83,6 +83,9 @@
                                         <a class="text-white" asp-controller="Assignments" asp-action="AllCreated" asp-route-id="@course.Id">Created Assignments</a>
                                     }
                                 </div>
+                                <div class="assignment-option mx-1 p-2" style="background: #42a5f5;">
+                                    <a class="text-white" asp-controller="Assignments" asp-action="CreateAssignment" asp-route-id="@course.Id">Create Assignment</a>
+                                </div>
                             </div>
                             <div class="card-header d-flex justify-content-start">
                                 <button class="btn btn-primary" id="btn-options" onclick="openOptions(@course.Id)">Options</button>

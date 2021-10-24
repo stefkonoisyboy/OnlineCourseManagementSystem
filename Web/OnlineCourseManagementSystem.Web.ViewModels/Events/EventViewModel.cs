@@ -13,9 +13,11 @@
 
         public string Theme { get; set; }
 
-        public string AuthorName { get; set; }
+        public string CreatorFirstName { get; set; }
 
-        public string ImageOfAuthor { get; set; }
+        public string CreatorLastName { get; set; }
+
+        public string AuthorProfileImageUrl { get; set; }
 
         public DateTime StartDate { get; set; }
 
@@ -26,7 +28,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Event, EventViewModel>()
-                .ForMember(e => e.AuthorName, y => y.MapFrom(e => $"{e.Creator.FirstName} {e.Creator.LastName}"));
+                .ForMember(e => e.AuthorProfileImageUrl, y => y.MapFrom(e => e.Creator.ProfileImageUrl));
         }
     }
 }

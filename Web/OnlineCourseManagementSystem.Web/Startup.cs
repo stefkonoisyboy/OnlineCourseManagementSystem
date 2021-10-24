@@ -1,12 +1,15 @@
 ﻿namespace OnlineCourseManagementSystem.Web
 {
+    using System.Linq;
     using System.Reflection;
 
     using CloudinaryDotNet;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Features;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.ResponseCompression;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +26,7 @@
     using OnlineCourseManagementSystem.Services.Messaging;
     using OnlineCourseManagementSystem.Web.Hubs;
     using OnlineCourseManagementSystem.Web.ViewModels;
+    using OnlineCourseManagementSystem.Web.ViewModels.VideoConferences;
     using Stripe;
 
     public class Startup
@@ -59,7 +63,15 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
-            services.AddSignalR();
+            services.Configure<TwilioSettings>(settings =>
+            {
+                settings.AccountSid = this.configuration["Twilio:TwilioAccountSid"];
+                settings.ApiSecret = this.configuration["Twilio:TwilioApiSecret"];
+                settings.ApiKey = this.configuration["Twilio:TwilioApiKey"];
+            });
+
+            services.AddSignalR(options => options.EnableDetailedErrors = true)
+                .AddMessagePackProtocol();
             services.AddControllersWithViews(
                 options =>
                     {
@@ -112,8 +124,11 @@
             services.AddTransient<ICompletitionsService, CompletitionsService>();
             services.AddTransient<ICertificatesService, CertificatesService>();
             services.AddTransient<IMessageQAsService, MessageQAsService>();
-
+            services.AddSingleton<ITwilioService, TwilioService>();
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
+            services.AddResponseCompression(opts =>
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -121,6 +136,7 @@
         {
             StripeConfiguration.ApiKey = this.configuration.GetSection("Stripe")["SecretKey"];
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            app.UseResponseCompression();
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -145,6 +161,7 @@
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
+
             app.UseCookiePolicy();
 
             app.UseRouting();
@@ -160,6 +177,7 @@
                         endpoints.MapRazorPages();
                         endpoints.MapFallbackToFile("index.html");
                         endpoints.MapBlazorHub();
+                        endpoints.MapHub<VideoHub>("hubs/VideoHub");
                         endpoints.MapHub<ChatHub>("hubs/ChatHub");
                         endpoints.MapHub<QAHub>("hubs/QAHub");
                     });

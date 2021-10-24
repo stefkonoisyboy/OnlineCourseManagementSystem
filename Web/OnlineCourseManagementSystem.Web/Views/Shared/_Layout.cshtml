@@ -13,11 +13,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
-
-
+   
+    <!--VideChat links-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.0/darkly/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="//media.twiliocdn.com/sdk/js/video/releases/2.3.0/twilio-video.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/lib/aspnet/signalr/dist/browser/signalr.js" asp-append-version="true"></script>
@@ -90,8 +96,17 @@
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" asp-controller="Events" asp-action="AllCreated">
-                                                    <p>Your Created Events</p>
+                                                    Your Created Events
                                                 </a>
+                                            </li>
+                                        }
+                                        @if (this.User.Identity.IsAuthenticated)
+                                        {
+                                            <li>
+                                                <hr class=" dropdown-divider" />
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="VideoChats" asp-action="IndexVideoChat">Video Conference</a>
                                             </li>
                                         }
                                     </ul>
