@@ -23,14 +23,17 @@
 
         public IEnumerable<FileViewModel> Files { get; set; }
 
-        public string CreatorName { get; set; }
+        public string CreatorFirstName { get; set; }
+
+        public string CreatorLastName { get; set; }
 
         public string CreatorDescription { get; set; }
+
+        public string CreatorProfileImageUrl { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Event, EventInfoViewModel>()
-                .ForMember(x => x.CreatorName, y => y.MapFrom(e => $"{e.Creator.FirstName} {e.Creator.LastName}"))
                 .ForMember(x => x.CreatorDescription, y => y.MapFrom(e => e.Creator.Background));
         }
     }

@@ -1,98 +1,149 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Events
+@using Microsoft.AspNetCore.Components 
 @model AllEventsCreatedViewModel
+@inject NavigationManager NavigationManager
+@{
+    this.ViewData["Title"] = "Your Created Events";
+    this.ViewData["CurrentUserHeading"] = "Messages";
+}
 
-<h1 class="title">Created Events</h1>
+<style>
+    .dropdown-option {
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        border-bottom: 2px solid #f5f5f5;
+        padding: 0.5rem;
+    }
+
+</style>
 
 @if (this.TempData.ContainsKey("CreatedEvent"))
 {
     <div class="alert alert-success alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <a href="@this.NavigationManager.Uri" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         @this.TempData["CreatedEvent"]
     </div>
 }
 
-<pre class="tab"></pre>
-<pre class="tab"></pre>
-<a asp-controller="Events" asp-action="Create" class="btn btn-success">
-    Create Event
-</a>
+<div class="d-flex my-3" style="border-radius:3px">
+    <h3 class="flex-grow-1">Created Events</h3>
+    <a asp-controller="Events" asp-action="Create">
+        Create Event
+        <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" height="30" width="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    </a>
+</div>
 
-<pre class="tab"></pre>
-<pre class="tab"></pre>
-
-<div class="row">
-    @foreach (var eventCreated in this.Model.Events)
-    {
-        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-
-            @*@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-            {
-                <div class="row">
-                    <div class="col-md-8">
+<div class="d-flex">
+    <div class="row mr-3 flex-grow-1">
+        @foreach (var eventCreated in this.Model.Events)
+        {
+            <div class="col-4 col-md-6 flex-column rounded card">
+                <div class="card-body">
+                    <div class="my-1">
+                        <h3>
+                            <a class="text" style="color: #ff6a00; width: 10px; overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
+                                @eventCreated.Theme
+                            </a>
+                        </h3>
                     </div>
-                    <div class="col-md-4">
-                        <div class="m-1">
-                            <form asp-controller="Events" asp-action="Disapprove" asp-route-id="@eventCreated.Id" method="post">
-                                <button class="btn-danger form-control">
-                                    Disapprove
-                                </button>
-                            </form>
-                        </div>
-                        <div class="m-1">
-                            <form asp-controller="Events" asp-action="Approve" asp-route-id="@eventCreated.Id" method="post">
-                                <button class="btn-success form-control">
-                                    Approve
-                                </button>
-                            </form>
-                        </div>
+                    <div class="my-1">
+                        @if (string.IsNullOrEmpty(eventCreated.AuthorProfileImageUrl))
+                        {
+                            <img class="rounded-circle" style="width:50px;height:50px" src="@eventCreated.AuthorProfileImageUrl" />
+                        }
+                        else
+                        {
+                            <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                                <h3 class="text-center">@(eventCreated.CreatorFirstName.Substring(0,1)+eventCreated.CreatorLastName.Substring(0,1)) </h3>
+                            </div>
+                        }
+                        <span class="text-black">@(eventCreated.CreatorFirstName+" "+eventCreated.CreatorLastName)</span>
+
+                        @if (eventCreated.IsApproved)
+                        {
+                            <div class="bg-success">
+                                Approved
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="bg-danger">
+                                Disapproved
+                            </div>
+                        }
                     </div>
                 </div>
-            }*@
-            <div>
-                <h3>
-                    <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
-                        @eventCreated.Theme
-                    </a>
-                </h3>
+                <div class="card-footer">
+                   <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
+                       <span>
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                           </svg>
+                           <span class="text-black-50">
+                               @eventCreated.StartDate.ToString("dd MMM yyyy(ddd)")
+                           </span>
+                       </span>
+                       <span>
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                           </svg>
+                           <span class="text-black-50">
+                               @eventCreated.StartDate.ToString("t") - @eventCreated.EndDate.ToString("t")
+                               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                               </svg>
+                           </span>
+                       </span>
+                   </a>
+                </div>
             </div>
-            <div>
-                <span>
-                    <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
-                </span>
-                <span class="text-black">@eventCreated.AuthorName</span>
-
-                @if (eventCreated.IsApproved)
-                {
-                    <div class="bg-success">
-                        Approved
-                    </div>
-                }
-                else
-                {
-                    <div class="bg-danger">
-                        Disapproved
-                    </div>
-                }
-            </div>
-            <div class="card-footer">
-                <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
-                    <span>
-                        <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
-                        <span class="text-black-50">
-                            @eventCreated.StartDate.ToString("dd MMM yyyy(ddd)")
-                        </span>
-                    </span>
-
-                    <span>
-                        <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
-                        <span class="text-black-50">
-                            @eventCreated.StartDate.ToString("t") - @eventCreated.EndDate.ToString("t")
-                            <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
-                        </span>
-                    </span>
-                </a>
+        }
+    </div>
+    <div class="d-flex flex-column bg-white h-50 w-25 mt-5 mt-md-0" style="color:black;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+        <div class="accordion" id="accountOptions">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="bg-white accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        My Account
+                    </button>
+                </h2>
             </div>
         </div>
-    }
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accountOptions">
+            <div class="accordion-body">
+                <div class="dropdown-option">
+                    <a href="#">Dashboard</a>
+                </div>
+                <div class="dropdown-option">
+                    @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                    {
+                        <a asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a>
+                    }
+
+                    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                    {
+                        <a asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a>
+                    }
+                </div>
+                <div class="dropdown-option">
+                    <a asp-controller="Users" asp-action="ManageAccountById">Profile</a>
+                </div>
+                <div class="dropdown-option">
+                    <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                </div>
+                <div class="dropdown-option">
+                    <form class="form-inline hide-submit " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
+                        <label class="d-flex justify-content-start">
+                            <input type="submit" />
+                            <a style="font-weight:normal;" href="#">Logout</a>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 

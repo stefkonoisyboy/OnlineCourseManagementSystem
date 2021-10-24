@@ -66,6 +66,7 @@ body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
     background: #1e3e63;
+    min-height:80vh;
 }
 
 .footer {

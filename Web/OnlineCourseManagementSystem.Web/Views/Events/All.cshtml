@@ -3,96 +3,125 @@
 @{
     this.ViewData["Title"] = "Events";
 }
-<h1 class="title">Events</h1>
 
-<h3>Events Coming</h3>
+<h3 class="mt-5">Events Coming</h3>
 @if (!this.Model.EventsComing.Any())
 {
     <div class="d-flex justify-content-center align-items-center" style="height:50vh; color:gray">
-        <h1>No coming events</h1>
+        <h1>No Upcoming Events</h1>
     </div>
 }
 
- <div class="row">
-     @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
-     {
-         <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-             <div>
-                 <h3>
-                     <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
-                         @eventComing.Theme
-                     </a>
-                 </h3>
-             </div>
-             <div>
-                 <span>
-                     <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
-                 </span>
-                 <span class="text-black">@eventComing.AuthorName</span>
-             </div>
-             <div class="card-footer">
-                 <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
-                     <span>
-                         <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
-                         <span class="text-black-50">
-                             @eventComing.StartDate.ToString("dd MMM yyyy(ddd)")
-                         </span>
-                     </span>
-
-                     <span>
-                         <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
-                         <span class="text-black-50">
-                             @eventComing.StartDate.ToString("t") - @eventComing.EndDate.ToString("t")
-                             <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
-                         </span>
-                     </span>
-                 </a>
-             </div>
-         </div>
-     }
- </div>
-
-
-<h3>Events Finished</h3>
-
-@if(!this.Model.EventsFinished.Any())
- {
-    <div class="d-flex justify-content-center align-items-center" style="height:50vh; background:#f8f9fa; color:gray">
-        <h1>No finished events</h1> 
-    </div>
- }
-
 <div class="row">
+    @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
+    {
+        <div class=" col-11 col-md-4 card">
+            <div class="card-body bg-white">
+                <div class="my-1">
+                    <h3>
+                        <a class="text" style="color: #ff6a00; width: inherit; overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                            @eventComing.Theme
+                        </a>
+                    </h3>
+                </div>
+                <div class="d-flex align-items-center my-1">
+                    @if (string.IsNullOrEmpty(eventComing.AuthorProfileImageUrl))
+                    {
+                        <img class="rounded-circle" style="width:50px;height:50px" src="@eventComing.AuthorProfileImageUrl" />
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                            <h3 class="text-center">@(eventComing.CreatorFirstName.Substring(0,1)+ eventComing.CreatorLastName.Substring(0,1))</h3>
+                        </div>
+                    }
+                    <div class="mx-1 text-black">@(eventComing.CreatorFirstName+" "+eventComing.CreatorLastName)</div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span class="text-black-50">
+                            @eventComing.StartDate.ToString("dd MMM yyyy(ddd)")
+                        </span>
+                    </span>
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-black-50">
+                            @eventComing.StartDate.ToString("t") - @eventComing.EndDate.ToString("t")
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+
+<h3 class="mt-5">Events Finished</h3>
+
+@if (!this.Model.EventsFinished.Any())
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:50vh; background:#f8f9fa; color:gray">
+        <h1>No Finished Events</h1>
+    </div>
+}
+
+<div class="row m-0 m-md-2">
     @foreach (var eventFinished in this.Model.EventsFinished)
     {
-        <div class="col-xs-12 col-sm-6 col-lg-4 flex-column rounded" style="background: #ffffff; margin: 0.5rem; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-            <div>
-                <h3>
-                    <a class="text" style="color:#ff6a00" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
-                        @eventFinished.Theme
-                    </a>
-                </h3>
-            </div>
-            <div>
-                <span>
-                    <img class="rounded-circle" style="width:50px;height:50px" src="https://softuni.bg/Files/Seminars/VladimirTasev.jpg" />
-                </span>
-                <span class="text-black">@eventFinished.AuthorName</span>
+        <div class="col-11 col-md-4 card">
+            <div class="card-body">
+                <div class="my-1">
+                    <h3>
+                        <a lass="text" style="color: #ff6a00; width: inherit; overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                            @eventFinished.Theme
+                        </a>
+                    </h3>
+                </div>
+                <div class="d-flex align-items-center my-1">
+                    @if (string.IsNullOrEmpty(eventFinished.AuthorProfileImageUrl))
+                    {
+                        <img class="rounded-circle" style="width:50px;height:50px" src="@eventFinished.AuthorProfileImageUrl" />
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                            <h3 class="text-center">@(eventFinished.CreatorFirstName.Substring(0,1)+ eventFinished.CreatorLastName.Substring(0,1))</h3>
+                        </div>
+                    }
+                    <div class="mx-1 text-black">@eventFinished.CreatorFirstName @eventFinished.CreatorLastName</div>
+                </div>
             </div>
             <div class="card-footer">
                 <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
                     <span>
-                        <img src="/icons/calendar.png" style="height:20px;width:20px" alt="Alternate Text" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                         <span class="text-black-50">
                             @eventFinished.StartDate.ToString("dd MMM yyyy(ddd)")
                         </span>
                     </span>
-
                     <span>
-                        <img class="rounded-circle" style="height:20px;width:20px" src="/icons/alarm.png" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                         <span class="text-black-50">
                             @eventFinished.StartDate.ToString("t") - @eventFinished.EndDate.ToString("t")
-                            <img src="/icons/circle_play.png" style="height:20px;width:20px" alt="Alternate Text" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </span>
                     </span>
                 </a>
@@ -100,7 +129,67 @@
         </div>
 
     }
-
 </div>
 
+@*<div class="d-flex justify-content-center mt-5">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (this.Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.PreviousPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" class="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+            @{
+                const int MorePagesToShow = 3;
+                var pagesToShow = new List<int>();
+                for (var i = 1; i <= MorePagesToShow; i++)
+                {
+                    pagesToShow.Add(i);
+                }
+                for (var i = this.Model.CurrentPage - MorePagesToShow; i <= this.Model.CurrentPage + MorePagesToShow; i++)
+                {
+                    if (i > 0)
+                    {
+                        pagesToShow.Add(i);
+                    }
+                }
+                for (var i = this.Model.PagesCount - MorePagesToShow + 1; i <= this.Model.PagesCount; i++)
+                {
+                    if (i > 0)
+                    {
+                        pagesToShow.Add(i);
+                    }
+                }
+                pagesToShow = pagesToShow.Where(x => x <= this.Model.PagesCount).Distinct().OrderBy(x => x).ToList();
+            }
+            @{
+                @for (var i = 0; i < pagesToShow.Count; i++)
+                {
+                    var className = string.Empty;
+                    var pageNumber = pagesToShow[i];
+                    if (pageNumber == this.Model.CurrentPage)
+                    {
+                        className = "active";
+                    }
+                    if (i > 0 && pageNumber - 1 != pagesToShow[i - 1])
+                    {
+                        <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@(pagesToShow[i - 1] + 1)" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">...</a></li>
+                    }
+                    <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@pageNumber" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">@pageNumber</a></li>
+                }
+            }
+            @if (this.Model.CurrentPage < this.Model.PagesCount)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.NextPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>*@
 

@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Text;
 
+    using OnlineCourseManagementSystem.Web.ViewModels.Paging;
+
     public class AllEventsViewModel
     {
         public IEnumerable<EventViewModel> EventsComing { get; set; }
