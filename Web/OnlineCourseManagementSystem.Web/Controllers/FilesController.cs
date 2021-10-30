@@ -14,6 +14,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
+    using SmartBreadcrumbs.Nodes;
 
     public class FilesController : Controller
     {
@@ -37,9 +38,26 @@
         [Authorize(Roles = "Lecturer,Student")]
         public IActionResult ById(int id, int lectureId)
         {
+            int courseId = this.lecturesService.GetCourseIdByLectureId(lectureId);
             FileByIdViewModel viewModel = this.fileService.GetById<FileByIdViewModel>(id);
             viewModel.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
             viewModel.Files = this.fileService.GetAllById<AllFilesByLectureIdViewModel>(lectureId, id);
+
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
+
+            BreadcrumbNode courseDetailsNode = new MvcBreadcrumbNode("ById", "Courses", "Course Details")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = courseId },
+            };
+            BreadcrumbNode fileDetailsNode = new MvcBreadcrumbNode("ById", "Files", "Resource Details")
+            {
+                Parent = courseDetailsNode,
+                RouteValues = new { id = id, lectureId = lectureId },
+            };
+
+            this.ViewData["BreadcrumbNode"] = fileDetailsNode;
+
             return this.View(viewModel);
         }
 
@@ -48,6 +66,22 @@
         {
             VideoByIdViewModel viewModel = this.fileService.GetById<VideoByIdViewModel>(id);
             viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(courseId);
+
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
+
+            BreadcrumbNode courseDetailsNode = new MvcBreadcrumbNode("ById", "Courses", "Course Details")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = courseId },
+            };
+            BreadcrumbNode videoDetailsNode = new MvcBreadcrumbNode("VideoById", "Files", "Video Details")
+            {
+                Parent = courseDetailsNode,
+                RouteValues = new { id = id, courseId = courseId },
+            };
+
+            this.ViewData["BreadcrumbNode"] = videoDetailsNode;
+
             return this.View(viewModel);
         }
 

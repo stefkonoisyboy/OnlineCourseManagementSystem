@@ -29,7 +29,28 @@ namespace OnlineCourseManagementSystem.Services.Data
                 Text = new HtmlSanitizer().Sanitize(input.Text),
                 Points = input.Points,
                 ExamId = input.ExamId,
+                CorrectAnswerOption = input.CorrectAnswerOption,
             };
+
+            if (input.Choices.Count(c => c.Text != null) < 2)
+            {
+                throw new ArgumentException("You should create at least 2 choices for this question!");
+            }
+
+            if (input.Choices.Count(c => c.Text != null) == 2 && (input.CorrectAnswerOption == "C" || input.CorrectAnswerOption == "D"))
+            {
+                throw new ArgumentException("You don't have enough count of choices created to mark this option as correct answer for the question!");
+            }
+
+            if (input.Choices.Count(c => c.Text != null) == 3 && input.CorrectAnswerOption == "D")
+            {
+                throw new ArgumentException("You don't have enough count of choices created to mark this option as correct answer for the question!");
+            }
+
+            if (string.IsNullOrWhiteSpace(input.CorrectAnswerOption))
+            {
+                throw new ArgumentException("There should be a correct option!");
+            }
 
             await this.questionsRepository.AddAsync(question);
             await this.questionsRepository.SaveChangesAsync();
@@ -107,8 +128,29 @@ namespace OnlineCourseManagementSystem.Services.Data
         {
             Question question = this.questionsRepository.All().FirstOrDefault(q => q.Id == input.Id);
 
+            if (input.Choices.Count(c => c.Text != null) < 2)
+            {
+                throw new ArgumentException("You should create at least 2 choices for this question!");
+            }
+
+            if (input.Choices.Count(c => c.Text != null) == 2 && (input.CorrectAnswerOption == "C" || input.CorrectAnswerOption == "D"))
+            {
+                throw new ArgumentException("You don't have enough count of choices created to mark this option as correct answer for the question!");
+            }
+
+            if (input.Choices.Count(c => c.Text != null) == 3 && input.CorrectAnswerOption == "D")
+            {
+                throw new ArgumentException("You don't have enough count of choices created to mark this option as correct answer for the question!");
+            }
+
+            if (string.IsNullOrWhiteSpace(input.CorrectAnswerOption))
+            {
+                throw new ArgumentException("There should be a correct option!");
+            }
+
             question.Text = new HtmlSanitizer().Sanitize(input.Text);
             question.Points = input.Points;
+            question.CorrectAnswerOption = input.CorrectAnswerOption;
 
             Choice oldChoice = this.choicesRepository.All().FirstOrDefault(c => c.QuestionId == question.Id && c.IsCorrect);
             oldChoice.IsCorrect = false;

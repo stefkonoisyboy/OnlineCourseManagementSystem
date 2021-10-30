@@ -4,7 +4,7 @@
     char[] symbols = new char[4]
     {
         'A', 'B', 'C', 'D'
-                   };
+                           };
 }
 
 @if (this.TempData.ContainsKey("Message"))
@@ -12,6 +12,14 @@
     <div class="alert alert-success alert-dismissible">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         @this.TempData["Message"]
+    </div>
+}
+
+@if (this.TempData.ContainsKey("Alert"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Alert"]
     </div>
 }
 

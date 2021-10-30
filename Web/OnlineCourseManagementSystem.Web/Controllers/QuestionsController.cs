@@ -9,18 +9,26 @@
     using Microsoft.AspNetCore.Mvc;
     using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.ViewModels.Choices;
     using OnlineCourseManagementSystem.Web.ViewModels.Questions;
+    using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     public class QuestionsController : Controller
     {
         private readonly IQuestionsService questionsService;
+        private readonly IChoicesService choicesService;
+        private readonly IExamsService examsService;
 
-        public QuestionsController(IQuestionsService questionsService)
+        public QuestionsController(IQuestionsService questionsService, IChoicesService choicesService, IExamsService examsService)
         {
             this.questionsService = questionsService;
+            this.choicesService = choicesService;
+            this.examsService = examsService;
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Add Question", FromAction = "All", FromController = typeof(ExamsController))]
         public IActionResult Create(int examId)
         {
             return this.View();
@@ -35,9 +43,16 @@
                 return this.View(input);
             }
 
-            input.ExamId = examId;
-            await this.questionsService.CreateAsync(input);
-            this.TempData["Message"] = "Question successfully created!";
+            try
+            {
+                input.ExamId = examId;
+                await this.questionsService.CreateAsync(input);
+                this.TempData["Message"] = "Question successfully created!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData["Alert"] = ex.Message;
+            }
 
             return this.RedirectToAction(nameof(this.AllByExam), new { examId });
         }
@@ -45,7 +60,25 @@
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         public IActionResult Edit(int id)
         {
+            int examId = this.examsService.GetExamIdByQuestionId(id);
             EditQuestionInputModel input = this.questionsService.GetById<EditQuestionInputModel>(id);
+            input.Choices = this.choicesService.GetAllById<CreateChoiceInputModel>(id).ToList();
+
+            BreadcrumbNode allExamsNode = new MvcBreadcrumbNode("All", "Exams", "All Exams");
+
+            BreadcrumbNode viewQuestionsNode = new MvcBreadcrumbNode("AllByExam", "Questions", "View Questions")
+            {
+                Parent = allExamsNode,
+                RouteValues = new { examId = examId },
+            };
+
+            BreadcrumbNode editQuestionNode = new MvcBreadcrumbNode("Edit", "Questions", "Edit Question")
+            {
+                Parent = viewQuestionsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = editQuestionNode;
+
             return this.View(input);
         }
 
@@ -58,8 +91,15 @@
                 return this.View(input);
             }
 
-            await this.questionsService.UpdateAsync(input);
-            this.TempData["Message"] = "Question successfully updated!";
+            try
+            {
+                await this.questionsService.UpdateAsync(input);
+                this.TempData["Message"] = "Question successfully updated!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData["Alert"] = ex.Message;
+            }
 
             return this.RedirectToAction(nameof(this.Details), new { id });
         }
@@ -74,6 +114,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("View Questions", FromAction = "All", FromController = typeof(ExamsController))]
         public IActionResult AllByExam(int examId)
         {
             AllQuestionsByExamListViewModel viewModel = new AllQuestionsByExamListViewModel
@@ -87,7 +128,23 @@
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         public IActionResult Details(int id)
         {
+            int examId = this.examsService.GetExamIdByQuestionId(id);
             QuestionDetailsViewModel viewModel = this.questionsService.GetById<QuestionDetailsViewModel>(id);
+
+            BreadcrumbNode allExamsNode = new MvcBreadcrumbNode("All", "Exams", "All Exams");
+
+            BreadcrumbNode viewQuestionsNode = new MvcBreadcrumbNode("AllByExam", "Questions", "View Questions")
+            {
+                Parent = allExamsNode,
+                RouteValues = new { examId = examId },
+            };
+
+            BreadcrumbNode detailsQuestionNode = new MvcBreadcrumbNode("Edit", "Questions", "Edit Question")
+            {
+                Parent = viewQuestionsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = detailsQuestionNode;
 
             return this.View(viewModel);
         }

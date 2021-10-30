@@ -96,6 +96,14 @@ namespace OnlineCourseManagementSystem.Services.Data
                 .FirstOrDefault();
         }
 
+        public string GetChannelNameById(int channelId)
+        {
+            return this.channelsRepository
+                .All()
+                .FirstOrDefault(c => c.Id == channelId)
+                .Name;
+        }
+
         public bool IsUserInChannel(string userId, int channelId)
         {
             if (!this.userChannelsRepository.All().Any(uc => uc.UserId == userId && uc.ChannelId == channelId))

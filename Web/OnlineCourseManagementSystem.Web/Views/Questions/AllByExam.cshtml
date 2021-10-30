@@ -11,6 +11,14 @@
     </div>
 }
 
+@if (this.TempData.ContainsKey("Alert"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Alert"]
+    </div>
+}
+
 <div class="row">
     <div class="alert alert-dark col-md-2" role="alert">
         @this.ViewData["Title"]

@@ -1,0 +1,288 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Dashboard
+@model DashboardViewModel
+@{
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(this.Model.ExamsChart.Select(x => x.ExamName).ToList());
+    var YValues = Newtonsoft.Json.JsonConvert.SerializeObject(this.Model.ExamsChart.Select(x => x.Grade).ToList());
+
+    var XLabelsCompletedLectures = Newtonsoft.Json.JsonConvert.SerializeObject(this.Model.CompletedLectures.Select(x => x.Name).ToList());
+    var YValuesCompletedLectures = Newtonsoft.Json.JsonConvert.SerializeObject(this.Model.CompletedLectures.Select(x => x.CompletedLectures).ToList());
+
+    var XLabelsCompletedAssignments = Newtonsoft.Json.JsonConvert.SerializeObject(this.Model.CompletedAssignments.Select(x => x.Name).ToList());
+    var YValuesCompletedAssignments = Newtonsoft.Json.JsonConvert.SerializeObject(this.Model.CompletedAssignments.Select(x => x.CompletedAssignments).ToList());
+
+    this.ViewData["Title"] = "Dashboard";
+}
+
+<body class="bg-light">
+    <div class="w-100 mb-2">
+        <p class="text-white text-center p-2" style="font-size: 20px; background-color: #659be0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
+                <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+            </svg>
+            @((this.Model.User.FirstName + ' ' + this.Model.User.LastName).ToUpper() + " - " + this.Model.User.Age)
+        </p>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <div class="w-100" style="border: 1px solid #659be0; ">
+                <div class="row mb-2">
+                    <p style="font-size: 20px; color: #659be0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                        RANKING
+                    </p>
+                </div>
+
+                <hr style="color: #659be0; " />
+
+                <div class="row mb-4">
+
+
+                    <div class="col-md-4">
+                        <div class="ml-5">
+                            <p style="font-size: 50px;">
+                                @this.Model.RankingForAverageSuccess
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dash-lg text-secondary" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z" />
+                                </svg>
+                            </p>
+                            <p style="color: #659be0;">Average Success</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="ml-4">
+                            <p style="font-size: 50px;">
+                                @this.Model.RankingForEnrolledCourses
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dash-lg text-secondary" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z" />
+                                </svg>
+                            </p>
+                            <p style="color: #659be0;">Enrolled Courses</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div>
+                            <p style="font-size: 50px;">
+                                @this.Model.RankingForFinishedAssignments
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dash-lg text-secondary" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z" />
+                                </svg>
+                            </p>
+                            <p style="color: #659be0;">Finished Assignments</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box-body">
+
+                <div class="chart-container">
+                    <canvas id="chart" style="width:100%; height:250px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <div class="box-body">
+                <div class="chart-container">
+                    <canvas id="lectures" style="width:100%; height:250px"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box-body">
+                <div class="chart-container">
+                    <canvas id="assignments" style="width:100%; height:250px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</body>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+    var chartName = "chart";
+        var ctx = document.getElementById(chartName).getContext('2d');
+        var data = {
+                labels: @Html.Raw(XLabels),
+                datasets: [{
+                    label: "Highest Grade Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(YValues)
+    }]
+            };
+
+var options = {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+}],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            };
+
+       var myChart = new  Chart(ctx, {
+                options: options,
+                data: data,
+                type:'bar'
+
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+    var chartName = "lectures";
+        var ctx = document.getElementById(chartName).getContext('2d');
+        var data = {
+                labels: @Html.Raw(XLabelsCompletedLectures),
+                datasets: [{
+                    label: "Completed Lectures Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(YValuesCompletedLectures)
+    }]
+            };
+
+var options = {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+}],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            };
+
+       var myChart = new  Chart(ctx, {
+                options: options,
+                data: data,
+                type:'line'
+
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+    var chartName = "assignments";
+        var ctx = document.getElementById(chartName).getContext('2d');
+        var data = {
+                labels: @Html.Raw(XLabelsCompletedAssignments),
+                datasets: [{
+                    label: "Completed Assignments Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(YValuesCompletedAssignments)
+    }]
+            };
+
+var options = {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+}],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            };
+
+       var myChart = new  Chart(ctx, {
+                options: options,
+                data: data,
+                type:'line'
+
+            });
+        });
+    </script>
+}

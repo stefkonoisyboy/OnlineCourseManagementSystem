@@ -102,6 +102,7 @@
                                         <strong>@course.CourseName</strong>
                                     </h5>
                                     <a asp-action="ById" asp-route-id="@course.CourseId" class="btn btn-success row-margin-10">GO TO COURSE</a>
+                                    <a asp-controller="Lectures" asp-action="CourseReports" asp-route-id="@course.CourseId" class="btn btn-info row-margin-10">Check Reports</a>
                                 </div>
                             </div>
                         </div>

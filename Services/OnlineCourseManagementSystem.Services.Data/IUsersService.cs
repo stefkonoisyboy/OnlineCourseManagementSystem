@@ -11,6 +11,12 @@
     {
         IEnumerable<T> GetAll<T>();
 
+        IEnumerable<T> GetTop3ByCourseId<T>(int courseId);
+
+        IEnumerable<T> GetTop4Teachers<T>();
+
+        IEnumerable<T> GetTop4Students<T>();
+
         T GetById<T>(string id);
 
         string GetFullNameById(string id);

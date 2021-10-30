@@ -14,6 +14,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
 
     [Authorize]
     public class UsersController : Controller
@@ -47,6 +48,7 @@
             this.townsService = townsService;
         }
 
+        [Breadcrumb("My Courses Info", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> CoursesInfo()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
