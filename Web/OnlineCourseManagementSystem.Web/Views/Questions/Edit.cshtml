@@ -34,7 +34,7 @@
                 <span asp-validation-for="Text" class="alert-danger"></span>
             </div>
 
-            @for (int i = 0; i < 4; i++)
+            @for (int i = 0; i < this.Model.Choices.Count(); i++)
             {
                 <div class="form-group row">
                     <label asp-for="Choices[i].Text" class="col-md-2">@("Option " + symbols[i])</label>
@@ -45,31 +45,103 @@
                 <input type="hidden" asp-for="Choices[i].Id" />
             }
 
-            <div class="form-group form-radio row">
-                <label class="radio-label" style="margin-left: 15px;">
-                    Correct Answer
-                </label>
-                <div class="form-radio-item">
-                    <input type="radio" asp-for="CorrectAnswerOption" id="a" value="A" class="form-check-input" style="margin-left:70px;">
-                    <label for="a" class="form-check-label" style="margin-left:90px;">A</label>
+        <div class="form-group form-radio row">
+            <label class="radio-label row mr-1">
+                Correct Answer
+            </label>
+            @if (this.Model.CorrectAnswerOption == "A")
+            {
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="a" value="A" checked class="form-check-input">
+                    <label for="a" class="form-check-label">A</label>
                     <span class="check"></span>
                 </div>
-                <div class="form-radio-item">
-                    <input type="radio" asp-for="CorrectAnswerOption" id="b" value="B" class="form-check-input" style="margin-left:70px;">
-                    <label for="b" class="form-check-label" style="margin-left:90px;">B</label>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="b" value="B" class="form-check-input">
+                    <label for="b" class="form-check-label">B</label>
                     <span class="check"></span>
                 </div>
-                <div class="form-radio-item">
-                    <input type="radio" asp-for="CorrectAnswerOption" id="c" value="C" class="form-check-input" style="margin-left:80px;">
-                    <label for="c" class="form-check-label" style="margin-left:100px;">C</label>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="c" value="C" class="form-check-input">
+                    <label for="c" class="form-check-label">C</label>
                     <span class="check"></span>
                 </div>
-                <div class="form-radio-item">
-                    <input type="radio" asp-for="CorrectAnswerOption" id="d" value="D" class="form-check-input" style="margin-left:90px;">
-                    <label for="d" class="form-check-label" style="margin-left:110px;">D</label>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="d" value="D" class="form-check-input">
+                    <label for="d" class="form-check-label">D</label>
                     <span class="check"></span>
                 </div>
-            </div>
+            }
+            else if (this.Model.CorrectAnswerOption == "B")
+            {
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="a" value="A" class="form-check-input">
+                    <label for="a" class="form-check-label">A</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="b" value="B" checked class="form-check-input">
+                    <label for="b" class="form-check-label">B</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="c" value="C" class="form-check-input">
+                    <label for="c" class="form-check-label">C</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="d" value="D" class="form-check-input">
+                    <label for="d" class="form-check-label">D</label>
+                    <span class="check"></span>
+                </div>
+            }
+            else if (this.Model.CorrectAnswerOption == "C")
+            {
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="a" value="A" class="form-check-input">
+                    <label for="a" class="form-check-label">A</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="b" value="B" class="form-check-input">
+                    <label for="b" class="form-check-label">B</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="c" value="C" checked class="form-check-input">
+                    <label for="c" class="form-check-label">C</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="d" value="D" class="form-check-input">
+                    <label for="d" class="form-check-label">D</label>
+                    <span class="check"></span>
+                </div>
+            }
+            else if (this.Model.CorrectAnswerOption == "D")
+            {
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="a" value="A" class="form-check-input">
+                    <label for="a" class="form-check-label">A</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="b" value="B" class="form-check-input">
+                    <label for="b" class="form-check-label">B</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="c" value="C" class="form-check-input">
+                    <label for="c" class="form-check-label">C</label>
+                    <span class="check"></span>
+                </div>
+                <div class="form-radio-item row ml-2">
+                    <input type="radio" asp-for="CorrectAnswerOption" id="d" value="D" checked class="form-check-input">
+                    <label for="d" class="form-check-label">D</label>
+                    <span class="check"></span>
+                </div>
+            }
+        </div>
 
             <div class="form-group row">
                 <label asp-for="Points" class="col-md-2"></label>

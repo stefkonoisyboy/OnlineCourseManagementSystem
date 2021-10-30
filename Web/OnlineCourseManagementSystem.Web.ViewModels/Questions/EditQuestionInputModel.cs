@@ -1,9 +1,11 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
+﻿using AutoMapper;
+using OnlineCourseManagementSystem.Data.Models;
 using OnlineCourseManagementSystem.Services.Mapping;
 using OnlineCourseManagementSystem.Web.ViewModels.Choices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
@@ -24,6 +26,7 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
 
         public string CorrectAnswerOption { get; set; }
 
+        [IgnoreMap]
         public List<CreateChoiceInputModel> Choices { get; set; }
     }
 }

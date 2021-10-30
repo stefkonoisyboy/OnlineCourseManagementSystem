@@ -7,6 +7,7 @@ using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
 using OnlineCourseManagementSystem.Web.ViewModels.Courses;
 using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
 using OnlineCourseManagementSystem.Web.ViewModels.Users;
+using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,7 @@ namespace OnlineCourseManagementSystem.Web.Controllers
         }
 
         [Authorize]
+        [Breadcrumb("My Certificate", FromAction = "CoursesInfo", FromController = typeof(UsersController))]
         public async Task<IActionResult> ByCurrentUserAndCourse(int courseId)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);

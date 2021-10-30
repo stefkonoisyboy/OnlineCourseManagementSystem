@@ -20,6 +20,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Home;
     using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
 
     public class HomeController : BaseController
     {
@@ -50,6 +51,7 @@
         }
 
         [Authorize]
+        [DefaultBreadcrumb(" Home ")]
         public async Task<IActionResult> Index()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -84,6 +86,7 @@
             return this.View();
         }
 
+        [Breadcrumb(" Contact ", FromAction = "Index")]
         public IActionResult Contact()
         {
             return this.View();
@@ -104,6 +107,7 @@
             return this.View();
         }
 
+        [Breadcrumb(" About ", FromAction = "Index")]
         public IActionResult About()
         {
             return this.View();

@@ -22,6 +22,8 @@
 
         public int Points { get; set; }
 
+        public string CorrectAnswerOption { get; set; }
+
         public virtual ICollection<Answer> Answers { get; set; }
 
         public virtual ICollection<Choice> Choices { get; set; }

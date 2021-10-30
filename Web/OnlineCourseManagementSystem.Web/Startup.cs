@@ -27,6 +27,7 @@
     using OnlineCourseManagementSystem.Web.Hubs;
     using OnlineCourseManagementSystem.Web.ViewModels;
     using OnlineCourseManagementSystem.Web.ViewModels.VideoConferences;
+    using SmartBreadcrumbs.Extensions;
     using Stripe;
 
     public class Startup
@@ -68,6 +69,17 @@
                 settings.AccountSid = this.configuration["Twilio:TwilioAccountSid"];
                 settings.ApiSecret = this.configuration["Twilio:TwilioApiSecret"];
                 settings.ApiKey = this.configuration["Twilio:TwilioApiKey"];
+            });
+
+            string separator = " / ";
+            services.AddBreadcrumbs(this.GetType().Assembly, options =>
+            {
+                options.TagName = "nav";
+                options.TagClasses = "";
+                options.OlClasses = "breadcrumb";
+                options.LiClasses = "breadcrumb-item";
+                options.ActiveLiClasses = "breadcrumb-item active";
+                options.SeparatorElement = $"<li class=\"separator\">{separator}</li>";
             });
 
             services.AddSignalR(options => options.EnableDetailedErrors = true)
@@ -124,6 +136,8 @@
             services.AddTransient<ICompletitionsService, CompletitionsService>();
             services.AddTransient<ICertificatesService, CertificatesService>();
             services.AddTransient<IMessageQAsService, MessageQAsService>();
+            services.AddTransient<IDashboardService, DashboardService>();
+
             services.AddSingleton<ITwilioService, TwilioService>();
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
             services.AddResponseCompression(opts =>

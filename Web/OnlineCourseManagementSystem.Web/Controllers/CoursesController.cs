@@ -19,6 +19,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Skills;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
 
     public class CoursesController : Controller
     {
@@ -61,6 +62,7 @@
         }
 
         [Authorize(Roles = "Student,Lecturer,Administrator")]
+        [Breadcrumb(" Course Details ", FromAction = "AllByCurrentUser")]
         public IActionResult ById(int id)
         {
             CourseByIdViewModel viewModel = this.coursesService.GetById<CourseByIdViewModel>(id);
@@ -73,6 +75,7 @@
         }
 
         [Authorize]
+        [Breadcrumb(" Course Details ", FromAction = "AllUpcomingAndActive")]
         public async Task<IActionResult> Details(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -100,6 +103,7 @@
         }
 
         [Authorize]
+        [Breadcrumb(" Upcoming and Active Courses ", FromAction = "Index", FromController = typeof(HomeController))]
         public IActionResult AllUpcomingAndActive(string name = null, int id = 1)
         {
             if (id <= 0)
@@ -153,6 +157,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb("My Courses", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> AllByCurrentUser(int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -232,6 +237,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Add Meta", FromAction = "Create")]
         public async Task<IActionResult> Meta()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -275,6 +281,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Create a Course", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> Create()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);

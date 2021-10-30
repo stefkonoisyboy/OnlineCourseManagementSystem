@@ -12,6 +12,7 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Orders;
+    using SmartBreadcrumbs.Attributes;
     using Stripe;
 
     public class OrdersController : Controller
@@ -55,6 +56,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb(" My Cart ", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> AllByUserId()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);

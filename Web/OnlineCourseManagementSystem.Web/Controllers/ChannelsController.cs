@@ -6,6 +6,7 @@ using OnlineCourseManagementSystem.Common;
 using OnlineCourseManagementSystem.Data.Models;
 using OnlineCourseManagementSystem.Services.Data;
 using OnlineCourseManagementSystem.Web.ViewModels.Channels;
+using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace OnlineCourseManagementSystem.Web.Controllers
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("My Channels", FromAction = "Index", FromController = typeof(HomeController))]
         public IActionResult AllByCreator(string id)
         {
             UserIdViewModel viewModel = new UserIdViewModel
@@ -37,6 +39,7 @@ namespace OnlineCourseManagementSystem.Web.Controllers
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb("My Channels", FromAction = "Index", FromController = typeof(HomeController))]
         public IActionResult AllByParticipant()
         {
             this.ViewData["CurrentUserHeading"] = "Messages";

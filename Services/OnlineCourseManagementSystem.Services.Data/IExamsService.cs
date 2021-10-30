@@ -31,6 +31,8 @@
 
         string GetCourseNameById(int id);
 
+        int GetExamIdByQuestionId(int questionId);
+
         int GetDurationById(int id);
 
         int GetPointsByUserIdAndExamId(string userId, int examId);

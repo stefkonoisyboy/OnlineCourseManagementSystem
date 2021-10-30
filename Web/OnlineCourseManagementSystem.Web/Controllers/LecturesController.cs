@@ -12,8 +12,11 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Dashboard;
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     public class LecturesController : Controller
     {
@@ -63,6 +66,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Edit Lecture", FromAction = "AllLecturesByCreatorId")]
         public async Task<IActionResult> Edit(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -100,6 +104,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Add Word", FromAction = "AllLecturesByCreatorId")]
         public async Task<IActionResult> AddWord(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -139,6 +144,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Add Presentation", FromAction = "AllLecturesByCreatorId")]
         public async Task<IActionResult> AddPresentation(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -178,6 +184,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Add Video", FromAction = "AllLecturesByCreatorId")]
         public async Task<IActionResult> AddVideo(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -217,6 +224,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("All Lectures", FromAction = "Meta", FromController = typeof(CoursesController))]
         public async Task<IActionResult> AllLecturesByCreatorId(int id = 1)
         {
             const int ItemsPerPage = 3;
@@ -248,6 +256,41 @@
             {
                 Videos = this.lecturesService.GetAllVideosById<AllVideosByIdViewModel>(id),
             };
+
+            return this.View(viewModel);
+        }
+
+        [Authorize(Roles = "Student,Lecturer")]
+        public IActionResult CourseReports(int id)
+        {
+            IEnumerable<AllLecturesForReportByCourseIdViewModel> lectures = this.lecturesService.GetAllById<AllLecturesForReportByCourseIdViewModel>(id);
+            CourseReportsViewModel viewModel = this.coursesService.GetById<CourseReportsViewModel>(id);
+
+            viewModel.Lectures = lectures;
+            viewModel.Students = this.usersService.GetTop3ByCourseId<Top3StudentsByCompletedAssignmentsViewModel>(id);
+
+            if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+            {
+                BreadcrumbNode parentNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
+
+                BreadcrumbNode childNode = new MvcBreadcrumbNode("CourseReports", "Lectures", "Course Reports")
+                {
+                    Parent = parentNode,
+                };
+
+                this.ViewData["BreadcrumbNode"] = childNode;
+            }
+            else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+            {
+                BreadcrumbNode parentNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+
+                BreadcrumbNode childNode = new MvcBreadcrumbNode("CourseReports", "Lectures", "Course Reports")
+                {
+                    Parent = parentNode,
+                };
+
+                this.ViewData["BreadcrumbNode"] = childNode;
+            }
 
             return this.View(viewModel);
         }

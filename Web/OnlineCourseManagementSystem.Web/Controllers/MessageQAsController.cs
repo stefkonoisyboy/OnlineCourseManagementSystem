@@ -8,6 +8,8 @@ using OnlineCourseManagementSystem.Services.Data;
 using OnlineCourseManagementSystem.Web.Hubs;
 using OnlineCourseManagementSystem.Web.ViewModels.MessageQAs;
 using OnlineCourseManagementSystem.Web.ViewModels.Users;
+using SmartBreadcrumbs.Attributes;
+using SmartBreadcrumbs.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +50,32 @@ namespace OnlineCourseManagementSystem.Web.Controllers
             IEnumerable<string> roles = await this.userManager.GetRolesAsync(user);
             this.ViewBag.RoleName = roles.FirstOrDefault();
             this.ViewBag.Id = id;
+
+            string channelName = this.channelsService.GetChannelNameById(id);
+
+            if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+            {
+                BreadcrumbNode mychannelsNode = new MvcBreadcrumbNode("AllByParticipant", "Channels", "My Channels");
+
+                BreadcrumbNode channelNode = new MvcBreadcrumbNode("AllByChannel", "MessageQAs", channelName)
+                {
+                    Parent = mychannelsNode,
+                };
+
+                this.ViewData["BreadcrumbNode"] = channelNode;
+            }
+            else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+            {
+                BreadcrumbNode mychannelsNode = new MvcBreadcrumbNode("AllByCreator", "Channels", "My Channels");
+
+                BreadcrumbNode channelNode = new MvcBreadcrumbNode("AllByChannel", "MessageQAs", channelName)
+                {
+                    Parent = mychannelsNode,
+                };
+
+                this.ViewData["BreadcrumbNode"] = channelNode;
+            }
+
             return this.View();
         }
 

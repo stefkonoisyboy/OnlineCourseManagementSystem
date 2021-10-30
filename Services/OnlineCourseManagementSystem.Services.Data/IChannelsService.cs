@@ -16,6 +16,8 @@ namespace OnlineCourseManagementSystem.Services.Data
 
         bool IsUserInChannel(string userId, int channelId);
 
+        string GetChannelNameById(int channelId);
+
         T GetById<T>(int id);
 
         IEnumerable<T> GetAllByParticipantId<T>(string participantId);

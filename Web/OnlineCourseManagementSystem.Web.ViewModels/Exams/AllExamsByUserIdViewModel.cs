@@ -16,6 +16,14 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
 
         public string Description { get; set; }
 
+        public int LectureId { get; set; }
+
+        public int CourseId { get; set; }
+
+        public string CourseName { get; set; }
+
+        public string ExamType => this.LectureId == 0 ? "Certification Exam" : "Lecture Exam";
+
         public IEnumerable<Question> Questions { get; set; }
 
         [IgnoreMap]

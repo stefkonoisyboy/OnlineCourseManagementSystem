@@ -17,6 +17,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Exams;
     using OnlineCourseManagementSystem.Web.ViewModels.Questions;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
 
     public class ExamsController : Controller
     {
@@ -50,6 +51,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Create Exam", FromAction = "All")]
         public IActionResult Create()
         {
             CreateExamInputModel input = new CreateExamInputModel
@@ -109,7 +111,17 @@
             }
             else
             {
-                await this.examsService.AddExamToLectureAsync(lectureId, input);
+                //await this.examsService.AddExamToLectureAsync(lectureId, input);
+
+                try
+                {
+                    await this.examsService.AddExamToLectureAsync(lectureId, input);
+                }
+                catch (Exception ex)
+                {
+                    this.TempData["Alert"] = ex.Message;
+                }
+
                 this.TempData["Message"] = $"Exam added successfully to Lecture: {lectureName}";
             }
 
@@ -119,6 +131,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Edit Exam", FromAction = "All")]
         public IActionResult Edit(int id)
         {
             EditExamInputModel input = this.examsService.GetById<EditExamInputModel>(id);
@@ -153,6 +166,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("All Exams", FromAction = "Index", FromController = typeof(HomeController))]
         public IActionResult All()
         {
             AllExamsListViewModel viewModel = new AllExamsListViewModel
@@ -164,6 +178,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb("My Exams", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> AllByUser()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -176,6 +191,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb("My Results", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> MyResults()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -191,6 +207,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("Exam Details", FromAction = "All", FromController = typeof(ExamsController))]
         public IActionResult Details(int id)
         {
             ExamDetailsViewModel viewModel = this.examsService.GetById<ExamDetailsViewModel>(id);
@@ -199,6 +216,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb("Take Exam", FromAction = "AllByUser")]
         public async Task<IActionResult> TakeExam(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -288,6 +306,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb("Review", FromAction = "MyResults")]
         public async Task<IActionResult> Review(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -301,7 +320,6 @@
             return this.View("Result", viewModel);
         }
 
-        // TODO: Make certifications page where users can see their certifications, followed courses and completed courses
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
         public async Task<IActionResult> StartCertificate(int id)
         {
@@ -315,6 +333,13 @@
             else
             {
                 int examId = this.examsService.GetCertificatedExamIdByCourse(id);
+
+                if (examId == 0)
+                {
+                    this.TempData["Alert"] = "There is still no exam for certification!";
+                    return this.RedirectToAction("ById", "Courses", new { id });
+                }
+
                 return this.RedirectToAction(nameof(this.TakeExam), new { id = examId });
             }
         }

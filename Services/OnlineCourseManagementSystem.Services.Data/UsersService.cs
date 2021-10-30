@@ -72,6 +72,38 @@
                .ProfileImageUrl;
         }
 
+        public IEnumerable<T> GetTop3ByCourseId<T>(int courseId)
+        {
+            return this.usersRepository
+                .All()
+                .Where(u => u.Roles.FirstOrDefault().RoleId.EndsWith("Student") && u.Courses.Any(c => c.CourseId == courseId))
+                .OrderByDescending(u => u.Assignments.Count(a => a.Assignment.CourseId == courseId))
+                .Take(3)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetTop4Students<T>()
+        {
+            return this.usersRepository
+                .All()
+                .Where(u => u.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+                .OrderByDescending(u => u.Exams.Average(e => e.Grade))
+                .Take(4)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetTop4Teachers<T>()
+        {
+            return this.usersRepository
+                .All()
+                .Where(u => u.Roles.FirstOrDefault().RoleId.EndsWith("Lecturer"))
+                .Take(4)
+                .To<T>()
+                .ToList();
+        }
+
         public async Task UpdateAsync(ManageAccountInputModel inputModel)
         {
             ApplicationUser user = this.usersRepository.All().FirstOrDefault(u => u.Id == inputModel.Id);

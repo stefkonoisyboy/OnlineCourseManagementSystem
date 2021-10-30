@@ -24,6 +24,7 @@
         private readonly IDeletableEntityRepository<Choice> choicesRepository;
         private readonly IDeletableEntityRepository<Completition> completitionsRepository;
         private readonly IDeletableEntityRepository<Certificate> certificationsRepository;
+        private readonly IDeletableEntityRepository<Course> coursesRepository;
 
         public ExamsService(
             IDeletableEntityRepository<Exam> examsRepository,
@@ -33,7 +34,8 @@
             IDeletableEntityRepository<Lecture> lecturesRepository,
             IDeletableEntityRepository<Choice> choicesRepository,
             IDeletableEntityRepository<Completition> completitionsRepository,
-            IDeletableEntityRepository<Certificate> certificationsRepository)
+            IDeletableEntityRepository<Certificate> certificationsRepository,
+            IDeletableEntityRepository<Course> coursesRepository)
         {
             this.examsRepository = examsRepository;
             this.answersRepository = answersRepository;
@@ -43,6 +45,7 @@
             this.choicesRepository = choicesRepository;
             this.completitionsRepository = completitionsRepository;
             this.certificationsRepository = certificationsRepository;
+            this.coursesRepository = coursesRepository;
         }
 
         public async Task AddExamToCertificateAsync(AddExamToCertificateInputModel input)
@@ -56,6 +59,14 @@
         public async Task AddExamToLectureAsync(int lectureId, AddExamToLectureInputModel input)
         {
             Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == input.ExamId);
+            Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == exam.CourseId);
+
+            if (!course.Lectures.Any(l => l.Id == lectureId))
+            {
+                throw new ArgumentException("Cannot add the exam to this lecture because it is not from this course!");
+            }
+
+            exam.IsCertificated = false;
             exam.LectureId = lectureId;
             await this.examsRepository.SaveChangesAsync();
         }
@@ -84,6 +95,7 @@
             {
                 Name = input.Name,
                 CourseId = input.CourseId,
+                IsCertificated = true,
                 LecturerId = input.LecturerId,
                 StartDate = input.StartDate,
                 Duration = input.Duration,
@@ -233,6 +245,14 @@
                 .All()
                 .FirstOrDefault(e => e.Id == id)
                 .Duration;
+        }
+
+        public int GetExamIdByQuestionId(int questionId)
+        {
+            return this.examsRepository
+                .All()
+                .FirstOrDefault(e => e.Questions.Any(q => q.Id == questionId))
+                .Id;
         }
 
         public int GetExamIdByUserIdAndCourseId(string userId, int courseId)

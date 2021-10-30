@@ -46,7 +46,7 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
         public IEnumerable<AllAnswersByExamIdAndUserIdViewModel> Answers { get; set; }
 
         [IgnoreMap]
-        public double SuccessRate => (this.CorrectAnswers / this.TotalAnswers) * 100;
+        public double SuccessRate => (double)(this.CorrectAnswers / this.TotalAnswers) * 100;
 
         [IgnoreMap]
         public int PointsEarned => this.EarnPoints();
