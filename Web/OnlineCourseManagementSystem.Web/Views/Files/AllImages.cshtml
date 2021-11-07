@@ -1,9 +1,9 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Files
 @model AllImagesViewModel
 @{
-    this.ViewData["Title"] = "Images";
+    this.ViewData["Title"] = "Images By Album";
 }
-<h1 class="title" style="color: #ff6a00;background:#ffffff; margin:10rem;">
+<h1 class="text-center my-5" style="color: #42a5f5;">
     Album: @Model.AlbumName
 </h1>
 
@@ -12,7 +12,7 @@
 </div>
 
 
-<div class="row">
+<div class="row my-5">
     @foreach (var image in this.Model.Images)
     {
         <div class="card card-body col-md-3 m-3 d-flex flex-column justify-content-center align-items-center" style="background: #e5e5e5;">

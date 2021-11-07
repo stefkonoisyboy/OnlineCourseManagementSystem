@@ -1,0 +1,46 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Users
+@model IEnumerable<UserViewModel>
+@{
+    this.ViewData["Title"] = "All Students";
+}
+
+<h1 class="text-center my-5">All Students</h1>
+<div class="d-flex flex-column shadow-lg mb-5">
+    @foreach (var student in this.Model)
+    {
+        <div class="d-flex align-items-center m-2">
+            @if (student.ProfileImageUrl == null)
+            {
+                <span class="rounded-circle d-flex justify-content-center align-items-center bg-secondary" style="width:50px; height:50px">
+                    <span class="text-white bold">@(student.FirstName.Substring(0,1).ToUpper()+student.LastName.Substring(0,1).ToUpper())</span>
+                </span>
+            }
+            else
+            {
+                <span>
+                    <img class="rounded-circle" width="50" height="50" src="@student.ProfileImageUrl" alt="User ProfileImage" />
+                </span>
+            }
+
+            <strong class="flex-grow-1 mx-1">@(student.FirstName + ' ' + student.LastName)</strong>
+
+            <div class="d-flex flex-column flex-md-row">
+                <a asp-controller="Users" asp-action="ManageAccountById" asp-route-id="@student.Id" class="btn btn-dark rounded-circle mx-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                    </svg>
+                </a>
+                <form asp-controller="Users" asp-action="Delete" asp-route-id="@student.Id" method="post">
+                    <button class="btn btn-danger rounded-circle mx-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+
+</div>
+<div class="mb-5">
+</div>

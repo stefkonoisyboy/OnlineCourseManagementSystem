@@ -25,6 +25,12 @@
 
         Task UpdateAsync(ManageAccountInputModel inputModel);
 
+        Task DeleteAsync(string userId);
+
+        IEnumerable<T> GetAllStudents<T>();
+
+        IEnumerable<T> GetAllLecturers<T>();
+
         //T GetCourseCreatorById<T>(int courseId);
     }
 }

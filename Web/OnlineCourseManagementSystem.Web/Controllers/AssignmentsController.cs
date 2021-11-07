@@ -13,6 +13,8 @@
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Assignments;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
+    using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     public class AssignmentsController : Controller
     {
@@ -38,6 +40,15 @@
                 CourseId = id,
             };
 
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+            BreadcrumbNode createassignmentNode = new MvcBreadcrumbNode("CreateAssignment", "Assignemnts", "Create Assignment")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = id },
+            };
+
+            this.ViewData["BreadcrumbNode"] = createassignmentNode;
+
             return this.View(createAssignmentInputModel);
         }
 
@@ -55,12 +66,13 @@
             inputModel.CourseId = id;
             await this.assignmentsService.CreateAsync(inputModel);
 
-            this.TempData["CreatedAssignment"] = "Succesfully created assignment";
+            this.TempData["Message"] = "Succesfully created assignment";
 
             return this.RedirectToAction("AllCreated", "Assignments", new { Id = id });
         }
 
         [Authorize]
+        [Breadcrumb("My Assignments", FromAction ="Index", FromController =typeof(HomeController))]
         public async Task<IActionResult> All()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -83,6 +95,13 @@
             IEnumerable<FileAssignmentViewModel> resourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(id, user.Id);
             IEnumerable<FileAssignmentViewModel> workFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(id, user.Id);
 
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("All", "Assignments", "My Assignments");
+
+            BreadcrumbNode myassignmentsNode = new MvcBreadcrumbNode("GetInfo", "Assignments", "Assignment Info")
+            {
+                Parent = mycoursesNode,
+            };
+
             if (resourceFiles.Any())
             {
                 assignmentPageViewModel.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(id, user.Id);
@@ -93,6 +112,7 @@
                 assignmentPageViewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(id, user.Id);
             }
 
+            this.ViewData["BreadcrumbNode"] = mycoursesNode;
             await this.assignmentsService.MarkAsSeen(id, user.Id);
 
             return this.View(assignmentPageViewModel);
@@ -108,11 +128,19 @@
                 CourseId = id,
             };
 
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+            MvcBreadcrumbNode mycreatedAssignmentsNode = new MvcBreadcrumbNode("AllCreated", "Assignments", "My Created Assignments")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = id, },
+            };
+
             foreach (var assignment in assignmetViewModel.CreatedAssignments)
             {
                 assignment.Users = this.assignmentsService.GetAllUsersForAssignment<AssignmentUserInfoViewModel>(assignment.AssignmentId);
             }
 
+            this.ViewData["BreadcrumbNode"] = mycreatedAssignmentsNode;
             return this.View(assignmetViewModel);
         }
 
@@ -129,6 +157,20 @@
         {
             EditAssignmentInputModel editAssignmentInputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id);
 
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecture", "Courses", "My Courses");
+            BreadcrumbNode mycreatedAssignmentsNode = new MvcBreadcrumbNode("AllCreated", "Assignments", "My Created Assignments")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = editAssignmentInputModel.CourseId, },
+
+            };
+
+            BreadcrumbNode editAssignmentNode = new MvcBreadcrumbNode("Edit", "Assignments", "Edit Assignment")
+            {
+                Parent = mycreatedAssignmentsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = editAssignmentInputModel;
             return this.View(editAssignmentInputModel);
         }
 
@@ -189,6 +231,19 @@
             viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
             viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(assignmentId, userId);
 
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+            BreadcrumbNode mycreatedAssignmentsNode = new MvcBreadcrumbNode("AllCreated", "Assignments", "My Created Assignments")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = viewModel.CourseId, },
+
+            };
+            BreadcrumbNode markUserAssignment = new MvcBreadcrumbNode("MarkUserAssignment", "Assignments", "Mark User Assignment")
+            {
+                Parent = mycreatedAssignmentsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = markUserAssignment;
             return this.View(viewModel);
         }
 
@@ -223,7 +278,21 @@
             viewModel.AssignmentInfo = this.assignmentsService.GetById<AssignmentInfoViewModel>(assignmentId, userId);
             viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(assignmentId, userId);
             viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
-            Console.WriteLine(viewModel.CourseId);
+
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+
+            BreadcrumbNode mycreatedAssignmentsNode = new MvcBreadcrumbNode("AllCreated", "Assignments", "My Created Assignments")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = viewModel.CourseId},
+            };
+
+            BreadcrumbNode markUserAssignment = new MvcBreadcrumbNode("MarkUserAssignment", "Assignments", "Mark User Assignment")
+            {
+                Parent = mycreatedAssignmentsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = markUserAssignment;
             return this.View(viewModel);
         }
 
@@ -236,7 +305,7 @@
                 viewModel.InputModel.AssignmentId = viewModel.AssignmentId;
                 viewModel.InputModel.UserId = userId;
                 await this.assignmentsService.UpdateCheckedAsync(viewModel.InputModel);
-                this.TempData["EditedCheckedAssignment"] = "Successfully editted marked Assignment";
+                this.TempData["Message"] = "Successfully editted marked Assignment!";
 
                 return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId });
             }
@@ -256,12 +325,21 @@
         public async Task<IActionResult> CurrentUserAllAssignmentsByCourse(int courseId)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
+
+            BreadcrumbNode myassignmentsByCourseNode = new MvcBreadcrumbNode("CurrentUserAllAssignmentsByCourse", "AssignmentsController", "My Assignments By Course")
+            {
+                Parent = mycoursesNode,
+                RouteValues = new { id = courseId, },
+            };
+
             AllAssignmentsViewModel allAssignmentsViewModel = new AllAssignmentsViewModel
             {
                 UnfinishedAssignments = this.assignmentsService.GetAllByCourseAndUser<AssignmentViewModel>(courseId, user.Id),
                 FinishedAssignments = this.assignmentsService.GetAllFinishedByCourseAndUser<FinishedAssignmentViewModel>(courseId, user.Id),
             };
 
+            this.ViewData["BreadcrumbNode"] = myassignmentsByCourseNode;
             return this.View(allAssignmentsViewModel);
         }
 

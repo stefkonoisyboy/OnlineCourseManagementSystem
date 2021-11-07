@@ -9,9 +9,11 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Events;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
     using SmartBreadcrumbs.Nodes;
@@ -21,17 +23,20 @@
         private readonly IFilesService fileService;
         private readonly ICoursesService coursesService;
         private readonly ILecturesService lecturesService;
+        private readonly IEventsService eventsService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public FilesController(
             IFilesService fileService,
             ICoursesService coursesService,
             ILecturesService lecturesService,
+            IEventsService eventsService,
             UserManager<ApplicationUser> userManager)
         {
             this.fileService = fileService;
             this.coursesService = coursesService;
             this.lecturesService = lecturesService;
+            this.eventsService = eventsService;
             this.userManager = userManager;
         }
 
@@ -105,6 +110,15 @@
         {
             ApplicationUser applicationUser = await this.userManager.GetUserAsync(this.User);
 
+            BreadcrumbNode myalbumsNode = new MvcBreadcrumbNode("All", "Albums", "My Albums");
+
+            BreadcrumbNode myimagesNode = new MvcBreadcrumbNode("AllImages", "Files", "Images By Album")
+            {
+                Parent = myalbumsNode,
+                RouteValues = new { id = id, },
+            };
+
+            this.ViewData["BreadcrumbNode"] = myimagesNode;
             var images = this.fileService.GetAllImagesForUser(applicationUser.Id, id);
             return this.View(images);
         }
@@ -131,6 +145,41 @@
             int courseId = this.lecturesService.GetCourseIdByLectureId(lectureId.Value);
             this.TempData["Message"] = "File successfully deleted!";
             return this.Redirect($"/Courses/ById/{courseId}");
+        }
+
+        public async Task<IActionResult> DeleteFileFromEventByAdmin(int id)
+        {
+            int? eventId = await this.fileService.DeleteFromEventAsync(id);
+            this.TempData["Message"] = "File successfully deleted!";
+            return this.RedirectToAction("EditEvent", "Admins", new { id = eventId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles ="Lecturer,Administrator")]
+        public async Task<IActionResult> AddVideoToEvent(VideoFileInputModel inputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            int videoId = await this.fileService.AddVideoResourceToEventAsync(inputModel);
+            this.TempData["Message"] = "Successfully added video resource!";
+            return this.RedirectToAction("EventVideoById", "Files", new { id = videoId });
+        }
+
+        public IActionResult EventVideoById(int id)
+        {
+            EventVideoByIdViewModel viewModel = this.fileService.GetById<EventVideoByIdViewModel>(id);
+            viewModel.Events = this.eventsService.GetAll<EventViewModel>();
+            return this.View(viewModel);
+        }
+
+        public async Task<IActionResult> DeleteFileFromEvent(int id)
+        {
+            int? eventId = await this.fileService.DeleteFromEventAsync(id);
+            this.TempData["Message"] = "File successfully deleted!";
+            return this.RedirectToAction("Edit", "Events", new { id = eventId });
         }
     }
 }

@@ -13,6 +13,8 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Comments;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Posts;
+    using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     public class PostsController : Controller
     {
@@ -23,7 +25,7 @@
 
         private readonly int itemsPerPage = 5;
 
-        public PostsController(IPostsService postsService, ICoursesService coursesService, ICommentsService commentsService ,UserManager<ApplicationUser> userManager)
+        public PostsController(IPostsService postsService, ICoursesService coursesService, ICommentsService commentsService, UserManager<ApplicationUser> userManager)
         {
             this.postsService = postsService;
             this.coursesService = coursesService;
@@ -38,6 +40,12 @@
             {
                 CourseItems = this.coursesService.GetAllAsSelectListItems(),
             };
+            BreadcrumbNode forumNode = new MvcBreadcrumbNode("All", "Posts", "Forum");
+            BreadcrumbNode createpostNode = new MvcBreadcrumbNode("Create", "Posts", "Create Post") 
+            {
+                Parent = forumNode,
+            };
+            this.ViewData["BreadcrumbNode"] = createpostNode;
 
             return this.View(inputModel);
         }
@@ -56,10 +64,11 @@
             inputModel.AuthorId = user.Id;
 
             await this.postsService.CreateAsync(inputModel);
-            this.TempData["CreatedPost"] = "Successfully created post";
+            this.TempData["Message"] = "Successfully created post";
             return this.RedirectToAction("All", "Posts");
         }
 
+        [Breadcrumb("Forum", FromAction ="Index", FromController =typeof(HomeController))]
         public IActionResult All(string search, int courseId, int id = 1)
         {
             id = Math.Max(1, id);
@@ -134,6 +143,14 @@
                 comment.Replies = this.commentsService.GetAllReplies<CommentViewModel>(comment.Id);
             }
 
+            BreadcrumbNode forumNode = new MvcBreadcrumbNode("All", "Posts", "Forum");
+            BreadcrumbNode postNode = new MvcBreadcrumbNode("SeePost", "Posts", "Post")
+            {
+                Parent = forumNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = postNode;
+
             return this.View(postInfoViewModel);
         }
 
@@ -141,7 +158,13 @@
         public IActionResult Edit(int id)
         {
             EditPostInputModel editPostInputModel = this.postsService.GetById<EditPostInputModel>(id);
+            BreadcrumbNode forumNode = new MvcBreadcrumbNode("All", "Posts", "Forum");
+            BreadcrumbNode editpostNode = new MvcBreadcrumbNode("Edit", "Posts", "Edit Post") 
+            {
+                Parent = forumNode,
+            };
 
+            this.ViewData["BreadcrumbNode"] = editpostNode;
             editPostInputModel.CourseItems = this.coursesService.GetAllAsSelectListItems();
             return this.View(editPostInputModel);
         }

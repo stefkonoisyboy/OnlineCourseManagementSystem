@@ -8,32 +8,41 @@
 }
 
 
-<h1 class="title" style="color:darkorange; background: #ffffff">@Model.CourseName</h1>
+<h1 class="text-center my-5">@Model.CourseName</h1>
 
 <div class="d-flex my-5">
     <div class="flex-grow-1">
         <h3>Instructions</h3>
-        <p>
-            @this.Model.Instructions
-        </p>
+        @if(string.IsNullOrEmpty(this.Model.Instructions) || string.IsNullOrWhiteSpace(this.Model.Instructions))
+         {
+             <p> 
+                 <i>
+                     No Instructions
+                 </i> 
+              </p>
+         }
+         <p class="w-75">
+             @this.Model.Instructions
+         </p>
     </div>
     <div class="d-flex flex-column">
         @if (this.Model.TurnedOn == null)
         {
-            <form asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
+            <form class="d-flex align-items-center" asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
                 <div class="mx-2">
-                    <button class="btn rounded-pill" style="color: #ffffff; background-color:darkorange">Turn In</button>
+                    <button class="btn btn-primary rounded-pill">Turn In</button>
                 </div>
                 <input asp-for="InputModel.Files" id="input-file" type="file" multiple class="form-control" hidden />
+                <label for="input-file" class="d-inline-flex rounded-pill p-2 my-2 justify-content-end align-items-center" id="show" style="cursor:pointer;color:black;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                    <tt id="create-text" class="mx-1">
+                        Upload Files
+                    </tt>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                </label>
             </form>
-            <label for="input-file" class="d-inline-flex rounded-pill p-2 my-2 justify-content-end align-items-center" id="show" style="cursor:pointer;color:black;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-                <tt id="create-text" class="mx-1">
-                    Upload Files
-                </tt>
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                </svg>
-            </label>
+            
         }
         else
         {
@@ -58,22 +67,22 @@
                         if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
                         {
                             <div id="@file.FileId" onclick="showFile(@file.FileId)" src="@file.RemoteUrl" class="p-2 my-1 d-flex align-items-center bg-secondary rounded-2" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ style="cursor:pointer;">
-                                <p class="flex-grow-1">Resource File</p>
+                                <h6 style="color:white;" class="flex-grow-1">Resource File</h6>
                             </div>
                         }
                         else
                         {
 
                             <div id="@file.FileId" onclick="showFile(@file.FileId)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ class="p-2 my-1 d-flex align-items-center rounded-2 bg-secondary" style="cursor:pointer;">
-                                <p class="flex-grow-1">Resource File</p>
+                                <h6  style="color:white" class="flex-grow-1">Resource File</h6>
                             </div>
                         }
                     }
                 }
                 else
                 {
-                    <div class="m-3 p-3">
-                        <p>No files</p>
+                    <div class="default-open-view mt-5" id="default">
+                        No files.
                     </div>
                 }
             </div>
@@ -86,10 +95,9 @@
                     {
                         @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
                         {
-
                             <div id="@file.FileId" onclick="showFile(@file.FileId)" src="@file.RemoteUrl" class="p-2 my-1 d-flex align-items-center bg-secondary rounded-2" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ style="cursor:pointer;">
                                 <div class="flex-grow-1">
-                                    <p>Work File</p>
+                                    <h6 style="color:white">Work File</h6>
                                 </div>
                                 <div>
                                     <form asp-controller="Files" asp-action="DeleteWorkFileFromAssignment" asp-route-id="@file.FileId" method="post">
@@ -102,7 +110,7 @@
                         {
                             <div id="@file.FileId" onclick="showFile(@file.FileId)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ class="p-2 my-1 d-flex align-items-center rounded-2 bg-secondary" style="cursor:pointer;">
                                 <div class="flex-grow-1">
-                                    <p>Work File</p>
+                                    <h6 style="color:white;">Work File</h6>
                                 </div>
                                 <div>
                                     <form asp-controller="Files" asp-action="DeleteWorkFileFromAssignment" asp-route-id="@file.FileId" method="post">
@@ -115,9 +123,9 @@
                 }
                 else
                 {
-                    <div class="m-3 p-3">
-                        <p>No files</p>
-                    </div>
+            <div class="default-open-view mt-5" id="default">
+                No files.
+            </div>
                 }
             </div>
         </div>
@@ -135,7 +143,7 @@
 
         @if (!string.IsNullOrEmpty(this.Model.Feedback))
         {
-            <p>
+            <p class="w-75">
                 Feedback: @this.Model.Feedback
             </p>
         }

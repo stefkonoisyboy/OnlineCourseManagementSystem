@@ -29,5 +29,9 @@
         IEnumerable<T> GetAllUserSubmittedFilesForAssignment<T>(int assignmentId, string userId);
 
         Task<int?> DeleteWorkFileFromAssignment(int fileId);
+
+        Task<int?> DeleteFromEventAsync(int fileId);
+
+        Task<int> AddVideoResourceToEventAsync(VideoFileInputModel inptuModel);
     }
 }

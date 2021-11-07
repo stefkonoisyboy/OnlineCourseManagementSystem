@@ -1,0 +1,152 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Files
+@model EventVideoByIdViewModel 
+@{ 
+    this.ViewData["Title"] = "Event Video";
+}
+
+<div class="my-5">
+    <iframe width="560" height="315" src="@this.Model.RemoteUrl"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+    </iframe>
+</div>
+
+<div id="carouselExampleIndicators" class="carousel slide bg-secondary position-relative" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner my-2 mx-1">
+        @for (int i = 0; i < (int)Math.Ceiling((double)this.Model.Events.Count() / 3); i++)
+        {
+            if (i == 0)
+            {
+                <div class="carousel-item active">
+                    <div class="row">
+                        @foreach (var eventFinished in this.Model.Events.Skip(i * 3).Take(3))
+                        {
+                            <div class="col-10 col-md-4 card">
+                                <div class="card-body">
+                                    <div class="my-1">
+                                        <h3>
+                                            <a class="text" style="color: #ff6a00; width: inherit; overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                                                @eventFinished.Theme
+                                            </a>
+                                        </h3>
+                                    </div>
+                                    <div class="d-flex align-items-center my-1">
+                                        @if (string.IsNullOrEmpty(eventFinished.AuthorProfileImageUrl))
+                                        {
+                                            <img class="rounded-circle" style="width:50px;height:50px" src="@eventFinished.AuthorProfileImageUrl" />
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                                                <h3 class="text-center">@(eventFinished.CreatorFirstName.Substring(0,1)+ eventFinished.CreatorLastName.Substring(0,1))</h3>
+                                            </div>
+                                        }
+                                        <div class="mx-1 text-black">@eventFinished.CreatorFirstName @eventFinished.CreatorLastName</div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            <span class="text-black-50">
+                                                @eventFinished.StartDate.ToString("dd MMM yyyy(ddd)")
+                                            </span>
+                                        </span>
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span class="text-black-50">
+                                                @eventFinished.StartDate.ToString("t") - @eventFinished.EndDate.ToString("t")
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="carousel-item">
+                    <div class="row">
+                        @foreach (var eventFinished in this.Model.Events.Skip(i * 3).Take(3))
+                        {
+                            <div class="col-10 col-md-4 card">
+                                <div class="card-body">
+                                    <div class="my-1">
+                                        <h3>
+                                            <a class="text" style="color: #ff6a00; width: inherit; overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                                                @eventFinished.Theme
+                                            </a>
+                                        </h3>
+                                    </div>
+                                    <div class="d-flex align-items-center my-1">
+                                        @if (string.IsNullOrEmpty(eventFinished.AuthorProfileImageUrl))
+                                        {
+                                            <img class="rounded-circle" style="width:50px;height:50px" src="@eventFinished.AuthorProfileImageUrl" />
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                                                <h3 class="text-center">@(eventFinished.CreatorFirstName.Substring(0,1)+ eventFinished.CreatorLastName.Substring(0,1))</h3>
+                                            </div>
+                                        }
+                                        <div class="mx-1 text-black">@eventFinished.CreatorFirstName @eventFinished.CreatorLastName</div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventFinished.Id">
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            <span class="text-black-50">
+                                                @eventFinished.StartDate.ToString("dd MMM yyyy(ddd)")
+                                            </span>
+                                        </span>
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span class="text-black-50">
+                                                @eventFinished.StartDate.ToString("t") - @eventFinished.EndDate.ToString("t")
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+    <button class="carousel-control-prev position-absolute bg-danger h-25"  style="top:30%; left:-175px" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next position-absolute bg-danger h-25" style="top:30%; right:-175px;" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>

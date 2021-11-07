@@ -3,95 +3,73 @@
 @{
     this.ViewData["Title"] = "Edit Checked Assignment";
 }
-@*@if (this.TempData.ContainsKey("ErrorPoints"))
-    {
-        <div class="alert alert-danger alert-dismissible">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            @this.TempData["ErrorPoints"]
-        </div>
+
+<style>
+    .info-container {
+        position: absolute;
+        width: 20rem;
+        height: 15rem;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        display: none;
+        right: 20px;
+        top:30%;
     }
 
+    .info-container::-webkit-scrollbar {
+        width: 5px;
+    }
 
-    <div class="lecture-assignment-info-container">
-        <div class="edit-container">
-            <form asp-controller="Assignments" asp-action="EditCheckedAssignment" asp-route-assignmentId="@this.Model.AssignmentId" asp-route-userId="@this.Model.UserId" method="post">
-                @if (this.Model.PossiblePoints != null)
-                {
-                    <div class="form-group">
-                        <label asp-for="InputModel.Points"></label>
-                        <input asp-for="InputModel.Points" placeholder="possible--points--@this.Model.PossiblePoints" class="form-control" />
-                        <span asp-validation-for="InputModel.Points"></span>
-                    </div>
-                }
-                <div class="form-group ">
-                    <label asp-for="InputModel.Feedback"></label>
-                    <textarea asp-for="InputModel.Feedback" class="form-control"></textarea>
-                    <span asp-validation-for="InputModel.Feedback"></span>
-                </div>
-                <button class="form-control btn-success">Edit</button>
-            </form>
-        </div>
-        <div class="files-container">
-            <h2 class="text-white" style="background:#e1dfdf;width:auto;outline: 1px solid #808080">
-                Resource Files
-            </h2>
+    .info-container::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
 
-            <div class="row">
-                @foreach (var file in this.Model.ResourceFiles)
-                {
-                    <div class="col-md-3">
-                        @if (file.RemoteUrl.EndsWith(".jpg"))
-                        {
+    .info-container::-webkit-scrollbar-thumb {
+        background-color: #2196f3;
+        border-radius: 10px;
+        width: 5px;
+    }
 
-                            <div>
-                                <img class="file-iframe" href=@file.RemoteUrl />
-                            </div>
-                        }
-                        else
-                        {
-                            <div>
-                                <iframe class="file-iframe" src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="400" width="400"></iframe>
-                            </div>
-                        }
-                    </div>
+.show-info-container {
+    display: block;
+    animation: wrapContent 1s ease-in-out 1 normal;
+}
 
-                    <div class="col-md-2">
-                    </div>
-                }
-            </div>
+.unshow-info-container {
+    display: none;
+    animation: unwrapContent 1s ease-out 1 normal;
+}
 
-            <h2 class="text-white" style="background:#e1dfdf;padding:1rem;width:auto;outline: 1px solid #808080">
-                Work Files
-            </h2>
-            @if (this.Model.TurnedOn != null)
-            {
-                 <div class="row">
-                     @foreach (var file in this.Model.WorkFiles)
-                     {
-                         <div class="col-md-3">
-                             @if (file.RemoteUrl.EndsWith(".jpg"))
-                             {
+@@keyframes wrapContent {
+    from {
+        height: 0;
+        opacity: 0;
+    }
 
-                                 <div>
-                                     <img class="file-iframe" href=@file.RemoteUrl />
-                                 </div>
-                             }
-                             else
-                             {
-                                 <div>
-                                     <iframe class="file-iframe" src='https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl' height="400" width="400"></iframe>
-                                 </div>
-                             }
-                         </div>
-                         <div class="col-md-2">
-                         </div>
+    to {
+        height: 100px;
+        opacity: 1;
+    }
+}
 
-                     }
-                 </div>
-            }
-        </div>
-    </div>*@
+@@keyframes unwrapContent {
+    from {
+        height: 100px;
+        opacity: 1;
+    }
 
+    to {
+        height: 0px;
+        opacity: 0;
+    }
+}
+
+.mycontainer{
+    overflow:hidden;
+    border-radius:10px;
+}
+</style>
 @if (this.TempData.ContainsKey("ErrorPoints"))
 {
     <div class="alert alert-danger alert-dismissible">
@@ -100,160 +78,170 @@
     </div>
 }
 
-<h1 class="text-center">Assignment</h1>
-<div class="mark-user-assignment">
-    <div class="flex-column" style="height:inherit; width:inherit;">
-        <div style="height: 10%;width:80%; background: #808080; color: white;">
-            <p>Received Points: @this.Model.InputModel.Points</p>
-            <p>Feedback: @this.Model.InputModel.Feedback</p>
-        </div>
-        <div class="file-display-container" id="displayed-file">
-            No file choosen
-        </div>
-    </div>
-    <div class="sidebar-assignemt-info">
-        <div class="m-2">
-            <div class="d-flex">
-                <div class="flex-grow-1">
-                    User: @this.Model.Username
+
+<h1 class="text-center my-5">Assignment: @this.Model.AssignmentInfo.Title</h1>
+<div class="mycontainer">
+    <div class="py-2" style="background: #3488cb">
+        <div class="d-flex align-items-center position-relative m-3">
+            @if (string.IsNullOrEmpty(this.Model.User.ProfileImageUrl))
+            {
+                <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                    <h3 class="text-center">@(this.Model.User.FirstName.Substring(0,1)+this.Model.User.LastName.Substring(0,1)) </h3>
                 </div>
+            }
+            else
+            {
+                <img class="rounded-circle" src="@this.Model.User.ProfileImageUrl" width="50" height="50" alt="Profile Image" />
+            }
+            <div class="mx-2 text-white flex-grow-1">
+                @this.Model.User.FirstName @this.Model.User.LastName
+            </div>
+            <div>
+                <button class="btn btn-primary" id="btn-showInfo">User Details</button>
                 <button type="button" class="btn bg-white px-3" data-bs-toggle="modal" data-bs-target="#EditMarkedUser">
                     Edit
                 </button>
             </div>
-            <div class="text-white">
-                Assignment info:
+            <div class="info-container card" id="info-container">
+                <div class="card-header d-flex position-static">
+                    <div class="flex-grow-1">
+                    </div>
+                    <div>
+                        <svg style="cursor:pointer;" id="closeBtn-info-container" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <p>Received Points: @this.Model.InputModel.Points</p>
+                        <p>Feedback: @this.Model.InputModel.Feedback</p>
+                    </div>
+                </div>
             </div>
-            <div style="margin-left: 7px;">
-                <p>
-                    Title: @this.Model.AssignmentInfo.Title
-                </p>
-                <p>
-                    <details>
-                        <summary>
-                            Instructions
-                        </summary>
-                        <p class="instruction-filed" style="">
+        </div>
+        <div class="text-white-50 d-flex" style="font-size:16px">
+            <p class="mx-1"> StartDate: @this.Model.AssignmentInfo.StartDate.ToString("d") @this.Model.AssignmentInfo.StartDate.ToString("t")</p>
+            |
+            <p class="mx-1"> EndDate: @this.Model.AssignmentInfo.EndDate.ToString("d") @this.Model.AssignmentInfo.EndDate.ToString("t")</p>
+            |
+            <p class="mx-1">
+                @if (this.Model.AssignmentInfo.TurnedOn != null)
+                {
+                    <span class="badge badge-success">@this.Model.AssignmentInfo.TurnedOn</span>
+                }
+                else
+                {
+                    <span class="badge badge-danger">Not turned</span>
+                }
+            </p>
+            <p class="mx-1">
+                @if (this.Model.AssignmentInfo.Seen)
+                {
+                    <span class="badge badge-success">Seen</span>
+                }
+                else
+                {
+                    <span class="badge badge-danger">Not seen</span>
+                }
+            </p>
+        </div>
+    </div>
+    <div class="mark-user-assignment">
+        <div class="file-display-container" id="displayed-file">
+            No file choosen
+        </div>
+        <div class="sidebar-assignemt-info">
+            <div class="m-2">
+                <details>
+                    <summary>
+                        Instructions
+                    </summary>
+                    @if (!string.IsNullOrEmpty(this.Model.AssignmentInfo.Instructions)
+                  && !string.IsNullOrWhiteSpace(this.Model.AssignmentInfo.Instructions))
+                    {
+                        <p class="instruction-filed">
                             @this.Model.AssignmentInfo.Instructions
                         </p>
-                    </details>
-                </p>
-                <p>
-                    Points:
-                    @if (this.Model.AssignmentInfo.PossiblePoints != null)
-                    {
-                        <span>@this.Model.AssignmentInfo.PossiblePoints</span>
                     }
                     else
                     {
-                        <span>None</span>
+                        <p class="instruction-filed text-white-50">
+                            No Instructions
+                        </p>
                     }
-                </p>
-                <p>
-                    <div style="display: flex; flex-direction:row">
-                        <div style="display:flex;flex-direction:column;">
-                            <div style="text-align:center">
-                                StartDate
+                </details>
+            </div>
+            <div class="m-2">
+                Possible Points:
+                @if (this.Model.AssignmentInfo.PossiblePoints != null)
+                {
+                    <spanc class="badge">@this.Model.AssignmentInfo.PossiblePoints</spanc>
+                }
+                else
+                {
+                    <span class="badge">None</span>
+                }
+            </div>
+            <div class="bg-white m-2 py-2" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseResourceFiles" aria-expanded="false" aria-controls="collapseResourceFiles">
+                Resource files
+            </div>
+            <div class="assignment-files-container collapse mx-3 rounded" id="collapseResourceFiles">
+                @if (this.Model.AssignmentInfo.ResourceFiles.Any())
+                {
+                    @foreach (var file in this.Model.AssignmentInfo.ResourceFiles)
+                    {
+                        @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
+                        {
+                            <div class="file-container" src="@file.RemoteUrl">
+                                Resource file
                             </div>
-                            <div style="text-align:center">
-                                @this.Model.AssignmentInfo.StartDate
+                        }
+                        else
+                        {
+                            <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
+                                Resource file
                             </div>
-                        </div>
-                         ->
-                        <div style="display:flex;flex-direction:column;">
-                            <div style="text-align:center">
-                                EndDate
-                            </div>
-
-                            <div style="text-align:center">
-                                @this.Model.AssignmentInfo.EndDate
-                            </div>
-                        </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="default-open-view mt-5" id="default">
+                        No files.
                     </div>
-                    Turned:
-                    @if (this.Model.AssignmentInfo.TurnedOn != null)
-                    {
-                        <span>@this.Model.AssignmentInfo.TurnedOn</span>
-                    }
-                    else
-                    {
-                        <span>Not turned</span>
-                    }
-                </p>
-                <p>
-                    Seen:
-                    @if (this.Model.AssignmentInfo.Seen)
-                    {
-                        <span class="badge" style="background: #00ff21; color: #00ff21">0</span>
-                    }
-                    else
-                    {
-                        <span class="badge" style="background:#ff0000;color:#ff0000">0</span>
-                    }
-                </p>
+                }
+            </div>
+            <div class="bg-white m-2 py-2" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseWorkFiles" aria-expanded="false" aria-controls="collapseWorkFiles">
+                Work files
             </div>
 
-        </div>
-        <div class="bg-white my-1" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseResourceFiles" aria-expanded="false" aria-controls="collapseResourceFiles">
-            Resource files
-        </div>
-
-        <div class="assignment-files-container collapse mx-1 rounded" id="collapseResourceFiles">
-            @if (this.Model.AssignmentInfo.ResourceFiles.Any())
-            {
-                @foreach (var file in this.Model.AssignmentInfo.ResourceFiles)
+            <div class="assignment-files-container collapse mx-3 rounded" id="collapseWorkFiles">
+                @if (this.Model.AssignmentInfo.WorkFiles.Any())
                 {
-                    @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
+                    @foreach (var file in this.Model.AssignmentInfo.WorkFiles)
                     {
-                        <div class="file-container" src="@file.RemoteUrl">
-                            Resource file
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
-                            Resource file
-                        </div>
+                        @if (file.RemoteUrl.EndsWith(".jpg") || file.RemoteUrl.EndsWith(".png"))
+                        {
+                            <div class="file-container" src="@file.RemoteUrl">
+                                Work File
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
+                                Work File
+                            </div>
+                        }
                     }
                 }
-            }
-            else
-            {
-                <div class="default-open-view mt-5" id="default">
-                    No files.
-                </div>
-            }
-        </div>
-
-        <div class="bg-white my-1" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseWorkFiles" aria-expanded="false" aria-controls="collapseWorkFiles">
-            Work files
-        </div>
-
-        <div class="assignment-files-container collapse mx-1 rounded" id="collapseWorkFiles">
-            @if (this.Model.AssignmentInfo.WorkFiles.Any())
-            {
-                @foreach (var file in this.Model.AssignmentInfo.WorkFiles)
+                else
                 {
-                    @if (file.RemoteUrl.EndsWith(".jpg") || file.RemoteUrl.EndsWith(".png"))
-                    {
-                        <div class="file-container" src="@file.RemoteUrl">
-                            Work File
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
-                            Work File
-                        </div>
-                    }
+                    <div class="default-open-view mt-5" id="default">
+                        No files.
+                    </div>
                 }
-            }
-            else
-            {
-                <div class="default-open-view mt-5" id="default">
-                    No files.
-                </div>
-            }
+            </div>
         </div>
     </div>
 </div>
@@ -271,7 +259,13 @@
                     {
                         <div class="form-group">
                             <label asp-for="InputModel.Points"></label>
-                            <input asp-for="InputModel.Points" placeholder="possible--points--@this.Model.AssignmentInfo.PossiblePoints" class="form-control" />
+                            <select asp-for="InputModel.Points" class="form-control">
+                                @for (int i = 0; i <= this.Model.AssignmentInfo.PossiblePoints; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                            @*<input asp-for="InputModel.Points" placeholder="possible--points--@this.Model.AssignmentInfo.PossiblePoints" class="form-control" />*@
                             <span asp-validation-for="InputModel.Points"></span>
                         </div>
                     }
@@ -328,4 +322,23 @@
 
     })
 
+</script>
+
+<script type="text/javascript">
+    var infoContainer = document.getElementById("info-container");
+    var btnShowInfo = document.getElementById("btn-showInfo");
+    var closeInfoContainerBtn = document.getElementById("closeBtn-info-container");
+
+    btnShowInfo.addEventListener("click", function () {
+        if (infoContainer.classList.contains("unshow-info-container")) {
+            infoContainer.classList.remove("unshow-info-container");
+        }
+
+        infoContainer.classList.add("show-info-container");
+    });
+
+    closeInfoContainerBtn.addEventListener("click", function () {
+        infoContainer.classList.remove("show-info-container");
+        infoContainer.classList.add("unshow-info-container");
+    });
 </script>

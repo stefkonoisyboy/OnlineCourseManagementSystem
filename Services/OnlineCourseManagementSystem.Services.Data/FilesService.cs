@@ -153,5 +153,29 @@
             await this.fileRepository.SaveChangesAsync();
             return lectureId;
         }
+
+        public async Task<int?> DeleteFromEventAsync(int id)
+        {
+            File file = this.fileRepository.All().FirstOrDefault(f => f.Id == id);
+            int? eventId = file.EventId;
+            this.fileRepository.Delete(file);
+            await this.fileRepository.SaveChangesAsync();
+            return eventId;
+        }
+
+        public async Task<int> AddVideoResourceToEventAsync(VideoFileInputModel inptuModel)
+        {
+            File file = new File
+            {
+                RemoteUrl = inptuModel.RemoteUrl,
+                EventId = inptuModel.EventId,
+                Extension = ".mp4",
+            };
+
+            await this.fileRepository.AddAsync(file);
+            await this.fileRepository.SaveChangesAsync();
+
+            return file.Id;
+        }
     }
 }

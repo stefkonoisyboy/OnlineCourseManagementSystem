@@ -14,5 +14,9 @@
         public PostViewModel Post { get; set; }
 
         public IEnumerable<CommentViewModel> Comments { get; set; }
+
+        public CreateCommentInputModel InputModel { get; set; }
+
+        public ReplyToCommentInputModel ReplyInputModel { get; set; }
     }
 }

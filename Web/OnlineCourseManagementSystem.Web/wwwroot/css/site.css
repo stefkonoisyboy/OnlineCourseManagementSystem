@@ -497,21 +497,16 @@ a:hover{
 
 .mark-user-assignment{
     display: flex;
-    flex-direction: row;
     height: 100vh;
-    width: 75vw;
-    margin-bottom: 2rem;
 }
 
 .sidebar-assignemt-info {
-    height: inherit;
-    width: inherit;
+    width:inherit;
+    height:inherit;
     width: 35%;
     height: 100%;
     color: white;
     background: #42a5f5;
-    border-radius: 4px;
-    min-width: 35%;
 }
 .file-display-container {
     width: inherit;
@@ -668,4 +663,132 @@ form.hide-submit input[type="submit"] {
     align-items: center;
     border-radius: 3px;
     padding: 5rem;
+}
+
+.info-container {
+    position: absolute;
+    width: 20rem;
+    height: 15rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: none;
+    right: 30%;
+}
+
+    .info-container::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .info-container::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    .info-container::-webkit-scrollbar-thumb {
+        background-color: #2196f3;
+        border-radius: 10px;
+        width: 5px;
+    }
+
+.show-info-container {
+    display: block;
+    animation: wrapContent 1s ease-in-out 1 normal;
+}
+
+.unshow-info-container {
+    display: none;
+    animation: unwrapContent 1s ease-out 1 normal;
+}
+
+@keyframes wrapContent {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+
+    to {
+        height: 100px;
+        opacity: 1;
+    }
+}
+
+@keyframes unwrapContent {
+    from {
+        height: 100px;
+        opacity: 1;
+    }
+
+    to {
+        height: 0px;
+        opacity: 0;
+    }
+}
+
+.svg-btn:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 350ms;
+}
+
+.slideshow-container {
+    max-width: 700px;
+    position: relative;
+    margin: auto
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    transition: .6s ease;
+    border-radius: 10px 0 0 10px;
+    user-select: none
+}
+
+.next {
+    right: 0;
+    border-radius: 0 10px 10px 0;
+}
+
+    .prev:hover, .next:hover {
+        background-color: #adb5bd;
+    }
+
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s
+}
+
+@-webkit-keyframes fade {
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@media only screen and (max-width:300px) {
+    .prev, .next, .text {
+        font-size: 11px
+    }
 }

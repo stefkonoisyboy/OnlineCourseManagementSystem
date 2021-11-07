@@ -12,6 +12,8 @@
     {
         public string RemoteUrl { get; set; }
 
+        public string Extension { get; set; }
+
         public int Id { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

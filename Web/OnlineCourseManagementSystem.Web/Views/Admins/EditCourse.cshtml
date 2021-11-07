@@ -110,7 +110,7 @@
         <input type="hidden" asp-for="EditMetaInputModel.Id" />
         <div class="d-flex">
             <div class="flex-grow-1">
-                <img src="EditMetaInputModel.FileRemoteUrl" alt="course-image" />
+                <img height="100" width=" 100" src="@this.Model.EditMetaInputModel.FileRemoteUrl" alt="course-image" />
             </div>
             <button class="btn btn-success" style="height:40px">Save&Edit</button>
         </div>
@@ -118,7 +118,7 @@
 </form>
 
 
-<div class="d-flex align-items-center">
+<div class="d-flex align-items-center my-5">
     <div class="flex-grow-1">
         <button class="btn btn-secondary " id="backBtn" onclick="moveBack()">Back</button>
     </div>
@@ -151,6 +151,7 @@
             metaSection.classList.remove(["bg-success"]);
             formMeta.style.display = "none";
             metaSection.classList.add(["bg-secondary"]);
+            continueBtn.style.display = "block";
 
             overviewSection.classList.add(["bg-success"]);
             formOverview.style.display = "block";

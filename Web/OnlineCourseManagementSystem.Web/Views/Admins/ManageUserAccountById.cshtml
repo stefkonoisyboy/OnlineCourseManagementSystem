@@ -1,0 +1,199 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Users
+@model ManageAccountInputModel
+@{
+    this.ViewData["Title"] = "Manager User Account";
+}
+
+<style>
+    .options {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        border-radius: 3px;
+        background: #f5f5f5;
+    }
+
+    .current {
+        color: #42a5f5;
+        background-color: white;
+        cursor: none;
+    }
+
+    .options:hover {
+        cursor: pointer;
+    }
+
+
+
+    .add-image {
+        padding: 0.5rem;
+        font-size: 12px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+
+        .add-image:hover {
+            cursor: pointer;
+            background: #f5f5f5;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        }
+
+    body {
+        background: #f5f5f5;
+    }
+
+    .dropdown-option {
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        border-bottom: 2px solid #f5f5f5;
+        padding: 0.5rem;
+        width: 250px;
+    }
+
+    .form-control-material {
+        border: none;
+        background-color: transparent;
+        border-bottom: 3px solid gray;
+        padding: 16px 0 0;
+        height: 48px;
+    }
+
+    #default-img {
+        display: none;
+    }
+
+    #default-view {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .show {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div class="d-flex flex-column mr-0 mr-md-3 w-75" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; background:white;">
+    <div class="d-flex" style="background: #f5f5f5;">
+        <div class="options current">
+            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+            <span class="d-none d-md-block">Manage Account</span>
+        </div>
+    </div>
+
+    <div class="main-section ml-2 ml-md-5">
+        <form asp-controller="Admins" asp-action="ManageUserAccountById" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="alert-danger"></div>
+
+            <div class="d-block d-md-flex mt-3">
+                <label asp-for="NewImage" class="mr-0 mr-md-4">Image</label>
+                <div class="d-flex align-items-center">
+                    @if (!string.IsNullOrEmpty(this.Model.ProfileImageUrl))
+                    {
+                        <div class="mt-1 mr-2 d-flex justify-content-center align-items-center" style="height: 100px; width: 100px; background: #f5f5f5;">
+                            <img src="@this.Model.ProfileImageUrl" id="img" height="100" width="100" alt="ProfileImage" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="default-img" class="mt-1 mr-2" style="height: 100px; width: 100px; background: #f5f5f5;">
+                            <img src="" id="img" height="100" width="100" alt="ProfileImage" />
+                        </div>
+                        <div id="default-view" class="mt-1 mr-2 " style="height: 100px; width: 100px; background: #f5f5f5;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z" />
+                            </svg>
+                        </div>
+                    }
+                    <label class="add-image" for="imageInput">ADD IMAGE</label>
+                    <input class="form-control" type="file" asp-for="NewImage" id="imageInput" accept="image/*" hidden />
+                </div>
+            </div>
+
+            <div class="d-block d-md-flex mt-3">
+                <h6 class="mr-0 mr-md-4">Full Name</h6>
+                <div class="d-block d-md-flex">
+                    <div class="mr-0 mr-md-2">
+                        <input asp-for="FirstName" class="form-control form-control-material " type="text" placeholder="First name" />
+                        <span asp-validation-for="FirstName" class="alert-danger"></span>
+                    </div>
+                    <div class="mr-0 mr-md-2">
+                        <input class="form-control form-control-material " asp-for="LastName" type="text" placeholder="Last name" />
+                        <span asp-validation-for="LastName" class="alert-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-block d-md-flex mt-3">
+                <label asp-for="Background" class="mr-0 mr-md-4">Background</label>
+                <textarea asp-for="Background" class="form-control form-control-material mr-0 mr-md-2 w-100" placholder="Background"></textarea>
+                <span asp-validation-for="Background" class="alert-danger"></span>
+            </div>
+
+            <div class="d-block d-md-flex mt-3">
+                <label asp-for="Birthdate" class="mr-0 mr-md-4">Birthdate</label>
+                <div class="d-block d-md-flex">
+                    <input asp-for="Birthdate" class=" form-control form-control-material mr-0 mr-md-2" />
+                    <span asp-validation-for="Birthdate" class="alert-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-block d-md-flex mt-3">
+                <label asp-for="TownId" class="mr-0 mr-md-4">Town</label>
+                <div class="d-block d-md-flex">
+                    <select asp-items="this.Model.TownItems" class="form-control form-control-material mr-0 mr-md-2" id="TownId" asp-for="TownId">
+                    </select>
+                    <span asp-validation-for="TownId" class="alert-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-block d-md-flex mt-3">
+                <label asp-for="Address" class="mr-0 mr-md-4">Address</label>
+                <div class="d-block d-md-flex">
+                    <input asp-for="Address" class="form-control form-control-material mr-0 mr-md-2" type="text" placeholder="Address" />
+                    <span asp-validation-for="Address" class="alert-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-block d-md-flex mt-3">
+                <label asp-for="Email" class="mr-0 mr-md-4">Email</label>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                    <input asp-for="Email" type="email" placeholder="Email address" />
+                    <span asp-validation-for="Email" class="alert-danger"></span>
+                </div>
+            </div>
+
+            @*<div class="d-block d-md-flex mt-3">
+            <h6 class="mr-0 mr-md-4">Change Password</h6>
+            <input type="password" placeholder="Password" />
+        </div>*@
+            <input hidden asp-for="Id" />
+            <div class="my-3 ml-md-5">
+                <button class="btn btn-primary mt-2">SAVE CHANGES</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var fileInput = document.getElementById("imageInput");
+    fileInput.onchange = function (event) {
+        var defaultImg = document.getElementById("default-img");
+        var defaultView = document.getElementById("default-view");
+        var image = document.getElementById("img");
+        if (defaultView != null && defaultImg != null) {
+            defaultView.style.display = "none";
+            defaultImg.style.display = "flex";
+            defaultImg.classList.toggle("show");
+        }
+        image.src = URL.createObjectURL(event.target.files[0]);
+    };
+</script>

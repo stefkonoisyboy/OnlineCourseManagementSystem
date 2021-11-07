@@ -46,10 +46,7 @@
         box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
         border-bottom: 2px solid #f5f5f5;
         padding: 0.5rem;
-    }
-
-    a{
-        color:black;
+        width:250px;
     }
 
     .form-control-material {
@@ -104,6 +101,7 @@
 
         <div class="main-section ml-2 ml-md-5">
             <form asp-controller="Users" asp-action="ManageAccountById" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="alert-danger"></div>
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="NewImage" class="mr-0 mr-md-4">Image</label>
                     <div class="d-flex align-items-center">
@@ -135,28 +133,26 @@
                     <div class="d-block d-md-flex">
                         <div class="mr-0 mr-md-2">
                             <input asp-for="FirstName" class="form-control form-control-material " type="text" placeholder="First name" />
-                            <span asp-validation-for="FirstName"></span>
+                            <span asp-validation-for="FirstName" class="alert-danger"></span>
                         </div>
                         <div class="mr-0 mr-md-2">
                             <input class="form-control form-control-material " asp-for="LastName" type="text" placeholder="Last name" />
-                            <span asp-validation-for="LastName"></span>
+                            <span asp-validation-for="LastName" class="alert-danger"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="Background" class="mr-0 mr-md-4">Background</label>
-                    <div class="d-block d-md-flex">
-                        <textarea asp-for="Background" class="form-control form-control-material mr-0 mr-md-2" placholder="Background"></textarea>
-                        <span asp-validation-for="Background"></span>
-                    </div>
+                    <textarea asp-for="Background" class="form-control form-control-material mr-0 mr-md-2" placholder="Background"></textarea>
+                    <span asp-validation-for="Background"></span>
                 </div>
 
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="Birthdate" class="mr-0 mr-md-4">Birthdate</label>
                     <div class="d-block d-md-flex">
                         <input asp-for="Birthdate" class=" form-control form-control-material mr-0 mr-md-2" />
-                        <span asp-validation-for="Birthdate"></span>
+                        <span asp-validation-for="Birthdate" class="alert-danger"></span>
                     </div>
                 </div>
 
@@ -165,7 +161,7 @@
                     <div class="d-block d-md-flex">
                         <select asp-items="this.Model.TownItems" class="form-control form-control-material mr-0 mr-md-2" id="TownId" asp-for="TownId">
                         </select>
-                        <span asp-validation-for="TownId"></span>
+                        <span asp-validation-for="TownId" class="alert-danger"></span>
                     </div>
                 </div>
 
@@ -173,7 +169,7 @@
                     <label asp-for="Address" class="mr-0 mr-md-4">Address</label>
                     <div class="d-block d-md-flex">
                         <input asp-for="Address" class="form-control form-control-material mr-0 mr-md-2" type="text" placeholder="Address" />
-                        <span asp-validation-for="Address"></span>
+                        <span asp-validation-for="Address" class="alert-danger"></span>
                     </div>
                 </div>
 
@@ -185,7 +181,7 @@
                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
                         <input asp-for="Email" type="email" placeholder="Email address" />
-                        <span asp-validation-for="Email"></span>
+                        <span asp-validation-for="Email" class="alert-danger"></span>
                     </div>
                 </div>
 
@@ -204,7 +200,7 @@
             </form>
         </div>
     </div>
-    <div class="d-flex flex-column bg-white h-50 w-25 mt-5 mt-md-0" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+    <div class="d-flex flex-column bg-white h-50 mt-5 mt-md-0" style="width:300px;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
         <div class="accordion" id="accountOptions">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
@@ -217,21 +213,35 @@
         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accountOptions">
             <div class="accordion-body">
                 <div class="dropdown-option">
-                    <a href="#">Dashboard</a>
-                </div>
-                <div class="dropdown-option">
                     @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
                     {
-                        <a asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a>
-                    }
+                        <a asp-controller="Dashboard" asp-action="StudentDashboard">Dashboard</a>
 
-                    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                    }
+                    else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
                     {
-                        <a asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a>
+                        <a asp-controller="Dashboard" asp-action="LecturerDashboard">Dashboard</a>
+                    }
+                    else if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a asp-controller="Dashboard" asp-action="AdminDashboard">Dashboard</a>
                     }
                 </div>
+                @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                {
+                     <div class="dropdown-option">
+                         <a asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a>
+                     </div>
+                }
+
+                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                {
+                    <div class="dropdown-option">
+                        <a asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a>
+                    </div>
+                }
                 <div class="dropdown-option" style="background: #42a5f5;">
-                    <a asp-controller="Users" asp-action="ManageAccountById" style="color:white;">Profile</a>
+                    <a  asp-controller="Users" asp-action="ManageAccountById" style="color:white;">Profile</a>
                 </div>
                 <div class="dropdown-option">
                     <a asp-controller="Chats" asp-action="IndexChats">Messages</a>

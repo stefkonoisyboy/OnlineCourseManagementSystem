@@ -8,7 +8,6 @@
     public class BaseCommentInputModel
     {
         [Required]
-        [MinLength(5)]
         public string Content { get; set; }
 
         public string AuthorId { get; set; }
