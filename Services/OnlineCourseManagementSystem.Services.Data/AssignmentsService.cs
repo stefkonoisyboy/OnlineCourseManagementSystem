@@ -82,7 +82,6 @@
                     .FirstOrDefault();
         }
 
-
         public IEnumerable<T> GetAllUsersForAssignment<T>(int assignmentId)
         {
             return this.userAssignmentRepository.All()
@@ -175,7 +174,6 @@
                 .FirstOrDefault(ua => ua.AssignmentId == inputModel.AssignmentId && ua.UserId == inputModel.UserId);
             userAssignment.TurnedOn = DateTime.UtcNow;
 
-
             if (inputModel.Files != null)
             {
                 await this.AttachFile(assignment, inputModel.Files, FileType.Submit, inputModel.UserId);
@@ -236,7 +234,6 @@
                 .All()
                 .FirstOrDefault(ua => ua.AssignmentId == inputModel.AssignmentId && ua.UserId == inputModel.UserId);
 
-
             userAssignment.Points = inputModel.Points;
             userAssignment.Feedback = inputModel.Feedback;
 
@@ -289,7 +286,7 @@
         {
             return this.userAssignmentRepository
                 .All()
-                .Where(ua => ua.UserId == userId && ua.Assignment.CourseId == courseId)
+                .Where(ua => ua.UserId == userId && ua.Assignment.CourseId == courseId && ua.TurnedOn == null)
                 .OrderByDescending(ua => ua.CreatedOn)
                 .To<T>()
                 .ToList();

@@ -95,11 +95,11 @@
             </button>*@
         </nav>
         <div class="container-fluid">
-            @if (this.TempData.ContainsKey("CreatedPost"))
+            @if (this.TempData.ContainsKey("Message"))
             {
                 <div class="alert alert-success alert-dismissible mb-3">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    @this.TempData["CreatedPost"]
+                    @this.TempData["Message"]
                 </div>
             }
 

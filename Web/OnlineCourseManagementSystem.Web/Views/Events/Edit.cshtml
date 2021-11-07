@@ -1,0 +1,184 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Events
+@model EditEventInputModel
+@{
+    this.ViewData["Title"] = "Edit Event";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @this.TempData["Message"]
+    </div>
+}
+
+<h1 class="text-center">Edit Event</h1>
+
+<form asp-controller="Events" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+    <div class="form-group">
+        <label asp-for="Theme"></label>
+        <input class="form-control" asp-for="Theme" />
+        <span asp-validation-for="Theme" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input class="form-control" asp-for="StartDate" />
+        <span asp-validation-for="StartDate" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input class="form-control" asp-for="EndDate" />
+        <span asp-validation-for="EndDate" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input class="form-control" asp-for="Address" />
+        <span asp-validation-for="Address" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea class="form-control" asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="alert-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <input asp-for="FilesToAdd" id="input-event-file" type="file" multiple class="form-control" hidden />
+
+    <label for="input-event-file" class="d-inline-flex rounded-pill p-2 my-2 justify-content-end align-items-center" id="show" style="cursor:pointer;color:black;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+        <tt id="create-text" class="mx-1">
+            Upload Files
+        </tt>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+        </svg>
+    </label>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary">Edit</button>
+    </div>
+</form>
+<div id="myModal" class="modal" style="">
+    <span class="close">&times;</span>
+    <iframe class="modal-content" id="file" frameborder='0'>
+    </iframe>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+<h3 class="my-5">Files Inlcuded</h3>
+@if (this.Model.Files != null)
+{
+    @foreach (var file in this.Model.Files)
+    {
+        @if (file.Extension == ".jpg" || file.Extension == ".png")
+        {
+            <div id="@file.Id" onclick="showFile(@file.Id)" src="@file.RemoteUrl" class="p-2 m-2 d-flex  align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                <div class="flex-grow-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-image svg-btn" viewBox="0 0 16 16">
+                        <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                        <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
+                    </svg>
+                </div>
+                <form asp-controller="Files" asp-action="DeleteFileFromEventByAdmin" asp-route-id="@file.Id" method="post">
+                    <button class="btn borde-0">
+                        <svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" height="30" width="30" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        }
+        else
+        {
+            if (file.Extension == ".pptx")
+            {
+                <div id="@file.Id" onclick="showFile(@file.Id)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" class="p-2 m-2 d-flex align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                    <div class="flex-grow-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-ppt " viewBox="0 0 16 16">
+                            <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
+                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                        </svg>
+                    </div>
+                    <form asp-controller="Files" asp-action="DeleteFileFromEventByAdmin" asp-route-id="@file.Id" method="post">
+                        <button class="btn borde-0">
+                            <svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" height="30" width="30" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            }
+            else if (file.Extension == ".docx")
+            {
+                <div id="@file.Id" onclick="showFile(@file.Id)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" class="p-2 m-2 d-flex align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                    <div class="flex-grow-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-word svg-btn" viewBox="0 0 16 16">
+                            <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                        </svg>
+                    </div>
+                    <form asp-controller="Files" asp-action="DeleteFileFromEventByAdmin" asp-route-id="@file.Id" method="post">
+                        <button class="btn borde-0">
+                            <svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" height="30" width="30" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            }
+            else if(file.Extension == ".mp4")
+            {
+                <a asp-controller="Files" asp-action="EventVideoById" asp-route-id="@file.Id" class="p-2 m-2 d-flex align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                    <div class="flex-grow-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-camera-video flex-grow-1" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
+                        </svg>
+                    </div>
+                    <form asp-controller="Files" asp-action="DeleteFileFromEventByAdmin" asp-route-id="@file.Id" method="post">
+                        <input id="fileInput" type="button" class="btn borde-0"/>
+                        <label for="fileInput">
+                            <svg class="svg-btn" xmlns="http://www.w3.org/2000/svg" height="30" width="30" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </label>
+                    </form>
+                </a>
+            }
+        }
+    }
+}
+
+
+@section Scripts{
+    <script>
+        function showFile(fileId) {
+            var file = document.getElementById(fileId);
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var modalFile = document.getElementById("file");
+
+            var captionText = document.getElementById("caption");
+
+            modal.style.display = "block";
+            if (file.getAttribute("src").includes(".jpg") || file.getAttribute("src").includes(".png")) {
+                modalImg.src = file.getAttribute("src");
+                modalImg.style.display = "block";
+            }
+            else {
+                modalFile.src = file.getAttribute("src");
+                modalFile.style.display = "block";
+            }
+
+            captionText.innerHTML = file.getAttribute("alt");
+
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function () {
+                modal.style.display = "none";
+                modalImg.style.display = "none";
+                modalFile.style.display = "none";
+            }
+        }
+    </script>
+}

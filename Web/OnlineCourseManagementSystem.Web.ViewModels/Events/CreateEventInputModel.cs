@@ -31,5 +31,13 @@
         public string CreatorId { get; set; }
 
         public IEnumerable<IFormFile> Files { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
+        {
+            if (this.StartDate > this.EndDate)
+            {
+                yield return new ValidationResult("Start Date need to be lower than the End Date");
+            }
+        }
     }
 }

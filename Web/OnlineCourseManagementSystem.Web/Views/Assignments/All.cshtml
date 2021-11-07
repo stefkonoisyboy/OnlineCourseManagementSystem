@@ -1,45 +1,49 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
 @model AllAssignmentsViewModel
 @{
-    this.ViewData["Title"] = "All Assignments";
+    this.ViewData["Title"] = "My Assignments";
 }
-<h1 class="text-center my-5" style="color: #42a5f5;">Assignments</h1>
+<h1 class="text-center my-5">Assignments</h1>
 
 
-<div class="d-flex flex-column my-1">
+<div class="d-flex flex-column mb-5">
    @foreach (var assignment in this.Model.UnfinishedAssignments)
    {
-       <a class="card my-1" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
-           <div style="color:#ff6a00" class="row">
-               <div class="col-md-4">
-                   <p style="color:#000000">@assignment.Title</p>
-                   <p class="text-black-50"> @assignment.CourseName</p>
-                       @if (assignment.EndDate.Day > DateTime.UtcNow.Day)
-                       {
-                           <div class="col-md-4">
-                               <p> Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")</p>
-                           </div>
-                       }
-                   else if (assignment.EndDate.Day == DateTime.UtcNow.Day + 1)
-                   {
-                       <div class="col-md-4">
-                           <p>Due Tomorrow</p>
-                       </div>
-                   }
-                   else
-                   {
-                       <div class="col-md-4 text-danger">
-                           <p>Due @assignment.EndDate.ToString("MMMM d, yyyy hh:mm t")<p>
-                       </div>
-                   }
-               </div>
-               <div class="col-md-3">
-                   @assignment.PossiblePoints Points
+       <a class="my-1 d-flex rounded-3" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+           <div class="flex-grow-1 m-3">
+               <h6>@assignment.Title</h6>
+               <h6 class="text-black-50"> @assignment.CourseName</h6>
+               @if (assignment.EndDate.Day > DateTime.UtcNow.Day)
+               {
+                   <div class="col-md-4">
+                       <h6> Due @assignment.EndDate.ToString("dd/MM/yyyy hh:mm t")</h6>
+                   </div>
+               }
+               else if (assignment.EndDate.Day == DateTime.UtcNow.Day + 1)
+               {
+                   <div class="col-md-4">
+                       <h6>Due Tomorrow</h6>
+                   </div>
+               }
+               else
+               {
+                   <div class="col-md-4 text-danger">
+                       <h6>Due @assignment.EndDate.ToString("dd/MM/yyyy hh:mm t")</h6>
+                   </div>
+               }
+           </div>
+           <div class="row m-3">
+               <div class="col-md-5">
+                   <h6>
+                       @assignment.PossiblePoints Points
+                   </h6>
                </div>
                @if (assignment.EndDate < DateTime.UtcNow)
                {
-                   <div class="col-md-3 text-danger">
-                       Past due
+                   <div class="col-md-5 text-danger">
+                       <h6>
+                           Past due
+                       </h6>
                    </div>
                }
            </div>
@@ -47,31 +51,32 @@
    }
 </div>
 
-<details style="margin-bottom:30vh;">
+<details class="my-5">
     <summary  style="color: #42a5f5;">
         Completed
     </summary>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column my-1">
       @foreach (var assignment in this.Model.FinishedAssignments)
        {
-          <a class="card my-1" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
-              <div style="color:#000000" class="row">
-
-                  <div class="col-md-5">
-                      @assignment.CourseName
-                  </div>
-                  <div class="col-md-4">
-                      Points: @assignment.ReceivedPoints/@assignment.PossiblePoints
-                  </div>
-                  <div class="col-md-4">
+          <a class="d-flex rounded-3 my-1" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+              <div class="flex-grow-1 m-3">
+                  <h6>
                       @assignment.Title
-                  </div>
+                  </h6>
+                  <h6 class="text-black-50">
+                      @assignment.CourseName
+                  </h6>
               </div>
-              <pre class="tab"></pre>
-              <pre class="tab"></pre>
+              <div class="m-3">
+                  <h6>
+                      Points: @assignment.ReceivedPoints/@assignment.PossiblePoints
+                  </h6>
+              </div>
           </a>
-          
        }
     </div>
 </details>
+
+<div style="height:20vh;">
+</div>
 

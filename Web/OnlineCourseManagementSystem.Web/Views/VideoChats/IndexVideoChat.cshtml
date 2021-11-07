@@ -3,7 +3,7 @@
 @using OnlineCourseManagementSystem.Data.Models
 @inject UserManager<ApplicationUser> userManager
 @{
-    this.ViewData["Title"] = "Video Chat";
+    this.ViewData["Title"] = "Video Conference";
     ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 }
 
@@ -236,5 +236,34 @@
         createOrJoinRoom,
         leaveRoom
     };
+
+    function muteVideo() {
+        var localParticipant = _activeRoom.localParticipant;
+        localParticipant.videoTracks.forEach(function (videoTracks) {
+            videoTracks.track.disable();
+
+        });
+    }
+
+    function unMuteVideo() {
+        var localParticipant = _activeRoom.localParticipant;
+        localParticipant.videoTracks.forEach(function (videoTracks) {
+            videoTracks.track.enable();
+        });
+    }
+
+    function unMuteAudio() {
+        var localParticipant = _activeRoom.localParticipant;
+        localParticipant.audioTracks.forEach(function (audioTrack) {
+            audioTrack.track.enable();
+        });
+    }
+
+    function muteAudio() {
+        var localParticipant = _activeRoom.localParticipant;
+        localParticipant.audioTracks.forEach(function (audioTrack) {
+            audioTrack.track.disable();
+        });
+    }
 
 </script>

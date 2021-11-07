@@ -1,43 +1,49 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Posts
+@using OnlineCourseManagementSystem.Data.Models
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> userManager
 @model PostInfoViewModel
 @{
     this.ViewData["Title"] = "Post";
     int i = 0;
+    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 }
 
-@if (this.TempData.ContainsKey("CreatedComment"))
+@if (this.TempData.ContainsKey("Message"))
 {
     <div class="alert alert-success alert-dismissible">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        @this.TempData["CreatedComment"]
+        @this.TempData["Message"]
     </div>
 }
 
 <article class="rounded mt-5" style=" background: #d8d8d8">
     <div class="card-header">
-        <span>@this.Model.Post.AuthorName</span>
+       
 
         <h1>@this.Model.Post.Title</h1>
-
     </div>
     <div class="card-body">
         <p>@this.Model.Post.Content</p>
     </div>
     <div class="card-footer">
         <p>
-            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
             </svg>
             <span class="badge text-black-50 mx-1">@this.Model.Post.Likes.Count()</span>
 
-            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
             </svg>
             <span class="badge text-black-50 mx-1">@this.Model.Post.Dislikes.Count()</span>
         </p>
         <p>
-            <img src="~/icons/calendar.png" alt="Alternate Text" />
-            <span>@this.Model.Post.CreatedOn</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+                <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
+                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+            </svg>
+            <span>@this.Model.Post.CreatedOn.ToString("d") @this.Model.Post.CreatedOn.ToString("t")</span> | <span>Author: @this.Model.Post.AuthorName</span>
         </p>
         @if (!this.User.Identity.IsAuthenticated)
         {
@@ -50,10 +56,32 @@
 
 @if (this.User.Identity.IsAuthenticated)
 {
-    <div class="d-flex justify-content-end">
-        <a class="btn mt-3" style="background: #ff6a00; color:#ffffff; width: auto" asp-controller="Comments" asp-action="Create" asp-route-id="@this.Model.Post.Id">
+    @*<div class="d-flex justify-content-end">
+        <a class="btn btn- mt-3" style="width: auto" asp-controller="Comments" asp-action="Create" asp-route-id="@this.Model.Post.Id">
             Add Comment
         </a>
+    </div>*@
+
+    <div class="my-5 w-75" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
+        <div class="m-2">
+            <h1>Post a comment</h1>
+        </div>
+        <hr />
+        <form class="m-2" asp-controller="Comments" asp-action="Create" asp-route-id="@this.Model.Post.Id" method="post">
+           <label asp-for="@this.Model.InputModel.Content">Your Comment</label>
+           <textarea asp-for="@this.Model.InputModel.Content" placeholder="Your comment..." class="form-control"></textarea>
+           <span asp-validation-for="@this.Model.InputModel.Content"></span>
+           <div class="d-flex justify-content-end my-3">
+               <button class="btn btn-primary py-2 d-flex align-items-center mb-3" style="font-size:12px; font-weight:bold;">
+                   POST COMMENT
+                   <span class="badge d-none d-md-block">
+                       <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 20 20" fill="currentColor">
+                           <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                       </svg>
+                   </span>
+               </button>
+           </div>
+        </form>
     </div>
 }
 
@@ -73,7 +101,7 @@
                             }
                         </div>
                         <div class="d-flex">
-                            @if (comment.AuthorName == this.User.Identity.Name)
+                            @if (comment.AuthorId == user.Id)
                             {
                                 <form class="mx-1" asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.Id" method="post">
                                     <button class="btn border-0" style="background:#ff0000;color:#ffffff">
@@ -99,22 +127,28 @@
                             <form class="mx-1" asp-controller="Comments" asp-action="Like" asp-route-id="@comment.Id" method="post">
                                 @if (!this.User.Identity.IsAuthenticated)
                                 {
-                                    <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                        <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                    <button disabled type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                        <svg style="color: #137cdc" class="my-1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                        </svg>
                                     </button>
                                 }
                                 else
                                 {
-                                    if (comment.Likes.Any(l => l.UserId == this.User.Identity.Name))
+                                    if (comment.Likes.Any(l => l.UserId == user.Id))
                                     {
-                                        <button id="likebtn" class="btn btn-secondary my-1" style="background:#137cdc">
-                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                        <button id="likebtn" class="btn btn-secondary my-1" style="background: #42a5f5" >
+                                            <svg  class="my-1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                            </svg>
                                         </button>
                                     }
                                     else
                                     {
                                         <button id="likebtn" class="btn btn-secondary my-1">
-                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
+                                            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                            </svg>
                                         </button>
                                     }
 
@@ -125,22 +159,28 @@
                             <form class="mx-1" asp-controller="Comments" asp-action="Dislike" asp-route-id="@comment.Id" method="post">
                                 @if (!this.User.Identity.IsAuthenticated)
                                 {
-                                    <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                        <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                    <button disabled type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                        <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                        </svg>
                                     </button>
                                 }
                                 else
                                 {
-                                    if (comment.Dislikes.Any(d => d.UserId == this.User.Identity.Name))
+                                    if (comment.Dislikes.Any(d => d.UserId == user.Id))
                                     {
-                                        <button id="dislikebtn" class="btn btn-secondary" style="background:#137cdc">
-                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                        <button id="dislikebtn" class="btn btn-secondary" style="background: #42a5f5;">
+                                            <svg  class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                            </svg>
                                         </button>
                                     }
                                     else
                                     {
                                         <button id="dislikebtn" class="btn btn-secondary">
-                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
+                                            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                            </svg>
                                         </button>
                                     }
 
@@ -149,7 +189,7 @@
                             </form>
                         </div>
                         <p>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="30" width="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             @if (comment.ModifiedOn == null)
@@ -162,128 +202,155 @@
                             }
                         </p>
                         @{
+                            int b = i;
                             string targetCollapse = $"allreplies{i++}";
                         }
-                        <div class="d-flex">
-                           <a asp-controller="Comments" asp-action="Reply" class="btn mx-1" style="background:#2847c0;color:aliceblue" asp-route-id="@comment.Id">
-                               Reply
-                           </a>
-                           <button type="button" class="btn btn-info mx-1" data-bs-toggle="collapse" data-bs-target="#@targetCollapse">Replies</button>
-                        </div>
+                    <div class="d-flex">
+                        <button type="button" class="btn btn-info mx-1" data-bs-toggle="collapse" data-bs-target="#@targetCollapse">Replies</button>
+                    </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="collapse" id="@targetCollapse">
-                            <div class="card card-body bg-dark">
-                                @foreach (var reply in comment.Replies)
-                                {
-                                    <div class="container mb-1" style="background:#ffffff">
-                                        <article class="rounded" style="background: #d8d8d8">
-                                            <div class="card-header">
+                <div class="collapse my-1" id="@targetCollapse">
+                    <div class="my-2 w-75" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
+                        <div class="m-2">
+                            <h1>Reply to comment</h1>
+                        </div>
+                        <hr />
+                        <form class="mx-2" asp-controller="Comments" asp-action="Reply" method="post">
+                            <div class="form-group">
+                                <label asp-for="@this.Model.ReplyInputModel.Content"></label>
+                                <textarea asp-for="@this.Model.ReplyInputModel.Content" placeholder="Enter the comment" class="form-control"></textarea>
+                                <span class="alert-danger" asp-validation-for="@this.Model.ReplyInputModel.Content"></span>
+                            </div>
+                            <input hidden asp-for="@this.Model.ReplyInputModel.ParentId" value="@comment.Id" />
+                            <input hidden asp-for="@this.Model.ReplyInputModel.PostId" value="@this.Model.Post.Id" />
+                            <div class="d-flex justify-content-end ">
+                                <button class="btn btn-primary py-2 d-flex align-items-center mb-3" style="font-size:12px; font-weight:bold;">
+                                    Reply
+                                    <span class="badge d-none d-md-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card card-body">
+
+                        @foreach (var reply in comment.Replies)
+                        {
+                            <div class="container mb-2" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                                <article class="rounded">
+                                    <div class="card-header d-flex">
+                                        <div class="flex-grow-1">
+                                            <div>
                                                 <span>@reply.AuthorName</span>
                                                 @if (reply.ModifiedOn != null)
                                                 {
                                                     <span>(editted)</span>
                                                 }
                                             </div>
-                                            <div class="card-body">
-                                                <p>@reply.Content</p>
-                                            </div>
-                                            <div class="card-footer">
-                                                <form asp-controller="Comments" asp-action="Like" asp-route-id="@reply.Id" method="post">
-                                                    @if (!this.User.Identity.IsAuthenticated)
-                                                    {
-                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                                            <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                        </button>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (reply.Likes.Any(l => l.UserId == this.User.Identity.Name))
-                                                        {
-                                                            <button id="likebtn" class="btn btn-secondary" style="background:#137cdc">
-                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                            </button>
-                                                        }
-                                                        else
-                                                        {
-                                                            <button id="likebtn" class="btn btn-secondary">
-                                                                <i class="fa fa-thumbs-up" style="font-size: 30px;"></i>
-                                                            </button>
-                                                        }
-                                                    }
-                                                    <span>Likes</span>
-                                                    <span>@reply.Likes.Count()</span>
+                                        </div>
+                                        <div class=" d-flex">
+                                            @if (reply.AuthorId == user.Id)
+                                            {
+                                                <form class="mx-1" asp-controller="Comments" asp-action="Delete" asp-route-id="@reply.Id" method="post">
+                                                    <button class="btn btn-danger">
+                                                        Delete Comment
+                                                    </button>
                                                 </form>
-                                                <form asp-controller="Comments" asp-action="Dislike" asp-route-id="@reply.Id" method="post">
-                                                    @if (!this.User.Identity.IsAuthenticated)
-                                                    {
-                                                        <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
-                                                            <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                        </button>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (reply.Dislikes.Any(d => d.UserId == this.User.Identity.Name))
-                                                        {
-                                                            <button id="dislikebtn" class="btn btn-secondary" style="background:#137cdc">
-                                                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                            </button>
-                                                        }
-                                                        else
-                                                        {
-                                                            <button id="dislikebtn" class="btn btn-secondary">
-                                                                <i class="fa fa-thumbs-down" style="font-size: 30px;"></i>
-                                                            </button>
-                                                        }
-                                                    }
-                                                    <span>Dislikes</span>
-                                                    <span>@reply.Dislikes.Count()</span>
-                                                </form>
-                                                <p>
-                                                    <img src="~/icons/calendar.png" alt="Alternate Text" />
-                                                    @if (reply.ModifiedOn == null)
-                                                    {
-                                                        <span>@reply.CreatedOn</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>@reply.ModifiedOn</span>
-
-                                                    }
-                                                </p>
-                                                <div class="row">
-                                                    <article>
-                                                        <div class="card-footer">
-                                                            @if (reply.AuthorName == this.User.Identity.Name)
-                                                            {
-                                                                <form asp-controller="Comments" asp-action="Delete" asp-route-id="@reply.Id" method="post">
-                                                                    <span>
-                                                                        <button class="btn form-control" style="background:#ff0000;color:#ffffff">
-                                                                            Delete Comment
-                                                                        </button>
-                                                                    </span>
-                                                                </form>
-                                                                <span>
-                                                                    <a asp-controller="Comments" asp-action="Edit" class="btn btn-info" asp-route-id="@reply.Id">
-                                                                        Edit
-                                                                    </a>
-                                                                </span>
-                                                            }
-                                                        </div>
-                                                    </article>
-                                                </div>
-                                            </div>
-                                        </article>
+                                                <a class="btn btn-info mx-1" asp-controller="Comments" asp-action="Edit" asp-route-id="@reply.Id">
+                                                    Edit
+                                                </a>
+                                            }
+                                        </div>
                                     </div>
-                                    
-                                }
+                                    <div class="card-body">
+                                        <p>@reply.Content</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="d-flex align-items-center">
+                                            <form class="mx-1" asp-controller="Comments" asp-action="Like" asp-route-id="@reply.Id" method="post">
+                                                @if (!this.User.Identity.IsAuthenticated)
+                                                {
+                                                    <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                                        <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                                        </svg>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    if (reply.Likes.Any(l => l.UserId == user.Id))
+                                                    {
+                                                        <button id="likebtn" class="btn btn-secondary" style="background: #42a5f5;">
+                                                            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                                            </svg>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button id="likebtn" class="btn btn-secondary">
+                                                            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                                            </svg>
+                                                        </button>
+                                                    }
+                                                }
+                                                <span class="badge text-black-50">@reply.Likes.Count()</span>
+                                            </form>
+                                            <form class="mx-1" asp-controller="Comments" asp-action="Dislike" asp-route-id="@reply.Id" method="post">
+                                                @if (!this.User.Identity.IsAuthenticated)
+                                                {
+                                                    <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="You need to be authenticated to rate this.">
+                                                        <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                                        </svg>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    if (reply.Dislikes.Any(d => d.UserId == user.Id))
+                                                    {
+                                                        <button id="dislikebtn" class="btn btn-secondary" style="background: #42a5f5;">
+                                                            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                                            </svg>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button id="dislikebtn" class="btn btn-secondary">
+                                                            <svg class="my-1" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                                                            </svg>
+                                                        </button>
+                                                    }
+                                                }
+                                                <span class="badge text-black-50">@reply.Dislikes.Count()</span>
+                                            </form>
+                                        </div>
+                                        <p>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            @if (reply.ModifiedOn == null)
+                                            {
+                                                <span>@this.Model.Post.CreatedOn.ToString("d") @this.Model.Post.CreatedOn.ToString("t")</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@this.Model.Post.ModifiedOn.ToString("d") @this.Model.Post.ModifiedOn.ToString("t")</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </article>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
-                <pre class="tab"></pre>
              }
          }
     </div>

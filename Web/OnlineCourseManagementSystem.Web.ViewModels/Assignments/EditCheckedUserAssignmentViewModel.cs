@@ -8,6 +8,7 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public class EditCheckedUserAssignmentViewModel : IMapFrom<UserAssignment>, IHaveCustomMappings
     {
@@ -20,6 +21,8 @@
         public string UserId { get; set; }
 
         public string Username { get; set; }
+
+        public UserViewModel User { get; set; }
 
         public AssignmentInfoViewModel AssignmentInfo { get; set; }
 

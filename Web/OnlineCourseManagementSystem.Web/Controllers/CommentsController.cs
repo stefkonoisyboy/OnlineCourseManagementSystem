@@ -43,7 +43,7 @@
 
             await this.commentsService.CreateAsync(inputModel);
 
-            this.TempData["CreatedComment"] = "Successfully created a comment.";
+            this.TempData["Message"] = "Successfully created a comment.";
 
             return this.RedirectToAction("SeePost", "Posts", new { Id = id });
         }
@@ -74,29 +74,21 @@
             int? postId = this.commentsService.GetPostId(id);
             inputModel.CommentId = id;
             await this.commentsService.UpdateAsync(inputModel);
+            this.TempData["Message"] = "Successfully updated comment";
 
             return this.RedirectToAction("SeePost", "Posts", new { Id = postId });
-        }
-
-        [Authorize]
-        public IActionResult Reply()
-        {
-            return this.View();
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Reply(ReplyToCommentInputModel inputModel, int id)
+        public async Task<IActionResult> Reply(ReplyToCommentInputModel replyInputModel)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            int? postId = this.commentsService.GetPostId(id);
 
-            inputModel.PostId = postId;
-            inputModel.ParentId = id;
-            inputModel.AuthorId = user.Id;
-            await this.commentsService.ReplyToComment(inputModel);
+            replyInputModel.AuthorId = user.Id;
+            await this.commentsService.ReplyToComment(replyInputModel);
 
-            return this.RedirectToAction("SeePost", "Posts", new { Id = postId });
+            return this.RedirectToAction("SeePost", "Posts", new { id = replyInputModel.PostId });
         }
 
         [Authorize]

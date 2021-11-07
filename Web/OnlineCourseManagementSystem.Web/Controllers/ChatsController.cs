@@ -11,10 +11,12 @@
     using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
+    using SmartBreadcrumbs.Attributes;
 
     public class ChatsController : Controller
     {
         [Authorize]
+        [Breadcrumb("Messages", FromAction ="Index", FromController = typeof(HomeController))]
         public IActionResult IndexChats()
         {
             return this.View();

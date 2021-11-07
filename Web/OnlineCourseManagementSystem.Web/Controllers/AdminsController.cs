@@ -19,6 +19,8 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
     using OnlineCourseManagementSystem.Web.ViewModels.Posts;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     public class AdminsController : Controller
     {
@@ -30,6 +32,7 @@
         private readonly IUsersService usersService;
         private readonly IAssignmentsService assignmentsService;
         private readonly ISubjectsService subjectsService;
+        private readonly ITownsService townsService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public AdminsController(
@@ -41,6 +44,7 @@
             IUsersService usersService,
             IAssignmentsService assignmentsService,
             ISubjectsService subjectsService,
+            ITownsService townsService,
             UserManager<ApplicationUser> userManager)
         {
             this.coursesService = coursesService;
@@ -51,10 +55,12 @@
             this.usersService = usersService;
             this.assignmentsService = assignmentsService;
             this.subjectsService = subjectsService;
+            this.townsService = townsService;
             this.userManager = userManager;
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [Breadcrumb("Admin Actions", FromAction = "Index", FromController =typeof(HomeController))]
         public IActionResult AdminActions()
         {
             AdminItemsViewModel viewModel = new AdminItemsViewModel()
@@ -81,6 +87,13 @@
         [Authorize(Roles =GlobalConstants.AdministratorRoleName)]
         public IActionResult EditAssignment(int id)
         {
+            BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
+            BreadcrumbNode editAssignmentNode = new MvcBreadcrumbNode("EditAssignment", "Admins", "Edit Assignemnt")
+            {
+                Parent = adminActionsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = editAssignmentNode;
             EditAssignmentInputModel inputModel = this.assignmentsService.GetById<EditAssignmentInputModel>(id);
             return this.View(inputModel);
         }
@@ -110,6 +123,13 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult EditCourse(int id)
         {
+            BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
+            BreadcrumbNode editCourse = new MvcBreadcrumbNode("EditCourse", "Admins", "Edit Course") 
+            {
+                Parent = adminActionsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = editCourse;
             EditCourseAsAdminInputModel inputModel = new EditCourseAsAdminInputModel()
             {
                 EditCourseInputModel = this.coursesService.GetById<EditCourseInputModel>(id),
@@ -160,6 +180,13 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult EditEvent(int id)
         {
+            BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
+            BreadcrumbNode editEventNode = new MvcBreadcrumbNode("EditEvent", "Admins", "Edit Event") 
+            {
+                Parent = adminActionsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = editEventNode;
             EditEventInputModel inputModel = this.eventsService.GetById<EditEventInputModel>(id);
 
             return this.View(inputModel);
@@ -209,8 +236,15 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult EditPost(int id)
         {
+            BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
+            BreadcrumbNode editPostNode = new MvcBreadcrumbNode("EditPost", "Admins", "Edit Post")
+            {
+                Parent = adminActionsNode,
+            };
             EditPostInputModel inputModel = this.postsService.GetById<EditPostInputModel>(id);
             inputModel.CourseItems = this.coursesService.GetAllAsSelectListItems();
+            this.ViewData["BreadcrumbNode"] = editPostNode;
+
             return this.View(inputModel);
         }
 
@@ -242,8 +276,14 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult EditLecture(int id)
         {
+            BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
+            BreadcrumbNode editLecture = new MvcBreadcrumbNode("EditLecture", "Admins", "Edit Lecture")
+            {
+                Parent = adminActionsNode,
+            };
             EditLectureInputModel inputModel = this.lecturesService.GetById<EditLectureInputModel>(id);
             inputModel.CoursesItems = this.coursesService.GetAllAsSelectListItems();
+            this.ViewData["BreadcrumbNode"] = editLecture;
             return this.View(inputModel);
         }
 
@@ -274,6 +314,13 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult EditExam(int id)
         {
+            BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
+            BreadcrumbNode editExamNode = new MvcBreadcrumbNode("EditExam", "Admins", "Edit Exam") 
+            {
+                Parent = adminActionsNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = adminActionsNode;
             EditExamInputModel inputModel = this.examsService.GetById<EditExamInputModel>(id);
             inputModel.CourseItems = this.coursesService.GetAllAsSelectListItems();
             return this.View(inputModel);
@@ -292,6 +339,38 @@
             await this.examsService.UpdateAsync(inputModel);
             this.TempData["Message"] = "Successfully updated assignment";
             return this.RedirectToAction("AdminActions", "Admin");
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public IActionResult ManageUserAccountById(string id)
+        {
+            ManageAccountInputModel inputModel = this.usersService.GetById<ManageAccountInputModel>(id);
+            inputModel.TownItems = this.townsService.GetAllAsSelectListItems();
+            BreadcrumbNode dashboardNode = new MvcBreadcrumbNode("AdminDasboard", "Admins", "Dashboard");
+            BreadcrumbNode manageUserAccountNode = new MvcBreadcrumbNode("ManageUserAccountById", "Admins", "Manager User Account")
+            {
+                Parent = dashboardNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = manageUserAccountNode;
+            return this.View(inputModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> ManageUserAccountById(ManageAccountInputModel inputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                inputModel = this.usersService.GetById<ManageAccountInputModel>(inputModel.Id);
+                inputModel.TownItems = this.townsService.GetAllAsSelectListItems();
+                return this.View(inputModel);
+            }
+
+            this.TempData["Message"] = "Successfully updated user!";
+
+            await this.usersService.UpdateAsync(inputModel);
+            return this.RedirectToAction("AdminDashboard", "Dashboard");
         }
     }
 }

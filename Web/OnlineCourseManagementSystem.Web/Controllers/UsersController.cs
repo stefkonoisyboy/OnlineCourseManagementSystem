@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
@@ -15,6 +16,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     [Authorize]
     public class UsersController : Controller
@@ -82,6 +84,7 @@
             return this.View(viewModel);
         }
 
+        [Breadcrumb("Manage Account", FromAction ="Index", FromController =typeof(HomeController))]
         public async Task<IActionResult> ManageAccountById()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -106,6 +109,45 @@
             await this.usersService.UpdateAsync(inputModel);
             this.TempData["UpdatedAccount"] = "Successfully updated account";
             return this.RedirectToAction("ManageAccountById", "Users");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await this.usersService.DeleteAsync(id);
+            this.TempData["Message"] = "Successfully deleted user!";
+            return this.RedirectToAction("AdminDashboard", "Dashboard");
+        }
+
+        [Authorize(Roles =GlobalConstants.AdministratorRoleName)]
+        public IActionResult AllLecturers()
+        {
+            IEnumerable<UserViewModel> lecturers = this.usersService.GetAllLecturers<UserViewModel>();
+
+            BreadcrumbNode dashboardNode = new MvcBreadcrumbNode("AdminDashboard", "Dashboard", "Dashboard");
+            BreadcrumbNode allLecturersNode = new MvcBreadcrumbNode("AllLecturers", "Users", "All Lecturers")
+            {
+                Parent = dashboardNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = allLecturersNode;
+            return this.View(lecturers);
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public IActionResult AllStudents()
+        {
+            IEnumerable<UserViewModel> students = this.usersService.GetAllStudents<UserViewModel>();
+            BreadcrumbNode dashboardNode = new MvcBreadcrumbNode("AdminDashboard", "Dashboard", "Dashboard");
+
+            BreadcrumbNode allStudentsNode = new MvcBreadcrumbNode("AllStudents", "Users", "All Students")
+            {
+                Parent = dashboardNode,
+            };
+
+            this.ViewData["BreadcrumbNode"] = allStudentsNode;
+            return this.View(students);
         }
     }
 }

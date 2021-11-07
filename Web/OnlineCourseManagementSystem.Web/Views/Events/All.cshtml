@@ -12,11 +12,12 @@
     </div>
 }
 
-<div class="row">
-    @foreach (var eventComing in this.Model.EventsComing.Where(e => e.IsApproved))
+
+<div class="row d-none d-md-flex justify-content-center">
+    @foreach (var eventComing in this.Model.EventsComing)
     {
-        <div class=" col-11 col-md-4 card">
-            <div class="card-body bg-white">
+        <div class=" col-9 col-md-4 card mr-1">
+            <div class="card-body">
                 <div class="my-1">
                     <h3>
                         <a class="text" style="color: #ff6a00; width: inherit; overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
@@ -66,6 +67,73 @@
     }
 </div>
 
+@if (this.Model.EventsComing.Any())
+{
+    <div class="slideshow-container d-md-none">
+        @for (int i = 0; i < this.Model.EventsComing.Count(); i++)
+        {
+            <div class="mySlides">
+                <div class="row d-flex justify-content-center">
+                    @foreach (var eventComing in this.Model.EventsComing.Skip(i).Take(1))
+                    {
+                        <div class=" col-10 col-md-4 card mr-1">
+                            <div class="card-body">
+                                <div class="my-1">
+                                    <h3>
+                                        <a class="text" style="color: #ff6a00; width: inherit; overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                                            @eventComing.Theme
+                                        </a>
+                                    </h3>
+                                </div>
+                                <div class="d-flex align-items-center my-1">
+                                    @if (string.IsNullOrEmpty(eventComing.AuthorProfileImageUrl) || string.IsNullOrWhiteSpace(eventComing.AuthorProfileImageUrl))
+                                    {
+                                        <img class="rounded-circle" style="width:50px;height:50px" src="@eventComing.AuthorProfileImageUrl" />
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                                            <h3 class="text-center">@(eventComing.CreatorFirstName.Substring(0,1) + eventComing.CreatorLastName.Substring(0,1))</h3>
+                                        </div>
+                                    }
+                                    <div class="mx-1 text-black">@(eventComing.CreatorFirstName+" "+eventComing.CreatorLastName)</div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventComing.Id">
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span class="text-black-50">
+                                            @eventComing.StartDate.ToString("dd MMM yyyy(ddd)")
+                                        </span>
+                                    </span>
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="text-black-50">
+                                            @eventComing.StartDate.ToString("t") - @eventComing.EndDate.ToString("t")
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+}
+
 
 <h3 class="mt-5">Events Finished</h3>
 
@@ -76,10 +144,10 @@
     </div>
 }
 
-<div class="row m-0 m-md-2">
+<div class="row w-100 d-flex justify-content-center">
     @foreach (var eventFinished in this.Model.EventsFinished)
     {
-        <div class="col-11 col-md-4 card">
+        <div class="col-10 col-md-4 card mr-1">
             <div class="card-body">
                 <div class="my-1">
                     <h3>
@@ -127,17 +195,16 @@
                 </a>
             </div>
         </div>
-
     }
 </div>
 
-@*<div class="d-flex justify-content-center mt-5">
+<div class="d-flex justify-content-center mt-5">
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            @if (this.Model.CurrentPage > 1)
+            @if (this.Model.PageNumber > 1)
             {
                 <li class="page-item">
-                    <a asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.PreviousPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" class="page-link" aria-label="Previous">
+                    <a asp-controller="Events" asp-action="All" asp-route-pageNumber="@this.Model.PreviousPage" class="page-link" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -149,7 +216,7 @@
                 {
                     pagesToShow.Add(i);
                 }
-                for (var i = this.Model.CurrentPage - MorePagesToShow; i <= this.Model.CurrentPage + MorePagesToShow; i++)
+                for (var i = this.Model.PageNumber - MorePagesToShow; i <= this.Model.PageNumber + MorePagesToShow; i++)
                 {
                     if (i > 0)
                     {
@@ -170,26 +237,54 @@
                 {
                     var className = string.Empty;
                     var pageNumber = pagesToShow[i];
-                    if (pageNumber == this.Model.CurrentPage)
+                    if (pageNumber == this.Model.PageNumber)
                     {
                         className = "active";
                     }
                     if (i > 0 && pageNumber - 1 != pagesToShow[i - 1])
                     {
-                        <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@(pagesToShow[i - 1] + 1)" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">...</a></li>
+                        <li class="page-item @className"><a class="page-link" asp-controller="Events" asp-action="All" asp-route-pageNumber="@(pagesToShow[i - 1] + 1)">...</a></li>
                     }
-                    <li class="page-item @className"><a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@pageNumber" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId">@pageNumber</a></li>
+                    <li class="page-item @className"><a class="page-link" asp-controller="Events" asp-action="All" asp-route-pageNumber="@pageNumber">@pageNumber</a></li>
                 }
             }
-            @if (this.Model.CurrentPage < this.Model.PagesCount)
+            @if (this.Model.PageNumber < this.Model.PagesCount)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="Posts" asp-action="All" asp-route-id="@this.Model.NextPage" asp-route-search="@this.Model.Search" asp-route-courseId="@this.Model.CourseId" aria-label="Next">
+                    <a class="page-link" asp-controller="Events" asp-action="All" asp-route-pageNumber="@this.Model.NextPage" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
             }
         </ul>
     </nav>
-</div>*@
+</div>
 
+<script>
+    var slideIndex = 1;
+
+    window.onload = function () {
+        showSlides(slideIndex);
+    }
+
+    showSlides(slideIndex);
+
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        
+        slides[slideIndex - 1].style.display = "block";
+    }
+</script>

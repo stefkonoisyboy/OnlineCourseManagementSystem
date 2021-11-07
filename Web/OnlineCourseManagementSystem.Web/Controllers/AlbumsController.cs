@@ -10,6 +10,8 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Albums;
+    using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     public class AlbumsController : Controller
     {
@@ -22,6 +24,7 @@
             this.userManager = userManager;
         }
 
+        [Breadcrumb("My Albums", FromAction = "Index", FromController =typeof(HomeController))]
         public async Task<IActionResult> All()
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);

@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using CloudinaryDotNet;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
@@ -28,12 +29,41 @@
             this.cloudinaryService = new CloudinaryService(cloudinary);
         }
 
+        public async Task DeleteAsync(string userId)
+        {
+            ApplicationUser user = this.usersRepository.All().FirstOrDefault(u => u.Id == userId);
+            this.usersRepository.Delete(user);
+            await this.usersRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<T> GetAll<T>()
         {
             return this.usersRepository
                 .All()
                 .OrderBy(u => u.FirstName + ' ' + u.LastName)
                 .ThenBy(u => u.UserName)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllLecturers<T>()
+        {
+            return this.usersRepository
+                .All()
+                .Where(u => u.Roles.FirstOrDefault().RoleId.EndsWith("Lecturer"))
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllStudents<T>()
+        {
+            return this.usersRepository
+                .All()
+                .Where(u => u.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
+                .OrderBy(u => u.FirstName)
+                .OrderBy(u => u.LastName)
                 .To<T>()
                 .ToList();
         }

@@ -36,19 +36,22 @@
                 Description = inputModel.Description,
             };
 
-            foreach (var file in inputModel.Files)
+            if (inputModel.Files?.Count() > 0)
             {
-                string extension = System.IO.Path.GetExtension(file.FileName);
-                string fileName = $"Events_{Guid.NewGuid()}" + extension;
-                string remoteUrl = await this.cloudinaryService.UploadFile(file, fileName, extension, FILESFOLDER);
-
-                File uploadFile = new File
+                foreach (var file in inputModel.Files)
                 {
-                    Extension = extension,
-                    RemoteUrl = remoteUrl,
-                };
+                    string extension = System.IO.Path.GetExtension(file.FileName);
+                    string fileName = $"Events_{Guid.NewGuid()}" + extension;
+                    string remoteUrl = await this.cloudinaryService.UploadFile(file, fileName, extension, FILESFOLDER);
 
-                @event.Files.Add(uploadFile);
+                    File uploadFile = new File
+                    {
+                        Extension = extension,
+                        RemoteUrl = remoteUrl,
+                    };
+
+                    @event.Files.Add(uploadFile);
+                }
             }
 
             await this.eventsRepository.AddAsync(@event);
@@ -100,7 +103,7 @@
         {
             return this.eventsRepository
                 .All()
-                .Where(e => DateTime.UtcNow < e.StartDate && e.IsApproved == true)
+                .Where(e => DateTime.UtcNow <= e.StartDate && e.IsApproved == true)
                 .To<T>()
                 .ToList();
         }
@@ -109,7 +112,7 @@
         {
             return this.eventsRepository
                 .All()
-                .Where(e => DateTime.UtcNow > e.EndDate && e.IsApproved == true)
+                .Where(e => DateTime.UtcNow >= e.EndDate && e.IsApproved == true)
                 .To<T>()
                 .ToList();
         }

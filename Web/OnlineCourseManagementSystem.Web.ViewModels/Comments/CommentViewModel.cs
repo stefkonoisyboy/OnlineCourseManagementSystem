@@ -12,6 +12,8 @@
 
     public class CommentViewModel : IMapFrom<Comment>, IHaveCustomMappings
     {
+        public string AuthorId { get; set; }
+
         public string AuthorName { get; set; }
 
         public int Id { get; set; }
