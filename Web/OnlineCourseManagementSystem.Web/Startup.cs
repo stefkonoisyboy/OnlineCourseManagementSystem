@@ -1,13 +1,16 @@
 ﻿namespace OnlineCourseManagementSystem.Web
 {
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
 
     using CloudinaryDotNet;
+    using LazZiya.ExpressLocalization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Features;
+    using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.ResponseCompression;
     using Microsoft.EntityFrameworkCore;
@@ -25,6 +28,7 @@
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Services.Messaging;
     using OnlineCourseManagementSystem.Web.Hubs;
+    using OnlineCourseManagementSystem.Web.LocalizationResources;
     using OnlineCourseManagementSystem.Web.ViewModels;
     using OnlineCourseManagementSystem.Web.ViewModels.VideoConferences;
     using SmartBreadcrumbs.Extensions;
@@ -64,6 +68,8 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
+            services.AddCors();
+
             services.Configure<TwilioSettings>(settings =>
             {
                 settings.AccountSid = this.configuration["Twilio:TwilioAccountSid"];
@@ -89,6 +95,7 @@
                     {
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     }).AddRazorRuntimeCompilation();
+
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -137,6 +144,7 @@
             services.AddTransient<ICertificatesService, CertificatesService>();
             services.AddTransient<IMessageQAsService, MessageQAsService>();
             services.AddTransient<IDashboardService, DashboardService>();
+            services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>();
 
             services.AddSingleton<ITwilioService, TwilioService>();
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
@@ -173,6 +181,15 @@
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(builder =>
+            {
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
 

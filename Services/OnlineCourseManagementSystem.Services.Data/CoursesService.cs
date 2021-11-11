@@ -25,6 +25,7 @@
         private readonly IDeletableEntityRepository<CourseLecturer> courseLecturersRepository;
         private readonly IDeletableEntityRepository<UserCourse> userCoursesRepository;
         private readonly IDeletableEntityRepository<Completition> completitionsRepository;
+        private readonly IDeletableEntityRepository<Skill> skillsRepository;
         private readonly Cloudinary cloudinary;
 
         public CoursesService(
@@ -34,6 +35,7 @@
             IDeletableEntityRepository<CourseLecturer> courseLecturersRepository,
             IDeletableEntityRepository<UserCourse> userCoursesRepository,
             IDeletableEntityRepository<Completition> completitionsRepository,
+            IDeletableEntityRepository<Skill> skillsRepository,
             Cloudinary cloudinary)
         {
             this.coursesRepository = coursesRepository;
@@ -42,6 +44,7 @@
             this.courseLecturersRepository = courseLecturersRepository;
             this.userCoursesRepository = userCoursesRepository;
             this.completitionsRepository = completitionsRepository;
+            this.skillsRepository = skillsRepository;
             this.cloudinary = cloudinary;
         }
 
@@ -77,12 +80,32 @@
         {
             Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == input.CourseId);
 
+            if (this.skillsRepository.All().Count(s => s.CourseId == course.Id) > 0)
+            {
+                throw new ArgumentException("Cannot edit already created course! Only admin has this permission!");
+            }
+
             course.Price = input.Price;
             course.StartDate = input.StartDate;
             course.SubjectId = input.SubjectId;
             course.RecommendedDuration = input.RecommendedDuration;
+            course.TrailerRemoteUrl = input.TrailerRemoteUrl;
 
             await this.coursesRepository.SaveChangesAsync();
+
+            string[] skills = input.Skills.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+            foreach (var skill in skills)
+            {
+                Skill skillDb = new Skill
+                {
+                    Text = skill,
+                    CourseId = course.Id,
+                };
+
+                await this.skillsRepository.AddAsync(skillDb);
+            }
+
+            await this.skillsRepository.SaveChangesAsync();
 
             string fileName = course.Name + Guid.NewGuid().ToString();
             string remoteUrl = await this.UploadImageAsync(input.Image, fileName);

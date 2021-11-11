@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnlineCourseManagementSystem.Web.ViewModels.Exams;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -31,6 +32,8 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Paging
         public int LecturerCoursesCount { get; set; }
 
         public int LecturesByCreatorIdCount { get; set; }
+
+        public int ExamsCount { get; set; }
 
         public int ItemsPerPage { get; set; }
 

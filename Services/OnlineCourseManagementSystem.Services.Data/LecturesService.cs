@@ -48,7 +48,7 @@
             await this.filesRepository.SaveChangesAsync();
         }
 
-        public async Task AddPresentationFileAsync(AddFileToLectureInputModel input)
+        public async Task AddPresentationFileAsync(AddPresentationToLectureInputModel input)
         {
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == input.LectureId);
 
@@ -69,7 +69,7 @@
             await this.filesRepository.SaveChangesAsync();
         }
 
-        public async Task AddWordFileAsync(AddFileToLectureInputModel input)
+        public async Task AddWordFileAsync(AddWordDocumentToLectureInputModel input)
         {
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == input.LectureId);
 

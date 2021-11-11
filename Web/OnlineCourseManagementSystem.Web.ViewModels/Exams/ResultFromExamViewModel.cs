@@ -39,6 +39,8 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
 
         public DateTime? SeenOn { get; set; }
 
+        public DateTime FinishedOn { get; set; }
+
         public Status Status { get; set; }
 
         public IEnumerable<AllQuestionsByExamViewModel> Questions { get; set; }
@@ -68,7 +70,7 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
 
         private int CalculateTimeSpent()
         {
-            TimeSpan difference = this.CreatedOn - this.ExamStartDate;
+            TimeSpan difference = this.FinishedOn - this.ExamStartDate;
             int spentTime = (int)difference.TotalMinutes;
             return spentTime;
         }

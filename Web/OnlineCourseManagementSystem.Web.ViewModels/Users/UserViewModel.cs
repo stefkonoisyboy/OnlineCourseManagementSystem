@@ -12,6 +12,8 @@
 
         public string LastName { get; set; }
 
+        public string Background { get; set; }
+
         public string ProfileImageUrl { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

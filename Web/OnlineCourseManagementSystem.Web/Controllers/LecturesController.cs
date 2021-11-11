@@ -98,6 +98,7 @@
 
             input.Id = id;
             await this.lecturesService.UpdateAsync(input);
+            await this.lecturesService.UpdateModifiedOnById(id);
             this.TempData["Message"] = "Lecture updated successfully!";
 
             return this.RedirectToAction(nameof(this.AllLecturesByCreatorId));
@@ -108,7 +109,7 @@
         public async Task<IActionResult> AddWord(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            AddFileToLectureInputModel input = new AddFileToLectureInputModel
+            AddWordDocumentToLectureInputModel input = new AddWordDocumentToLectureInputModel
             {
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                 RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
@@ -121,7 +122,7 @@
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [HttpPost]
-        public async Task<IActionResult> AddWord(AddFileToLectureInputModel input, int id)
+        public async Task<IActionResult> AddWord(AddWordDocumentToLectureInputModel input, int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             if (!this.ModelState.IsValid)
@@ -148,7 +149,7 @@
         public async Task<IActionResult> AddPresentation(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            AddFileToLectureInputModel input = new AddFileToLectureInputModel
+            AddPresentationToLectureInputModel input = new AddPresentationToLectureInputModel
             {
                 CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                 RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
@@ -161,7 +162,7 @@
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [HttpPost]
-        public async Task<IActionResult> AddPresentation(AddFileToLectureInputModel input, int id)
+        public async Task<IActionResult> AddPresentation(AddPresentationToLectureInputModel input, int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             if (!this.ModelState.IsValid)

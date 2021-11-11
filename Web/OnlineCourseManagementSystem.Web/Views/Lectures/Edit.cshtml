@@ -118,11 +118,21 @@
                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <ul class="list-group">
-                                <li class="list-group-item">Dashboard</li>
-                                <li class="list-group-item">My Courses</li>
-                                <li class="list-group-item">Messages</li>
-                                <li class="list-group-item">Profile</li>
-                                <li class="list-group-item">Logout</li>
+                                <li class="list-group-item">
+                                    <a asp-controller="Dashboard" asp-action="LecturerDashboard">Dashboard</a>
+                                </li>
+                                <li href="#" class="list-group-item bg-info">
+                                    My Courses
+                                </li>
+                                <li class="list-group-item">
+                                    <a asp-controller="Users" asp-action="ManageAccountById">Profile</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                                </li>
+                                <li href="#" class="list-group-item">
+                                    <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">Logout</a>
+                                </li>
                             </ul>
                         </div>
                     </div>

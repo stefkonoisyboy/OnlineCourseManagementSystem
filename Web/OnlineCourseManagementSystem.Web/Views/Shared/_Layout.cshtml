@@ -4,6 +4,7 @@
 @using OnlineCourseManagementSystem.Web.ViewModels.Users
 @inject UserManager<ApplicationUser> userManager
 @inject OnlineCourseManagementSystem.Services.Data.IUsersService usersService
+@inject OnlineCourseManagementSystem.Services.Data.IChatbotMessagesService chatbotMessagesService
 @{
 
 }
@@ -45,7 +46,7 @@
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <!--Sidebar-->
     @*<link rel="stylesheet" href="~/css/sidebar.css" asp-append-version="true" />*@
 
@@ -99,6 +100,12 @@
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link active" aria-current="page" asp-controller="Dashboard" asp-action="AdminDashboard">Dashboard</a>
+                                    </li>
+                                }
+                                @if (this.User.Identity.IsAuthenticated)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" asp-controller="Users" asp-action="AllTeachers">Lecturers</a>
                                     </li>
                                 }
                                 <li class="nav-item dropdown">
@@ -319,6 +326,8 @@
                         </div>
                     }*@
             </div>
+
+
         </nav>
 
 
@@ -474,6 +483,15 @@
         </main>
     </div>
 
+    @if (this.User.Identity.IsAuthenticated)
+	{
+        ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+        var viewModel = new OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages.AllChatbotMessagesByCreatorIdListViewModel
+        {
+            Messages = this.chatbotMessagesService.GetAllByCreatorId<OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages.AllChatbotMessagesByCreatorIdViewModel>(user.Id),
+        };
+        <partial name="_ChatbotMessagePartial" model="viewModel" />
+	}
     <footer class="footer bg-dark border-top text-muted position-relative">
         <div class="container">
             <div class="row">
@@ -606,8 +624,6 @@
     <!--===============================================================================================-->
     <script src="~/login-form-resource/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
-    <script src="~/login-form-resource/vendor/bootstrap/js/popper.js"></script>
-    <script src="~/login-form-resource/vendor/bootstrap/js/bootstrap.min.js"></script>
     <!--===============================================================================================-->
     <script src="~/login-form-resource/vendor/select2/select2.min.js"></script>
     <!--===============================================================================================-->
@@ -619,6 +635,9 @@
     </script>
     <!--===============================================================================================-->
     <script src="~/login-form-resource/js/main.js"></script>
+
+    <!--Chatbot-->
+    @*<script src="//code.tidio.co/lwibzhmtpva9ljavaxly88sz2wp1zzck.js" async></script>*@
 
 </body>
 </html>

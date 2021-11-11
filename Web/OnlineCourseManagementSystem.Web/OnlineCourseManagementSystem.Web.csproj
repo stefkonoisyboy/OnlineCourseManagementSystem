@@ -26,7 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
     <PackageReference Include="CloudinaryDotNet" Version="1.15.2" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.2" />
+    <PackageReference Include="LazZiya.ExpressLocalization" Version="4.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
@@ -243,5 +246,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Shared\Components\QA\" />
+    <Folder Include="Views\Test\" />
   </ItemGroup>
 </Project>

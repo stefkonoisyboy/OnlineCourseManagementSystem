@@ -37,7 +37,11 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Lectures
             int weeks = days / 7;
             int years = weeks / 52;
 
-            if (seconds == 1)
+            if (seconds == 0)
+            {
+                result = "Updated now";
+            }
+            else if (seconds == 1)
             {
                 result = "1 second ago";
             }

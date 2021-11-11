@@ -663,6 +663,43 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.ToTable("ChatUsers");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.ChatbotMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMessageFromChatbot")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("ChatbotMessages");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Choice", b =>
                 {
                     b.Property<int>("Id")
@@ -2021,6 +2058,9 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("FinishedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<double>("Grade")
                         .HasColumnType("float");
 
@@ -2251,6 +2291,15 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Chat");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.ChatbotMessage", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
+                        .WithMany("ChatbotMessages")
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Choice", b =>
@@ -2782,6 +2831,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Certificates");
 
                     b.Navigation("Channels");
+
+                    b.Navigation("ChatbotMessages");
 
                     b.Navigation("Chats");
 

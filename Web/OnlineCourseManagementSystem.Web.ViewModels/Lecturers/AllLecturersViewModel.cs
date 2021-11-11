@@ -26,6 +26,8 @@
 
         public string UserAddress { get; set; }
 
+        public string UserProfileImageUrl { get; set; }
+
         public Title UserTitle { get; set; }
     }
 }

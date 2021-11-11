@@ -21,7 +21,7 @@
 
         Task SaveAnswerAsync(string userId, IFormCollection formCollection);
 
-        Task MarkAsSeenAsync(int id);
+        Task MarkAsSeenAsync(string userId, int id);
 
         Task AddExamToLectureAsync(int lectureId, AddExamToLectureInputModel input);
 
@@ -34,6 +34,10 @@
         int GetExamIdByQuestionId(int questionId);
 
         int GetDurationById(int id);
+
+        int GetExamsCountByUserId(string userId, string searchItem);
+
+        int GetResultsCountByUserId(string userId, string searchItem);
 
         int GetPointsByUserIdAndExamId(string userId, int examId);
 
@@ -57,6 +61,8 @@
 
         bool CanStartCertificate(int courseId, string userId);
 
+        bool IsExamActive(int examId);
+
         DateTime GetStartDateById(int id);
 
         T GetById<T>(int id);
@@ -65,9 +71,9 @@
 
         IEnumerable<T> GetAll<T>();
 
-        IEnumerable<T> GetAllByUserId<T>(string userId);
+        IEnumerable<T> GetAllByUserId<T>(int id, string userId, string searchItem, int itemsPerPage = 5);
 
-        IEnumerable<T> GetAllByCurrentUserId<T>(string userId);
+        IEnumerable<T> GetAllByCurrentUserId<T>(int id, string userId, string searchItem, int itemsPerPage = 5);
 
         IEnumerable<T> GetAllByLectureId<T>(int lectureId);
 

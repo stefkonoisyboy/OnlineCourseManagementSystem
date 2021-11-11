@@ -95,11 +95,11 @@
             {
                 Name = input.Name,
                 CourseId = input.CourseId,
-                IsCertificated = true,
                 LecturerId = input.LecturerId,
                 StartDate = input.StartDate,
                 Duration = input.Duration,
                 CreatorId = input.CreatorId,
+                Description = input.Description,
             };
 
             await this.examsRepository.AddAsync(exam);
@@ -131,12 +131,24 @@
                 .ToList();
         }
 
-        public IEnumerable<T> GetAllByCurrentUserId<T>(string userId)
+        public IEnumerable<T> GetAllByCurrentUserId<T>(int id, string userId, string searchItem, int itemsPerPage = 5)
         {
-            return this.userExamsRepository
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return this.userExamsRepository
                 .All()
                 .Where(ue => ue.UserId == userId)
                 .OrderByDescending(ue => ue.CreatedOn)
+                .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+            }
+
+            return this.userExamsRepository
+                .All()
+                .Where(ue => ue.UserId == userId && (ue.Exam.Course.Name.ToLower().Contains(searchItem.ToLower()) || ue.Exam.Name.Contains(searchItem.ToLower())))
+                .OrderByDescending(ue => ue.CreatedOn)
+                .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()
                 .ToList();
         }
@@ -152,14 +164,26 @@
         }
 
         // Todo: Add check if exams are active when switching to production environment
-        public IEnumerable<T> GetAllByUserId<T>(string userId)
+        public IEnumerable<T> GetAllByUserId<T>(int id, string userId, string searchItem, int itemsPerPage = 5)
         {
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return this.examsRepository
+               .All()
+               .Where(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId))
+               .OrderByDescending(e => e.StartDate)
+               .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+               .To<T>()
+               .ToList();
+            }
+
             return this.examsRepository
-                .All()
-                .Where(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId))
-                .OrderByDescending(e => e.StartDate)
-                .To<T>()
-                .ToList();
+               .All()
+               .Where(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId) && (e.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Description.ToLower().Contains(searchItem.ToLower())))
+               .OrderByDescending(e => e.StartDate)
+               .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+               .To<T>()
+               .ToList();
         }
 
         public IEnumerable<SelectListItem> GetAllExamsAsSelectListItemsByCreatorId(string creatorId)
@@ -263,6 +287,20 @@
                 .ExamId;
         }
 
+        public int GetExamsCountByUserId(string userId, string searchItem)
+        {
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return this.examsRepository
+                .All()
+                .Count(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId));
+            }
+
+            return this.examsRepository
+                .All()
+                .Count(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId) && (e.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Description.ToLower().Contains(searchItem.ToLower())));
+        }
+
         public double GetGradeByUserIdAndCourseId(string userId, int courseId)
         {
             return this.userExamsRepository
@@ -287,6 +325,20 @@
                 .Sum(a => a.Question.Points);
         }
 
+        public int GetResultsCountByUserId(string userId, string searchItem)
+        {
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return this.userExamsRepository
+                .All()
+                .Count(ue => ue.UserId == userId);
+            }
+
+            return this.userExamsRepository
+                .All()
+                .Count(ue => ue.UserId == userId && (ue.Exam.Course.Name.ToLower().Contains(searchItem.ToLower()) || ue.Exam.Name.Contains(searchItem.ToLower())));
+        }
+
         public DateTime GetStartDateById(int id)
         {
             return this.examsRepository
@@ -302,6 +354,21 @@
                 .Any(ue => ue.ExamId == examId && ue.UserId == userId);
         }
 
+        public bool IsExamActive(int examId)
+        {
+            Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == examId);
+            DateTime endDate = exam.StartDate.AddMinutes(exam.Duration);
+
+            if (DateTime.Now < exam.StartDate || DateTime.Now > exam.EndDate)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public bool IsExamAddedToLecture(int examId, int lectureId)
         {
             Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == examId);
@@ -315,9 +382,9 @@
             return exam.IsCertificated.HasValue ? exam.IsCertificated.Value : false;
         }
 
-        public async Task MarkAsSeenAsync(int id)
+        public async Task MarkAsSeenAsync(string userId, int id)
         {
-            UserExam userExam = this.userExamsRepository.All().FirstOrDefault(ue => ue.Id == id);
+            UserExam userExam = this.userExamsRepository.All().FirstOrDefault(ue => ue.UserId == userId && ue.ExamId == id);
             userExam.SeenOn = DateTime.UtcNow;
             await this.userExamsRepository.SaveChangesAsync();
         }
@@ -419,6 +486,7 @@
                     ExamId = examId,
                     Grade = grade,
                     Status = Status.Graded,
+                    FinishedOn = DateTime.Now,
                 };
 
                 Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == userExam.ExamId);
@@ -434,7 +502,7 @@
                     await this.completitionsRepository.SaveChangesAsync();
                 }
 
-                if (exam.IsCertificated.Value)
+                if (exam.IsCertificated.HasValue && exam.IsCertificated.Value)
                 {
                     Certificate certificate = new Certificate
                     {
@@ -462,6 +530,7 @@
             exam.Description = input.Description;
             exam.CourseId = input.CourseId;
             exam.StartDate = input.StartDate;
+            exam.Duration = input.Duration;
 
             await this.examsRepository.SaveChangesAsync();
         }

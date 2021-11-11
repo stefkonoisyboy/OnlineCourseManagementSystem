@@ -1,5 +1,6 @@
 ﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Home
 {
+    using OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
@@ -22,5 +23,7 @@
         public IEnumerable<AllReviewsByCourseIdViewModel> Reviews { get; set; }
 
         public CurrentUserViewModel CurrentUser { get; set; }
+
+        public AllChatbotMessagesByCreatorIdListViewModel Chatbot { get; set; }
     }
 }
