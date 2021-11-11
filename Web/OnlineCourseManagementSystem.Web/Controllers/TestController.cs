@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace OnlineCourseManagementSystem.Web.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class TestController : ControllerBase
+    public class TestController : Controller
     {
-        [HttpGet]
-        public ActionResult Index()
+        public IActionResult SomeAction()
         {
-            return this.Ok();
+            return this.View();
         }
     }
 }

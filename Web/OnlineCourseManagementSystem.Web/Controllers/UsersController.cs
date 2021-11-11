@@ -13,6 +13,7 @@
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using SmartBreadcrumbs.Attributes;
@@ -148,6 +149,13 @@
 
             this.ViewData["BreadcrumbNode"] = allStudentsNode;
             return this.View(students);
+        }
+
+        [Authorize]
+        public IActionResult AllTeachers()
+        {
+            this.ViewData["CurrentUserHeading"] = "Messages";
+            return this.View(this.usersService.GetAllLecturers<UserViewModel>());
         }
     }
 }

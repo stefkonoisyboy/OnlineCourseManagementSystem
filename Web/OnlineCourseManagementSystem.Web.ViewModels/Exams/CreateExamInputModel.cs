@@ -7,6 +7,8 @@
 
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public class CreateExamInputModel
     {
@@ -34,5 +36,8 @@
         public int Duration { get; set; }
 
         public string CreatorId { get; set; }
+        public IEnumerable<AllRecommendedCoursesByIdViewModel> RecommendedCourses { get; set; }
+
+        public CurrentUserViewModel CurrentUser { get; set; }
     }
 }

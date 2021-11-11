@@ -15,6 +15,7 @@
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels;
     using OnlineCourseManagementSystem.Web.ViewModels.Assignments;
+    using OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages;
     using OnlineCourseManagementSystem.Web.ViewModels.ContactMessages;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Home;
@@ -30,6 +31,7 @@
         private readonly IReviewsService reviewsService;
         private readonly IUsersService usersService;
         private readonly IContactMessagesService contactMessagesService;
+        private readonly IChatbotMessagesService chatbotMessagesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public HomeController(
@@ -39,6 +41,7 @@
             IReviewsService reviewsService,
             IUsersService usersService,
             IContactMessagesService contactMessagesService,
+            IChatbotMessagesService chatbotMessagesService,
             UserManager<ApplicationUser> userManager)
         {
             this.assignmentsService = assignmentsService;
@@ -47,6 +50,7 @@
             this.reviewsService = reviewsService;
             this.usersService = usersService;
             this.contactMessagesService = contactMessagesService;
+            this.chatbotMessagesService = chatbotMessagesService;
             this.userManager = userManager;
         }
 
@@ -65,6 +69,10 @@
                     FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                     CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                     UserId = user.Id,
+                    Chatbot = new AllChatbotMessagesByCreatorIdListViewModel
+                    {
+                        Messages = this.chatbotMessagesService.GetAllByCreatorId<AllChatbotMessagesByCreatorIdViewModel>(user.Id),
+                    },
                 };
 
                 return this.View(homeViewModel);
@@ -76,6 +84,10 @@
                     Reviews = this.reviewsService.GetTop3Recent<AllReviewsByCourseIdViewModel>(),
                     FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                     CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
+                    Chatbot = new AllChatbotMessagesByCreatorIdListViewModel
+                    {
+                        Messages = this.chatbotMessagesService.GetAllByCreatorId<AllChatbotMessagesByCreatorIdViewModel>(user.Id),
+                    },
                 };
                 return this.View(homeViewModel);
             }

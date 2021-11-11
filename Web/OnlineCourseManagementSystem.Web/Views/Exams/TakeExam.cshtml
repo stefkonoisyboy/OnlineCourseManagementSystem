@@ -9,9 +9,13 @@
     char[] letters = new char[4] { 'a', 'b', 'c', 'd' };
     ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
-    TimeSpan difference = DateTime.UtcNow - this.Model.StartDate;
-    double spentTime = difference.TotalMinutes;
-    double remainingTime = (double)(this.Model.Duration - spentTime);
+    //TimeSpan difference = DateTime.UtcNow - this.Model.StartDate;
+    //double spentTime = difference.TotalMinutes;
+    //double remainingTime = (double)(this.Model.Duration - spentTime);
+
+    DateTime endDate = this.Model.StartDate.AddMinutes(this.Model.Duration);
+    TimeSpan difference = endDate - DateTime.Now;
+    double remainingTime = difference.TotalMinutes;
 }
 
 <h1 class="text-success">@this.ViewData["Title"]</h1>
@@ -141,7 +145,7 @@
 
                 <br />
                 <div align="center">
-                    <div id="exam_timer" data-timer="@(this.Model.Duration * 60)" style="max-width: 400px; width: 100%; height: 200px;">
+                    <div id="exam_timer" data-timer="@(remainingTime * 60)" style="max-width: 400px; width: 100%; height: 200px;">
                     </div>
                 </div>
             </div>

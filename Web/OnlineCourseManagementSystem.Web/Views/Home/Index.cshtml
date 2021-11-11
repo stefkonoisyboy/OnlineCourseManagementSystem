@@ -16,6 +16,13 @@
     </div>
 }
 
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.TempData["Message"]
+    </div>
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -350,7 +357,7 @@
             </div>
         </div>
     </div>
-   
+
     <div class="shadow-lg p-3 mb-5 bg-white rounded text-center">
         <h1>Feedback</h1>
         <p class="text-black-50" style="font-size: 20px;">How others use E-learning to improve their skills</p>
@@ -527,6 +534,8 @@
             }
         </div>
     </div>
+
+    @*<partial name="_ChatbotMessagePartial" model="this.Model.Chatbot" />*@
 
     @section Scripts {
         <script type="text/javascript">

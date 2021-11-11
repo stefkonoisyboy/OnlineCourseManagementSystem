@@ -53,16 +53,16 @@
 
 <body class="bg-light">
 
-    <div class="row text-center text-white shadow-lg p-3 mb-5 rounded" style="background-color: #234465;">
+    <div class="row text-center text-white shadow-lg p-3 mb-5 rounded bg-info" style="background-color: #234465;">
         <h1 class="text-white">
             <img src="@this.Model.FileRemoteUrl" alt="courseImage" height="80" width="80" />
             @this.Model.Name
         </h1>
-        <p class="text-white" style="text-align: left; color: white;">
+        <p class="text-white" style="text-align: left; color: white !important;">
             @Html.Raw(string.Join("", this.Model.Description.Take(200).ToList()))
         </p>
         <div class="text-center">
-            <button style="background-color: #234465; border-color: #234465; border-top: none; border-left: none; border-bottom: none; border-right: none;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <button class="bg-info" style="background-color: #234465; border-color: #234465; border-radius: 50%; border-top: none; border-left: none; border-bottom: none; border-right: none;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <p style="color: #ffa000;">
                     LOOK MORE
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
@@ -73,7 +73,7 @@
         </div>
         <div class="collapse" id="collapseExample">
             <div>
-                <p class="text-white" style="text-align: left;">@Html.Raw(string.Join("", this.Model.Description.Skip(200).ToList()))</p>
+                <p style="text-align: left; color: #515365;">@Html.Raw(string.Join("", this.Model.Description.Skip(200).ToList()))</p>
             </div>
         </div>
     </div>
@@ -272,9 +272,15 @@
                             <div class="accordion-body">
                                 <ul class="list-group">
                                     <li class="list-group-item bg-info">Curriculum</li>
-                                    <li class="list-group-item">Course Forums</li>
-                                    <li class="list-group-item">Start Certification</li>
-                                    <li class="list-group-item">Quiz Results</li>
+                                    <li class="list-group-item">
+                                        <a asp-controller="Posts" asp-action="All">Course Forums</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a asp-controller="Exams" asp-action="MyResults">Quiz Results</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -293,11 +299,21 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <ul class="list-group">
-                                    <li class="list-group-item">Dashboard</li>
-                                    <li class="list-group-item">My Courses</li>
-                                    <li class="list-group-item">Messages</li>
-                                    <li class="list-group-item">Profile</li>
-                                    <li class="list-group-item">Logout</li>
+                                    <li class="list-group-item">
+                                        <a asp-controller="Dashboard" asp-action="LecturerDashboard">Dashboard</a>
+                                    </li>
+                                    <li href="#" class="list-group-item bg-info">
+                                        My Courses
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a asp-controller="Users" asp-action="ManageAccountById">Profile</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                                    </li>
+                                    <li href="#" class="list-group-item">
+                                        <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">Logout</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

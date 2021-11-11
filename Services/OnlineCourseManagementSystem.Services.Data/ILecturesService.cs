@@ -17,9 +17,9 @@
 
         Task DeleteAsync(int id);
 
-        Task AddWordFileAsync(AddFileToLectureInputModel input);
+        Task AddWordFileAsync(AddWordDocumentToLectureInputModel input);
 
-        Task AddPresentationFileAsync(AddFileToLectureInputModel input);
+        Task AddPresentationFileAsync(AddPresentationToLectureInputModel input);
 
         Task AddVideoAsync(AddVideoToLectureInputModel input);
 

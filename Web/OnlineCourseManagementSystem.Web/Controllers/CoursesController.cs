@@ -20,6 +20,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
 
     public class CoursesController : Controller
     {
@@ -62,7 +63,6 @@
         }
 
         [Authorize(Roles = "Student,Lecturer,Administrator")]
-        [Breadcrumb(" Course Details ", FromAction = "AllByCurrentUser")]
         public IActionResult ById(int id)
         {
             CourseByIdViewModel viewModel = this.coursesService.GetById<CourseByIdViewModel>(id);
@@ -70,6 +70,31 @@
             viewModel.Skills = this.skillsService.GetAllByCourseId<AllSkillsByCourseIdViewModel>(id);
             viewModel.Lecturers = this.lecturersService.GetAllByCourseId<AllLecturersByIdViewModel>(id);
             viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(id);
+
+            if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+            {
+                BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
+
+                BreadcrumbNode courseDetailsNode = new MvcBreadcrumbNode("ById", "Courses", "Course Details")
+                {
+                    Parent = mycoursesNode,
+                    RouteValues = new { id = id },
+                };
+
+                this.ViewData["BreadcrumbNode"] = courseDetailsNode;
+            }
+            else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+            {
+                BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+
+                BreadcrumbNode courseDetailsNode = new MvcBreadcrumbNode("ById", "Courses", "Course Details")
+                {
+                    Parent = mycoursesNode,
+                    RouteValues = new { id = id },
+                };
+
+                this.ViewData["BreadcrumbNode"] = courseDetailsNode;
+            }
 
             return this.View(viewModel);
         }
@@ -183,6 +208,7 @@
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Breadcrumb("My Courses", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> AllByCurrentLecturer(int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
@@ -273,8 +299,17 @@
             }
 
             input.UserId = user.Id;
-            await this.coursesService.CreateMetaAsync(input);
-            this.TempData["Message"] = "Meta information about the course successfully created!";
+
+            try
+            {
+                await this.coursesService.CreateMetaAsync(input);
+                this.TempData["Message"] = "Meta information about the course successfully created!";
+            }
+            catch (Exception ex)
+            {
+                this.TempData["AlertMessage"] = ex.Message;
+            }
+
             this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.RedirectToAction("AllLecturesByCreatorId", "Lectures");

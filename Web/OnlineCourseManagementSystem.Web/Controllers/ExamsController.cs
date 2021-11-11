@@ -2,9 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
-
+    using ClosedXML.Excel;
+    using iTextSharp.text.pdf;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
@@ -52,12 +55,19 @@
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [Breadcrumb("Create Exam", FromAction = "All")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
             CreateExamInputModel input = new CreateExamInputModel
             {
                 CourseItems = this.coursesService.GetAllAsSelectListItems(),
             };
+
+            input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+            input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.View(input);
         }
@@ -66,13 +76,15 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateExamInputModel input)
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             if (!this.ModelState.IsValid)
             {
                 input.CourseItems = this.coursesService.GetAllAsSelectListItems();
+                input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+                input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
                 return this.View(input);
             }
 
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             input.CreatorId = user.Id;
             input.LecturerId = user.Id;
             await this.examsService.CreateAsync(input);
@@ -111,8 +123,6 @@
             }
             else
             {
-                //await this.examsService.AddExamToLectureAsync(lectureId, input);
-
                 try
                 {
                     await this.examsService.AddExamToLectureAsync(lectureId, input);
@@ -132,10 +142,15 @@
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [Breadcrumb("Edit Exam", FromAction = "All")]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             EditExamInputModel input = this.examsService.GetById<EditExamInputModel>(id);
             input.CourseItems = this.coursesService.GetAllAsSelectListItems();
+            input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+            input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.View(input);
         }
@@ -144,9 +159,12 @@
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditExamInputModel input)
         {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             if (!this.ModelState.IsValid)
             {
                 input.CourseItems = this.coursesService.GetAllAsSelectListItems();
+                input.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+                input.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
                 return this.View(input);
             }
 
@@ -179,12 +197,17 @@
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
         [Breadcrumb("My Exams", FromAction = "Index", FromController = typeof(HomeController))]
-        public async Task<IActionResult> AllByUser()
+        public async Task<IActionResult> AllByUser(string input, int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            const int ItemsPerPage = 5;
             AllExamsByUserIdListViewModel viewModel = new AllExamsByUserIdListViewModel
             {
-                Exams = this.examsService.GetAllByUserId<AllExamsByUserIdViewModel>(user.Id),
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                ActiveCoursesCount = this.examsService.GetExamsCountByUserId(user.Id, input),
+                Exams = this.examsService.GetAllByUserId<AllExamsByUserIdViewModel>(id, user.Id, input, ItemsPerPage),
+                Name = input,
             };
 
             return this.View(viewModel);
@@ -192,12 +215,20 @@
 
         [Authorize(Roles = GlobalConstants.StudentRoleName)]
         [Breadcrumb("My Results", FromAction = "Index", FromController = typeof(HomeController))]
-        public async Task<IActionResult> MyResults()
+        public async Task<IActionResult> MyResults(string input, int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            IEnumerable<ResultFromExamViewModel> viewModel = this.examsService.GetAllByCurrentUserId<ResultFromExamViewModel>(user.Id);
+            const int ItemsPerPage = 2;
+            ResultFromExamListViewModel viewModel = new ResultFromExamListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                ActiveCoursesCount = this.examsService.GetResultsCountByUserId(user.Id, input),
+                Exams = this.examsService.GetAllByCurrentUserId<ResultFromExamViewModel>(id, user.Id, input, ItemsPerPage),
+                Name = input,
+            };
 
-            foreach (var item in viewModel)
+            foreach (var item in viewModel.Exams)
             {
                 item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId);
                 item.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(item.ExamId, user.Id);
@@ -221,23 +252,32 @@
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
-            if (this.examsService.HasUserMadeCertainExam(id, user.Id))
+            if (!this.examsService.IsExamActive(id))
             {
-                this.TempData["Alert"] = "You have already done this exam!";
+                this.TempData["Alert"] = "This exam is not active!";
                 return this.RedirectToAction(nameof(this.AllByUser));
             }
             else
             {
-                TakeExamInputModel input = new TakeExamInputModel
+                if (this.examsService.HasUserMadeCertainExam(id, user.Id))
                 {
-                    ExamId = id,
-                    Duration = this.examsService.GetDurationById(id),
-                    Name = this.examsService.GetNameById(id),
-                    Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id),
-                    Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id),
-                };
+                    this.TempData["Alert"] = "You have already done this exam!";
+                    return this.RedirectToAction(nameof(this.AllByUser));
+                }
+                else
+                {
+                    TakeExamInputModel input = new TakeExamInputModel
+                    {
+                        ExamId = id,
+                        StartDate = this.examsService.GetStartDateById(id),
+                        Duration = this.examsService.GetDurationById(id),
+                        Name = this.examsService.GetNameById(id),
+                        Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id),
+                        Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id),
+                    };
 
-                return this.View(input);
+                    return this.View(input);
+                }
             }
         }
 
@@ -316,6 +356,7 @@
             int usersCountOnCertainExam = this.examsService.GetCountOfAllUsersWhoPassedCertainExam(id);
             double usersCountWithLowerGradesOnCertainExam = this.examsService.GetCountOfUsersWithLowerGradesOnCertainExam(id, viewModel.Grade);
             viewModel.CompareRateInPercents = ((double)(usersCountWithLowerGradesOnCertainExam / usersCountOnCertainExam)) * 100;
+            await this.examsService.MarkAsSeenAsync(user.Id, id);
 
             return this.View("Result", viewModel);
         }
@@ -351,6 +392,143 @@
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             await this.examsService.SaveAnswerAsync(user.Id, formCollection);
             return this.RedirectToAction(nameof(this.TakeExam), new { id, page });
+        }
+
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        public async Task<IActionResult> ExportMyExamsAsCSV()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Name,Type,Course,Description,PassMarks,TotalMarks");
+
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllExamsByUserIdListViewModel viewModel = new AllExamsByUserIdListViewModel
+            {
+                Exams = this.examsService.GetAllByUserId<AllExamsByUserIdViewModel>(1, user.Id, string.Empty, int.MaxValue),
+            };
+
+            foreach (var exam in viewModel.Exams)
+            {
+                sb.AppendLine($"{exam.Name},{exam.ExamType},{exam.CourseName},{exam.Description},{exam.PassMarks},{exam.TotalMarks}");
+            }
+
+            return this.File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "MyExamsInfo.csv");
+        }
+
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        public async Task<IActionResult> ExportMyExamsAsExcel()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllExamsByUserIdListViewModel viewModel = new AllExamsByUserIdListViewModel
+            {
+                Exams = this.examsService.GetAllByUserId<AllExamsByUserIdViewModel>(1, user.Id, string.Empty, int.MaxValue),
+            };
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("MyExams");
+                int currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Name";
+                worksheet.Cell(currentRow, 2).Value = "Type";
+                worksheet.Cell(currentRow, 3).Value = "Course";
+                worksheet.Cell(currentRow, 4).Value = "Description";
+                worksheet.Cell(currentRow, 5).Value = "PassMarks";
+                worksheet.Cell(currentRow, 6).Value = "TotalMarks";
+
+                foreach (var exam in viewModel.Exams)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = exam.Name;
+                    worksheet.Cell(currentRow, 2).Value = exam.ExamType;
+                    worksheet.Cell(currentRow, 3).Value = exam.CourseName;
+                    worksheet.Cell(currentRow, 4).Value = exam.Description;
+                    worksheet.Cell(currentRow, 5).Value = exam.PassMarks;
+                    worksheet.Cell(currentRow, 6).Value = exam.TotalMarks;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return this.File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MyExamsInfo.xlsx");
+                }
+            }
+        }
+
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        public async Task<IActionResult> ExportMyResultsAsCSV()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Name,Result,Points,Correct Answers,Course,Active from,Time,Status,Active to,Seen on");
+
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            IEnumerable<ResultFromExamViewModel> viewModel = this.examsService.GetAllByCurrentUserId<ResultFromExamViewModel>(1, user.Id, string.Empty, int.MaxValue);
+
+            foreach (var item in viewModel)
+            {
+                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId);
+                item.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(item.ExamId, user.Id);
+            }
+
+            foreach (var exam in viewModel)
+            {
+                string seenOn = exam.SeenOn.HasValue ? exam.SeenOn.Value.ToString() : "Not seen yet";
+                sb.AppendLine($"{exam.ExamName},{exam.SuccessRate.ToString("f2")},{exam.PointsEarned},{exam.CorrectAnswers},{exam.ExamCourseName},{exam.ExamStartDate},{exam.TimeSpent},{exam.Status.ToString()},{exam.ExamEndDate},{seenOn}");
+            }
+
+            return this.File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "MyResultsInfo.csv");
+        }
+
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        public async Task<IActionResult> ExportMyResultsAsExcel()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            IEnumerable<ResultFromExamViewModel> viewModel = this.examsService.GetAllByCurrentUserId<ResultFromExamViewModel>(1, user.Id, string.Empty, int.MaxValue);
+
+            foreach (var item in viewModel)
+            {
+                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId);
+                item.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(item.ExamId, user.Id);
+            }
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("MyExams");
+                int currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Name";
+                worksheet.Cell(currentRow, 2).Value = "Result";
+                worksheet.Cell(currentRow, 3).Value = "Points";
+                worksheet.Cell(currentRow, 4).Value = "Correct Answers";
+                worksheet.Cell(currentRow, 5).Value = "Course";
+                worksheet.Cell(currentRow, 6).Value = "Active from";
+                worksheet.Cell(currentRow, 7).Value = "Time";
+                worksheet.Cell(currentRow, 8).Value = "Status";
+                worksheet.Cell(currentRow, 9).Value = "Active to";
+                worksheet.Cell(currentRow, 10).Value = "Seen to";
+
+                foreach (var exam in viewModel)
+                {
+                    string seenOn = exam.SeenOn.HasValue ? exam.SeenOn.Value.ToString() : "Not seen yet";
+
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = exam.ExamName;
+                    worksheet.Cell(currentRow, 2).Value = exam.SuccessRate.ToString("f2");
+                    worksheet.Cell(currentRow, 3).Value = exam.PointsEarned;
+                    worksheet.Cell(currentRow, 4).Value = exam.CorrectAnswers;
+                    worksheet.Cell(currentRow, 5).Value = exam.ExamCourseName;
+                    worksheet.Cell(currentRow, 6).Value = exam.ExamStartDate;
+                    worksheet.Cell(currentRow, 7).Value = exam.TimeSpent;
+                    worksheet.Cell(currentRow, 8).Value = exam.Status.ToString();
+                    worksheet.Cell(currentRow, 9).Value = exam.ExamEndDate;
+                    worksheet.Cell(currentRow, 10).Value = seenOn;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return this.File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MyResultsInfo.xlsx");
+                }
+            }
         }
     }
 }

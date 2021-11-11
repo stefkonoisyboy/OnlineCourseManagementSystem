@@ -11,6 +11,10 @@
     </div>
 }
 
+<head>
+    <link href="~/css/responsiveTables.css" rel="stylesheet" />
+</head>
+
 <div class="row">
     <div class="alert alert-dark col-md-2" role="alert">
         @this.ViewData["Title"]
@@ -24,24 +28,24 @@
                 <table class="table-bordered table-hover table-striped col-md-12">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Course</th>
-                            <th>Lecturer</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Options</th>
+                            <th class="priority-1">Name</th>
+                            <th class="priority-2">Course</th>
+                            <th class="priority-3">Lecturer</th>
+                            <th class="priority-4">Start Date</th>
+                            <th class="priority-5">End Date</th>
+                            <th class="priority-6">Options</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var exam in this.Model.Exams)
                         {
                             <tr>
-                                <td>@exam.Name</td>
-                                <td>@exam.CourseName</td>
-                                <td>@(exam.LecturerFirstName + ' ' + exam.LecturerLastName)</td>
-                                <td>@exam.StartDate.ToString("yyyy-MM-dd HH:mm tt")</td>
-                                <td>@exam.EndDate.ToString("yyyy-MM-dd HH:mm tt")</td>
-                                <td>
+                                <td class="priority-1">@exam.Name</td>
+                                <td class="priority-2">@exam.CourseName</td>
+                                <td class="priority-3">@(exam.LecturerFirstName + ' ' + exam.LecturerLastName)</td>
+                                <td class="priority-4">@exam.StartDate.ToString("yyyy-MM-dd HH:mm tt")</td>
+                                <td class="priority-5">@exam.EndDate.ToString("yyyy-MM-dd HH:mm tt")</td>
+                                <td class="priority-6">
                                     <a asp-controller="Exams" asp-action="Details" asp-route-id="@exam.Id" class=" btn btn-secondary" style="background:#137cdc">
                                         <i class="fa fa-info"></i>
                                         Details

@@ -22,5 +22,7 @@
         public Status Status { get; set; }
 
         public DateTime? SeenOn { get; set; }
+
+        public DateTime FinishedOn { get; set; }
     }
 }

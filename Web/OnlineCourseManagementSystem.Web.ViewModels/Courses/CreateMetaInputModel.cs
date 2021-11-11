@@ -42,6 +42,14 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
         [Required]
         public int RecommendedDuration { get; set; }
 
+        [Required]
+        [Display(Name = "Skills (list all skills, separated by a semi-colon)")]
+        public string Skills { get; set; }
+
+        [Required]
+        [Display(Name = "Trailer (Video from YouTube)")]
+        public string TrailerRemoteUrl { get; set; }
+
         [ImageExtensionValidationAttribute(ErrorMessage = "Invalid file format!")]
         public IFormFile Image { get; set; }
 

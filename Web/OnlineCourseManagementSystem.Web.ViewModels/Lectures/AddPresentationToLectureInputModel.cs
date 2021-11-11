@@ -9,16 +9,9 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
-    public class AddFileToLectureInputModel
+    public class AddPresentationToLectureInputModel : AddBaseFileToLectureInputModel
     {
-        public string UserId { get; set; }
-
-        public int LectureId { get; set; }
-
+        [PresentationExtension(ErrorMessage = "The provided file is not a presentation!")]
         public IFormFile File { get; set; }
-
-        public IEnumerable<AllRecommendedCoursesByIdViewModel> RecommendedCourses { get; set; }
-
-        public CurrentUserViewModel CurrentUser { get; set; }
     }
 }

@@ -1,0 +1,129 @@
+﻿@model IEnumerable<OnlineCourseManagementSystem.Web.ViewModels.Users.UserViewModel>
+@{ 
+    this.ViewData["Title"] = "Lecturers";
+    int lecturerIndex = 1;
+}
+
+<style>
+    .hoverable:hover {
+        background-color: orangered;
+        opacity: 0.4;
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+    }
+
+    .visible {
+        visibility: visible;
+    }
+
+    .non-visible {
+        visibility: hidden;
+    }
+</style>
+
+<body class="bg-light">
+    <h3 class="text-center mr-5" style="color: #234465;">@this.ViewData["Title"]</h3>
+    <div class="row">
+        @foreach (var lecturer in this.Model)
+        {
+            <div class="modal fade" id="staticBackdrop-@lecturerIndex" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@lecturerIndex" aria-hidden="true">
+                <div class="modal-dialog bg-light">
+                    <div class="modal-content w-100">
+                        <div class="modal-header" style="background-color: #ffa000;">                           
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            @if (lecturer.ProfileImageUrl == null)
+                            {
+                                <div class="text-center row">
+                                    <div class="col-md-3">
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="rounded-circle text-center d-flex justify-content-center align-items-center bg-secondary shadow-lg p-3 mb-5 ml-3 rounded" style="width:190px; height:190px">
+                                            <span class="text-white bold" style="font-size: 30px;">@(lecturer.FirstName.Substring(0,1).ToUpper()+lecturer.LastName.Substring(0,1).ToUpper())</span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <img class="shadow-lg p-3 mb-5 bg-white" src="@lecturer.ProfileImageUrl" alt="lecturerImage" style="border: 8px solid #234465; border-radius: 50%; width: 190px; height: 190px;" />
+                            }
+                            <p style="color: #234465; font-size: 20px;">@(lecturer.FirstName + ' ' + lecturer.LastName)</p>
+                            <p>@lecturer.Background</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@lecturerIndex" id="button-@lecturerIndex" class="hoverable lecturer-info">
+                    @if (lecturer.ProfileImageUrl == null)
+                    {
+                        <span class="hoverable rounded-circle d-flex justify-content-center align-items-center bg-secondary" style="width:190px; height:190px">
+                            <span class="text-white bold" style="font-size: 30px;">@(lecturer.FirstName.Substring(0,1).ToUpper()+lecturer.LastName.Substring(0,1).ToUpper())</span>
+                        </span>
+                    }
+                    else
+                    {
+                        <img class="hoverable" src="@lecturer.ProfileImageUrl" alt="lecturerImage" style="border: 8px solid #234465; border-radius: 50%; width: 190px; height: 190px;" />
+                    }
+
+                    <div class="non-visible" id="learnMore-@lecturerIndex">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+                            </svg>
+                            LEARN MORE
+                        </span>
+                    </div>
+                </button>
+
+                <p id="name-@lecturerIndex" class="ml-4 visible" style="color: #234465; font-size: 20px;">@(lecturer.FirstName + ' ' + lecturer.LastName)</p>
+            </div>
+
+            lecturerIndex++;
+        }
+    </div>
+</body>
+
+@section Scripts {
+    <script type="text/javascript">
+        const buttons = Array.from(document.querySelectorAll(".lecturer-info"));
+        buttons.forEach((button) => {
+            button.addEventListener("mouseenter", function (e) {
+                let tokens = button.id.split('-');
+                let buttonId = 'learnMore-' + Number(tokens[1]);
+                const learnMore = document.querySelector(`#${buttonId}`);
+                learnMore.classList.remove("non-visible");
+                learnMore.classList.add("visible");
+
+                const span = learnMore.querySelector("span");
+                span.classList.add("text-primary");
+
+                let paraId = 'name-' + Number(tokens[1]);
+                const paraName = document.getElementById(`${paraId}`);
+                paraName.classList.remove("visible");
+                paraName.classList.add("non-visible");
+            });
+
+            button.addEventListener("mouseleave", function (e) {
+                let tokens = button.id.split('-');
+                let buttonId = 'learnMore-' + Number(tokens[1]);
+                const learnMore = document.querySelector(`#${buttonId}`);
+                learnMore.classList.remove("visible");
+                learnMore.classList.add("non-visible");
+
+                let paraId = 'name-' + Number(tokens[1]);
+                const paraName = document.getElementById(`${paraId}`);
+                paraName.classList.remove("non-visible");
+                paraName.classList.add("visible");
+            });
+        });
+    </script>
+}

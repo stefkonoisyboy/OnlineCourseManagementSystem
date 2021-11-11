@@ -155,7 +155,7 @@
                                 </svg>
                                 @activeCourse.RecommendedDuration weeks
                             </p>
-                            <p>@(string.Join("", activeCourse.Description.Take(300).ToList()) + "...")</p>
+                            <p>@Html.Raw(string.Join("", activeCourse.Description.Take(300).ToList()) + "...")</p>
                         </div>
                     </div>
                 </li>
