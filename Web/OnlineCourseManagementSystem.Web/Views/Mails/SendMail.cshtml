@@ -1,0 +1,29 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Mails
+@model MailRequest
+@{ 
+    this.ViewData["Title"] = "Send Mail";
+}
+
+<form asp-controller="Mails" asp-action="SendMail" enctype="multipart/form-data" method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label asp-for="ToEmail"></label>
+        <input type="email" asp-for="ToEmail"  class="form-control"/>
+        <span class="alert-danger" asp-validation-for="ToEmail"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Subject"></label>
+        <input asp-for="Subject" class="form-control" />
+        <span asp-validation-for="Subject" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Body"></label>
+        <input class="form-control" asp-for="Body" />
+        <span class="alert-danger" asp-validation-for="Body"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Attachments" type="file" multiple class="form-control" />
+    </div>
+
+    <button class="btn btn-orange">Send Mail</button>
+</form>

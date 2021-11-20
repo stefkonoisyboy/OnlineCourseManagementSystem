@@ -95,24 +95,16 @@
             IEnumerable<FileAssignmentViewModel> resourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(id, user.Id);
             IEnumerable<FileAssignmentViewModel> workFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(id, user.Id);
 
-            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("All", "Assignments", "My Assignments");
-
-            BreadcrumbNode myassignmentsNode = new MvcBreadcrumbNode("GetInfo", "Assignments", "Assignment Info")
-            {
-                Parent = mycoursesNode,
-            };
-
             if (resourceFiles.Any())
             {
-                assignmentPageViewModel.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(id, user.Id);
+                assignmentPageViewModel.ResourceFiles = resourceFiles.ToList();
             }
 
             if (workFiles.Any())
             {
-                assignmentPageViewModel.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(id, user.Id);
+                assignmentPageViewModel.WorkFiles = workFiles.ToList();
             }
 
-            this.ViewData["BreadcrumbNode"] = mycoursesNode;
             await this.assignmentsService.MarkAsSeen(id, user.Id);
 
             return this.View(assignmentPageViewModel);

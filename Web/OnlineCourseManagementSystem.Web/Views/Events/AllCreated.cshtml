@@ -79,14 +79,14 @@
                         </h3>
                     </div>
                     <div class="my-1">
-                        @if (string.IsNullOrEmpty(eventCreated.AuthorProfileImageUrl))
+                        @if (!string.IsNullOrEmpty(eventCreated.AuthorProfileImageUrl))
                         {
                             <img class="rounded-circle" style="width:50px;height:50px" src="@eventCreated.AuthorProfileImageUrl" />
                         }
                         else
                         {
                             <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
-                                <h3 class="text-center">@(eventCreated.CreatorFirstName.Substring(0,1)+eventCreated.CreatorLastName.Substring(0,1)) </h3>
+                                <h3 class="text-center" style="color:white !important">@(eventCreated.CreatorFirstName.Substring(0,1)+eventCreated.CreatorLastName.Substring(0,1)) </h3>
                             </div>
                         }
                         <span class="text-black">@(eventCreated.CreatorFirstName+" "+eventCreated.CreatorLastName)</span>

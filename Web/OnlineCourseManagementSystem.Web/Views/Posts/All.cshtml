@@ -28,7 +28,7 @@
 <div class="d-flex mt-4" id="wrapper">
     <div class="border-right bg-transparent" id="sidebar-wrapper" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
         <div class="list-group list-group-flush">
-            <h4 class="text-white">
+            <h4>
                 Courses Options(@this.Model.Courses.Count())
             </h4>
             <a class="course-choice m-2 rounded d-flex align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1">
@@ -180,17 +180,17 @@
                                 </div>
                                 <div>
                                     Last Active: @post.LastActive.Name
-                                    @if (post.CreatedOn.Date == DateTime.UtcNow.Date)
+                                    @if (post.LastActive.LastActive == DateTime.UtcNow.Date)
                                     {
-                                        <span class="badge text-black-50">Today @post.CreatedOn.ToString("HH:mm")</span>
+                                        <span class="badge text-black-50">Today @post.LastActive.LastActive.ToString("HH:mm")</span>
                                     }
-                                    else if (post.CreatedOn.Date.Day == DateTime.UtcNow.Date.Day - 1 && post.CreatedOn.Date.Month == DateTime.UtcNow.Month)
+                                    else if (post.LastActive.LastActive.Date.Day == DateTime.UtcNow.Date.Day - 1 && post.LastActive.LastActive.Date.Month == DateTime.UtcNow.Month)
                                     {
-                                        <span class="badge text-black-50">Tonight @post.CreatedOn.ToString("HH:mm")</span>
+                                        <span class="badge text-black-50">Tonight @post.LastActive.LastActive.ToString("HH:mm")</span>
                                     }
                                     else
                                     {
-                                        <span class="badge text-black-50">@post.CreatedOn.ToString("d")</span>
+                                        <span class="badge text-black-50">@post.LastActive.LastActive.ToString("d")</span>
                                     }
                                 </div>
                             </div>

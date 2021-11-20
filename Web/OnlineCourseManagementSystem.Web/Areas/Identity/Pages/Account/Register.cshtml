@@ -5,185 +5,522 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
+    /*custom font*/
+@@import url(https://fonts.googleapis.com/css?family=Montserrat);
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-row justify-content-center">
+/*basic reset*/
+* {margin: 0; padding: 0;}
 
-                <div class="form-group col-sm-5">
-                    <label asp-for="Input.FirstName"></label>
-                    <input asp-for="Input.FirstName" class="form-control " placeholder="First Name" style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group col-sm-5">
-                    <label asp-for="Input.LastName"></label>
-                    <input asp-for="Input.LastName" class="form-control " placeholder="Surname" style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row example mb-lg-4"></div>
-            <div class="row justify-content-center">
-                <div class="form-group col-sm-10">
-                    <label asp-for="Input.TownId">Town</label>
-                    <select asp-for="Input.TownId" class="form-control " style="border-color: #c0c3cf;" asp-items="@this.townsService.GetAllAsSelectListItems()"></select>
-                    <span asp-validation-for="Input.TownId" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row example mb-lg-4"></div>
-            <div class="row">
-                <div class="form-group" style="padding-left:6.5em;">
-                    <div class="form-radio">
-                        <label for="gender" class="radio-label">
-                            Gender :
-                        </label>
-                        <div class="form-radio-item">
-                            <input type="radio" asp-for="Input.Gender" id="male" value="Male" checked class="form-check-input" style="margin-left:-70px;">
-                            <label for="male" class="form-check-label" style="margin-left:17px;">Male</label>
-                            <span class="check"></span>
-                        </div>
-                        <div class="form-radio-item">
-                            <input type="radio" asp-for="Input.Gender" id="female" value="Female" class="form-check-input" style="margin-left:-70px;">
-                            <label for="female" class="form-check-label" style="margin-left:17px;">Female</label>
-                            <span class="check"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group" style="padding-left:6.5em;">
-                    <div class="form-radio">
-                        <label for="gender" class="radio-label">
-                            Title :
-                        </label>
-                        <div class="form-radio-item">
-                            <input type="radio" asp-for="Input.Title" id="mr" value="Mr" checked class="form-check-input" style="margin-left:-70px;">
-                            <label for="mr" class="form-check-label" style="margin-left:17px;">Mr</label>
-                            <span class="check"></span>
-                        </div>
-                        <div class="form-radio-item">
-                            <input type="radio" asp-for="Input.Title" id="mrs" value="Mrs" class="form-check-input" style="margin-left:-70px;">
-                            <label for="mrs" class="form-check-label" style="margin-left:17px;">Mrs</label>
-                            <span class="check"></span>
-                        </div>
-                        <div class="form-radio-item">
-                            <input type="radio" asp-for="Input.Title" id="miss" value="Miss" class="form-check-input" style="margin-left:-70px;">
-                            <label for="miss" class="form-check-label" style="margin-left:17px;">Miss</label>
-                            <span class="check"></span>
-                        </div>
-                        <div class="form-radio-item">
-                            <input type="radio" asp-for="Input.Title" id="dr" value="Dr" class="form-check-input" style="margin-left:-70px;">
-                            <label for="dr" class="form-check-label" style="margin-left:17px;">Dr</label>
-                            <span class="check"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4"></div>
-                <div class="form-radio">
-                    <label for="role" class="radio-label" style="margin-left:-6px;">
+    body {
+        font-family: montserrat, arial, verdana !important;
+        background: #9053c7;
+        background: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);
+        background: -o-linear-gradient(-135deg, #c850c0, #4158d0);
+        background: -moz-linear-gradient(-135deg, #c850c0, #4158d0);
+        background: linear-gradient(-135deg, #c850c0, #4158d0);
+        height: 100%;
+    }
+/*form styles*/
+#msform {
+	width: 400px;
+	margin: 50px auto;
+	text-align: center;
+	position: relative;
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+    #msform input, #msform textarea {
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        font-family: montserrat;
+        color: #2C3E50;
+        font-size: 13px;
+        border-color: #c0c3cf !important;
+    }
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #27AE60;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 10px 5px;
+    bottom: 10px auto;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+	margin-bottom: 30px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+}
+#progressbar li {
+	list-style-type: none;
+	color: white;
+	text-transform: uppercase;
+	font-size: 9px;
+	width: 33.33%;
+	float: left;
+	position: relative;
+}
+#progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 20px;
+	line-height: 20px;
+	display: block;
+	font-size: 10px;
+	color: #333;
+	background: white;
+	border-radius: 3px;
+	margin: 0 auto 5px auto;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: white;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+	/*connector not needed before the first step*/
+	content: none;
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,  #progressbar li.active:after{
+	background: #27AE60;
+	color: white;
+}
+</style>
+
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <!-- multistep form -->
+    <form id="msform" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <ul id="progressbar" class="d-flex justify-content-center">
+            <li class="active">Account Setup</li>
+            <li>Personal Details</li>
+        </ul>
+        <fieldset class="position-relative">
+
+            <h2 class="fs-title">Create your account</h2>
+            <h3 class="fs-subtitle">This is step 1</h3>
+            <input asp-for="Input.UserName" placeholder="Username" />
+            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            <input asp-for="Input.Email" placeholder="Email" />
+            <input asp-for="Input.Password" placeholder="Password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <input asp-for="Input.ConfirmPassword" placeholder="Confirm Password" />
+            <span asp-validation-for="Input.ConfirmPassword" class="alert-danger"></span>
+
+            <div class="d-flex justify-content-start">
+                <div class="form-radio d-flex flex-column">
+                    <label for="role" class="radio-label my-2">
                         Role :
                     </label>
-                    <div class="form-radio-item">
-                        <input type="radio" asp-for="Input.Role" id="student" value="Student" checked class="form-check-input" style="margin-left:-432px;">
-                        <label for="student" class="form-check-label" style="margin-left:13px;">Student</label>
+                    <div class="form-check row">
+                        <label for="student" class="form-check-label">Student</label>
+                        <input style="width:20px !important;height: 20px !important;padding:2px !important;" type="radio" asp-for="Input.Role" id="student" value="Student" checked class="form-check-input">
                         <span class="check"></span>
                     </div>
-                    <div class="form-radio-item">
-                        <input type="radio" asp-for="Input.Role" id="lecturer" value="Lecturer" class="form-check-input" style="margin-left:-432px;">
-                        <label for="lecturer" class="form-check-label" style="margin-left:13px;">Lecturer</label>
+                    <div class="form-check row">
+                        <label for="lecturer" class="form-check-label">Lecturer</label>
+                        <input style="width:20px !important; height:20px !important; padding:2px !important;" type="radio" asp-for="Input.Role" id="lecturer" value="Lecturer" class="form-check-input">
+                        <span class="check"></span>
+                    </div>
+                </div>
+                <span asp-validation-for="Input.Role" class="text-danger"></span>
+            </div>
+            <div class="next action-button position-relative">
+                Next
+            </div>
+        </fieldset>
+        <fieldset class="position-relative">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <h2 class="fs-title">Personal Details</h2>
+            <h3 class="fs-subtitle">This is step 2</h3>
+            <input asp-for="Input.FirstName" placeholder="First Name" />
+            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            <input asp-for="Input.LastName" placeholder="Last Name" />
+            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            <select asp-for="Input.TownId" class="form-control" asp-items="@this.townsService.GetAllAsSelectListItems()"></select>
+            <span asp-validation-for="Input.TownId" class="text-danger"></span>
+            <div class="d-flex justify-content-start">
+                <div class="form-radio d-flex flex-column">
+                    <label for="gender" class="radio-label my-2">
+                        Gender :
+                    </label>
+                    <div class="form-check row">
+                        <label for="male" class="form-check-label">Male</label>
+                        <input style="width:20px !important; height:20px !important; padding:2px !important;" type="radio" asp-for="Input.Gender" id="male" value="Male" checked class="form-check-input">
+                        <span class="check"></span>
+                    </div>
+                    <div class="form-check row">
+                        <label for="female" class="form-check-label">Female</label>
+                        <input style="width:20px !important; height:20px !important; padding:2px !important;" type="radio" asp-for="Input.Gender" id="female" value="Female" class="form-check-input">
                         <span class="check"></span>
                     </div>
                 </div>
             </div>
-            <div class="row example mb-lg-4"></div>
-            <div class="form-row justify-content-center">
-                <div class="form-group col-sm-5">
-                    <label asp-for="Input.PhoneNumber"></label>
-                    <input asp-for="Input.PhoneNumber" class="form-control " placeholder="Phone Number" style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group col-sm-5">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="form-control " placeholder="Email" style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row example mb-lg-4"></div>
-            <div class="row justify-content-center">
-                <div class="form-group col-sm-10">
-                    <label asp-for="Input.BirthDate"></label>
-                    <input asp-for="Input.BirthDate" class="form-control " style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
-                </div>
-                <div class="form-group col-sm-10">
-                    <label asp-for="Input.Background"></label>
-                    <input asp-for="Input.Background" class="form-control " style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.Background" class="text-danger"></span>
-                </div>
-                <div class="form-group col-sm-10">
-                    <label asp-for="Input.Address"></label>
-                    <input asp-for="Input.Address" class="form-control " style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.Address" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row example mb-lg-4"></div>
-            <div class="row justify-content-center">
-                <div class="form-group col-sm-10">
-                    <label asp-for="Input.UserName"></label>
-                    <input asp-for="Input.UserName" class="form-control " placeholder="Username" style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row example mb-lg-4"></div>
-            <div class="form-row justify-content-center">
-                <div class="form-group col-sm-5">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="form-control " placeholder="Password" style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="form-group col-sm-5">
-                    <label asp-for="Input.ConfirmPassword"></label>
-                    <input asp-for="Input.ConfirmPassword" class="form-control " placeholder="Confirm Password" style="border-color: #c0c3cf;" />
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to register.</h4>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
+
+            <div class="d-flex justify-content-start">
+                <div class="form-radio d-flex flex-column">
+                    <label for="title" class="radio-label my-2">
+                        Title :
+                    </label>
+                    <div class="form-check row">
+                        <label for="mr" class="form-check-label">Mr</label>
+                        <input style="width:20px !important; height:20px !important; padding:2px !important;" type="radio" asp-for="Input.Title" id="mr" value="Mr" checked class="form-check-input">
+                        <span class="check"></span>
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                    <div class="form-check row">
+                        <label for="mrs" class="form-check-label">Mrs</label>
+                        <input style="width:20px !important; height:20px !important; padding:2px !important;" type="radio" asp-for="Input.Title" id="mrs" value="Mrs" class="form-check-input">
+                        <span class="check"></span>
+                    </div>
+                    <div class="form-check row">
+                        <label for="miss" class="form-check-label">Miss</label>
+                        <input style="width:20px !important; height:20px !important; padding:2px !important;" type="radio" asp-for="Input.Title" id="miss" value="Miss" class="form-check-input">
+                        <span class="check"></span>
+                    </div>
+                    <div class="form-check row">
+                        <label for="dr" class="form-check-label">Dr</label>
+                        <input style="width:20px !important; height:20px !important; padding:2px !important;" type="radio" asp-for="Input.Title" id="dr" value="Dr" class="form-check-input">
+                        <span class="check"></span>
+                    </div>
+                </div>
+            </div>
+            <input asp-for="Input.PhoneNumber" placeholder="Phone Number" />
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            <input type="date" asp-for="Input.BirthDate" placeholder="Birthdate" />
+            <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+
+            <input asp-for="Input.Background" placeholder="Background" />
+            <span asp-validation-for="Input.Background" class="text-danger"></span>
+            <input asp-for="Input.Address" placeholder="Address" />
+            <span asp-validation-for="Input.Address" class="text-danger"></span>
+            <div class="previous action-button">
+                Previous
+            </div>
+            <button class="btn action-button">Submit</button>
+        </fieldset>
+    </form>
+    <!-- partial -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+
+</body>
+
+<div class="row">
+        @*<div class="col-md-4">
+            <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h4>Create a new account.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-row justify-content-center">
+
+                    <div class="form-group col-sm-5">
+                        <label asp-for="Input.FirstName"></label>
+                        <input asp-for="Input.FirstName" class="form-control " placeholder="First Name" style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-5">
+                        <label asp-for="Input.LastName"></label>
+                        <input asp-for="Input.LastName" class="form-control " placeholder="Surname" style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row example mb-lg-4"></div>
+                <div class="row justify-content-center">
+                    <div class="form-group col-sm-10">
+                        <label asp-for="Input.TownId">Town</label>
+                        <select asp-for="Input.TownId" class="form-control " style="border-color: #c0c3cf;" asp-items="@this.townsService.GetAllAsSelectListItems()"></select>
+                        <span asp-validation-for="Input.TownId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row example mb-lg-4"></div>
+                <div class="row">
+                    <div class="form-group" style="padding-left:6.5em;">
+                        <div class="form-radio">
+                            <label for="gender" class="radio-label">
+                                Gender :
+                            </label>
+                            <div class="form-radio-item">
+                                <input type="radio" asp-for="Input.Gender" id="male" value="Male" checked class="form-check-input" style="margin-left:-70px;">
+                                <label for="male" class="form-check-label" style="margin-left:17px;">Male</label>
+                                <span class="check"></span>
+                            </div>
+                            <div class="form-radio-item">
+                                <input type="radio" asp-for="Input.Gender" id="female" value="Female" class="form-check-input" style="margin-left:-70px;">
+                                <label for="female" class="form-check-label" style="margin-left:17px;">Female</label>
+                                <span class="check"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding-left:6.5em;">
+                        <div class="form-radio">
+                            <label for="gender" class="radio-label">
+                                Title :
+                            </label>
+                            <div class="form-radio-item">
+                                <input type="radio" asp-for="Input.Title" id="mr" value="Mr" checked class="form-check-input" style="margin-left:-70px;">
+                                <label for="mr" class="form-check-label" style="margin-left:17px;">Mr</label>
+                                <span class="check"></span>
+                            </div>
+                            <div class="form-radio-item">
+                                <input type="radio" asp-for="Input.Title" id="mrs" value="Mrs" class="form-check-input" style="margin-left:-70px;">
+                                <label for="mrs" class="form-check-label" style="margin-left:17px;">Mrs</label>
+                                <span class="check"></span>
+                            </div>
+                            <div class="form-radio-item">
+                                <input type="radio" asp-for="Input.Title" id="miss" value="Miss" class="form-check-input" style="margin-left:-70px;">
+                                <label for="miss" class="form-check-label" style="margin-left:17px;">Miss</label>
+                                <span class="check"></span>
+                            </div>
+                            <div class="form-radio-item">
+                                <input type="radio" asp-for="Input.Title" id="dr" value="Dr" class="form-check-input" style="margin-left:-70px;">
+                                <label for="dr" class="form-check-label" style="margin-left:17px;">Dr</label>
+                                <span class="check"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4"></div>
+                    <div class="form-radio">
+                        <label for="role" class="radio-label" style="margin-left:-6px;">
+                            Role :
+                        </label>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Role" id="student" value="Student" checked class="form-check-input" style="margin-left:-432px;">
+                            <label for="student" class="form-check-label" style="margin-left:13px;">Student</label>
+                            <span class="check"></span>
+                        </div>
+                        <div class="form-radio-item">
+                            <input type="radio" asp-for="Input.Role" id="lecturer" value="Lecturer" class="form-check-input" style="margin-left:-432px;">
+                            <label for="lecturer" class="form-check-label" style="margin-left:13px;">Lecturer</label>
+                            <span class="check"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row example mb-lg-4"></div>
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-sm-5">
+                        <label asp-for="Input.PhoneNumber"></label>
+                        <input asp-for="Input.PhoneNumber" class="form-control " placeholder="Phone Number" style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-5">
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control " placeholder="Email" style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row example mb-lg-4"></div>
+                <div class="row justify-content-center">
+                    <div class="form-group col-sm-10">
+                        <label asp-for="Input.BirthDate"></label>
+                        <input asp-for="Input.BirthDate" class="form-control " style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-10">
+                        <label asp-for="Input.Background"></label>
+                        <input asp-for="Input.Background" class="form-control " style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.Background" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-10">
+                        <label asp-for="Input.Address"></label>
+                        <input asp-for="Input.Address" class="form-control " style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.Address" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row example mb-lg-4"></div>
+                <div class="row justify-content-center">
+                    <div class="form-group col-sm-10">
+                        <label asp-for="Input.UserName"></label>
+                        <input asp-for="Input.UserName" class="form-control " placeholder="Username" style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row example mb-lg-4"></div>
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-sm-5">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" class="form-control " placeholder="Password" style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-5">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control " placeholder="Confirm Password" style="border-color: #c0c3cf;" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>*@
+        <div class="col-md-6 col-md-offset-2" hidden>
+            <section>
+                <h4>Use another service to register.</h4>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
                         <div>
                             <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
+                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                                for details on setting up this ASP.NET application to support logging in via external services.
                             </p>
                         </div>
-                    </form>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
                 }
-            }
-        </section>
+            </section>
+        </div>
     </div>
-</div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script type="text/javascript">
+    //jQuery time
+    var current_fs, next_fs, previous_fs; //fieldsets
+    var left, opacity, scale; //fieldset properties which we will animate
+    var animating; //flag to prevent quick multi-click glitches
+
+    $(".next").click(function () {
+        if (animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        next_fs = $(this).parent().next();
+
+        //activate next step on progressbar using the index of next_fs
+        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+        //show the next fieldset
+        next_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate({ opacity: 0 }, {
+            step: function (now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale current_fs down to 80%
+                scale = 1 - (1 - now) * 0.2;
+                //2. bring next_fs from the right(50%)
+                left = (now * 50) + "%";
+                //3. increase opacity of next_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({
+                    'transform': 'scale(' + scale + ')',
+                    'position': 'absolute',
+                });
+                next_fs.css({ 'left': left, 'opacity': opacity });
+            },
+            duration: 800,
+            complete: function () {
+                current_fs.hide();
+                animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
+    });
+
+    $(".previous").click(function () {
+        if (animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        previous_fs = $(this).parent().prev();
+
+        //de-activate current step on progressbar
+        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+        //show the previous fieldset
+        previous_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate({ opacity: 0 }, {
+            step: function (now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale previous_fs from 80% to 100%
+                scale = 0.8 + (1 - now) * 0.2;
+                //2. take current_fs to the right(50%) - from 0%
+                left = ((1 - now) * 50) + "%";
+                //3. increase opacity of previous_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({ 'left': left, });
+                previous_fs.css({ 'transform': 'scale(' + scale + ')', 'opacity': opacity, });
+            },
+            duration: 800,
+            complete: function () {
+                current_fs.hide();
+                animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
+    });
+
+    $(".submit").click(function () {
+        return false;
+    })
+</script>

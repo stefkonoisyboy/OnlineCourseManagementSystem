@@ -7,23 +7,33 @@
     int j = 0;
 }
 
+<style>
+    .btn-upload{
+        background:transparent;
+        border:none;
+    }
+
+    .bnt-upload:hover{
+        border-bottom: 1px solid #42a5f5;
+    }
+</style>
 
 <h1 class="text-center my-5">@Model.CourseName</h1>
 
 <div class="d-flex my-5">
     <div class="flex-grow-1">
         <h3>Instructions</h3>
-        @if(string.IsNullOrEmpty(this.Model.Instructions) || string.IsNullOrWhiteSpace(this.Model.Instructions))
-         {
-             <p> 
-                 <i>
-                     No Instructions
-                 </i> 
-              </p>
-         }
-         <p class="w-75">
-             @this.Model.Instructions
-         </p>
+        @if (string.IsNullOrEmpty(this.Model.Instructions) || string.IsNullOrWhiteSpace(this.Model.Instructions))
+        {
+            <p>
+                <i>
+                    No Instructions
+                </i>
+            </p>
+        }
+        <p class="w-75">
+            @this.Model.Instructions
+        </p>
     </div>
     <div class="d-flex flex-column">
         @if (this.Model.TurnedOn == null)
@@ -42,7 +52,6 @@
                     </svg>
                 </label>
             </form>
-            
         }
         else
         {
@@ -74,7 +83,7 @@
                         {
 
                             <div id="@file.FileId" onclick="showFile(@file.FileId)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" @*data-bs-toggle="modal" data-bs-target="#exampleModal"*@ class="p-2 my-1 d-flex align-items-center rounded-2 bg-secondary" style="cursor:pointer;">
-                                <h6  style="color:white" class="flex-grow-1">Resource File</h6>
+                                <h6 style="color:white" class="flex-grow-1">Resource File</h6>
                             </div>
                         }
                     }
@@ -123,9 +132,9 @@
                 }
                 else
                 {
-            <div class="default-open-view mt-5" id="default">
-                No files.
-            </div>
+                    <div class="default-open-view mt-5" id="default">
+                        No files.
+                    </div>
                 }
             </div>
         </div>
@@ -163,6 +172,7 @@
     <img class="modal-content" id="img01">
     <div id="caption"></div>
 </div>
+
 
 
 @*<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

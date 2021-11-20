@@ -45,9 +45,18 @@
                     <div class="mx-2">StartDate: @assignment.StartDate.ToString("d") @assignment.StartDate.ToString("t")</div>
                     <div class="mx-2">EndDate: @assignment.EndDate.ToString("d")  @assignment.EndDate.ToString("t")</div>
                 </div>
-                <div>
-                    Points: @assignment.PossiblePoints
-                </div>
+                @if (assignment.PossiblePoints == null)
+                {
+                    <div>
+                        Points: 0/0
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        Points: @assignment.PossiblePoints
+                    </div>
+                }
             </div>
             @{
                 string targetAssignment = $"collapseAssignment{assignment.AssignmentId}";

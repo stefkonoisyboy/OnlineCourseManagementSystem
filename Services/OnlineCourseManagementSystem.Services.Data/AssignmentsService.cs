@@ -32,7 +32,7 @@
         public IEnumerable<T> GetAllFinishedBy<T>(string userId)
         {
             var assignments = this.userAssignmentRepository
-                .AllWithDeleted()
+                .All()
                 .Where(x => x.IsChecked && x.UserId == userId)
                 .OrderByDescending(x => x.TurnedOn)
                 .To<T>().ToArray();

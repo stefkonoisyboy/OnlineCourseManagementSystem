@@ -325,13 +325,14 @@
 
     .option {
         opacity: 0.4;
+        color: #2196f3 !important;
     }
 
         .option:hover {
             opacity: 1;
             background: #2196f3;
             cursor: pointer;
-            color: white;
+            color: white !important;
         }
 
     .error-message {
@@ -616,7 +617,7 @@
     @if (this.CurrentChat.ChatId != 0)
     {
         <div>
-            <div class="my-3 my-md-0 mb-md-3 messaging-container ">
+            <div class="my-3 my-md-0 mb-md-3 mx-2 messaging-container ">
                 @if (this.EditMessageInputModel.Id != 0)
                 {
                     <div class="input-form">
@@ -641,7 +642,7 @@
                     <div class="input-form">
                         <EditForm Model="@this.CreateMessageInputModel" OnValidSubmit="@SendMessage">
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-message d-flex justify-content-center align-items-center" disabled="@(!this.IsConnected)">
+                                <button class="btn" style="background:#42a5f5;" disabled="@(!this.IsConnected)">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="25" width="25" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -806,7 +807,7 @@
                 <div class="inside-search-form">
                     <div>
                         <EditForm Model="@this.SearchInputModel">
-                            <div class="d-flex p-2 bg-white rounded-pill justify-content-center align-items-center">
+                            <div class="d-flex p-2 rounded-pill justify-content-center align-items-center" style="background:#e9ecef;">
                                 <div class="flex-grow-1">
                                     <InputText class="mx-1 bg-transparent" style="width:inherit; width:90%; border:none; outline:none !important; color:gray" @bind-Value="@this.SearchInputModel.Input" placeholder="Search for message" />
                                 </div>
@@ -901,7 +902,7 @@
                                 <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
                             </svg>
                         }
-                        <label for="input-file" id="image" class="position-absolute text-white text-center" style="width:100%; height: 100%; top:10%; right:15%; cursor:pointer;">
+                        <label for="input-file" id="image" class="position-absolute text-white text-center" style="width:100%; height: 100%; top:10%; right:25%; cursor:pointer;">
                             <svg xmlns="http://www.w3.org/2000/svg" height="70px" width="70px" viewBox="0 0 20 20" fill="white">
                                 <path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
                             </svg>
@@ -927,15 +928,8 @@
         </div>
     </div>
 </div>
-@{
-    string className = string.Empty;
-}
-@if (!string.IsNullOrEmpty(this.errorMessage))
-{
-    className = "show";
-}
 
-<div class="modal fade @className" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal @this.errorModalClass" style="display:@this.errorModalDisplay;" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -950,6 +944,11 @@
         </div>
     </div>
 </div>
+
+@if (this.showErrorBackdrop)
+ {
+    <div class="modal-backdrop fade show"></div>
+ }
 
 <div class="modal fade" id="addUsersToChat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addUsersToChatLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -1050,6 +1049,9 @@
     private string username = string.Empty;
     private HubConnection hubConnection;
     private string errorMessage;
+    private string errorModalDisplay = "none";
+    private string errorModalClass = string.Empty;
+    private bool showErrorBackdrop = false;
 
     private ChatViewModel CurrentChat = new ChatViewModel();
 
@@ -1087,7 +1089,7 @@
         catch (Exception e)
         {
             this.errorMessage = e.Message;
-            this.StateHasChanged();
+            this.OpenErrorModal();
         }
     }
 
@@ -1107,6 +1109,7 @@
         catch (Exception e)
         {
             this.errorMessage = e.Message;
+            this.OpenErrorModal();
         }
 
         this.AddUsersToChatInputModel = new AddUsersToChatInputModel();
@@ -1437,7 +1440,19 @@
 
     void CloseErrorMessage()
     {
+        this.errorModalDisplay = "none";
+        this.errorModalClass = string.Empty;
+        this.showErrorBackdrop = false;
+        this.StateHasChanged();
         this.errorMessage = string.Empty;
+    }
+
+    void OpenErrorModal()
+    {
+        this.errorModalDisplay = "block;";
+        this.errorModalClass = "Show";
+        this.showErrorBackdrop = true;
+        this.StateHasChanged();
     }
 
     [Parameter]

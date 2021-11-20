@@ -82,6 +82,7 @@
                 certificate.Grade = this.examsService.GetGradeByUserIdAndCourseId(user.Id, certificate.CourseId);
             }
 
+            this.ViewData["CurrentUserHeading"] = "Messages";
             return this.View(viewModel);
         }
 
