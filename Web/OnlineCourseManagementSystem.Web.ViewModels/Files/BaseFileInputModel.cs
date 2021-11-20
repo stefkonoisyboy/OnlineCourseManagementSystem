@@ -5,12 +5,12 @@
     using System.Text;
 
     using Microsoft.AspNetCore.Http;
+    using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
 
     public class BaseFileInputModel
     {
         public IEnumerable<IFormFile> Files { get; set; }
 
         public string UserId { get; set; }
-
     }
 }

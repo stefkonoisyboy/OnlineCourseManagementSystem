@@ -19,7 +19,7 @@
         {
             configuration.CreateMap<Comment, LastActiveViewModel>()
                 .ForMember(x => x.LastActive, y => y.MapFrom(c => c.ModifiedOn ?? c.CreatedOn))
-                .ForMember(x => x.Name, y => y.MapFrom(c => c.Author.UserName));
+                .ForMember(x => x.Name, y => y.MapFrom(c => $"{c.Author.FirstName} {c.Author.LastName}"));
         }
     }
 }

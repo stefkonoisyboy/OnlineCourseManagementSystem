@@ -11,7 +11,7 @@
   </h5>
 <button class="btn btn-info my-1 w-100" @onclick="() => this.GetMessageTest()">Get devices</button>
 <div class="dropdown my-1 pb-4">
-    <button class="btn btn-lg btn-secondary dropdown-toggle twilio-btn-red w-100"
+    @*<button  class="btn btn-lg btn-secondary dropdown-toggle twilio-btn-red w-100"
             type="button" id="dropdownMenuButton"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span>@(this.IsLoading ? "Loading cameras..." : "Select Camera")</span>
@@ -30,6 +30,26 @@
                 <button class="dropdown-item @(this.activeCamera == device.DeviceId ? "active" : "")" id="@device.DeviceId" @onclick="@(async () => await SelectCamera(device.DeviceId))">
                     @device.Label
                 </button>
+            }
+        }
+    </div>*@
+    <div class="d-flex justify-content-center">
+        @if (this.HasDevices)
+        {
+            foreach (var device in this.Devices!)
+            {
+                <button class="dropdown-item @(this.activeCamera == device.DeviceId ? "active" : "")" id="@device.DeviceId" @onclick="@(async () => await SelectCamera(device.DeviceId))">
+                    @device.Label
+                </button>
+            }
+        }
+        else
+        {
+            <span>@(this.IsLoading ? "Loading cameras..." : "Select Camera")</span>
+            @if (this.IsLoading)
+            {
+                <span id="loading" class="spinner-border spinner-border-sm"
+                      role="status" aria-hidden="true"></span>
             }
         }
     </div>
@@ -75,4 +95,5 @@
             await this.CameraChanged.InvokeAsync(this.activeCamera);
         }
     }
+
 }

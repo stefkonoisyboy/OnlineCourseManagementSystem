@@ -8,6 +8,7 @@
 
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
+    using Ganss.XSS;
     using Microsoft.AspNetCore.Http;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
@@ -95,7 +96,7 @@
             Lecture lecture = new Lecture
             {
                 Title = input.Title,
-                Description = input.Description,
+                Description = new HtmlSanitizer().Sanitize(input.Description),
                 CourseId = input.CourseId,
                 CreatorId = input.CreatorId,
             };
@@ -134,7 +135,7 @@
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == input.Id);
 
             lecture.Title = input.Title;
-            lecture.Description = input.Description;
+            lecture.Description = new HtmlSanitizer().Sanitize(input.Description);
             lecture.CourseId = input.CourseId;
 
             await this.lecturesRepository.SaveChangesAsync();

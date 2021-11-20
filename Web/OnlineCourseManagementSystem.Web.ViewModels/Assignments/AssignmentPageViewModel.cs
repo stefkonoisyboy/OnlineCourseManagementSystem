@@ -22,8 +22,10 @@
 
         public string Feedback { get; set; }
 
+        [IgnoreMap]
         public IEnumerable<FileAssignmentViewModel> ResourceFiles { get; set; }
 
+        [IgnoreMap]
         public IEnumerable<FileAssignmentViewModel> WorkFiles { get; set; }
 
         public string CourseName { get; set; }

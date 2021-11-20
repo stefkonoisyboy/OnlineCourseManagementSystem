@@ -26,14 +26,14 @@
                     </h3>
                 </div>
                 <div class="d-flex align-items-center my-1">
-                    @if (string.IsNullOrEmpty(eventComing.AuthorProfileImageUrl))
+                    @if (!string.IsNullOrEmpty(eventComing.AuthorProfileImageUrl))
                     {
                         <img class="rounded-circle" style="width:50px;height:50px" src="@eventComing.AuthorProfileImageUrl" />
                     }
                     else
                     {
                         <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
-                            <h3 class="text-center">@(eventComing.CreatorFirstName.Substring(0,1)+ eventComing.CreatorLastName.Substring(0,1))</h3>
+                            <h3 class="text-center" style="color:white !important">@(eventComing.CreatorFirstName.Substring(0,1)+ eventComing.CreatorLastName.Substring(0,1))</h3>
                         </div>
                     }
                     <div class="mx-1 text-black">@(eventComing.CreatorFirstName+" "+eventComing.CreatorLastName)</div>
@@ -86,14 +86,14 @@
                                     </h3>
                                 </div>
                                 <div class="d-flex align-items-center my-1">
-                                    @if (string.IsNullOrEmpty(eventComing.AuthorProfileImageUrl) || string.IsNullOrWhiteSpace(eventComing.AuthorProfileImageUrl))
+                                    @if (!string.IsNullOrEmpty(eventComing.AuthorProfileImageUrl))
                                     {
                                         <img class="rounded-circle" style="width:50px;height:50px" src="@eventComing.AuthorProfileImageUrl" />
                                     }
                                     else
                                     {
                                         <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
-                                            <h3 class="text-center">@(eventComing.CreatorFirstName.Substring(0,1) + eventComing.CreatorLastName.Substring(0,1))</h3>
+                                            <h3 class="text-center" style="color:white !important">@(eventComing.CreatorFirstName.Substring(0,1) + eventComing.CreatorLastName.Substring(0,1))</h3>
                                         </div>
                                     }
                                     <div class="mx-1 text-black">@(eventComing.CreatorFirstName+" "+eventComing.CreatorLastName)</div>
@@ -157,14 +157,14 @@
                     </h3>
                 </div>
                 <div class="d-flex align-items-center my-1">
-                    @if (string.IsNullOrEmpty(eventFinished.AuthorProfileImageUrl))
+                    @if (!string.IsNullOrEmpty(eventFinished.AuthorProfileImageUrl))
                     {
                         <img class="rounded-circle" style="width:50px;height:50px" src="@eventFinished.AuthorProfileImageUrl" />
                     }
                     else
                     {
                         <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
-                            <h3 class="text-center">@(eventFinished.CreatorFirstName.Substring(0,1)+ eventFinished.CreatorLastName.Substring(0,1))</h3>
+                            <h3 class="text-center" style="color:white !important">@(eventFinished.CreatorFirstName.Substring(0,1)+ eventFinished.CreatorLastName.Substring(0,1))</h3>
                         </div>
                     }
                     <div class="mx-1 text-black">@eventFinished.CreatorFirstName @eventFinished.CreatorLastName</div>

@@ -5,6 +5,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text;
 
+    using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
+
     public class CreateContactMessageInputModel
     {
         [Required]
@@ -17,6 +19,7 @@
         [DataType(DataType.PhoneNumber)]
         [MinLength(10)]
         [MaxLength(10)]
+        [CheckIfPhoneNumber]
         public string Phone { get; set; }
 
         [Required]

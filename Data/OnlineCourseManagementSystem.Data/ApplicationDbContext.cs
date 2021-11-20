@@ -107,6 +107,8 @@
 
         public virtual DbSet<ChatbotMessage> ChatbotMessages { get; set; }
 
+        public virtual DbSet<Subscriber> Subscribers { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

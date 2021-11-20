@@ -6,14 +6,18 @@
 
 <style>
     .info-container {
-    position: absolute;
-    width: 20rem;
-    height: 15rem;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    display: none;
-    right: 30%;
-}
+        position: absolute;
+        width: 20rem;
+        height: 15rem;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        display: none;
+        right: 30%;
+        top: 50%;
+        z-index: 10;
+        background: white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
 
     .info-container::-webkit-scrollbar {
         width: 5px;
@@ -66,7 +70,7 @@
 </style>
 
 <h1 class="title" style="color: #ff6a00;background:#ffffff">@this.Model.Theme</h1>
-<div class="row rounded my-4" style="background:#919090">
+<div class="row rounded my-4" style="background:#919090;color:black;">
     @if (this.Model.StartDate.ToString("dd MMM YYYY") == this.Model.EndDate.ToString("dd MMM YYYY"))
     {
         <div class="my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -178,7 +182,7 @@
         }
     </div>
     <div class="position-relative">
-        <div class="info-container card" id="info-container">
+        <div class="info-container" id="info-container">
             <div class="card-header d-flex">
                 <div class="flex-grow-1">
                 </div>
@@ -251,7 +255,7 @@
         }
     </script>
 
-    <script type="text/javascript">
+    <script>
         var infoContainer = document.getElementById("info-container");
         var btnShowInfo = document.getElementById("btn-showInfo");
         var closeInfoContainerBtn = document.getElementById("closeBtn-info-container");
@@ -268,8 +272,6 @@
             infoContainer.classList.remove("show-info-container");
             infoContainer.classList.add("unshow-info-container");
         });
-
-
     </script>
 }
 

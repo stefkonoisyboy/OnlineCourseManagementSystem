@@ -1,0 +1,14 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Subscribers
+@model CreateSubscriberInputModel
+
+<h5 style="color:#536161;">Newsletter</h5>
+
+<form asp-controller="Subscribers" asp-action="Create" method="post">
+    <div class="d-inline-flex">
+        <div class="form-group">
+            <input asp-for="Email" type="email" class="form-control flex-grow-1" style="border-radius:3px 0 0 3px; " placeholder="Enter your email" />
+            <span asp-validation-for="Email" class="alert-danger"></span>
+        </div>
+        <button class="btn btn-secondary" style="border-radius: 0 3px 3px 0;height:35px !important;" >SUBSCRIBE</button>
+    </div>
+</form>

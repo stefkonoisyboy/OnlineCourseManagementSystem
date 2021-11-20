@@ -393,7 +393,7 @@
             Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == input.Id);
 
             course.Name = input.Name;
-            course.Description = input.Description;
+            course.Description = new HtmlSanitizer().Sanitize(input.Description);
 
             await this.coursesRepository.SaveChangesAsync();
         }

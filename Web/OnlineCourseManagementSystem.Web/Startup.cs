@@ -30,6 +30,7 @@
     using OnlineCourseManagementSystem.Web.Hubs;
     using OnlineCourseManagementSystem.Web.LocalizationResources;
     using OnlineCourseManagementSystem.Web.ViewModels;
+    using OnlineCourseManagementSystem.Web.ViewModels.Mails.Settings;
     using OnlineCourseManagementSystem.Web.ViewModels.VideoConferences;
     using SmartBreadcrumbs.Extensions;
     using Stripe;
@@ -145,9 +146,12 @@
             services.AddTransient<IMessageQAsService, MessageQAsService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>();
-
+            services.AddTransient<ISubscribersService, SubscribersService>();
+            services.AddTransient<IMailsService, MailsService>();
             services.AddSingleton<ITwilioService, TwilioService>();
+
             services.Configure<StripeSettings>(this.configuration.GetSection("Stripe"));
+            services.Configure<MailSettings>(this.configuration.GetSection("MailSettings"));
             services.AddResponseCompression(opts =>
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" }));

@@ -13,7 +13,10 @@
         overflow-y: scroll;
         display: none;
         right: 20px;
-        top:30%;
+        top: 30%;
+        z-index:10;
+        background:white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
 
     .info-container::-webkit-scrollbar {
@@ -68,6 +71,7 @@
 .mycontainer{
     overflow:hidden;
     border-radius:10px;
+    z-index:-1;
 }
 </style>
 @if (this.TempData.ContainsKey("ErrorPoints"))
@@ -86,7 +90,7 @@
             @if (string.IsNullOrEmpty(this.Model.User.ProfileImageUrl))
             {
                 <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
-                    <h3 class="text-center">@(this.Model.User.FirstName.Substring(0,1)+this.Model.User.LastName.Substring(0,1)) </h3>
+                    <h3 class="text-center " style="color:white !important;">@(this.Model.User.FirstName.Substring(0,1)+this.Model.User.LastName.Substring(0,1)) </h3>
                 </div>
             }
             else
@@ -102,7 +106,7 @@
                     Edit
                 </button>
             </div>
-            <div class="info-container card" id="info-container">
+            <div class="info-container" id="info-container">
                 <div class="card-header d-flex position-static">
                     <div class="flex-grow-1">
                     </div>
@@ -149,7 +153,13 @@
     </div>
     <div class="mark-user-assignment">
         <div class="file-display-container" id="displayed-file">
-            No file choosen
+            <div class="d-flex flex-column align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16">
+                    <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z" />
+                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z" />
+                </svg>
+                <h3>Choose file</h3>
+            </div>
         </div>
         <div class="sidebar-assignemt-info">
             <div class="m-2">
@@ -183,8 +193,8 @@
                     <span class="badge">None</span>
                 }
             </div>
-            <div class="bg-white m-2 py-2" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseResourceFiles" aria-expanded="false" aria-controls="collapseResourceFiles">
-                Resource files
+            <div class="bg-white m-2 py-2 w-75" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseResourceFiles" aria-expanded="false" aria-controls="collapseResourceFiles">
+                <h6 class="mx-2">Resource files</h6>
             </div>
             <div class="assignment-files-container collapse mx-3 rounded" id="collapseResourceFiles">
                 @if (this.Model.AssignmentInfo.ResourceFiles.Any())
@@ -193,13 +203,13 @@
                     {
                         @if (file.RemoteUrl.EndsWith("jpg") || file.RemoteUrl.EndsWith("png"))
                         {
-                            <div class="file-container" src="@file.RemoteUrl">
+                            <div class="file-container m-2" src="@file.RemoteUrl">
                                 Resource file
                             </div>
                         }
                         else
                         {
-                            <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
+                            <div class="file-container m-2" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
                                 Resource file
                             </div>
                         }
@@ -207,13 +217,13 @@
                 }
                 else
                 {
-                    <div class="default-open-view mt-5" id="default">
+                    <div class="default-open-view" id="default">
                         No files.
                     </div>
                 }
             </div>
-            <div class="bg-white m-2 py-2" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseWorkFiles" aria-expanded="false" aria-controls="collapseWorkFiles">
-                Work files
+            <div class="bg-white m-2 py-2 w-75" style="color: #42a5f5; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapseWorkFiles" aria-expanded="false" aria-controls="collapseWorkFiles">
+                <h6 class="mx-2">Work files</h6>
             </div>
 
             <div class="assignment-files-container collapse mx-3 rounded" id="collapseWorkFiles">
@@ -223,13 +233,13 @@
                     {
                         @if (file.RemoteUrl.EndsWith(".jpg") || file.RemoteUrl.EndsWith(".png"))
                         {
-                            <div class="file-container" src="@file.RemoteUrl">
+                            <div class="file-container m-2" src="@file.RemoteUrl">
                                 Work File
                             </div>
                         }
                         else
                         {
-                            <div class="file-container" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
+                            <div class="file-container m-2" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl">
                                 Work File
                             </div>
                         }
@@ -237,7 +247,7 @@
                 }
                 else
                 {
-                    <div class="default-open-view mt-5" id="default">
+                    <div class="default-open-view" id="default">
                         No files.
                     </div>
                 }

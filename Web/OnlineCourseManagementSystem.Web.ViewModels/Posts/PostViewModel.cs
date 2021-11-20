@@ -33,6 +33,7 @@
 
         public int CourseId { get; set; }
 
+        [IgnoreMap]
         public LastActiveViewModel LastActive { get; set; }
 
         public int CommentsCount { get; set; }

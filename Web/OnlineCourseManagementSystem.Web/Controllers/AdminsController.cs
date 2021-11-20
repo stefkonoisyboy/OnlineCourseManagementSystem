@@ -108,7 +108,7 @@
             }
 
             await this.assignmentsService.UpdateAsync(inputModel);
-            this.TempData["Message"] = "Successfully updated assignment.";
+            this.TempData["Message"] = "Successfully updated assignment!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -124,7 +124,7 @@
         public IActionResult EditCourse(int id)
         {
             BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
-            BreadcrumbNode editCourse = new MvcBreadcrumbNode("EditCourse", "Admins", "Edit Course") 
+            BreadcrumbNode editCourse = new MvcBreadcrumbNode("EditCourse", "Admins", "Edit Course")
             {
                 Parent = adminActionsNode,
             };
@@ -156,7 +156,7 @@
             await this.coursesService.UpdateMetaAsync(inputModel.EditMetaInputModel);
             await this.coursesService.UpdateModifiedOnById(inputModel.EditMetaInputModel.Id);
 
-            this.ViewData["Message"] = "Successfully updated course.";
+            this.ViewData["Message"] = "Successfully updated course!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -181,7 +181,7 @@
         public IActionResult EditEvent(int id)
         {
             BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
-            BreadcrumbNode editEventNode = new MvcBreadcrumbNode("EditEvent", "Admins", "Edit Event") 
+            BreadcrumbNode editEventNode = new MvcBreadcrumbNode("EditEvent", "Admins", "Edit Event")
             {
                 Parent = adminActionsNode,
             };
@@ -203,7 +203,7 @@
 
             await this.eventsService.UpdateAsync(inputModel);
 
-            this.TempData["Message"] = "Successfully updated event.";
+            this.TempData["Message"] = "Successfully updated event!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -212,7 +212,7 @@
         public async Task<IActionResult> ApproveEvent(int id)
         {
             await this.eventsService.ApproveAsync(id);
-            this.ViewData["Message"] = "Successfully approved event.";
+            this.ViewData["Message"] = "Successfully approved event!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -221,7 +221,7 @@
         public async Task<IActionResult> DisapproveEvent(int id)
         {
             await this.eventsService.DisapproveAsync(id);
-            this.TempData["Message"] = "Successfully disapproved event.";
+            this.TempData["Message"] = "Successfully disapproved event!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -261,7 +261,7 @@
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             inputModel.AuthorId = user.Id;
             await this.postsService.UpdateAsync(inputModel);
-            this.TempData["Message"] = "Successfully updated assignment";
+            this.TempData["Message"] = "Successfully updated assignment!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -299,7 +299,7 @@
             await this.lecturesService.UpdateAsync(inputModel);
             await this.lecturesService.UpdateModifiedOnById(inputModel.Id);
 
-            this.TempData["Message"] = "Successfully updated assignment";
+            this.TempData["Message"] = "Successfully updated assignment!";
             return this.RedirectToAction("AdminActions", "Admin");
         }
 
@@ -315,7 +315,7 @@
         public IActionResult EditExam(int id)
         {
             BreadcrumbNode adminActionsNode = new MvcBreadcrumbNode("AdminActions", "Admins", "Admin Actions");
-            BreadcrumbNode editExamNode = new MvcBreadcrumbNode("EditExam", "Admins", "Edit Exam") 
+            BreadcrumbNode editExamNode = new MvcBreadcrumbNode("EditExam", "Admins", "Edit Exam")
             {
                 Parent = adminActionsNode,
             };
@@ -337,7 +337,7 @@
             }
 
             await this.examsService.UpdateAsync(inputModel);
-            this.TempData["Message"] = "Successfully updated assignment";
+            this.TempData["Message"] = "Successfully updated assignment!";
             return this.RedirectToAction("AdminActions", "Admin");
         }
 

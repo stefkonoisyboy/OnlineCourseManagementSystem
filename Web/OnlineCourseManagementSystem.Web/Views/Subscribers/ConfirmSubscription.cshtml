@@ -1,0 +1,21 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Subscribers
+@model ConfirmSubscriptionInputModel
+@{
+    this.ViewData["Title"] = "Confirm Subscription";
+}
+
+<h1 class="text-center">Confirm Subscription</h1>
+<div class="d-flex justify-content-center align-items-center my-5">
+    <form asp-controller="Subscribers" asp-action="ConfirmSubscription" method="post">
+        <input hidden asp-for="Id" />
+        @if (!this.Model.IsConfirmed)
+        {
+            <button class="btn btn-success p-5">
+                Confirm
+            </button>
+        }
+    </form>
+</div>
+
+<div style="height:25vh;">
+</div>

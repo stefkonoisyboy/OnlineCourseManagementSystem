@@ -1,0 +1,18 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Mails
+@model WelcomeRequest
+
+
+<form class="my-5" asp-controller="Mails" asp-action="SendWelcomeMail" method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label asp-for="ToEmail"></label>
+        <input type="email" asp-for="ToEmail" class="form-control" />
+        <span class="alert-danger" asp-validation-for="ToEmail"></span>
+    </div>
+    <button class="btn btn-orange">Send Welcome Mail</button>
+</form>
+
+<div style="height:20vh;">
+
+</div>
+
