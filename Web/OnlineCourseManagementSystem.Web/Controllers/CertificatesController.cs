@@ -58,6 +58,7 @@ namespace OnlineCourseManagementSystem.Web.Controllers
                 return this.RedirectToAction("Review", "Exams", new { id = examId });
             }
 
+            this.ViewData["CurrentUserHeading"] = "Messages";
             return this.View(viewModel);
         }
     }

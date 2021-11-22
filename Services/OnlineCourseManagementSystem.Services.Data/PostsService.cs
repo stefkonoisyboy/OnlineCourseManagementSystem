@@ -169,7 +169,7 @@
         {
             Post post = this.postRepository
                 .All()
-                .FirstOrDefault(p => p.Id == inputModel.PostId);
+                .FirstOrDefault(p => p.Id == inputModel.Id);
 
             post.Content = inputModel.Content;
             post.Title = inputModel.Title;

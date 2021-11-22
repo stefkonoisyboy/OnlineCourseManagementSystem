@@ -35,9 +35,21 @@
            </div>
            <div class="row m-3">
                <div class="col-md-5">
-                   <h6>
-                       @assignment.PossiblePoints Points
-                   </h6>
+                   @if (!assignment.Seen)
+                   {
+                       <span class="badge badge-danger" style="font-size:12px;">New</span>
+                    }
+               <h6>
+                   Points:
+                   @if (assignment.PossiblePoints  != null)
+                   {
+                       <span class="badge" style="color:black;">@assignment.PossiblePoints</span>
+                   }
+                   else
+                   {
+                       <span class="badge" style="color:black;">0</span>
+                   }
+               </h6>
                </div>
                @if (assignment.EndDate < DateTime.UtcNow)
                {

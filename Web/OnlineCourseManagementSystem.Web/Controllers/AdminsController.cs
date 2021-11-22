@@ -156,7 +156,7 @@
             await this.coursesService.UpdateMetaAsync(inputModel.EditMetaInputModel);
             await this.coursesService.UpdateModifiedOnById(inputModel.EditMetaInputModel.Id);
 
-            this.ViewData["Message"] = "Successfully updated course!";
+            this.TempData["Message"] = "Successfully updated course!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -261,7 +261,7 @@
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             inputModel.AuthorId = user.Id;
             await this.postsService.UpdateAsync(inputModel);
-            this.TempData["Message"] = "Successfully updated assignment!";
+            this.TempData["Message"] = "Successfully updated post!";
             return this.RedirectToAction("AdminActions", "Admins");
         }
 
@@ -299,8 +299,8 @@
             await this.lecturesService.UpdateAsync(inputModel);
             await this.lecturesService.UpdateModifiedOnById(inputModel.Id);
 
-            this.TempData["Message"] = "Successfully updated assignment!";
-            return this.RedirectToAction("AdminActions", "Admin");
+            this.TempData["Message"] = "Successfully updated lecture!";
+            return this.RedirectToAction("AdminActions", "Admins");
         }
 
         [HttpPost]
@@ -337,8 +337,8 @@
             }
 
             await this.examsService.UpdateAsync(inputModel);
-            this.TempData["Message"] = "Successfully updated assignment!";
-            return this.RedirectToAction("AdminActions", "Admin");
+            this.TempData["Message"] = "Successfully updated exam!";
+            return this.RedirectToAction("AdminActions", "Admins");
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
