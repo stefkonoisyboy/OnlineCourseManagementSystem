@@ -22,6 +22,8 @@
 
         public string CourseName { get; set; }
 
+        public bool Seen { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<UserAssignment, AssignmentViewModel>()

@@ -237,7 +237,7 @@
             return this.View(viewModel);
         }
 
-        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        [Authorize(Roles = "Lecturer, Administrator")]
         [Breadcrumb("Exam Details", FromAction = "All", FromController = typeof(ExamsController))]
         public IActionResult Details(int id)
         {

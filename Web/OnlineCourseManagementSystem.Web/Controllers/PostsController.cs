@@ -184,7 +184,7 @@
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
             inputModel.AuthorId = user.Id;
-            inputModel.PostId = id;
+            inputModel.Id = id;
             await this.postsService.UpdateAsync(inputModel);
 
             return this.RedirectToAction("All", "Posts");

@@ -9,6 +9,6 @@
 
     public class EditPostInputModel : BasePostInputModel, IMapFrom<Post>
     {
-        public int PostId { get; set; }
+        public int Id { get; set; }
     }
 }

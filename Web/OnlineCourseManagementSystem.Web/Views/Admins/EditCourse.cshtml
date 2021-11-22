@@ -68,7 +68,7 @@
         Meta
     </div>
 </div>
-<form asp-controller="Admins" asp-action="EditCourse" method="post">
+<form asp-controller="Admins" asp-action="EditCourse" enctype="multipart/form-data" method="post">
     <div asp-validation-summary="All" class="alert-danger"></div>
     <div class="form-edit" id="form-edit-overview-section">
         <h3>Edit Overview</h3>
@@ -119,6 +119,7 @@
 
 
         <input type="hidden" asp-for="EditMetaInputModel.Id" />
+        <input type="hidden" asp-for="EditMetaInputModel.FileId"/>
         <div class="d-flex">
             <div class="flex-grow-1">
                 <img height="100" width=" 100" src="@this.Model.EditMetaInputModel.FileRemoteUrl" alt="course-image" />
