@@ -14,7 +14,7 @@
     //double remainingTime = (double)(this.Model.Duration - spentTime);
 
     DateTime endDate = this.Model.StartDate.AddMinutes(this.Model.Duration);
-    TimeSpan difference = endDate - DateTime.Now;
+    TimeSpan difference = endDate - DateTime.UtcNow;
     double remainingTime = difference.TotalMinutes;
 }
 
