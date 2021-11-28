@@ -359,7 +359,7 @@
             Exam exam = this.examsRepository.All().FirstOrDefault(e => e.Id == examId);
             DateTime endDate = exam.StartDate.AddMinutes(exam.Duration);
 
-            if (DateTime.Now < exam.StartDate || DateTime.Now > exam.EndDate)
+            if (DateTime.Now < exam.StartDate || DateTime.Now > endDate)
             {
                 return false;
             }
