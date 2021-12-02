@@ -3,8 +3,10 @@
     using System.Collections;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.ContactMessages;
@@ -20,7 +22,7 @@
             this.userManager = userManager;
         }
 
-        //[Authorize(GlobalConstants.AdministratorRoleName)]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult All()
         {
             var contactMessages = this.contactMessagesService.GetAll<ContactMessageViewModel>();
@@ -28,6 +30,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> MarkAsSeen(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);

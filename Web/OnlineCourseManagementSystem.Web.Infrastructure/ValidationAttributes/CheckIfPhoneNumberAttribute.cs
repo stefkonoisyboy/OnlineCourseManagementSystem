@@ -9,11 +9,21 @@
     {
         public override bool IsValid(object value)
         {
-            foreach (var number in value.ToString())
+            if (value is string phone)
             {
-                if (!(number >= 0 && number <= 9))
+                foreach (var number in phone)
                 {
-                    return false;
+                    if (int.TryParse(number.ToString(), out int result))
+                    {
+                        if (!(result >= 0 && result <= 9))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
 
