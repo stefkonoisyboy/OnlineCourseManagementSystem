@@ -113,39 +113,40 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddMudServices();
 
+            // 36 services overall, but 34 services because we don't use parents and absences service
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IStudentsService, StudentsService>();
             services.AddTransient<ILecturersService, LecturersService>();
             services.AddTransient<IParentsService, ParentsService>();
             services.AddTransient<IFilesService, FilesService>();
-            services.AddTransient<ICoursesService, CoursesService>();
-            services.AddTransient<ITagsService, TagsService>();
-            services.AddTransient<ISubjectsService, SubjectsService>();
-            services.AddTransient<ILecturesService, LecturesService>();
+            services.AddTransient<ICoursesService, CoursesService>(); // Stefko
+            services.AddTransient<ITagsService, TagsService>(); // Stefko
+            services.AddTransient<ISubjectsService, SubjectsService>(); // Stefko
+            services.AddTransient<ILecturesService, LecturesService>(); // Stefko
             services.AddTransient<IAlbumsService, AlbumsService>();
             services.AddTransient<IAssignmentsService, AssignmentsService>();
-            services.AddTransient<IOrdersService, OrdersService>();
-            services.AddTransient<ITownsService, TownsService>();
+            services.AddTransient<IOrdersService, OrdersService>(); // Stefko
+            services.AddTransient<ITownsService, TownsService>(); // Stefko
             services.AddTransient<IAbsencesService, AbsencesService>();
             services.AddTransient<IPostsService, PostsService>();
             services.AddTransient<ICommentsService, CommentsService>();
             services.AddTransient<IEventsService, EventsService>();
-            services.AddTransient<IExamsService, ExamsService>();
-            services.AddTransient<IQuestionsService, QuestionsService>();
-            services.AddTransient<IChoicesService, ChoicesService>();
-            services.AddTransient<IChannelsService, ChannelsService>();
-            services.AddTransient<IAudienceCommentsService, AudienceCommentsService>();
+            services.AddTransient<IExamsService, ExamsService>(); // Stefko
+            services.AddTransient<IQuestionsService, QuestionsService>(); // Stefko
+            services.AddTransient<IChoicesService, ChoicesService>(); // Stefko
+            services.AddTransient<IChannelsService, ChannelsService>(); // Stefko
+            services.AddTransient<IAudienceCommentsService, AudienceCommentsService>(); // Stefko
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
-            services.AddTransient<IAnswersService, AnswersService>();
-            services.AddTransient<ISkillsService, SkillsService>();
-            services.AddTransient<IReviewsService, ReviewsService>();
+            services.AddTransient<IAnswersService, AnswersService>(); // Stefko
+            services.AddTransient<ISkillsService, SkillsService>(); // Stefko
+            services.AddTransient<IReviewsService, ReviewsService>(); // Stefko
             services.AddTransient<IContactMessagesService, ContactMessagesService>();
-            services.AddTransient<ICompletitionsService, CompletitionsService>();
-            services.AddTransient<ICertificatesService, CertificatesService>();
-            services.AddTransient<IMessageQAsService, MessageQAsService>();
-            services.AddTransient<IDashboardService, DashboardService>();
-            services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>();
+            services.AddTransient<ICompletitionsService, CompletitionsService>(); // Stefko
+            services.AddTransient<ICertificatesService, CertificatesService>(); // Stefko
+            services.AddTransient<IMessageQAsService, MessageQAsService>(); // Stefko
+            services.AddTransient<IDashboardService, DashboardService>(); // Stefko
+            services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>(); // Stefko
             services.AddTransient<ISubscribersService, SubscribersService>();
             services.AddTransient<IMailsService, MailsService>();
             services.AddSingleton<ITwilioService, TwilioService>();
