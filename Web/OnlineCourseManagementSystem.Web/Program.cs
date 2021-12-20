@@ -16,14 +16,7 @@
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                     {
-                        webBuilder.UseStartup<Startup>().UseKestrel((context, options) =>
-                        {
-                            var port = Environment.GetEnvironmentVariable("PORT");
-                            if (!string.IsNullOrEmpty(port))
-                            {
-                                options.ListenAnyIP(int.Parse(port));
-                            }
-                        });
+                        webBuilder.UseStartup<Startup>();
                     });
     }
 }
