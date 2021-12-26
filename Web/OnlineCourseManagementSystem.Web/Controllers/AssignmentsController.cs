@@ -36,7 +36,7 @@
         {
             CreateAssignmentInputModel createAssignmentInputModel = new CreateAssignmentInputModel
             {
-                Students = this.studentsService.GetAllAsSelectListItems(id),
+                Students = this.studentsService.GetAllAsSelectListItemsByCourse(id),
                 CourseId = id,
             };
 
@@ -59,7 +59,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                inputModel.Students = this.studentsService.GetAllAsSelectListItems(id);
+                inputModel.Students = this.studentsService.GetAllAsSelectListItemsByCourse(id);
                 return this.View(inputModel);
             }
 

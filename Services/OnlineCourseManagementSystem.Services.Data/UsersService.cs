@@ -63,7 +63,7 @@
                 .All()
                 .Where(u => u.Roles.FirstOrDefault().RoleId.EndsWith("Student"))
                 .OrderBy(u => u.FirstName)
-                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.LastName)
                 .To<T>()
                 .ToList();
         }

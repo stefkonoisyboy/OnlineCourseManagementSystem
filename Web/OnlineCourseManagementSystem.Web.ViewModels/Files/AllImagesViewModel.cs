@@ -8,19 +8,12 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
 
-    public class AllImagesViewModel : IMapFrom<Album>, IHaveCustomMappings
+    public class AllImagesViewModel : IMapFrom<Album>
     {
-        public string AlbumName { get; set; }
+        public string Name { get; set; }
 
-        public IEnumerable<ImageViewModel> Images { get; set; }
+        public ICollection<ImageViewModel> Images { get; set; }
 
-        public int AlbumId { get; set; }
-
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<Album, AllImagesViewModel>()
-                 .ForMember(x => x.AlbumName, y => y.MapFrom(x => x.Name))
-                 .ForMember(x => x.AlbumId, y => y.MapFrom(x => x.Id));
-        }
+        public int Id { get; set; }
     }
 }

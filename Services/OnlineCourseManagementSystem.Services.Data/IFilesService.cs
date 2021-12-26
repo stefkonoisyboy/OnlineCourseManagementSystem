@@ -12,7 +12,7 @@
     {
         Task AddImages(UploadImageInputModel uploadImageInputModel);
 
-        AllImagesViewModel GetAllImagesForUser(string userId, int albumId);
+        T GetAllImagesForUserByAlbum<T>(string userId, int albumId);
 
         Task<int?> DeleteImageFromGallery(int fileId, string userId);
 

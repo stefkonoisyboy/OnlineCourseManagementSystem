@@ -54,7 +54,7 @@
                 .ToList();
         }
 
-        public IEnumerable<SelectListItem> GetAllAsSelectListItems(int courseId)
+        public IEnumerable<SelectListItem> GetAllAsSelectListItemsByCourse(int courseId)
         {
             return this.studentsRepository
                 .All()

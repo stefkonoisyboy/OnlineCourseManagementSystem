@@ -4,11 +4,11 @@
     this.ViewData["Title"] = "Images By Album";
 }
 <h1 class="text-center my-5" style="color: #42a5f5;">
-    Album: @Model.AlbumName
+    Album: @Model.Name
 </h1>
 
 <div class="my-5">
-    @await Html.PartialAsync("_PartialAddImages", new UploadImageInputModel { AlbumId = Model.AlbumId })
+    @await Html.PartialAsync("_PartialAddImages", new UploadImageInputModel { AlbumId = Model.Id })
 </div>
 
 

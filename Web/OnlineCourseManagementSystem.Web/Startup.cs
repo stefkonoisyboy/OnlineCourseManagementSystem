@@ -114,11 +114,11 @@
             services.AddMudServices();
 
             // 36 services overall, but 34 services because we don't use parents and absences service
-            services.AddTransient<IUsersService, UsersService>();
-            services.AddTransient<IStudentsService, StudentsService>();
-            services.AddTransient<ILecturersService, LecturersService>();
+            services.AddTransient<IUsersService, UsersService>(); // Miro UnitTests Done Comments Done
+            services.AddTransient<IStudentsService, StudentsService>(); // Miro UnitTests Done Comments Done
+            services.AddTransient<ILecturersService, LecturersService>(); // Miro UnitTests Done Comments Done
             services.AddTransient<IParentsService, ParentsService>();
-            services.AddTransient<IFilesService, FilesService>();
+            services.AddTransient<IFilesService, FilesService>(); // Miro Done 4/12 Comments 0/12
             services.AddTransient<ICoursesService, CoursesService>(); // Stefko
             services.AddTransient<ITagsService, TagsService>(); // Stefko
             services.AddTransient<ISubjectsService, SubjectsService>(); // Stefko

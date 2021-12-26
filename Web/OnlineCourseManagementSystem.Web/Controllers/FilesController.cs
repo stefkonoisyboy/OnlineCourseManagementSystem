@@ -119,7 +119,7 @@
             };
 
             this.ViewData["BreadcrumbNode"] = myimagesNode;
-            var images = this.fileService.GetAllImagesForUser(applicationUser.Id, id);
+            var images = this.fileService.GetAllImagesForUserByAlbum<AllImagesViewModel>(applicationUser.Id, id);
             return this.View(images);
         }
 
