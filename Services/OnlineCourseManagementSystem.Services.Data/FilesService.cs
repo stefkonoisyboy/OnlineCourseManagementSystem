@@ -61,22 +61,22 @@
                 .ToList();
         }
 
-        public AllImagesViewModel GetAllImagesForUser(string userId, int albumId)
+        public T GetAllImagesForUserByAlbum<T>(string userId, int albumId)
         {
-            var images = this.fileRepository
+            var images = this.albumRepository
                 .All()
-                .Where(x => x.UserId == userId && x.RemoteUrl.Contains("gallery") && x.AlbumId == albumId)
-                .To<ImageViewModel>().ToArray();
+                .Where(x => x.UserId == userId && x.Id == albumId)
+                .To<T>().FirstOrDefault();
 
-            string albumName = this.albumRepository.All().FirstOrDefault(x => x.Id == albumId).Name;
-            AllImagesViewModel allImages = new AllImagesViewModel
-            {
-                Images = images,
-                AlbumId = albumId,
-                AlbumName = albumName,
-            };
+            //string albumName = this.albumRepository.All().FirstOrDefault(x => x.Id == albumId).Name;
+            //AllImagesViewModel allImages = new AllImagesViewModel
+            //{
+            //    Images = images,
+            //    AlbumId = albumId,
+            //    AlbumName = albumName,
+            //};
 
-            return allImages;
+            return images;
         }
 
         public async Task AddImages(UploadImageInputModel uploadImageInputModel)
