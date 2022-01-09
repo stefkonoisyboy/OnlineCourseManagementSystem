@@ -9,6 +9,7 @@
 
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Albums;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
     using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
@@ -41,6 +42,10 @@
 
             AutoMapperConfig.RegisterMappings(
                 typeof(AllImagesViewModel).GetTypeInfo().Assembly,
+                typeof(Album).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(AlbumViewModel).GetTypeInfo().Assembly,
                 typeof(Album).GetTypeInfo().Assembly);
         }
     }
