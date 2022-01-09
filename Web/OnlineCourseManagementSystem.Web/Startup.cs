@@ -118,12 +118,12 @@
             services.AddTransient<IStudentsService, StudentsService>(); // Miro UnitTests Done Comments Done
             services.AddTransient<ILecturersService, LecturersService>(); // Miro UnitTests Done Comments Done
             services.AddTransient<IParentsService, ParentsService>();
-            services.AddTransient<IFilesService, FilesService>(); // Miro Done 4/12 Comments 0/12
+            services.AddTransient<IFilesService, FilesService>(); // Miro UnitTests Done Comments Done
             services.AddTransient<ICoursesService, CoursesService>(); // Stefko
             services.AddTransient<ITagsService, TagsService>(); // Stefko
             services.AddTransient<ISubjectsService, SubjectsService>(); // Stefko
             services.AddTransient<ILecturesService, LecturesService>(); // Stefko
-            services.AddTransient<IAlbumsService, AlbumsService>();
+            services.AddTransient<IAlbumsService, AlbumsService>();// Miro Done UnitTests Done Comments Done
             services.AddTransient<IAssignmentsService, AssignmentsService>();
             services.AddTransient<IOrdersService, OrdersService>(); // Stefko
             services.AddTransient<ITownsService, TownsService>(); // Stefko

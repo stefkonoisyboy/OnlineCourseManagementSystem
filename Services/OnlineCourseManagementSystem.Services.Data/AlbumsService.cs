@@ -39,11 +39,11 @@
             await this.albumRepository.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(string userId, int albumId, string name)
+        public async Task UpdateAsync(EditAlbumInputModel inputModel)
         {
-            Album album = this.albumRepository.All().FirstOrDefault(x => x.Id == albumId);
+            Album album = this.albumRepository.All().FirstOrDefault(x => x.Id == inputModel.Id && x.UserId == inputModel.UserId);
 
-            album.Name = name;
+            album.Name = inputModel.Name;
 
             await this.albumRepository.SaveChangesAsync();
         }

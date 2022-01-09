@@ -5,7 +5,11 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text;
 
-    public class AlbumInputModel : BaseInputModel
+    public class BaseInputModel
     {
+        [Required]
+        public string Name { get; set; }
+
+        public string UserId { get; set; }
     }
 }
