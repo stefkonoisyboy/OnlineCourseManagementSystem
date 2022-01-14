@@ -10,10 +10,23 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Albums;
+    using OnlineCourseManagementSystem.Web.ViewModels.Answers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
+    using OnlineCourseManagementSystem.Web.ViewModels.Channels;
+    using OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages;
+    using OnlineCourseManagementSystem.Web.ViewModels.Choices;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Exams;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
     using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
+    using OnlineCourseManagementSystem.Web.ViewModels.MessageQAs;
+    using OnlineCourseManagementSystem.Web.ViewModels.Orders;
+    using OnlineCourseManagementSystem.Web.ViewModels.Questions;
+    using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
+    using OnlineCourseManagementSystem.Web.ViewModels.Skills;
     using OnlineCourseManagementSystem.Web.ViewModels.Students;
+    using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
 
     public class MapperInitializer
@@ -23,6 +36,66 @@
             AutoMapperConfig.RegisterMappings(
                typeof(AllCoursesViewModel).GetTypeInfo().Assembly,
                typeof(Course).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllChatbotMessagesByCreatorIdViewModel).GetTypeInfo().Assembly,
+               typeof(ChatbotMessage).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllMessagesByChannelIdViewModel).GetTypeInfo().Assembly,
+               typeof(MessageQA).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+              typeof(AllCertificatesByUserIdViewModel).GetTypeInfo().Assembly,
+              typeof(Certificate).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllReviewsByCourseIdViewModel).GetTypeInfo().Assembly,
+               typeof(Review).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllSkillsByCourseIdViewModel).GetTypeInfo().Assembly,
+               typeof(Skill).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+              typeof(AllAnswersByExamIdAndUserIdViewModel).GetTypeInfo().Assembly,
+              typeof(Answer).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(ChannelByIdViewModel).GetTypeInfo().Assembly,
+               typeof(Channel).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllChoicesByIdViewModel).GetTypeInfo().Assembly,
+               typeof(Course).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllQuestionsByExamViewModel).GetTypeInfo().Assembly,
+               typeof(Question).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(ResultFromExamViewModel).GetTypeInfo().Assembly,
+               typeof(UserExam).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllExamsViewModel).GetTypeInfo().Assembly,
+               typeof(Exam).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllOrdersByUserIdViewModel).GetTypeInfo().Assembly,
+               typeof(Order).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+              typeof(AllVideosByIdViewModel).GetTypeInfo().Assembly,
+              typeof(File).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+              typeof(AllLecturesByCreatorIdViewModel).GetTypeInfo().Assembly,
+              typeof(Lecture).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+               typeof(AllTagsViewModel).GetTypeInfo().Assembly,
+               typeof(Tag).GetTypeInfo().Assembly);
 
             AutoMapperConfig.RegisterMappings(
                 typeof(AllStudentsByIdViewModel).GetTypeInfo().Assembly,
