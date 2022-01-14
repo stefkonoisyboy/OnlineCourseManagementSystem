@@ -113,40 +113,40 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddMudServices();
 
-            // 36 services overall, but 34 services because we don't use parents and absences service
-            services.AddTransient<IUsersService, UsersService>(); // Miro UnitTests Done Comments Done
-            services.AddTransient<IStudentsService, StudentsService>(); // Miro UnitTests Done Comments Done
-            services.AddTransient<ILecturersService, LecturersService>(); // Miro UnitTests Done Comments Done
-            services.AddTransient<IParentsService, ParentsService>();
-            services.AddTransient<IFilesService, FilesService>(); // Miro UnitTests Done Comments Done
-            services.AddTransient<ICoursesService, CoursesService>(); // Stefko
-            services.AddTransient<ITagsService, TagsService>(); // Stefko
-            services.AddTransient<ISubjectsService, SubjectsService>(); // Stefko
-            services.AddTransient<ILecturesService, LecturesService>(); // Stefko
-            services.AddTransient<IAlbumsService, AlbumsService>();// Miro Done UnitTests Done Comments Done
+            // 36 services overall, but 33 services because we don't use parents and absences service
+            services.AddTransient<IUsersService, UsersService>(); // 100%
+            services.AddTransient<IStudentsService, StudentsService>(); // 100%
+            services.AddTransient<ILecturersService, LecturersService>(); // 100%
+            services.AddTransient<IParentsService, ParentsService>(); // NOT
+            services.AddTransient<IFilesService, FilesService>(); // 100%
+            services.AddTransient<ICoursesService, CoursesService>(); // All GET methods done
+            services.AddTransient<ITagsService, TagsService>(); // 100%
+            services.AddTransient<ISubjectsService, SubjectsService>(); // 100%
+            services.AddTransient<ILecturesService, LecturesService>(); // All GET methods done
+            services.AddTransient<IAlbumsService, AlbumsService>(); // 100%
             services.AddTransient<IAssignmentsService, AssignmentsService>();
-            services.AddTransient<IOrdersService, OrdersService>(); // Stefko
-            services.AddTransient<ITownsService, TownsService>(); // Stefko
-            services.AddTransient<IAbsencesService, AbsencesService>();
+            services.AddTransient<IOrdersService, OrdersService>(); // All GET methods done
+            services.AddTransient<ITownsService, TownsService>(); // 100%
+            services.AddTransient<IAbsencesService, AbsencesService>(); // NOT
             services.AddTransient<IPostsService, PostsService>();
             services.AddTransient<ICommentsService, CommentsService>();
             services.AddTransient<IEventsService, EventsService>();
-            services.AddTransient<IExamsService, ExamsService>(); // Stefko
-            services.AddTransient<IQuestionsService, QuestionsService>(); // Stefko
-            services.AddTransient<IChoicesService, ChoicesService>(); // Stefko
-            services.AddTransient<IChannelsService, ChannelsService>(); // Stefko
-            services.AddTransient<IAudienceCommentsService, AudienceCommentsService>(); // Stefko
+            services.AddTransient<IExamsService, ExamsService>(); // All GET methods done
+            services.AddTransient<IQuestionsService, QuestionsService>(); // All GET methods done
+            services.AddTransient<IChoicesService, ChoicesService>(); // 100%
+            services.AddTransient<IChannelsService, ChannelsService>(); // All GET methods done
+            services.AddTransient<IAudienceCommentsService, AudienceCommentsService>(); // NOT
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
-            services.AddTransient<IAnswersService, AnswersService>(); // Stefko
-            services.AddTransient<ISkillsService, SkillsService>(); // Stefko
-            services.AddTransient<IReviewsService, ReviewsService>(); // Stefko
+            services.AddTransient<IAnswersService, AnswersService>(); // 100%
+            services.AddTransient<ISkillsService, SkillsService>(); // 100%
+            services.AddTransient<IReviewsService, ReviewsService>(); // All GET methods done
             services.AddTransient<IContactMessagesService, ContactMessagesService>();
-            services.AddTransient<ICompletitionsService, CompletitionsService>(); // Stefko
-            services.AddTransient<ICertificatesService, CertificatesService>(); // Stefko
-            services.AddTransient<IMessageQAsService, MessageQAsService>(); // Stefko
+            services.AddTransient<ICompletitionsService, CompletitionsService>(); // 100%
+            services.AddTransient<ICertificatesService, CertificatesService>(); // 100%
+            services.AddTransient<IMessageQAsService, MessageQAsService>(); // All GET methods done
             services.AddTransient<IDashboardService, DashboardService>(); // Stefko
-            services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>(); // Stefko
+            services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>(); // All GET methods done
             services.AddTransient<ISubscribersService, SubscribersService>();
             services.AddTransient<IMailsService, MailsService>();
             services.AddSingleton<ITwilioService, TwilioService>();

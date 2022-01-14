@@ -52,7 +52,7 @@ namespace OnlineCourseManagementSystem.Services.Data
 
         IEnumerable<T> GetAllArchivedMessagesByChannelId<T>(int channelId);
 
-        IEnumerable<T> GetAllRecentMessagesByChannelId<T>(int channelId); 
+        IEnumerable<T> GetAllRecentMessagesByChannelId<T>(int channelId);
 
         IEnumerable<T> GetAllRepliesByParentId<T>(int parentId);
 
