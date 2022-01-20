@@ -76,8 +76,9 @@
 
         public T GetById<T>(int assignmentId, string userId)
         {
-            return this.userAssignmentRepository.All()
-                    .Where(a => a.AssignmentId == assignmentId && a.UserId == userId)
+            return this.userAssignmentRepository
+                    .All()
+                    .Where(ua => ua.AssignmentId == assignmentId && ua.UserId == userId)
                     .To<T>()
                     .FirstOrDefault();
         }
@@ -220,9 +221,9 @@
 
         public IEnumerable<T> GetAllCheckedBy<T>(int courseId)
         {
-            return this.userAssignmentRepository
+            return this.assignmentRepository
                 .All()
-                .Where(ua => ua.Assignment.CourseId == courseId && ua.IsChecked)
+                .Where(a => a.Users.Count(ua => ua.IsChecked) == a.Users.Count && a.CourseId == courseId)
                 .To<T>()
                 .Distinct()
                 .ToList();
@@ -250,7 +251,7 @@
         {
             return this.userAssignmentRepository
                 .All()
-                .Where(ua => ua.AssignmentId == assignmentId && ua.UserId == userId)
+                .Where(ua => ua.AssignmentId == assignmentId && ua.UserId == userId && ua.IsChecked)
                 .To<T>()
                 .FirstOrDefault();
         }

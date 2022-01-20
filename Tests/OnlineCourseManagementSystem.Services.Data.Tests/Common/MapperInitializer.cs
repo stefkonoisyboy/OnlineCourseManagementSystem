@@ -11,16 +11,21 @@
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Albums;
     using OnlineCourseManagementSystem.Web.ViewModels.Answers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Assignments;
     using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
     using OnlineCourseManagementSystem.Web.ViewModels.Channels;
     using OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages;
+    using OnlineCourseManagementSystem.Web.ViewModels.Chats;
     using OnlineCourseManagementSystem.Web.ViewModels.Choices;
+    using OnlineCourseManagementSystem.Web.ViewModels.ContactMessages;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Events;
     using OnlineCourseManagementSystem.Web.ViewModels.Exams;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
     using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
     using OnlineCourseManagementSystem.Web.ViewModels.MessageQAs;
+    using OnlineCourseManagementSystem.Web.ViewModels.Messages;
     using OnlineCourseManagementSystem.Web.ViewModels.Orders;
     using OnlineCourseManagementSystem.Web.ViewModels.Questions;
     using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
@@ -120,6 +125,34 @@
             AutoMapperConfig.RegisterMappings(
                 typeof(AlbumViewModel).GetTypeInfo().Assembly,
                 typeof(Album).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(AssignmentViewModel).GetTypeInfo().Assembly,
+                typeof(UserAssignment).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(AssignmentByAdminViewModel).GetTypeInfo().Assembly,
+                typeof(Assignment).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(EventViewModel).GetTypeInfo().Assembly,
+                typeof(Event).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(ChatViewModel).GetTypeInfo().Assembly,
+                typeof(ChatUser).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(UserViewModel).GetTypeInfo().Assembly,
+                typeof(ChatUser).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(MessageViewModel).GetTypeInfo().Assembly,
+                typeof(Message).GetTypeInfo().Assembly);
+
+            AutoMapperConfig.RegisterMappings(
+                typeof(ContactMessageViewModel).GetTypeInfo().Assembly,
+                typeof(ContactMessage).GetTypeInfo().Assembly);
         }
     }
 }

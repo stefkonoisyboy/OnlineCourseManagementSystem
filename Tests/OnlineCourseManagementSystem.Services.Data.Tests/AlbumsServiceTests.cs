@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using Moq;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
@@ -28,8 +29,8 @@
             var mockedRepsitory = new Mock<IDeletableEntityRepository<Album>>();
             mockedRepsitory.Setup(x => x.All()).Returns(testData.AsQueryable());
             IAlbumsService albumsService = new AlbumsService(mockedRepsitory.Object);
-            List<string> expectedNames = testData.Where(a => a.UserId == userId).Select(a => a.Name).ToList();
-            List<int> expectedIds = testData.Where(a => a.UserId == userId).Select(a => a.Id).ToList();
+            IEnumerable<string> expectedNames = testData.Where(a => a.UserId == userId).Select(a => a.Name).ToList();
+            IEnumerable<int> expectedIds = testData.Where(a => a.UserId == userId).Select(a => a.Id).ToList();
 
             // Act
             IEnumerable<AlbumViewModel> actual = albumsService.GetAllById<AlbumViewModel>(userId);

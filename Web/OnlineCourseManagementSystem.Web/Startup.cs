@@ -124,30 +124,30 @@
             services.AddTransient<ISubjectsService, SubjectsService>(); // 100%
             services.AddTransient<ILecturesService, LecturesService>(); // All GET methods done
             services.AddTransient<IAlbumsService, AlbumsService>(); // 100%
-            services.AddTransient<IAssignmentsService, AssignmentsService>();
+            services.AddTransient<IAssignmentsService, AssignmentsService>(); // All GET methods done with comments.
             services.AddTransient<IOrdersService, OrdersService>(); // All GET methods done
             services.AddTransient<ITownsService, TownsService>(); // 100%
             services.AddTransient<IAbsencesService, AbsencesService>(); // NOT
-            services.AddTransient<IPostsService, PostsService>();
-            services.AddTransient<ICommentsService, CommentsService>();
-            services.AddTransient<IEventsService, EventsService>();
+            services.AddTransient<IPostsService, PostsService>(); // 100%
+            services.AddTransient<ICommentsService, CommentsService>(); // 100%
+            services.AddTransient<IEventsService, EventsService>();// All GET methods and comments done
             services.AddTransient<IExamsService, ExamsService>(); // All GET methods done
             services.AddTransient<IQuestionsService, QuestionsService>(); // All GET methods done
             services.AddTransient<IChoicesService, ChoicesService>(); // 100%
             services.AddTransient<IChannelsService, ChannelsService>(); // All GET methods done
             services.AddTransient<IAudienceCommentsService, AudienceCommentsService>(); // NOT
-            services.AddTransient<IChatsService, ChatsService>();
-            services.AddTransient<IMessagesService, MessagesService>();
+            services.AddTransient<IChatsService, ChatsService>(); // All GET methods and comments done
+            services.AddTransient<IMessagesService, MessagesService>(); // All GET methods and comments done.
             services.AddTransient<IAnswersService, AnswersService>(); // 100%
             services.AddTransient<ISkillsService, SkillsService>(); // 100%
             services.AddTransient<IReviewsService, ReviewsService>(); // All GET methods done
-            services.AddTransient<IContactMessagesService, ContactMessagesService>();
+            services.AddTransient<IContactMessagesService, ContactMessagesService>();  // All GET methods and comments done
             services.AddTransient<ICompletitionsService, CompletitionsService>(); // 100%
             services.AddTransient<ICertificatesService, CertificatesService>(); // 100%
             services.AddTransient<IMessageQAsService, MessageQAsService>(); // All GET methods done
             services.AddTransient<IDashboardService, DashboardService>(); // Stefko
             services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>(); // All GET methods done
-            services.AddTransient<ISubscribersService, SubscribersService>();
+            services.AddTransient<ISubscribersService, SubscribersService>(); // All GET methods and comments.
             services.AddTransient<IMailsService, MailsService>();
             services.AddSingleton<ITwilioService, TwilioService>();
 
