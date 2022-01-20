@@ -41,7 +41,7 @@
                 CourseItems = this.coursesService.GetAllAsSelectListItems(),
             };
             BreadcrumbNode forumNode = new MvcBreadcrumbNode("All", "Posts", "Forum");
-            BreadcrumbNode createpostNode = new MvcBreadcrumbNode("Create", "Posts", "Create Post") 
+            BreadcrumbNode createpostNode = new MvcBreadcrumbNode("Create", "Posts", "Create Post")
             {
                 Parent = forumNode,
             };
@@ -82,7 +82,7 @@
 
             if (courseId != 0)
             {
-                query = this.postsService.GetByCourseId<PostViewModel>(courseId);
+                query = this.postsService.GetAllByCourseId<PostViewModel>(courseId);
             }
 
             var posts = query
@@ -159,7 +159,7 @@
         {
             EditPostInputModel editPostInputModel = this.postsService.GetById<EditPostInputModel>(id);
             BreadcrumbNode forumNode = new MvcBreadcrumbNode("All", "Posts", "Forum");
-            BreadcrumbNode editpostNode = new MvcBreadcrumbNode("Edit", "Posts", "Edit Post") 
+            BreadcrumbNode editpostNode = new MvcBreadcrumbNode("Edit", "Posts", "Edit Post")
             {
                 Parent = forumNode,
             };

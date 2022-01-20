@@ -17,7 +17,7 @@
         private readonly IDeletableEntityRepository<Like> likesRepository;
         private readonly IDeletableEntityRepository<Dislike> dislikesRepository;
 
-        public CommentsService(IDeletableEntityRepository<Comment> commentRepository,IDeletableEntityRepository<Like> likesRepository, IDeletableEntityRepository<Dislike> dislikesRepository )
+        public CommentsService(IDeletableEntityRepository<Comment> commentRepository, IDeletableEntityRepository<Like> likesRepository, IDeletableEntityRepository<Dislike> dislikesRepository)
         {
             this.commentRepository = commentRepository;
             this.likesRepository = likesRepository;
@@ -73,7 +73,7 @@
 
             ICollection<T> comments = new List<T>();
 
-            foreach (var comment in commentDictionary.OrderByDescending(c => c.Value)) 
+            foreach (var comment in commentDictionary.OrderByDescending(c => c.Value))
             {
                 T commentGet = this.commentRepository
                     .All()

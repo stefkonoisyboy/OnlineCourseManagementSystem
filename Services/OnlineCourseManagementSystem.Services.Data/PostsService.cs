@@ -102,7 +102,7 @@
                 .ToList();
         }
 
-        public IEnumerable<T> GetByCourseId<T>(int courseId)
+        public IEnumerable<T> GetAllByCourseId<T>(int courseId)
         {
             return this.postRepository
                 .All()
