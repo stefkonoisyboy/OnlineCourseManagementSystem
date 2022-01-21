@@ -29,7 +29,7 @@
             <div asp-validation-summary="All" class="alert-danger"></div>
 
             <div class="form-group row">
-                <label asp-for="Text" class="col-md-2"></label>
+                <label asp-for="Text" class="col-md-2 text-white"></label>
                 <textarea asp-for="Text" class="form-control col-md-10"></textarea>
                 <span asp-validation-for="Text" class="alert-danger"></span>
             </div>
@@ -37,7 +37,7 @@
             @for (int i = 0; i < 4; i++)
             {
                 <div class="form-group row">
-                    <label asp-for="Choices[i].Text" class="col-md-2">@("Option " + symbols[i])</label>
+                    <label asp-for="Choices[i].Text" class="col-md-2 text-white">@("Option " + symbols[i])</label>
                     @if (i < 2)
                     {
                         <input asp-for="Choices[i].Text" class="form-control col-md-10" placeholder="Required" />
@@ -51,33 +51,33 @@
             }
 
             <div class="form-group form-radio row">
-                <label class="radio-label row mr-1">
+                <label class="radio-label row mr-1 text-white">
                     Correct Answer
                 </label>
                 <div class="form-radio-item row ml-3">
                     <input type="radio" asp-for="CorrectAnswerOption" id="a" value="A" class="form-check-input">
-                    <label for="a" class="form-check-label">A</label>
+                    <label for="a" class="form-check-label text-white">A</label>
                     <span class="check"></span>
                 </div>
                 <div class="form-radio-item row ml-3">
                     <input type="radio" asp-for="CorrectAnswerOption" id="b" value="B" class="form-check-input">
-                    <label for="b" class="form-check-label">B</label>
+                    <label for="b" class="form-check-label text-white">B</label>
                     <span class="check"></span>
                 </div>
                 <div class="form-radio-item row ml-3">
                     <input type="radio" asp-for="CorrectAnswerOption" id="c" value="C" class="form-check-input">
-                    <label for="c" class="form-check-label">C</label>
+                    <label for="c" class="form-check-label text-white">C</label>
                     <span class="check"></span>
                 </div>
                 <div class="form-radio-item row ml-3">
                     <input type="radio" asp-for="CorrectAnswerOption" id="d" value="D" class="form-check-input">
-                    <label for="d" class="form-check-label">D</label>
+                    <label for="d" class="form-check-label text-white">D</label>
                     <span class="check"></span>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label asp-for="Points" class="col-md-2"></label>
+                <label asp-for="Points" class="col-md-2 text-white"></label>
                 <input asp-for="Points" class="form-control col-md-10" />
                 <span asp-validation-for="Points" class="alert-danger"></span>
             </div>
