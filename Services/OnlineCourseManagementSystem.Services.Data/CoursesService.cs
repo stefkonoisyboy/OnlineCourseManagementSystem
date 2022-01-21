@@ -414,10 +414,29 @@
                 string fileName = course.Name + Guid.NewGuid().ToString();
                 string remoteUrl = await this.UploadImageAsync(input.Image, fileName);
 
-                File file = this.filesRepository.All().FirstOrDefault(f => f.Id == input.FileId);
-                file.RemoteUrl = remoteUrl;
+                File file = this.filesRepository.All().FirstOrDefault(f => f.Id == course.FileId);
 
-                await this.filesRepository.SaveChangesAsync();
+                if (file == null)
+                {
+                    File newFile = new File
+                    {
+                        Extension = System.IO.Path.GetExtension(input.Image.FileName),
+                        RemoteUrl = remoteUrl,
+                        CourseId = course.Id,
+                    };
+
+                    await this.filesRepository.AddAsync(newFile);
+                    await this.filesRepository.SaveChangesAsync();
+
+                    course.FileId = newFile.Id;
+                }
+                else
+                {
+                    file.RemoteUrl = remoteUrl;
+                    await this.filesRepository.SaveChangesAsync();
+                }
+
+                await this.coursesRepository.SaveChangesAsync();
             }
         }
 
