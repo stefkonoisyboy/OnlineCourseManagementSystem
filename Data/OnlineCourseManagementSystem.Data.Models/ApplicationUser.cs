@@ -71,6 +71,8 @@ namespace OnlineCourseManagementSystem.Data.Models
 
         public virtual Lecturer Lecturer { get; set; }
 
+        public int MachineLearningId { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

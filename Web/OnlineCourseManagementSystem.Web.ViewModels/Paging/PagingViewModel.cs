@@ -38,5 +38,7 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Paging
         public int ItemsPerPage { get; set; }
 
         public string Name { get; set; }
+
+        public string RecommendationType { get; set; }
     }
 }

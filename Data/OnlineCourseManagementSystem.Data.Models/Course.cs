@@ -33,6 +33,8 @@
 
         public string CreatorId { get; set; }
 
+        public int MachineLearningId { get; set; }
+
         public virtual ApplicationUser Creator { get; set; }
 
         public DateTime StartDate { get; set; }

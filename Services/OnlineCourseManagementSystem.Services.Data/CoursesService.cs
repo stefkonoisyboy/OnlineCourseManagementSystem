@@ -13,6 +13,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data.MachineLearning;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
@@ -26,6 +27,7 @@
         private readonly IDeletableEntityRepository<UserCourse> userCoursesRepository;
         private readonly IDeletableEntityRepository<Completition> completitionsRepository;
         private readonly IDeletableEntityRepository<Skill> skillsRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly Cloudinary cloudinary;
 
         public CoursesService(
@@ -36,6 +38,7 @@
             IDeletableEntityRepository<UserCourse> userCoursesRepository,
             IDeletableEntityRepository<Completition> completitionsRepository,
             IDeletableEntityRepository<Skill> skillsRepository,
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
             Cloudinary cloudinary)
         {
             this.coursesRepository = coursesRepository;
@@ -45,6 +48,7 @@
             this.userCoursesRepository = userCoursesRepository;
             this.completitionsRepository = completitionsRepository;
             this.skillsRepository = skillsRepository;
+            this.usersRepository = usersRepository;
             this.cloudinary = cloudinary;
         }
 
@@ -70,6 +74,7 @@
                 Name = input.Name,
                 Description = new HtmlSanitizer().Sanitize(input.Description),
                 CreatorId = input.CreatorId,
+                MachineLearningId = this.coursesRepository.All().OrderBy(c => c.MachineLearningId).LastOrDefault().MachineLearningId + 1,
             };
 
             await this.coursesRepository.AddAsync(course);
@@ -158,7 +163,7 @@
             await this.coursesRepository.SaveChangesAsync();
         }
 
-        public async Task EnrollAsync(int courseId, string userId)
+        public async Task EnrollAsync(int courseId, string userId, string path)
         {
             if (this.userCoursesRepository.All().Any(uc => uc.UserId == userId && uc.CourseId == courseId))
             {
@@ -173,6 +178,9 @@
 
             await this.userCoursesRepository.AddAsync(userCourse);
             await this.userCoursesRepository.SaveChangesAsync();
+
+            string line = $"{this.usersRepository.All().FirstOrDefault(u => u.Id == userId).MachineLearningId},{this.coursesRepository.All().FirstOrDefault(c => c.Id == courseId).MachineLearningId}";
+            System.IO.File.AppendAllText(path, Environment.NewLine + line);
         }
 
         public IEnumerable<T> GetAll<T>()
@@ -336,6 +344,24 @@
                 .All()
                 .Where(c => c.Users.Any(u => u.UserId == userId))
                 .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<UserInCourse> GetAllForTestingAIByUserId(int id, string userId, int itemsPerPage = 12)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => !c.Users.Any(u => u.UserId == userId) && c.MachineLearningId != 0)
+                .Select(c => new UserInCourse
+                {
+                    UserId = this.usersRepository.All().FirstOrDefault(u => u.Id == userId).MachineLearningId,
+                    CourseId = c.MachineLearningId,
+                    CourseName = c.Name,
+                    CoursePrice = c.Price.ToString("f2"),
+                    ParticipantsCount = c.Users.Count(),
+                    StartDate = c.StartDate.ToString("MMMM yyyy"),
+                    Id = c.Id,
+                })
                 .ToList();
         }
 

@@ -62,6 +62,7 @@ namespace OnlineCourseManagementSystem.Services.Data.Tests
         {
             // Arrange
             List<CourseTag> testData = this.GetCourseTagTestData();
+
             var mockedRepository = new Mock<IDeletableEntityRepository<CourseTag>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
             ITagsService tagsService = new TagsService(null, mockedRepository.Object);

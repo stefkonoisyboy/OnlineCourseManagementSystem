@@ -12,6 +12,7 @@
     using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Services.Data.MachineLearning;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
@@ -60,6 +61,72 @@
             this.lecturesService = lecturesService;
             this.completitionsService = completitionsService;
             this.userManager = userManager;
+        }
+
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        public async Task<IActionResult> AllRecommendedByCurrentUser(int id = 1, string recommendationType = "Highly")
+        {
+            const int ItemsPerPage = 12;
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            string modelFile = "OMCSCourses.zip";
+
+            if (!System.IO.File.Exists("OMCSCourses.zip"))
+            {
+                Recommender.TrainModel(System.IO.Path.Combine("Datasets", "userInCourses.csv"), modelFile);
+            }
+
+            IEnumerable<UserInCourse> testModelData = this.coursesService.GetAllForTestingAIByUserId(id, user.Id, ItemsPerPage);
+            IEnumerable<UserInCourseScore> result = Recommender.TestModel(modelFile, testModelData);
+
+            for (int i = 0; i < result.Count(); i++)
+            {
+                if (result.ToList()[i].Score >= 0.75)
+                {
+                    testModelData.ToList()[i].RecommendationType = "Highly";
+                }
+                else if (result.ToList()[i].Score >= 0.50 && result.ToList()[i].Score < 0.75)
+                {
+                    testModelData.ToList()[i].RecommendationType = "Strongly";
+                }
+                else if (result.ToList()[i].Score >= 0.25 && result.ToList()[i].Score < 0.50)
+                {
+                    testModelData.ToList()[i].RecommendationType = "Recommended";
+                }
+                else if (result.ToList()[i].Score < 0.25)
+                {
+                    testModelData.ToList()[i].RecommendationType = "NotRecommended";
+                }
+            }
+
+            if (recommendationType == "Highly")
+            {
+                result = result.Where(x => x.Score >= 0.75).ToList();
+            }
+            else if (recommendationType == "Strongly")
+            {
+                result = result.Where(x => x.Score >= 0.50 && x.Score < 0.75).ToList();
+            }
+            else if (recommendationType == "Recommended")
+            {
+                result = result.Where(x => x.Score >= 0.25 && x.Score < 0.50).ToList();
+            }
+            else if (recommendationType == "NotRecommended")
+            {
+                result = result.Where(x => x.Score < 0.25).ToList();
+            }
+
+            AllRecommendedCoursesByAIViewModel<UserInCourse, UserInCourseScore> viewModel = new AllRecommendedCoursesByAIViewModel<UserInCourse, UserInCourseScore>
+            {
+                InputData = testModelData.Where(x => x.RecommendationType == recommendationType).ToList(),
+                OutputData = result.Skip((id - 1) * ItemsPerPage).Take(ItemsPerPage),
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                ActiveCoursesCount = result.Count(),
+                RecommendationType = recommendationType,
+            };
+
+            return this.View(viewModel);
         }
 
         [Authorize(Roles = "Student,Lecturer,Administrator")]

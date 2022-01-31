@@ -98,7 +98,7 @@
 
             foreach (var course in viewModel.Orders.Select(o => o.CourseId))
             {
-                await this.coursesService.EnrollAsync(course, user.Id);
+                await this.coursesService.EnrollAsync(course, user.Id, System.IO.Path.Combine("Datasets", "userInCourses.csv"));
             }
 
             foreach (var course in viewModel.Orders.Select(o => o.CourseId))
