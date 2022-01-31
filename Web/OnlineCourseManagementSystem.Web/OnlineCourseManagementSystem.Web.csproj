@@ -251,4 +251,10 @@
     <Folder Include="Views\Shared\Components\QA\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Datasets\courses.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

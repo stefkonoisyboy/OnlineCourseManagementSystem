@@ -118,12 +118,12 @@
     </div>
 </div>
 
-<header class="shadow-lg p-3 mb-5 rounded text-white" style="background-color: #234465;">
+<header class="shadow-sm p-3 mb-5 rounded text-white" style="background-color: #234465;">
     <div class="row">
         <div class="col-md-10">
             <div class="row">
                 <div class="col-md-2">
-                    <img src="@this.Model.FileRemoteUrl" alt="courseProfileImage" height="120" width="120" />
+                    <img src="@this.Model.FileRemoteUrl" alt="courseProfileImage" class="p-2" style="border: 5px solid white;" height="120" width="120" />
                 </div>
                 <div class="col-md-10">
                     <h1 class="text-white">@this.ViewData["Title"]</h1>
@@ -281,7 +281,7 @@
             </div>
         </div>
         <div class="col-md-2 row-margin-10">
-            <a asp-action="AllUpcomingAndActive" class="btn btn-success shadow-lg p-3 mb-5 bg-success rounded">
+            <a asp-action="AllUpcomingAndActive" class="btn btn-success shadow-sm p-3 mb-5 bg-success rounded">
                 <strong>Library</strong>
             </a>
         </div>
@@ -289,9 +289,9 @@
 </header>
 
 <body class="bg-light">
-    <div class="row row-margin-20 bg-light shadow-lg p-3 mb-5 bg-white rounded">
+    <div class="row row-margin-20 bg-light shadow-sm p-3 mb-5 bg-white rounded">
         <div class="col-md-8">
-            <iframe width="560" height="315" src="@this.Model.TrailerRemoteUrl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            <iframe width="360" height="175" src="@this.Model.TrailerRemoteUrl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
             </iframe>
             <p>@Html.Raw(this.Model.Description)</p>
             <p style="font-size: 25px;">
@@ -300,17 +300,17 @@
                     <span class="badge bg-primary text-black-50">@tag.TagName</span>
                 }
 
-                <span class="badge bg-primary text-black-50">@this.Model.Level.ToString()</span>
+                
             </p>
             <div class="row">
-                <div class="col-md-6 shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="col-md-6 shadow p-3 mb-5 bg-body rounded">
                     <h3>What you'll learn</h3>
                     <ul class="list-group">
                         @foreach (var skill in this.Model.Skills)
                         {
                             if (skillIndex % 2 == 0)
                             {
-                                <li class="list-group-item bg-primary" style="background-color: white;">
+                                <li class="list-group-item" style="border: 2px solid lightgray; border-left: none; border-right: none; background-color: white;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg text-success" viewBox="0 0 16 16">
                                         <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z" />
                                     </svg>
@@ -319,7 +319,7 @@
                             }
                             else
                             {
-                                <li class="list-group-item bg-warning" style="background-color: white;">
+                                <li class="list-group-item" style="border: 2px solid lightgray; border-left: none; border-right: none; background-color: white;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg text-success" viewBox="0 0 16 16">
                                         <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z" />
                                     </svg>
@@ -332,9 +332,9 @@
                     </ul>
                 </div>
                 <div class="col-md-5">
-                    <div class="row shadow-lg p-3 mb-5 text-white rounded" style="position: relative; left: 30px; background-color: #ef5350;">
+                    <div class="row shadow p-3 mb-5 bg-body rounded text-white" style="position: relative; left: 30px;">
                         <div class="col-md-10">
-                            <h3>Testimonials</h3>
+                            <h3>Reviews</h3>
                             <p class="font-italic">A few words from our past students</p>
                             <div class="swiper mySwiper">
                                 <div class="swiper-wrapper">
@@ -345,10 +345,10 @@
                                                 <p>@review.Content</p>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-5">
+                                                <div class="col-md-3">
                                                     <img src="@review.UserProfileImageUrl" width="80" height="80" style="border-radius: 50%" alt="userProfileImage" />
                                                 </div>
-                                                <div class="col-md-7">
+                                                <div class="col-md-9">
                                                     <p>
                                                         <strong>@(review.UserFirstName + ' ' + review.UserLastName)</strong>
                                                     </p>
@@ -513,7 +513,7 @@
                         <div class="col-md-2">
                             @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
                             {
-                                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#staticBackdropRate" style="border-radius: 50%;">
+                                <button type="button" class="btn btn-light p-2" data-bs-toggle="modal" data-bs-target="#staticBackdropRate" style="border-radius: 50%;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                         <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
                                     </svg>
@@ -525,11 +525,11 @@
             </div>
         </div>
         <div class="col-md-4">
-            <ul class="list-group shadow-lg p-3 mb-5 bg-white rounded">
-                <li class="list-group-item bg-primary">
+            <ul class="list-group shadow p-3 mb-5 bg-body rounded">
+                <li class="list-group-item" style="border: 2px solid lightgray; border-left: none; border-right: none;">
                     <h2>Course</h2>
                 </li>
-                <li class="list-group-item bg-warning">
+                <li class="list-group-item" style="border: 2px solid lightgray; border-left: none; border-right: none;">
                     <div class="row">
                         <div class="col-md-4" style="position: relative; left: 5px;">
                             <p class="card-text" style="font-size: 12px;">
@@ -576,19 +576,19 @@
                         </p>
                     </div>
                 </li>
-                <li class="list-group-item text-center bg-primary">
+                <li class="list-group-item text-center" style="border: 2px solid lightgray; border-left: none; border-right: none;">
                     @if (this.Model.Users.Any(u => u.UserId == user.Id))
                     {
                         <p class="row-margin-20 text-white" style="font-size: 20px;">YOU ARE ALREADY ENROLLED FOR THIS COURSE!</p>
                     }
                     else
                     {
-                        <a asp-controller="Orders" asp-action="Create" asp-route-id="@this.Model.Id" class="btn btn-success shadow-lg p-3 mb-5 rounded row-margin-20">
-                            <p class="row-margin-10" style="font-size: 20px; color: white;">START COURSE</p>
+                        <a asp-controller="Orders" asp-action="Create" asp-route-id="@this.Model.Id" class="btn btn-success shadow-sm p-3 mb-5 rounded row-margin-20 w-100">
+                            <p class="row-margin-10 text-center" style="font-size: 20px; color: white;">START COURSE</p>
                         </a>
                     }
                 </li>
-                <li class="list-group-item bg-warning">
+                <li class="list-group-item" style="border: 2px solid lightgray; border-left: none; border-right: none;">
                     <p class="text-black-50">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
                             <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
@@ -596,7 +596,7 @@
                         Share on facebook
                     </p>
                 </li>
-                <li class="list-group-item bg-primary">
+                <li class="list-group-item" style="border: 2px solid lightgray; border-left: none; border-right: none;">
                     <p class="text-black-50">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
                             <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
@@ -605,7 +605,7 @@
                     </p>
                 </li>
             </ul>
-            <div class="shadow-lg p-3 mb-5 bg-success text-white rounded">
+            <div class="shadow p-3 mb-5 bg-body rounded text-white">
                 @foreach (var lecturer in this.Model.Lecturers)
                 {
                     <div class="row">
@@ -619,7 +619,7 @@
                     </div>
                     <p>@string.Join("", lecturer.LecturerUserBackground.Take(200).ToList())</p>
                     <div class="text-center">
-                        <button style="border-radius: 50%;" class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample_@lecturerIndex" aria-expanded="false" aria-controls="collapseExample">
+                        <button style="border-radius: 50%;" class="btn btn-info p-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample_@lecturerIndex" aria-expanded="false" aria-controls="collapseExample">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
                             </svg>
@@ -641,7 +641,7 @@
         <div class="swiper-wrapper">
             @foreach (var course in this.Model.RecommendedCourses)
             {
-                <div class="swiper-slide shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="swiper-slide shadow-sm p-3 mb-5 bg-white rounded">
                     <div class="row">
                         <div class="col-md-3">
                             <img src="@course.FileRemoteUrl" width="80" height="80" alt="courseProfileImage" />

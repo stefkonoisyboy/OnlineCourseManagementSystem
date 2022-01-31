@@ -139,6 +139,7 @@
                     BirthDate = this.Input.BirthDate,
                     Background = this.Input.Background,
                     Address = this.Input.Address,
+                    MachineLearningId = this.dbContext.Users.OrderBy(u => u.MachineLearningId).LastOrDefault().MachineLearningId + 1,
                 };
 
                 var result = await this._userManager.CreateAsync(user, this.Input.Password);

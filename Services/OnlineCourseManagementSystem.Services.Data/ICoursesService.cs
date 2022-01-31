@@ -6,6 +6,8 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data.MachineLearning;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
 
@@ -25,7 +27,7 @@
 
         Task ApproveAsync(int courseId);
 
-        Task EnrollAsync(int courseId, string userId);
+        Task EnrollAsync(int courseId, string userId, string path);
 
         string CourseNameByStudentAndCourse(string studentId, int courseId);
 
@@ -34,6 +36,8 @@
         int GetAllCoursesByUserIdCount(string userId);
 
         int GetAllCoursesByCreatorIdCount(string creatorId);
+
+        IEnumerable<UserInCourse> GetAllForTestingAIByUserId(int id, string userId, int itemsPerPage = 12);
 
         IEnumerable<T> GetAll<T>();
 
