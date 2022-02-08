@@ -8,18 +8,19 @@
 
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data.MachineLearning;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Comments;
 
     public class CommentsService : ICommentsService
     {
-        private readonly IDeletableEntityRepository<Comment> commentRepository;
+        private readonly IDeletableEntityRepository<Comment> commentsRepository;
         private readonly IDeletableEntityRepository<Like> likesRepository;
         private readonly IDeletableEntityRepository<Dislike> dislikesRepository;
 
         public CommentsService(IDeletableEntityRepository<Comment> commentRepository, IDeletableEntityRepository<Like> likesRepository, IDeletableEntityRepository<Dislike> dislikesRepository)
         {
-            this.commentRepository = commentRepository;
+            this.commentsRepository = commentRepository;
             this.likesRepository = likesRepository;
             this.dislikesRepository = dislikesRepository;
         }
@@ -33,23 +34,23 @@
                 AuthorId = inputModel.AuthorId,
             };
 
-            await this.commentRepository.AddAsync(comment);
+            await this.commentsRepository.AddAsync(comment);
 
-            await this.commentRepository.SaveChangesAsync();
+            await this.commentsRepository.SaveChangesAsync();
         }
 
         public async Task<int?> DeleteAsync(int commentId)
         {
-            Comment comment = this.commentRepository.All().FirstOrDefault(c => c.Id == commentId);
+            Comment comment = this.commentsRepository.All().FirstOrDefault(c => c.Id == commentId);
             int? postId = comment.PostId;
-            this.commentRepository.Delete(comment);
-            await this.commentRepository.SaveChangesAsync();
+            this.commentsRepository.Delete(comment);
+            await this.commentsRepository.SaveChangesAsync();
             return postId;
         }
 
         public IEnumerable<T> GetAllByPostId<T>(int postId)
         {
-            ICollection<Comment> commentsToUse = this.commentRepository
+            ICollection<Comment> commentsToUse = this.commentsRepository
                .All()
                .Where(c => c.PostId == postId && c.ParentId == null)
                .ToArray();
@@ -75,7 +76,7 @@
 
             foreach (var comment in commentDictionary.OrderByDescending(c => c.Value))
             {
-                T commentGet = this.commentRepository
+                T commentGet = this.commentsRepository
                     .All()
                     .Where(x => x.Id == comment.Key)
                     .To<T>()
@@ -88,7 +89,7 @@
 
         public IEnumerable<T> GetAllReplies<T>(int commentId)
         {
-            ICollection<Comment> repliesToComment = this.commentRepository
+            ICollection<Comment> repliesToComment = this.commentsRepository
                .All()
                .Where(c => c.ParentId != null && c.ParentId == commentId)
                .ToArray();
@@ -114,7 +115,7 @@
 
             foreach (var comment in commentDictionary.OrderByDescending(c => c.Value))
             {
-                T commentGet = this.commentRepository
+                T commentGet = this.commentsRepository
                     .All()
                     .Where(x => x.Id == comment.Key)
                     .To<T>()
@@ -127,7 +128,7 @@
 
         public T GetById<T>(int commentId)
         {
-            return this.commentRepository.All()
+            return this.commentsRepository.All()
                 .Where(c => c.Id == commentId)
                 .To<T>()
                 .FirstOrDefault();
@@ -135,14 +136,14 @@
 
         public T GetLastActiveCommentByPostId<T>(int postId)
         {
-            Comment lastCommentCreatedOn = this.commentRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.CreatedOn).FirstOrDefault();
-            Comment lastCommentModifiedOn = this.commentRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.ModifiedOn).FirstOrDefault();
+            Comment lastCommentCreatedOn = this.commentsRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.CreatedOn).FirstOrDefault();
+            Comment lastCommentModifiedOn = this.commentsRepository.All().Where(c => c.PostId == postId).OrderByDescending(c => c.ModifiedOn).FirstOrDefault();
 
-            if (this.commentRepository.All().Where(c => c.PostId == postId).Any())
+            if (this.commentsRepository.All().Where(c => c.PostId == postId).Any())
             {
                 if (lastCommentCreatedOn.CreatedOn > lastCommentModifiedOn.ModifiedOn)
                 {
-                    return this.commentRepository
+                    return this.commentsRepository
                         .All()
                         .Where(c => c.Id == lastCommentCreatedOn.Id)
                         .To<T>()
@@ -150,7 +151,7 @@
                 }
                 else
                 {
-                    return this.commentRepository
+                    return this.commentsRepository
                         .All()
                         .Where(c => c.Id == lastCommentModifiedOn.Id)
                         .To<T>()
@@ -165,7 +166,7 @@
 
         public int? GetPostId(int commentId)
         {
-            Comment comment = this.commentRepository
+            Comment comment = this.commentsRepository
                 .All()
                 .FirstOrDefault(c => c.Id == commentId);
 
@@ -184,20 +185,20 @@
                 ParentId = inputModel.ParentId,
             };
 
-            await this.commentRepository.AddAsync(comment);
+            await this.commentsRepository.AddAsync(comment);
 
-            await this.commentRepository.SaveChangesAsync();
+            await this.commentsRepository.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(EditCommentInputModel inputModel)
         {
-            Comment comment = this.commentRepository
+            Comment comment = this.commentsRepository
                 .All()
                 .FirstOrDefault(c => c.Id == inputModel.CommentId);
 
             comment.Content = inputModel.Content;
 
-            await this.commentRepository.SaveChangesAsync();
+            await this.commentsRepository.SaveChangesAsync();
         }
 
         public async Task Dislike(int commentId, string userId)
@@ -271,6 +272,29 @@
 
             await this.likesRepository.SaveChangesAsync();
             await this.dislikesRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<PredictedCommentViewModel> GetAllToxic()
+        {
+            var modelFile = "ToxicCommentsModel.zip";
+            var source = this.commentsRepository.All().To<CommentViewModel>().ToArray();
+            var predicion = ToxicCommentsClassifier.TestModel(modelFile, source.Select(x => x.Content));
+
+            List<PredictedCommentViewModel> predictedComments = new List<PredictedCommentViewModel>();
+            int index = 0;
+            foreach (var predictedComment in predicion)
+            {
+                predictedComments.Add(new PredictedCommentViewModel()
+                {
+                    Comment = source[index],
+                    Prediction = predictedComment.Prediction,
+                    Score = predictedComment.Score,
+                });
+
+                index++;
+            }
+
+            return predictedComments;
         }
     }
 }

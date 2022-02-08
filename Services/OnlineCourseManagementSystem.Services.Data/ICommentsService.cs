@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
-
+    using OnlineCourseManagementSystem.Services.Data.MachineLearning;
     using OnlineCourseManagementSystem.Web.ViewModels.Comments;
 
     public interface ICommentsService
@@ -60,6 +60,12 @@
         /// <returns></returns>
         int? GetPostId(int commentId);
 
+        /// <summary>
+        /// This method gets all replies for comment.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
         IEnumerable<T> GetAllReplies<T>(int commentId);
 
         /// <summary>
@@ -85,5 +91,11 @@
         /// <param name="userId"></param>
         /// <returns></returns>
         Task Dislike(int commentId, string userId);
+
+        /// <summary>
+        /// This method gets toxic comments(founded abusive or offensive based on ml.net prediction).
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<PredictedCommentViewModel> GetAllToxic();
     }
 }
