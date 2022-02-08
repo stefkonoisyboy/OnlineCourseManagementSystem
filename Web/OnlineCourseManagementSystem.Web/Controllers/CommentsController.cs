@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Common;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Comments;
@@ -110,6 +111,12 @@
             int? postId = this.commentsService.GetPostId(id);
 
             return this.RedirectToAction("SeePost", "Posts", new { Id = postId });
+        }
+
+        [Authorize(Roles= GlobalConstants.AdministratorRoleName)]
+        public IActionResult AllToxicComments()
+        {
+            return this.View(this.commentsService.GetAllToxic());
         }
     }
 }

@@ -1,0 +1,53 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Comments
+@model IEnumerable<PredictedCommentViewModel>
+@{
+    this.ViewData["Title"] = "Toxic Comments Classification";
+}
+<h1 class="text-center">Toxic Comments classification</h1>
+<div class="d-flex flex-column justify-content-center my-5">
+    @foreach (var comment in this.Model)
+    {
+        <div class="card">
+            <div class="card-header">
+                <div class="flex-grow-1">
+                    <span class="mx-1">
+                        Author: @comment.Comment.AuthorName |
+                    </span>
+                    <span class="mx-1">
+                        Created on: @comment.Comment.CreatedOn |
+                    </span>
+                    @if (comment.Comment.ModifiedOn != null)
+                    {
+                        <span class="mx-1">
+                            Modified on: @comment.Comment.ModifiedOn
+                        </span>
+                    }
+                </div>
+                <div>
+                    <span>
+                        Prediction : @comment.Prediction
+                    </span>
+                    <span>
+                        @if (comment.Score > 0.5)
+                        {
+                            <span class="badge badge-danger">
+                                Toxic
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-success">
+                                Non-toxic
+                            </span>
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p>
+                    @comment.Comment.Content
+                </p>
+            </div>
+        </div>
+    }
+</div>

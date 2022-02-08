@@ -792,3 +792,24 @@ form.hide-submit input[type="submit"] {
         font-size: 11px
     }
 }
+
+#allcourses {
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+    #allcourses::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    #allcourses::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    #allcourses::-webkit-scrollbar-thumb {
+        background-color: #2196f3;
+        border-radius: 10px;
+        width: 5px;
+    }
