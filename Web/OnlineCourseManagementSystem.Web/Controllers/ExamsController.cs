@@ -218,7 +218,7 @@
         public async Task<IActionResult> MyResults(string input, int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            const int ItemsPerPage = 2;
+            const int ItemsPerPage = 5;
             ResultFromExamListViewModel viewModel = new ResultFromExamListViewModel
             {
                 ItemsPerPage = ItemsPerPage,

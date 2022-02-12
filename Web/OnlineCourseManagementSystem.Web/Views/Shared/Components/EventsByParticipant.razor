@@ -107,7 +107,7 @@ else
         <ul class="list-group">
             @foreach (var channel in this.Model.Channels.Where(c => DateTime.UtcNow >= c.StartDate && DateTime.UtcNow <= c.EndDate))
             {
-                <li class="list-group-item" style="border-radius: 20px;">
+                <li class="list-group-item mb-2" style="border-radius: 20px;">
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mt-4">
@@ -152,7 +152,7 @@ else
         <ul class="list-group">
             @foreach (var channel in this.Model.Channels.Where(c => c.StartDate > DateTime.UtcNow))
             {
-                <li class="list-group-item" style="border-radius: 20px;">
+                <li class="list-group-item mb-2" style="border-radius: 20px;">
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mt-4">
@@ -201,7 +201,7 @@ else
         <ul class="list-group">
             @foreach (var channel in this.Model.Channels.Where(c => c.EndDate < DateTime.UtcNow))
             {
-                <li class="list-group-item" style="border-radius: 20px;">
+                <li class="list-group-item mb-2" style="border-radius: 20px;">
                     <div class="row">
                         <div class="col-md-10">
                             <div class="row mt-4">
