@@ -536,6 +536,18 @@
                     clear: both;
                     height: 0;
                 }
+
+                #pdf:hover {
+                    color: aqua !important;
+                }
+
+        #excel:hover {
+            color: lawngreen !important;
+        }
+
+        #csv:hover {
+            color: red !important;
+        }
     </style>
     <link href="~/css/responsiveTables.css" rel="stylesheet" />
 </head>
@@ -545,8 +557,8 @@
 
 <body>
     <button id="pdf" class="btn btn-outline-primary mb-3">PDF</button>
-    <a asp-action="ExportMyExamsAsExcel" class="btn btn-outline-success mb-3">Excel</a>
-    <a asp-action="ExportMyExamsAsCSV" class="btn btn-outline-danger mb-3">CSV</a>
+    <a id="excel" asp-action="ExportMyExamsAsExcel" class="btn btn-outline-success mb-3">Excel</a>
+    <a id="csv" asp-action="ExportMyExamsAsCSV" class="btn btn-outline-danger mb-3">CSV</a>
 
     <form class="float-end" style="display: inline;">
         <div class="row">

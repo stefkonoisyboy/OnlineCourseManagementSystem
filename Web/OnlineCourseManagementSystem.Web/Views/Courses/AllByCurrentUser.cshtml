@@ -76,7 +76,7 @@
                 @foreach (var course in this.Model.Courses)
                 {
                     <div class="col-md-4">
-                        <div class="card bg-white shadow-lg p-3 mb-5 rounded">
+                        <div class="card bg-white  p-3 mb-5 rounded" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
                             <div class="assignment-options" id="view-@course.CourseId">
                                 <div class="assignment-option mx-1 p-2" style="background:#42a5f5;">
                                     <a class="text-white" asp-controller="Assignments" asp-action="CurrentUserAllAssignmentsByCourse" asp-route-courseId="@course.CourseId">Assignments</a>
@@ -113,7 +113,7 @@
             <partial name="_MyCoursesPagingPartial" model="@this.Model" />
         </div>
         <div class="col-md-3">
-            <div class="accordion shadow-lg p-3 mb-5 bg-white rounded" id="accordionExample">
+            <div class="accordion  p-3 mb-5 bg-white rounded" id="accordionExample" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -150,7 +150,7 @@
                     <div class="swiper-wrapper">
                         @foreach (var course in this.Model.FeaturedCourses)
                         {
-                            <div class="swiper-slide shadow-lg p-3 mb-5 bg-white rounded">
+                            <div class="swiper-slide  p-3 mb-5 bg-white rounded" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <img src="@course.FileRemoteUrl" width="80" height="80" alt="courseProfileImage" />
