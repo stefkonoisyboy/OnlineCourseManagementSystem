@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-
+    using Ganss.XSS;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
@@ -33,7 +33,7 @@
         {
             Post post = new Post
             {
-                Content = inputModel.Content,
+                Content = new HtmlSanitizer().Sanitize(inputModel.Content),
                 Title = inputModel.Title,
                 CourseId = inputModel.CourseId,
                 AuthorId = inputModel.AuthorId,
@@ -171,7 +171,7 @@
                 .All()
                 .FirstOrDefault(p => p.Id == inputModel.Id);
 
-            post.Content = inputModel.Content;
+            post.Content = new HtmlSanitizer().Sanitize(inputModel.Content);
             post.Title = inputModel.Title;
             post.CourseId = inputModel.CourseId;
 

@@ -262,7 +262,6 @@ function attachTrack(track) {
 
             const responsiveItem = document.createElement('div');
             responsiveItem.classList.add('embed-responsive-item');
-
             // Similar to.
             // <div class="embed-responsive embed-responsive-16by9">
             //   <div id="camera" class="embed-responsive-item">
@@ -354,4 +353,58 @@ function muteAudio() {
     });
 }
 
+var screenTrack;
 
+function shareScreenHandler() {
+    if (!screenTrack) {
+        navigator.mediaDevices.getDisplayMedia().then(stream => {
+            screenTrack = new Twilio.Video.LocalVideoTrack(stream.getTracks()[0]);
+            _activeRoom.localParticipant.publishTrack(screenTrack);
+            screenTrack.mediaStreamTrack.onended = () => { shareScreenHandler() };
+        }).catch(() => {
+            alert("Could not share the screen");
+        })
+    }
+    else {
+        _activeRoom.localParticipant.unpublishTrack(screenTrack);
+        screenTrack.stop();
+        screenTrack = null;
+    }
+}
+
+//function zoomTrack(trackElement) {
+//    var container = document.getElementById('participants');
+//    if (!trackElement.classList.contains('participantZoomed')) {
+//        // zoom in
+//        container.childNodes.forEach(participant => {
+//            if (participant.className.includes('participant')) {
+//                if (participant.childNodes[0] === trackElement) {
+//                    participant.childNodes[0].classList.add('participantZoomed')
+//                }
+//                else {
+//                    participant.childNodes[0].classList.add('participantHidden')
+//                }
+//                if (participant.childNodes.length > 1) {
+//                    participant.childNodes[1].classList.add('participantHidden');
+//                }
+//            }
+//        });
+//    }
+//    else {
+
+//        // zoom out
+//        container.childNodes.forEach(participant => {
+//            if (participant.className.includes('participant')) {
+//                if (participant.childNodes[0] === trackElement) {
+//                    participant.childNodes[0].classList.remove('participantZoomed')
+//                }
+//                else {
+//                    participant.childNodes[0].classList.remove('participantHidden')
+//                }
+//                if (participant.childNodes.length > 1) {
+//                    participant.childNodes[1].classList.remove('participantHidden');
+//                }
+//            }
+//        });
+//    }
+//};

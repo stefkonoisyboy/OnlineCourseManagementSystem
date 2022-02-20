@@ -1,14 +1,21 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Comments
-@model IEnumerable<PredictedCommentViewModel>
+@model AllCommentsViewModel
 @{
     this.ViewData["Title"] = "Toxic Comments Classification";
 }
 <h1 class="text-center">Toxic Comments classification</h1>
 <div class="d-flex flex-column justify-content-center my-5">
-    @foreach (var comment in this.Model)
+    <div class="d-flex justify-content-end">
+        <form asp-controller="Comments" asp-action="DeleteAllToxicComments" method="post">
+            <button>
+                Delete all toxic comments
+            </button>
+        </form>
+    </div>
+    @foreach (var comment in this.Model.Comments)
     {
         <div class="card">
-            <div class="card-header">
+            <div class="card-header d-flex">
                 <div class="flex-grow-1">
                     <span class="mx-1">
                         Author: @comment.Comment.AuthorName |
@@ -41,6 +48,15 @@
                             </span>
                         }
                     </span>
+                    <div>
+                        <form asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.Comment.Id" method="post">
+                            <button class="btn btn-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="26px" width="26px" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
