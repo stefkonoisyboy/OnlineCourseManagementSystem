@@ -35,180 +35,185 @@
     </a>
 </div>
 
-<div class="d-flex  flex-column flex-md-row justify-content-center ">
-    <div class="row flex-md-grow-1">
-        @foreach (var eventCreated in this.Model.Events)
-        {
-            <div class="col-10 col-md-5 flex-column rounded card mr-1">
-                <div class="card-header d-flex">
-                    <div class="flex-grow-1">
-                    </div>
-                    @{
-                        string modalId = $"#addResourceModal{eventCreated.Id}";
-                    }
-                    <div class="d-inline-flex align-items-center rounded-pill p-2 my-1" data-bs-toggle="modal" data-bs-target="@modalId" style="cursor:pointer;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-                        <tt class="d-sm-block d-md-none d-xl-block">
-                            Add Video Resource
-                        </tt>
-                        <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="d-flex align-items-center mx-1">
-                        <form asp-controller="Events" asp-action="Delete" asp-route-id="@eventCreated.Id" method="post">
-                            <button class="btn border-0">
-                                <svg style="" xmlns="http://www.w3.org/2000/svg" height="16" width="16" class="svg-btn mx-1" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </form>
-                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@eventCreated.Id">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" class="svg-btn mx-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="my-1">
-                        <h3>
-                            <a class="text" style="color: #ff6a00; width: 10px;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
-                                @eventCreated.Theme
-                            </a>
-                        </h3>
-                    </div>
-                    <div class="my-1">
-                        @if (!string.IsNullOrEmpty(eventCreated.AuthorProfileImageUrl))
-                        {
-                            <img class="rounded-circle" style="width:50px;height:50px" src="@eventCreated.AuthorProfileImageUrl" />
-                        }
-                        else
-                        {
-                            <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
-                                <h3 class="text-center" style="color:white !important">@(eventCreated.CreatorFirstName.Substring(0,1)+eventCreated.CreatorLastName.Substring(0,1)) </h3>
-                            </div>
-                        }
-                        <span class="text-black">@(eventCreated.CreatorFirstName+" "+eventCreated.CreatorLastName)</span>
+<div class="row">
 
-                        @if (eventCreated.IsApproved)
-                        {
-                            <div class="bg-success">
-                                Approved
+    <div class="col-md-9">
+        <div class="row">
+            @foreach (var eventCreated in this.Model.Events)
+            {
+                <div class="col-md-5">
+                    <div class="card rounded">
+                        <div class="card-header d-flex">
+                            <div class="flex-grow-1">
                             </div>
-                        }
-                        else
-                        {
-                            <div class="bg-danger">
-                                Disapproved
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span class="text-black-50">
-                                @eventCreated.StartDate.ToString("dd MMM yyyy(ddd)")
-                            </span>
-                        </span>
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span class="text-black-50">
-                                @eventCreated.StartDate.ToString("t") - @eventCreated.EndDate.ToString("t")
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            @{
+                                string modalId = $"#addResourceModal{eventCreated.Id}";
+                            }
+                            <div class="d-flex align-items-center rounded-pill p-1 my-1" data-bs-toggle="modal" data-bs-target="@modalId" style="cursor:pointer;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                                <div style="font-size: 10px;">
+                                    Video Resource
+                                </div>
+                                <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                 </svg>
-                            </span>
-                        </span>
-                    </a>
-                </div>
-            </div>
-            <div class="modal fade" id="@modalId.Substring(1, modalId.Length-1)" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="@(modalId.Substring(1, modalId.Length - 1))Label" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="@(modalId.Substring(1, modalId.Length-1))Label">Add Video Resource</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                @*<div class="col-md-4">
-                                        <form asp-action="AddDocxFile" asp-controller="Files" method="post">
-                                            <label for="fileInputDocx" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-word" viewBox="0 0 16 16">
-                                                    <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
-                                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                                                </svg>
-                                            </label>
-                                           <input hidden id="fileInputDocx"  />
-                                        </form>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <form asp-action="AddPowerPointFile" asp-controller="Files" method="post">
-                                            <label for="inputFilePowerPoint" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-ppt" viewBox="0 0 16 16">
-                                                    <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
-                                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
-                                                </svg>
-                                            </label>
-                                            <input hidden id="inputFilePowerPoint"  />
-                                        </form>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <form asp-action="AddImageFile" asp-controller="Files" method="post">
-                                            <label for="inputFileImage" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
-                                                    <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
-                                                    <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
-                                                </svg>
-                                            </label>
-                                            <input hidden id="inputFileImage" />
-
-                                        </form>
-                                    </div>*@
-                                @*<div class="col-md-4">
-                                        <form asp-action="AddVideoFile" asp-controller="Files" method="post">
-                                            <label for="inputFileVideo" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z" />
-                                                </svg>
-                                            </label>
-                                            <input hidden id="inputFileVideo"  />
-                                        </form>
-                                    </div>*@
-                                <form asp-controller="Files" asp-action="AddVideoToEvent" method="post">
-                                    <div class="form-group">
-                                        <label for="@this.Model.InputModel.RemoteUrl">Video URL</label>
-                                        <input class="form-control" asp-for="@this.Model.InputModel.RemoteUrl" type="text" placeholder="Video URL..." />
-                                        <span class="alert-danger" asp-validation-for="@this.Model.InputModel.RemoteUrl"></span>
-                                    </div>
-                                    <input hidden asp-for="@this.Model.InputModel.EventId" value="@eventCreated.Id" />
-                                    <div class="d-flex justify-content-end">
-                                        <button class="btn btn-secondary ">
-                                            Add
-                                            <span class="badge badge-secondary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </div>
+                            </div>
+                            <div class="d-flex align-items-center mx-1">
+                                <form asp-controller="Events" asp-action="Delete" asp-route-id="@eventCreated.Id" method="post">
+                                    <button class="btn border-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" class="svg-btn mx-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
                                 </form>
+                                <a class="btn" asp-controller="Events" asp-action="Edit" asp-route-id="@eventCreated.Id">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" class="svg-btn mx-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="my-1">
+                                <h3>
+                                    <a class="text" style="color: #ff6a00; width: 10px;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
+                                        @eventCreated.Theme
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="my-1">
+                                @if (!string.IsNullOrEmpty(eventCreated.AuthorProfileImageUrl))
+                                {
+                                    <img class="rounded-circle" style="width:50px;height:50px" src="@eventCreated.AuthorProfileImageUrl" />
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary" style="width:50px; height:50px;">
+                                        <h3 class="text-center" style="color:white !important">@(eventCreated.CreatorFirstName.Substring(0,1)+eventCreated.CreatorLastName.Substring(0,1)) </h3>
+                                    </div>
+                                }
+                                <span class="text-black">@(eventCreated.CreatorFirstName+" "+eventCreated.CreatorLastName)</span>
+
+                                @if (eventCreated.IsApproved)
+                                {
+                                    <div class="bg-success">
+                                        Approved
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="bg-danger">
+                                        Disapproved
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span class="text-black-50">
+                                        @eventCreated.StartDate.ToString("dd MMM yyyy(ddd)")
+                                    </span>
+                                </span>
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="text-black-50">
+                                        @eventCreated.StartDate.ToString("t") - @eventCreated.EndDate.ToString("t")
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="@modalId.Substring(1, modalId.Length-1)" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="@(modalId.Substring(1, modalId.Length - 1))Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="@(modalId.Substring(1, modalId.Length-1))Label">Add Video Resource</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    @*<div class="col-md-4">
+                                            <form asp-action="AddDocxFile" asp-controller="Files" method="post">
+                                                <label for="fileInputDocx" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-word" viewBox="0 0 16 16">
+                                                        <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
+                                                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                                                    </svg>
+                                                </label>
+                                               <input hidden id="fileInputDocx"  />
+                                            </form>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form asp-action="AddPowerPointFile" asp-controller="Files" method="post">
+                                                <label for="inputFilePowerPoint" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-ppt" viewBox="0 0 16 16">
+                                                        <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
+                                                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                                                    </svg>
+                                                </label>
+                                                <input hidden id="inputFilePowerPoint"  />
+                                            </form>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form asp-action="AddImageFile" asp-controller="Files" method="post">
+                                                <label for="inputFileImage" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+                                                        <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                                                        <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
+                                                    </svg>
+                                                </label>
+                                                <input hidden id="inputFileImage" />
+
+                                            </form>
+                                        </div>*@
+                                    @*<div class="col-md-4">
+                                            <form asp-action="AddVideoFile" asp-controller="Files" method="post">
+                                                <label for="inputFileVideo" class="btn p-3 border-0" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z" />
+                                                    </svg>
+                                                </label>
+                                                <input hidden id="inputFileVideo"  />
+                                            </form>
+                                        </div>*@
+                                    <form asp-controller="Files" asp-action="AddVideoToEvent" method="post">
+                                        <div class="form-group">
+                                            <label for="@this.Model.InputModel.RemoteUrl">Video URL</label>
+                                            <input class="form-control" asp-for="@this.Model.InputModel.RemoteUrl" type="text" placeholder="Video URL..." />
+                                            <span class="alert-danger" asp-validation-for="@this.Model.InputModel.RemoteUrl"></span>
+                                        </div>
+                                        <input hidden asp-for="@this.Model.InputModel.EventId" value="@eventCreated.Id" />
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-secondary ">
+                                                Add
+                                                <span class="badge">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-    <div class="d-flex flex-column bg-white h-50 mt-5 mt-md-0" style="width:40%;color:black;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+    <div class="col-md-3" style="color:black;">
         <div class="accordion" id="accountOptions">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
@@ -268,8 +273,8 @@
         </div>
     </div>
 </div>
-    
-    
 
-<div style="height:30vh;">
-</div>
+
+
+    <div style="height:30vh;">
+    </div>

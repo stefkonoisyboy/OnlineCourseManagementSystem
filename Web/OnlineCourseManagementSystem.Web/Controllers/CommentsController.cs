@@ -116,7 +116,19 @@
         [Authorize(Roles= GlobalConstants.AdministratorRoleName)]
         public IActionResult AllToxicComments()
         {
-            return this.View(this.commentsService.GetAllToxic());
+            AllCommentsViewModel viewModel = new AllCommentsViewModel()
+            {
+                Comments = this.commentsService.GetAllCommentsClassified(),
+                DeletedToxicCommentIds = this.commentsService.GetAllCommentsClassified().Where(x=>x.Score> 0.5).Select(x=>x.Comment.Id),
+            };
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteAllToxicComments()
+        {
+            this.commentsService.DeleteAllToxicComments();
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }

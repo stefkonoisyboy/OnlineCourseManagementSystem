@@ -274,7 +274,7 @@
             await this.dislikesRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<PredictedCommentViewModel> GetAllToxic()
+        public IEnumerable<PredictedCommentViewModel> GetAllCommentsClassified()
         {
             var modelFile = "ToxicCommentsModel.zip";
             var source = this.commentsRepository.All().To<CommentViewModel>().ToArray();
@@ -295,6 +295,19 @@
             }
 
             return predictedComments;
+        }
+
+        public async Task DeleteAllToxicComments()
+        {
+            IEnumerable<int> toxicComments = this.GetAllCommentsClassified().Where(c => c.Score > 0.5 && c.Prediction == true).Select(c => c.Comment.Id);
+            foreach (var commentId in toxicComments)
+            {
+                Console.WriteLine(commentId);
+                Comment comment = this.commentsRepository.All().FirstOrDefault(c => c.Id == commentId);
+                this.commentsRepository.Delete(comment);
+            }
+
+            await this.commentsRepository.SaveChangesAsync();
         }
     }
 }

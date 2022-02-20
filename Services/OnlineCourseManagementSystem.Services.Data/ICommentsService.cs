@@ -96,6 +96,12 @@
         /// This method gets toxic comments(founded abusive or offensive based on ml.net prediction).
         /// </summary>
         /// <returns></returns>
-        IEnumerable<PredictedCommentViewModel> GetAllToxic();
+        IEnumerable<PredictedCommentViewModel> GetAllCommentsClassified();
+
+        /// <summary>
+        /// This method deletes all toxic comments
+        /// </summary>
+        /// <param name="toxicComments"></param>
+        Task DeleteAllToxicComments();
     }
 }
