@@ -20,12 +20,14 @@
     {
         private readonly IDeletableEntityRepository<Assignment> assignmentRepository;
         private readonly IDeletableEntityRepository<UserAssignment> userAssignmentRepository;
+        private readonly IDeletableEntityRepository<Course> courseRepository;
         private readonly CloudinaryService cloudinaryService;
 
-        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentRepository, IDeletableEntityRepository<UserAssignment> userAssignmentRepository, Cloudinary cloudinaryUtility)
+        public AssignmentsService(IDeletableEntityRepository<Assignment> assignmentRepository, IDeletableEntityRepository<UserAssignment> userAssignmentRepository, IDeletableEntityRepository<Course> courseRepository,Cloudinary cloudinaryUtility)
         {
             this.assignmentRepository = assignmentRepository;
             this.userAssignmentRepository = userAssignmentRepository;
+            this.courseRepository = courseRepository;
             this.cloudinaryService = new CloudinaryService(cloudinaryUtility);
         }
 
@@ -298,6 +300,15 @@
             return this.userAssignmentRepository
                 .All()
                 .Where(ua => ua.UserId == userId && ua.Assignment.CourseId == courseId && ua.IsChecked && ua.TurnedOn != null)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByLecturer<T>(string userId)
+        {
+            return this.userAssignmentRepository
+                .All()
+                .Where(ua => ua.Assignment.Course.CreatorId == userId)
                 .To<T>()
                 .ToList();
         }

@@ -15,20 +15,22 @@
         border-radius: 3px;
         background: #f5f5f5;
     }
+
     .current {
         color: #42a5f5;
         background-color: white;
         cursor: none;
     }
-        .options:hover {
-            cursor: pointer;
-        }
 
-    
+    .options:hover {
+        cursor: pointer;
+    }
+
+
 
     .add-image {
-        padding:0.5rem;
-        font-size:12px;
+        padding: 0.5rem;
+        font-size: 12px;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     }
 
@@ -38,51 +40,52 @@
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         }
 
-    body{
-        background:#f5f5f5;
+    body {
+        background: #f5f5f5;
     }
 
     .dropdown-option {
         box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
         border-bottom: 2px solid #f5f5f5;
         padding: 0.5rem;
-        width:250px;
+        width: 250px;
     }
 
-    .form-control-material {
-        border: none;
-        background-color: transparent;
-        border-bottom: 3px solid gray;
-        padding: 16px 0 0;
-        height: 48px;
+    #default-img {
+        display: none;
     }
 
-    #default-img{
-        display:none;
+    #default-view {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    #default-view{
-        display:flex;
-        justify-content:center;
-        align-items:center;
-    }
-
-    .show{
-        display:flex;
-        justify-content:center;
-        align-items:center;
+    .show {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
 @if (this.TempData.ContainsKey("UpdatedAccount"))
- {
+{
     <div class="alert alert-success alert-dismissible">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         @this.TempData["UpdatedAccount"]
     </div>
- }
+}
+<script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "image paste table link code media"
+        ]
+    });
+</script>
 
-<div class="d-flex flex-column flex-md-row justify-content-center mt-4 w-100">
-    <div class="d-flex flex-column mr-0 mr-md-3 w-75" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; background:white;">
+<div class="row mt-4">
+    <div class="col-md-9" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; background:white;">
         <div class="d-flex" style="background: #f5f5f5;">
             <div class="options current">
                 <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 20 20" fill="currentColor">
@@ -101,7 +104,7 @@
 
         <div class="main-section ml-2 ml-md-5">
             <form asp-controller="Users" asp-action="ManageAccountById" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="alert-danger"></div>
+                <div asp-validation-summary="All" class="alert-danger"></div>
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="NewImage" class="mr-0 mr-md-4">Image</label>
                     <div class="d-flex align-items-center">
@@ -114,7 +117,7 @@
                         else
                         {
                             <div id="default-img" class="mt-1 mr-2" style="height: 100px; width: 100px; background: #f5f5f5;">
-                                <img src="" id="img"  height="100" width="100" alt="ProfileImage" />
+                                <img src="" id="img" height="100" width="100" alt="ProfileImage" />
                             </div>
                             <div id="default-view" class="mt-1 mr-2 " style="height: 100px; width: 100px; background: #f5f5f5;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
@@ -132,11 +135,11 @@
                     <h6 class="mr-0 mr-md-4">Full Name</h6>
                     <div class="d-block d-md-flex">
                         <div class="mr-0 mr-md-2">
-                            <input asp-for="FirstName" class="form-control form-control-material " type="text" placeholder="First name" />
+                            <input asp-for="FirstName" class="form-control  " type="text" placeholder="First name" />
                             <span asp-validation-for="FirstName" class="alert-danger"></span>
                         </div>
                         <div class="mr-0 mr-md-2">
-                            <input class="form-control form-control-material " asp-for="LastName" type="text" placeholder="Last name" />
+                            <input class="form-control  " asp-for="LastName" type="text" placeholder="Last name" />
                             <span asp-validation-for="LastName" class="alert-danger"></span>
                         </div>
                     </div>
@@ -144,14 +147,14 @@
 
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="Background" class="mr-0 mr-md-4">Background</label>
-                    <textarea asp-for="Background" class="form-control form-control-material mr-0 mr-md-2" placholder="Background"></textarea>
+                    <textarea asp-for="Background" rows="12" cols="12" class="form-control mr-0 mr-md-2" placholder="Background"></textarea>
                     <span asp-validation-for="Background"></span>
                 </div>
 
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="Birthdate" class="mr-0 mr-md-4">Birthdate</label>
                     <div class="d-block d-md-flex">
-                        <input asp-for="Birthdate" class=" form-control form-control-material mr-0 mr-md-2" />
+                        <input asp-for="Birthdate" class=" form-control  mr-0 mr-md-2" />
                         <span asp-validation-for="Birthdate" class="alert-danger"></span>
                     </div>
                 </div>
@@ -159,7 +162,7 @@
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="TownId" class="mr-0 mr-md-4">Town</label>
                     <div class="d-block d-md-flex">
-                        <select asp-items="this.Model.TownItems" class="form-control form-control-material mr-0 mr-md-2" id="TownId" asp-for="TownId">
+                        <select asp-items="this.Model.TownItems" class="form-control  mr-0 mr-md-2" id="TownId" asp-for="TownId">
                         </select>
                         <span asp-validation-for="TownId" class="alert-danger"></span>
                     </div>
@@ -168,7 +171,7 @@
                 <div class="d-block d-md-flex mt-3">
                     <label asp-for="Address" class="mr-0 mr-md-4">Address</label>
                     <div class="d-block d-md-flex">
-                        <input asp-for="Address" class="form-control form-control-material mr-0 mr-md-2" type="text" placeholder="Address" />
+                        <input asp-for="Address" class="form-control  mr-0 mr-md-2" type="text" placeholder="Address" />
                         <span asp-validation-for="Address" class="alert-danger"></span>
                     </div>
                 </div>
@@ -186,13 +189,20 @@
                 </div>
 
                 @*<div class="d-block d-md-flex mt-3">
-            <h6 class="mr-0 mr-md-4">Change Password</h6>
-            <input type="password" placeholder="Password" />
-        </div>*@
+                        <h6 class="mr-0 mr-md-4">Change Password</h6>
+                        <input type="password" placeholder="Password" />
+                    </div>*@
                 <input hidden asp-for="Id" />
                 <div class="my-3 ml-md-5">
                     <div class="d-flex align-items-center">
-                        <input type="radio" />
+                        @if (this.Model.Subscribed != null)
+                        {
+                            <input type="radio" asp-for="@this.Model.Subscribed" />
+                        }
+                        else
+                        {
+                            <input type="radio" />
+                        }
                         Subscribe to our Newsletter
                     </div>
                     <button class="btn btn-primary mt-2">SAVE CHANGES</button>
@@ -200,63 +210,122 @@
             </form>
         </div>
     </div>
-    <div class="d-flex flex-column bg-white h-50 mt-5 mt-md-0" style="width:300px;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
-        <div class="accordion" id="accountOptions">
+    <div class="col-md-3">
+        <div class="accordion  p-3 mb-5 bg-white rounded" id="accordionExample" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
-                    <button class="bg-white accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"  aria-expanded="false" aria-controls="collapseOne">
-                        My Account
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <strong>My Account</strong>
                     </button>
                 </h2>
-            </div>
-        </div>
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accountOptions">
-            <div class="accordion-body">
-                <div class="dropdown-option">
-                    @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
-                    {
-                        <a asp-controller="Dashboard" asp-action="StudentDashboard">Dashboard</a>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                {
+                                    <a asp-controller="Dashboard" asp-action="StudentDashboard">Dashboard</a>
 
-                    }
-                    else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-                    {
-                        <a asp-controller="Dashboard" asp-action="LecturerDashboard">Dashboard</a>
-                    }
-                    else if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                    {
-                        <a asp-controller="Dashboard" asp-action="AdminDashboard">Dashboard</a>
-                    }
-                </div>
-                @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
-                {
-                     <div class="dropdown-option">
-                         <a asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a>
-                     </div>
-                }
+                                }
+                                else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                {
+                                    <a asp-controller="Dashboard" asp-action="LecturerDashboard">Dashboard</a>
+                                }
+                                else if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                {
+                                    <a asp-controller="Dashboard" asp-action="AdminDashboard">Dashboard</a>
+                                }
+                            </li>
+                            @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                            {
+                                <li class="list-group-item">
+                                    <a asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a>
+                                </li>
+                            }
 
-                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-                {
-                    <div class="dropdown-option">
-                        <a asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a>
+                            @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                            {
+                                <li class="list-group-item">
+                                    <a asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a>
+                                </li>
+                            }
+                            <li class="list-group-item active">
+                                <a asp-controller="Users" asp-action="ManageAccountById" style="color:white;">Profile</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                            </li>
+                            <li class="list-group-item">
+                                <form class="form-inline hide-submit " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
+                                    <label class="d-flex justify-content-start dropdown-item">
+                                        <input type="submit" />
+                                        <span style="font-weight:normal;" href="#">Logout</span>
+                                    </label>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
-                }
-                <div class="dropdown-option" style="background: #42a5f5;">
-                    <a  asp-controller="Users" asp-action="ManageAccountById" style="color:white;">Profile</a>
-                </div>
-                <div class="dropdown-option">
-                    <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
-                </div>
-                <div class="dropdown-option">
-                    <form class="form-inline hide-submit " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
-                        <label class="d-flex justify-content-start dropdown-item">
-                            <input type="submit" />
-                            <span style="font-weight:normal;" href="#">Logout</span>
-                        </label>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
+    @*<div class="d-flex flex-column bg-white h-50 mt-5 mt-md-0" style="width:300px;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+            <div class="accordion" id="accountOptions">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="bg-white accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            My Account
+                        </button>
+                    </h2>
+                </div>
+            </div>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accountOptions">
+                <div class="accordion-body">
+                    <div class="dropdown-option">
+                        @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                        {
+                            <a asp-controller="Dashboard" asp-action="StudentDashboard">Dashboard</a>
+
+                        }
+                        else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                        {
+                            <a asp-controller="Dashboard" asp-action="LecturerDashboard">Dashboard</a>
+                        }
+                        else if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        {
+                            <a asp-controller="Dashboard" asp-action="AdminDashboard">Dashboard</a>
+                        }
+                    </div>
+                    @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                    {
+                        <div class="dropdown-option">
+                            <a asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a>
+                        </div>
+                    }
+
+                    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                    {
+                        <div class="dropdown-option">
+                            <a asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a>
+                        </div>
+                    }
+                    <div class="dropdown-option" style="background: #42a5f5;">
+                        <a asp-controller="Users" asp-action="ManageAccountById" style="color:white;">Profile</a>
+                    </div>
+                    <div class="dropdown-option">
+                        <a asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                    </div>
+                    <div class="dropdown-option">
+                        <form class="form-inline hide-submit " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
+                            <label class="d-flex justify-content-start dropdown-item">
+                                <input type="submit" />
+                                <span style="font-weight:normal;" href="#">Logout</span>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>*@
 </div>
 <script type="text/javascript">
     var fileInput = document.getElementById("imageInput");

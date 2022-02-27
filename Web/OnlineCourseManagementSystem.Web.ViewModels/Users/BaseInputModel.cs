@@ -40,7 +40,7 @@
         public string Address { get; set; }
 
         [IgnoreMap]
-        public bool Subscribed { get; set; }
+        public bool? Subscribed { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]

@@ -10,6 +10,8 @@
 
         public string Name { get; set; } = null!;
 
+        public string CreatorId { get; set; }
+
         public int ParticipantCount { get; set; }
 
         public int MaxParticipants { get; set; }

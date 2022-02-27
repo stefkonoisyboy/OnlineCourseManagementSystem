@@ -20,6 +20,11 @@
             this.subscribersRepository = subscribersRepository;
         }
 
+        public bool? CheckSubscribedByEmail(string email)
+        {
+            return this.subscribersRepository.All().FirstOrDefault(s => s.Email == email)?.IsConfirmed;
+        }
+
         public async Task ConfirmSubscriptionAsync(ConfirmSubscriptionInputModel inputModel)
         {
             Subscriber subscriber = this.subscribersRepository.All().FirstOrDefault(sb => sb.Id == inputModel.Id);

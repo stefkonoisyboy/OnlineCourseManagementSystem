@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using CloudinaryDotNet;
+    using Ganss.XSS;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
@@ -33,7 +34,7 @@
                 StartDate = inputModel.StartDate,
                 EndDate = inputModel.EndDate,
                 CreatorId = inputModel.CreatorId,
-                Description = inputModel.Description,
+                Description = new HtmlSanitizer().Sanitize(inputModel.Description),
             };
 
             if (inputModel.Files?.Count() > 0)
@@ -151,7 +152,7 @@
             @event.StartDate = inputModel.StartDate;
             @event.EndDate = inputModel.EndDate;
             @event.Address = inputModel.Address;
-            @event.Description = inputModel.Description;
+            @event.Description = new HtmlSanitizer().Sanitize(inputModel.Description);
 
             if (inputModel.FilesToAdd != null)
             {

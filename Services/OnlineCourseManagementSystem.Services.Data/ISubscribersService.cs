@@ -30,5 +30,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
         T GetById<T>(string id);
+
+        bool? CheckSubscribedByEmail(string email);
     }
 }

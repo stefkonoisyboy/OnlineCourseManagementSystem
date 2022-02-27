@@ -20,53 +20,23 @@
 
 <h1 class="text-center my-5">@Model.CourseName</h1>
 
-<div class="d-flex my-5">
-    <div class="flex-grow-1">
-        <h3>Instructions</h3>
-        @if (string.IsNullOrEmpty(this.Model.Instructions) || string.IsNullOrWhiteSpace(this.Model.Instructions))
-        {
+<div class="row">
+    <div class="col-lg-8 col-sm-6">
+        <div class="my-2">
+            <h3>Instructions</h3>
+            @if (string.IsNullOrEmpty(this.Model.Instructions) || string.IsNullOrWhiteSpace(this.Model.Instructions))
+            {
+                <p>
+                    <i>
+                        No Instructions
+                    </i>
+                </p>
+            }
             <p>
-                <i>
-                    No Instructions
-                </i>
+                @this.Model.Instructions
             </p>
-        }
-        <p class="w-75">
-            @this.Model.Instructions
-        </p>
-    </div>
-    <div class="d-flex flex-column">
-        @if (this.Model.TurnedOn == null)
-        {
-            <form class="d-flex align-items-center" asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
-                <div class="mx-2">
-                    <button class="btn btn-primary rounded-pill">Turn In</button>
-                </div>
-                <input asp-for="InputModel.Files" id="input-file" type="file" multiple class="form-control" hidden />
-                <label for="input-file" class="d-inline-flex rounded-pill p-2 my-2 justify-content-end align-items-center" id="show" style="cursor:pointer;color:black;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-                    <tt id="create-text" class="mx-1">
-                        Upload Files
-                    </tt>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                </label>
-            </form>
-        }
-        else
-        {
-            <form asp-controller="Assignments" asp-action="UndoTurnIn" asp-route-id="@this.Model.AssignmentId" method="post">
-                <div>
-                    <button class="btn rounded-pill" style="color: #ffffff; background-color:darkorange">Undo turn in</button>
-                </div>
-            </form>
-        }
-    </div>
-</div>
-
-<div class="d-flex my-3">
-    <div class="flex-grow-1" style="width:80vh">
-        <div>
+        </div>
+        <div class="my-2">
             <h3>Resource Files</h3>
             <div class="d-flex flex-column m-3">
                 @if (this.Model.ResourceFiles != null)
@@ -139,29 +109,57 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-4 col-sm-6">
+        <div class="d-flex flex-column justify-content-end">
+            @if (this.Model.TurnedOn == null)
+            {
+                <form class="d-flex align-items-center" asp-controller="Assignments" asp-action="TurnIn" asp-route-id="@this.Model.AssignmentId" enctype="multipart/form-data" method="post">
+                    <div class="mx-2">
+                        <button class="btn btn-primary rounded-pill">Turn In</button>
+                    </div>
+                    <input asp-for="InputModel.Files" id="input-file" type="file" multiple class="form-control" hidden />
+                    <label for="input-file" class="d-inline-flex rounded-pill p-2 my-2 justify-content-end align-items-center" id="show" style="cursor:pointer;color:black;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                        <tt id="create-text" class="mx-1">
+                            Upload Files
+                        </tt>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                    </label>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Assignments" asp-action="UndoTurnIn" asp-route-id="@this.Model.AssignmentId" method="post">
+                    <div>
+                        <button class="btn rounded-pill" style="color: white; background-color:#42a5f5">Undo turn in</button>
+                    </div>
+                </form>
+            }
+        </div>
+        <div class="d-inline-block mt-5">
+            @if (this.Model.TurnedOn != null)
+            {
+                <p>Points: @this.Model.Points</p>
+            }
+            else
+            {
+                <p>Points: @this.Model.PossiblePoints</p>
+            }
 
-    <div class="d-inline-block">
-        @if (this.Model.TurnedOn != null)
-        {
-            <p>Points: @this.Model.Points</p>
-        }
-        else
-        {
-            <p>Points: @this.Model.PossiblePoints</p>
-        }
-
-        @if (!string.IsNullOrEmpty(this.Model.Feedback))
-        {
-            <p class="w-75">
-                Feedback: @this.Model.Feedback
-            </p>
-        }
-        else
-        {
-            <p>
-                Feedback: none
-            </p>
-        }
+            @if (!string.IsNullOrEmpty(this.Model.Feedback))
+            {
+                <p>
+                    Feedback: @this.Model.Feedback
+                </p>
+            }
+            else
+            {
+                <p>
+                    Feedback: none
+                </p>
+            }
+        </div>
     </div>
 </div>
 

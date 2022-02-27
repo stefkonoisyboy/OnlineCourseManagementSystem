@@ -1,10 +1,11 @@
-﻿using OnlineCourseManagementSystem.Data.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Data.Models
+﻿namespace OnlineCourseManagementSystem.Data.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Common.Models;
+
     public class UserChannel : BaseDeletableModel<int>
     {
         public string UserId { get; set; }

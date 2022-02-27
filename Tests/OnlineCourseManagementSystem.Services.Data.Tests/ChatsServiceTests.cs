@@ -70,7 +70,7 @@
             var mockedRepository = new Mock<IDeletableEntityRepository<ChatUser>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
             IChatsService chatsService = new ChatsService(null, mockedRepository.Object, null, null);
-            string expectedCreatorId = testData.FirstOrDefault(c=>c.Id == chatId).Chat.CreatorId;
+            string expectedCreatorId = testData.FirstOrDefault(c => c.Id == chatId).Chat.CreatorId;
             string expectedIconUrl = testData.FirstOrDefault(c => c.Id == chatId).Chat.IconRemoteUrl;
 
             // Act
@@ -159,7 +159,6 @@
 
             string expectedCreatorId = testData.FirstOrDefault(cu => cu.UserId == userId && cu.ChatId == chatId).Chat.CreatorId;
             string expectedIconUrl = testData.FirstOrDefault(cu => cu.UserId == userId && cu.ChatId == chatId).Chat.IconRemoteUrl;
-
 
             // Act
             ChatViewModel actual = chatsService.GetByCurrentUser<ChatViewModel>(userId, chatId);

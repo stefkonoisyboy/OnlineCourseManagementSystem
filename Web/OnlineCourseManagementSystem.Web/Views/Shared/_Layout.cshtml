@@ -124,6 +124,14 @@
                                                     My Created Events
                                                 </a>
                                             </li>
+                                            <li>
+                                                <hr class="dropdown-divider" />
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="Assignments" asp-action="AllCreatedByLecturer">
+                                                    My Created Assignments
+                                                </a>
+                                            </li>
                                         }
                                         @if (this.User.Identity.IsAuthenticated)
                                         {

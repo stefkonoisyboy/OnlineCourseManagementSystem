@@ -34,7 +34,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -67,7 +67,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -104,7 +104,7 @@
             var mockedCompletitionsRepository = new Mock<IDeletableEntityRepository<Completition>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
             mockedCompletitionsRepository.Setup(x => x.All()).Returns(completitionsTestData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, mockedCompletitionsRepository.Object, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, mockedCompletitionsRepository.Object, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(x => x.Users.Any(u => u.UserId == userId) && x.Lectures.Count() > 0 && x.Lectures.Count() == completitionsTestData.Count(comp => comp.UserId == userId && comp.Lecture.CourseId == x.Id)).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(x => x.Users.Any(u => u.UserId == userId) && x.Lectures.Count() > 0 && x.Lectures.Count() == completitionsTestData.Count(comp => comp.UserId == userId && comp.Lecture.CourseId == x.Id)).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(x => x.Users.Any(u => u.UserId == userId) && x.Lectures.Count() > 0 && x.Lectures.Count() == completitionsTestData.Count(comp => comp.UserId == userId && comp.Lecture.CourseId == x.Id)).Select(x => x.Description).ToList();
@@ -138,7 +138,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(x => x.Users.Any(u => u.UserId == userId)).OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(x => x.Users.Any(u => u.UserId == userId)).OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(x => x.Users.Any(u => u.UserId == userId)).OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -176,7 +176,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(c => c.Name.Contains(input.Text) || c.Tags.Any(t => t.Tag.Name.Contains(input.Text))).OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(c => c.Name.Contains(input.Text) || c.Tags.Any(t => t.Tag.Name.Contains(input.Text))).OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(c => c.Name.Contains(input.Text) || c.Tags.Any(t => t.Tag.Name.Contains(input.Text))).OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -209,7 +209,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.OrderByDescending(x => x.Reviews.Average(r => r.Rating)).ThenByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.OrderByDescending(x => x.Reviews.Average(r => r.Rating)).ThenByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.OrderByDescending(x => x.Reviews.Average(r => r.Rating)).ThenByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -243,7 +243,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             int expectedId = testData.FirstOrDefault(x => x.Id == id).Id;
             string expectedName = testData.FirstOrDefault(x => x.Id == id).Name;
             string expectedDescription = testData.FirstOrDefault(x => x.Id == id).Description;
@@ -277,7 +277,7 @@
             List<UserCourse> testData = this.GetUserCoursesTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserCourse>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(null, null, null, null, mockedRepository.Object, null, null, null);
+            ICoursesService coursesService = new CoursesService(null, null, null, null, mockedRepository.Object, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(x => x.UserId == userId).OrderByDescending(x => x.Course.StartDate).Skip((id - 1) * 6).Take(6).Select(x => x.Course.Id);
             IEnumerable<string> expectedNames = testData.Where(x => x.UserId == userId).OrderByDescending(x => x.Course.StartDate).Skip((id - 1) * 6).Take(6).Select(x => x.Course.Name);
             IEnumerable<string> expectedDescriptions = testData.Where(x => x.UserId == userId).OrderByDescending(x => x.Course.StartDate).Skip((id - 1) * 6).Take(6).Select(x => x.Course.Description);
@@ -310,7 +310,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(x => x.CreatorId == creatorId).Skip((id - 1) * 6).Take(6).OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(x => x.CreatorId == creatorId).Skip((id - 1) * 6).Take(6).OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(x => x.CreatorId == creatorId).Skip((id - 1) * 6).Take(6).OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -343,7 +343,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(x => x.StartDate > DateTime.UtcNow).OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(x => x.StartDate > DateTime.UtcNow).OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(x => x.StartDate > DateTime.UtcNow).OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -376,7 +376,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(x => x.EndDate < DateTime.UtcNow).OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(x => x.EndDate < DateTime.UtcNow).OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(x => x.EndDate < DateTime.UtcNow).OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -410,7 +410,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(x => x.StartDate < DateTime.UtcNow && (x.Name.Contains(name) || x.Tags.Any(t => t.Tag.Name.Contains(name)))).Skip((id - 1) * 5).Take(5).OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(x => x.StartDate < DateTime.UtcNow && (x.Name.Contains(name) || x.Tags.Any(t => t.Tag.Name.Contains(name)))).Skip((id - 1) * 5).Take(5).OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(x => x.StartDate < DateTime.UtcNow && (x.Name.Contains(name) || x.Tags.Any(t => t.Tag.Name.Contains(name)))).Skip((id - 1) * 5).Take(5).OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -448,7 +448,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(c => c.Tags.Any(t => t.Tag.Name.Contains(input.Name))).OrderByDescending(x => x.StartDate).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.Where(c => c.Tags.Any(t => t.Tag.Name.Contains(input.Name))).OrderByDescending(x => x.StartDate).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.Where(c => c.Tags.Any(t => t.Tag.Name.Contains(input.Name))).OrderByDescending(x => x.StartDate).Select(x => x.Description).ToList();
@@ -481,7 +481,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<string> expectedTexts = testData.Where(x => x.StartDate >= DateTime.UtcNow && x.EndDate <= DateTime.UtcNow).Select(x => x.Name);
             IEnumerable<string> expectedValues = testData.Where(x => x.StartDate >= DateTime.UtcNow && x.EndDate <= DateTime.UtcNow).Select(x => x.Id.ToString());
 
@@ -500,7 +500,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<string> expectedTexts = testData.OrderBy(x => x.Name).Select(x => x.Name);
             IEnumerable<string> expectedValues = testData.OrderBy(x => x.Name).Select(x => x.Id.ToString());
 
@@ -520,7 +520,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<string> expectedTexts = testData.Where(x => x.CreatorId == creatorId).OrderBy(x => x.Name).Select(x => x.Name);
             IEnumerable<string> expectedValues = testData.Where(x => x.CreatorId == creatorId).OrderBy(x => x.Name).Select(x => x.Id.ToString());
 
@@ -539,7 +539,7 @@
             List<Course> testData = this.GetTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Course>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null);
+            ICoursesService coursesService = new CoursesService(mockedRepository.Object, null, null, null, null, null, null, null, null);
             IEnumerable<int> expectedIds = testData.OrderByDescending(x => x.CreatedOn).Select(x => x.Id).ToList();
             IEnumerable<string> expectedNames = testData.OrderByDescending(x => x.CreatedOn).Select(x => x.Name).ToList();
             IEnumerable<string> expectedDescriptions = testData.OrderByDescending(x => x.CreatedOn).Select(x => x.Description).ToList();
