@@ -218,10 +218,11 @@
     }
 
     .input-message {
-        border: none;
-        background-color: transparent;
-        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-        border-radius: 0 3px 3px 0;
+        border: none !important;
+        background-color: transparent !important;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px !important;
+        box-shadow: none !important;
+        border-radius: 0 3px 3px 0 !important;
         width: 20rem;
         font-size: 15px;
         color: gray;
@@ -389,6 +390,13 @@
 
     .show {
         display: block;
+    }
+
+
+    .svg-btn {
+        color: black;
+        height:35px; 
+        width:35px;
     }
 
     .svg-btn:hover {
@@ -652,7 +660,7 @@
                     <div class="input-form">
                         <EditForm Model="@this.CreateMessageInputModel" OnValidSubmit="@SendMessage">
                             <div class="d-flex justify-content-center">
-                                <button class="btn" style="background:#42a5f5;" disabled="@(!this.IsConnected)">
+                                <button class="btn" style="background:#42a5f5; border-radius:10px 0px 0px 10px !important" disabled="@(!this.IsConnected)">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="25" width="25" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -756,20 +764,21 @@
         <div class="col-md-3">
             <div class="d-flex justify-content-center">
                 <div class="chat-option">
-                    <svg onclick="showMembers()" xmlns="http://www.w3.org/2000/svg" class="svg-btn mx-2" style="color:black" height="35px" width="35px" viewBox="0 0 20 20" fill="currentColor">
+                    <svg onclick="showMembers()" xmlns="http://www.w3.org/2000/svg" class="svg-btn mx-2" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                     </svg>
                 </div>
                 @if (this.CurrentChat.IsGroupChat)
                 {
                     <div class="chat-option">
-                        <svg @onclick="@this.LoadUsersNotAddedToChat" xmlns="http://www.w3.org/2000/svg" class="svg-btn mx-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                        <svg @onclick="@this.LoadUsersNotAddedToChat" data-bs-toggle="modal" data-bs-target="#addUsersToChat" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-plus-fill svg-btn" viewBox="0 0 16 16">
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                            <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
                         </svg>
                     </div>
                 }
                 <div class="chat-option">
-                    <svg onclick="searchDropDown()" xmlns="http://www.w3.org/2000/svg" class="svg-btn mx-2"  style="color:black" height="35px" width="35px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg onclick="searchDropDown()" xmlns="http://www.w3.org/2000/svg" class="svg-btn mx-2"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>

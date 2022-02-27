@@ -14,6 +14,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Subscribers;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using SmartBreadcrumbs.Attributes;
@@ -29,6 +30,7 @@
         private readonly ICompletitionsService completitionsService;
         private readonly ITagsService tagsService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly ISubscribersService subscribersService;
         private readonly ITownsService townsService;
 
         public UsersController(
@@ -39,6 +41,7 @@
             ICompletitionsService completitionsService,
             ITagsService tagsService,
             UserManager<ApplicationUser> userManager,
+            ISubscribersService subscribersService,
             ITownsService townsService)
         {
             this.usersService = usersService;
@@ -48,6 +51,7 @@
             this.completitionsService = completitionsService;
             this.tagsService = tagsService;
             this.userManager = userManager;
+            this.subscribersService = subscribersService;
             this.townsService = townsService;
         }
 
@@ -92,6 +96,8 @@
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
             ManageAccountInputModel inputModel = this.usersService.GetById<ManageAccountInputModel>(user.Id);
+            inputModel.Subscribed = this.subscribersService.CheckSubscribedByEmail(user.Email);
+
             inputModel.TownItems = this.townsService.GetAllAsSelectListItems();
             return this.View(inputModel);
         }
@@ -103,12 +109,14 @@
             {
                 ApplicationUser user = await this.userManager.GetUserAsync(this.User);
 
+                inputModel.Subscribed = this.subscribersService.CheckSubscribedByEmail(user.Email);
                 inputModel = this.usersService.GetById<ManageAccountInputModel>(user.Id);
                 inputModel.TownItems = this.townsService.GetAllAsSelectListItems();
                 return this.View(inputModel);
             }
 
             await this.usersService.UpdateAsync(inputModel);
+
             this.TempData["UpdatedAccount"] = "Successfully updated account";
             return this.RedirectToAction("ManageAccountById", "Users");
         }

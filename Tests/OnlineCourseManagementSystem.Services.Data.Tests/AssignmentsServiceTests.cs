@@ -29,7 +29,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
             IEnumerable<string> expectedCourseNames = testData.Where(ua => ua.AssignmentId == assignmentId).Select(a => a.Assignment.Course.Name).ToList();
             IEnumerable<string> expectedTitles = testData.Where(ua => ua.AssignmentId == assignmentId).Select(a => a.Assignment.Title).ToList();
 
@@ -49,7 +49,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object,  null, null);
             IEnumerable<int> expectedIds = testData.Where(ua => ua.Assignment.CourseId == courseId).Select(a => a.AssignmentId).ToList();
             IEnumerable<string> expectedCourseNames = testData.Where(ua => ua.Assignment.CourseId == courseId).Select(a => a.Assignment.Course.Name).ToList();
             IEnumerable<string> expectedTitles = testData.Where(ua => ua.Assignment.CourseId == courseId).Select(a => a.Assignment.Title).ToList();
@@ -71,7 +71,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
             IEnumerable<int> expectedIds = testData.Where(ua => ua.UserId == ua.UserId && ua.Assignment.CourseId == courseId && ua.TurnedOn == null)
                                                       .OrderByDescending(ua => ua.CreatedOn)
                                                       .Select(ua => ua.AssignmentId).ToList();
@@ -99,7 +99,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
             IEnumerable<int> expectedIds = testData.Where(ua => ua.UserId == userId && ua.Assignment.CourseId == courseId && ua.IsChecked && ua.IsChecked && ua.TurnedOn != null)
                                             .Select(ua => ua.AssignmentId).ToList();
             IEnumerable<string> expectedCourseNames = testData.Where(ua => ua.UserId == userId && ua.Assignment.CourseId == courseId && ua.IsChecked && ua.IsChecked && ua.TurnedOn != null)
@@ -124,7 +124,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
             IEnumerable<int> expectedIds = testData.Where(ua => ua.UserId == userId && ua.User.Roles
                 .FirstOrDefault().RoleId
                 .EndsWith("Student") && ua.TurnedOn == null)
@@ -158,7 +158,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
             IEnumerable<int> expectedIds = testData.Where(ua => ua.IsChecked && ua.UserId == userId)
                 .OrderByDescending(ua => ua.TurnedOn)
                 .Select(ua => ua.AssignmentId);
@@ -188,7 +188,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
             string expectedCourseName = testData.FirstOrDefault(ua => ua.AssignmentId == assignmentId && ua.UserId == userId).Assignment.Course.Name;
             string expectedTitle = testData.FirstOrDefault(ua => ua.AssignmentId == assignmentId && ua.UserId == userId).Assignment.Title;
 
@@ -208,7 +208,7 @@
             List<Assignment> testData = this.GetAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Assignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(mockedRepository.Object, null, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(mockedRepository.Object, null, null, null);
             string expectedTitle = testData.FirstOrDefault(a => a.Id == assignmentId).Title;
             string expectedCourseName = testData.FirstOrDefault(a => a.Id == assignmentId).Course.Name;
 
@@ -227,7 +227,7 @@
             List<Assignment> testData = this.GetAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Assignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(mockedRepository.Object, null, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(mockedRepository.Object, null, null, null);
 
             IEnumerable<int> expectedIds = testData.Where(a => a.Users.Count(ua => ua.IsChecked) == a.Users.Count && a.CourseId == courseId).Select(a => a.Id).ToList();
             IEnumerable<string> expectedTitles = testData.Where(a => a.Users.Count(ua => ua.IsChecked) == a.Users.Count && a.CourseId == courseId).Select(a => a.Title).ToList();
@@ -248,7 +248,7 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
 
             string expectedTitle = testData.FirstOrDefault(ua => ua.AssignmentId == assignmentId && ua.UserId == userId && ua.IsChecked).Assignment.Title;
             string expectedCourseName = testData.FirstOrDefault(ua => ua.AssignmentId == assignmentId && ua.UserId == userId && ua.IsChecked).Assignment.Course.Name;
@@ -269,9 +269,9 @@
             List<UserAssignment> testData = this.GetUserAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<UserAssignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(null, mockedRepository.Object, null, null);
 
-            IEnumerable<string> expectedTitles = testData.Where(ua => ua.IsChecked && ua.AssignmentId == assignmentId).Select(ua=>ua.Assignment.Title).ToList();
+            IEnumerable<string> expectedTitles = testData.Where(ua => ua.IsChecked && ua.AssignmentId == assignmentId).Select(ua => ua.Assignment.Title).ToList();
             IEnumerable<string> expectedCourseNames = testData.Where(ua => ua.IsChecked && ua.AssignmentId == assignmentId).Select(ua => ua.Assignment.Course.Name).ToList();
 
             // Act
@@ -286,10 +286,10 @@
         public void GetAllByAdmin_Should_Work_Correctly()
         {
             // Arrange
-            List<Assignment> testData = this.GetAssignmentsTestData ();
+            List<Assignment> testData = this.GetAssignmentsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Assignment>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IAssignmentsService assignmentsService = new AssignmentsService(mockedRepository.Object, null, null);
+            IAssignmentsService assignmentsService = new AssignmentsService(mockedRepository.Object, null, null, null);
 
             IEnumerable<int> expectedIds = testData.OrderByDescending(a => a.CreatedOn).Select(a => a.Id);
             IEnumerable<string> expectedTitles = testData.OrderByDescending(a => a.CreatedOn).Select(a => a.Title);

@@ -1,4 +1,6 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Events
+@using System.Globalization
+
 @model EventInfoViewModel
 @{
     this.ViewData["Title"] = "Event info";
@@ -19,201 +21,327 @@
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
 
-    .info-container::-webkit-scrollbar {
-        width: 5px;
+        .info-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .info-container::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .info-container::-webkit-scrollbar-thumb {
+            background-color: #2196f3;
+            border-radius: 10px;
+            width: 5px;
+        }
+
+    .show-info-container {
+        display: block;
+        animation: wrapContent 500ms ease-in-out 1 normal;
     }
 
-    .info-container::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        border-radius: 10px;
+    .unshow-info-container {
+        display: none;
+        animation: unwrapContent 1s ease-out 1 normal;
     }
 
-    .info-container::-webkit-scrollbar-thumb {
-        background-color: #2196f3;
-        border-radius: 10px;
-        width: 5px;
+    @@keyframes wrapContent {
+        from {
+            height: 0;
+            opacity: 0;
+        }
+
+        to {
+            height: 100px;
+            opacity: 1;
+        }
     }
 
-.show-info-container {
-    display: block;
-    animation: wrapContent 1s ease-in-out 1 normal;
-}
+    @@keyframes unwrapContent {
+        from {
+            height: 100px;
+            opacity: 1;
+        }
 
-.unshow-info-container {
-    display: none;
-    animation: unwrapContent 1s ease-out 1 normal;
-}
-
-@@keyframes wrapContent {
-    from {
-        height: 0;
-        opacity: 0;
+        to {
+            height: 0px;
+            opacity: 0;
+        }
     }
 
-    to {
-        height: 100px;
-        opacity: 1;
-    }
-}
-
-@@keyframes unwrapContent {
-    from {
-        height: 100px;
-        opacity: 1;
+    .resource:hover {
+        transform: scale(1.03);
+        transition: transform 350ms ease-in-out;
     }
 
-    to {
-        height: 0px;
-        opacity: 0;
+    svg {
+        margin-right: 5px;
     }
-}
+
+    .box {
+        font-weight:bold;
+        text-align: center;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 2px;
+        background: #f0f2f6;
+    }
+
+    body {
+        width: 100%;
+        background-image: url("/Images/banner.png") !important;
+    }
+    h5{
+        color:white !important;
+    }
+    .speakers {
+        background-image: url("/Images/section_bg02.jpg");
+        height: 80vh;
+    }
+
+    section{
+        margin: 20px;
+    }
+
+    .section-intro h2 {
+        font-size: 36px;
+        line-height: 1.5;
+        color: white !important;
+        font-family: "Oswald",sans-serif  !important;
+    }
 </style>
 
-<h1 class="title" style="color: #ff6a00;background:#ffffff">@this.Model.Theme</h1>
-<div class="row rounded my-4" style="background:#919090;color:black;">
-    @if (this.Model.StartDate.ToString("dd MMM YYYY") == this.Model.EndDate.ToString("dd MMM YYYY"))
-    {
-        <div class="my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
-                <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
-                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
-            </svg>
-            <div> @this.Model.StartDate.ToString("dd MMM yyyy(ddd)")</div>
-        </div>
-        <div class="my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
-                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-            </svg>
-            <div>
-                @this.Model.StartDate.ToString("t") - @this.Model.EndDate.ToString("t")
+    <section class="my-5">
+        <h1 class="text-center">@this.Model.Theme</h1>
+        <div class="row rounded mt-5" style="background:#2196f3;color:white;">
+            <div hidden id="date">
+                @this.Model.StartDate.ToString("F", CultureInfo.GetCultures(CultureTypes.AllCultures).First(r => r.EnglishName == "English"))
             </div>
-        </div>
-    }
-    else
-    {
-        <div class="my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
-                <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
-                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
-            </svg>
-            <div> @this.Model.StartDate.ToString("dd MMM yyyy(ddd)") -   @this.Model.EndDate.ToString("dd MMM yyyy(ddd)")</div>
-        </div>
-        <div class="my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
-                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-            </svg>
-            <div>
-                @this.Model.StartDate.ToString("t") - @this.Model.EndDate.ToString("t")
-            </div>
-        </div>
-    }
-
-    <div class="my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-        </svg>
-        <div class="text-center">@this.Model.Address</div>
-    </div>
-    <div class=" my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
-        <svg style="color:black" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-        <div>
-            @(this.Model.CreatorFirstName+" "+ this.Model.CreatorLastName)
-        </div>
-    </div>
-</div>
-
-<p class="text-center" style="margin-top:5vh; margin-bottom:5vh;">
-    @this.Model.Description
-</p>
-
-<div class="d-flex flex-column flex-md-row" style="margin-bottom:20vh;">
-    <div class="flex-grow-1 d-flex flex-column justify-content-start" style="width:50vh;">
-        <h3>Resources</h3>
-        @if (!this.Model.Files.Any())
-        {
-            <div class="d-flex justify-content-center align-items-center" style="width:50vh;height:20vh; background:#f8f9fa; color:gray">
-                <h1>No Resources</h1>
-            </div>
-        }
-        @foreach (var file in this.Model.Files)
-        {
-            @if (file.Extension.Contains(".jpg") || file.Extension.Contains(".png"))
+            @if (this.Model.StartDate.ToString("dd MMM YYYY") == this.Model.EndDate.ToString("dd MMM YYYY"))
             {
-                <div id="@file.Id" onclick="showFile(@file.Id)" src="@file.RemoteUrl" class="p-2 m-1 d-flex justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
-                        <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
-                        <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
-                    </svg>
+                <div class="my-2 col-md-3">
+                    <div class="d-flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+                            <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                        </svg>
+                        <div>
+                            <h5>DATE</h5>
+                            <span>@this.Model.StartDate.ToString("dd MMM yyyy(ddd)")</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-2 col-md-3 ">
+                    <div class="d-flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                        </svg>
+                        <div>
+                            <h5>TIME</h5>
+                            <span>@this.Model.StartDate.ToString("t") - @this.Model.EndDate.ToString("t")</span>
+                        </div>
+                    </div>
                 </div>
             }
             else
             {
-                if (file.Extension.Contains(".pptx"))
-                {
-                    <div id="@file.Id" onclick="showFile(@file.Id)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" class=" p-2 m-1 d-flex justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-ppt" viewBox="0 0 16 16">
-                            <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
-                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                <div class="my-2 col-md-3">
+                    <div class="d-flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+                            <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
                         </svg>
+                        <div>
+                            <h5>DATE</h5>
+                            <span>@this.Model.StartDate.ToString("dd MMM yyyy(ddd)") - @this.Model.EndDate.ToString("dd MMM yyyy(ddd)")</span>
+                        </div>
                     </div>
-                }
-                else if (file.Extension.Contains(".docx"))
-                {
-                    <div id="@file.Id" onclick="showFile(@file.Id)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" class=" p-2 m-1 d-flex justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-word" viewBox="0 0 16 16">
-                            <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
-                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                        </svg>
-                    </div>
-                }
-                else if(file.Extension.Contains(".mp4"))
-                {
-                    <a  asp-controller="Files" asp-action="EventVideoById" asp-route-id="@file.Id" class="p-2 card my-1 d-flex justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
-                        </svg>
-                    </a>
-                }
-            }
-        }
-    </div>
-    <div class="position-relative">
-        <div class="info-container" id="info-container">
-            <div class="card-header d-flex">
-                <div class="flex-grow-1">
                 </div>
-                <div>
-                    <svg style="cursor:pointer;" id="closeBtn-info-container" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <div class="my-2 col-md-3">
+                    <div class="d-flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                        </svg>
+                        <div>
+                            <h5>TIME</h5>
+                            <span>@this.Model.StartDate.ToString("t") - @this.Model.EndDate.ToString("t")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="my-2 col-md-3">
+                <div class="d-flex">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
                     </svg>
+                    <div>
+                        <h5>LOCATION</h5>
+                        <span>@this.Model.Address</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class=" my-2 col-md-3 d-flex flex-column justify-content-center align-items-center">
+                <div class="d-flex">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <div>
+                        <h5>SPEAKER</h5>
+                        <span>@(this.Model.CreatorFirstName+" "+ this.Model.CreatorLastName)</span>
+                    </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                    @if (string.IsNullOrEmpty(this.Model.CreatorProfileImageUrl))
+        </div>
+    </section>
+
+    <section class="my-5">
+        <h4 class="text-center">Counter until the event</h4>
+        <div class="row d-flex justify-content-center mt-2">
+            <div class="col-3">
+
+            </div>
+            <div class="col-6">
+
+                <div class="row">
+                    <div class="col-md-2 box">
+                        <h6 id="days"></h6>
+                        <span>Days</span>
+                    </div>
+                    <div class="col-md-2 box">
+                        <h6 id="hours"></h6>
+                        <span>Hours</span>
+                    </div>
+                    <div class="col-md-2 box">
+                        <h6 id="minutes"></h6>
+                        <span>Minutes</span>
+                    </div>
+                    <div class="col-md-2 box">
+                        <h6 id="seconds"></h6>
+                        <span>Seconds</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-md-1">
+            </div>
+        </div>
+        <div class="mt-5">
+            <h1>About the Event</h1>
+            <p class="text-center" style="margin-top:5vh; margin-bottom:5vh;">
+                @Html.Raw(this.Model.Description)
+            </p>
+        </div>
+    </section>
+
+    <section class="speakers rounded d-flex justify-content-center">
+        <div class="row mx-3 my-2">
+            <div class="col-12 text-center section-intro">
+                <h2>The Speaker</h2>
+
+            </div>
+            <div class="col-lg-8 col-sm-10">
+                <h2 class="text-white">@this.Model.CreatorFirstName @this.Model.CreatorLastName</h2>
+                <p class="text-white w-50">
+                    @this.Model.CreatorDescription
+                </p>
+            </div>
+            <div class="col-lg-4 col-sm-2">
+                <div class="embed-responsive embed-responsive-1by1 position-relative">
+                    <img class="mr-1 embed-responsive-item" src="@this.Model.CreatorProfileImageUrl" alt="Speaker Image" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="my-5">
+        <div class="d-flex flex-column flex-md-row">
+            <div class="flex-grow-1 d-flex flex-column justify-content-start" style="width:50vh;">
+                <h3>Resources</h3>
+                @if (!this.Model.Files.Any())
+                {
+                    <div class="d-flex justify-content-center align-items-center" style="width:50vh;height:20vh; background:#f8f9fa; color:gray">
+                        <h1>No Resources</h1>
+                    </div>
+                }
+                @foreach (var file in this.Model.Files)
+                {
+                    @if (file.Extension.Contains(".jpg") || file.Extension.Contains(".png"))
                     {
-                        <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary mr-1" style="width:150px; height:150px;">
-                            <h3 class="text-center">@(this.Model.CreatorFirstName.Substring(0,1)+ this.Model.CreatorLastName.Substring(0,1))</h3>
+                        <div id="@file.Id" onclick="showFile(@file.Id)" src="@file.RemoteUrl" class="resource bg-white p-2 m-1 d-flex justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+                                <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                                <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
+                            </svg>
                         </div>
                     }
                     else
                     {
-                        <img class="rounded-circle mr-1" style="width:150px; height:150px" src="@this.Model.CreatorProfileImageUrl" alt="ProfileImageUrl" />
+                        if (file.Extension.Contains(".pptx"))
+                        {
+                            <div id="@file.Id" onclick="showFile(@file.Id)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" class="resource bg-white p-2 m-1 d-flex justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-ppt" viewBox="0 0 16 16">
+                                    <path d="M7 5.5a1 1 0 0 0-1 1V13a.5.5 0 0 0 1 0v-2h1.188a2.75 2.75 0 0 0 0-5.5H7zM8.188 10H7V6.5h1.188a1.75 1.75 0 1 1 0 3.5z" />
+                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                                </svg>
+                            </div>
+                        }
+                        else if (file.Extension.Contains(".docx"))
+                        {
+                            <div id="@file.Id" onclick="showFile(@file.Id)" src="https://view.officeapps.live.com/op/embed.aspx?src=@file.RemoteUrl" class="resource bg-white p-2 m-1 d-flex justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-word" viewBox="0 0 16 16">
+                                    <path d="M5.485 6.879a.5.5 0 1 0-.97.242l1.5 6a.5.5 0 0 0 .967.01L8 9.402l1.018 3.73a.5.5 0 0 0 .967-.01l1.5-6a.5.5 0 0 0-.97-.242l-1.036 4.144-.997-3.655a.5.5 0 0 0-.964 0l-.997 3.655L5.485 6.88z" />
+                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                                </svg>
+                            </div>
+                        }
+                        else if (file.Extension.Contains(".mp4"))
+                        {
+                            <a asp-controller="Files" asp-action="EventVideoById" asp-route-id="@file.Id" class="resource p-2 my-1 d-flex bg-white justify-content-center align-items-center rounded" style="cursor: pointer; width: 50vh; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
+                                </svg>
+                            </a>
+                        }
                     }
-                    <div>
-                        @(this.Model.CreatorFirstName+" "+ this.Model.CreatorLastName)
-                    </div>
-                </div>
-                <p class="m-2">@this.Model.CreatorDescription</p>
+                }
             </div>
+            @*<div class="position-relative">
+                    <div class="info-container" id="info-container">
+                        <div class="card-header d-flex">
+                            <div class="flex-grow-1">
+                            </div>
+                            <div>
+                                <svg style="cursor:pointer;" id="closeBtn-info-container" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                @if (string.IsNullOrEmpty(this.Model.CreatorProfileImageUrl))
+                                {
+                                    <div class="d-flex justify-content-center align-items-center rounded-circle bg-secondary mr-1" style="width:150px; height:150px;">
+                                        <h3 class="text-center">@(this.Model.CreatorFirstName.Substring(0,1)+ this.Model.CreatorLastName.Substring(0,1))</h3>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img class="rounded-circle mr-1" style="width:150px; height:150px" src="@this.Model.CreatorProfileImageUrl" alt="ProfileImageUrl" />
+                                }
+                                <div>
+                                    @(this.Model.CreatorFirstName+" "+ this.Model.CreatorLastName)
+                                </div>
+                            </div>
+                            <p class="m-2">@this.Model.CreatorDescription</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="btn-showInfo">Lecture Info</button>
+                </div>*@
         </div>
-        <button class="btn btn-primary" id="btn-showInfo">Lecture Info</button>
-    </div>
-</div>
+    </section>
 
 <div id="myModal" class="modal" style="">
     <span class="close">&times;</span>
@@ -255,7 +383,7 @@
         }
     </script>
 
-    <script>
+    @*<script>
         var infoContainer = document.getElementById("info-container");
         var btnShowInfo = document.getElementById("btn-showInfo");
         var closeInfoContainerBtn = document.getElementById("closeBtn-info-container");
@@ -272,6 +400,30 @@
             infoContainer.classList.remove("show-info-container");
             infoContainer.classList.add("unshow-info-container");
         });
+    </script>*@
+    <script>
+        var countDownDate = new Date(document.getElementById("date").innerText).getTime();
+        console.log(countDownDate);
+        var x = setInterval(function () {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("days").innerText = 0;
+                document.getElementById("hours").innerText = 0;
+                document.getElementById("minutes").innerText = 0;
+                document.getElementById("seconds").innerText = 0;
+            }
+        }, 1000);
     </script>
 }
 

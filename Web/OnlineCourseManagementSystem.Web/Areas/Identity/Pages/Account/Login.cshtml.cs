@@ -77,7 +77,7 @@
             returnUrl ??= this.Url.Content("~/");
 
             this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-        
+
             if (this.ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -88,10 +88,12 @@
                     this._logger.LogInformation("User logged in.");
                     return this.LocalRedirect(returnUrl);
                 }
+
                 if (result.RequiresTwoFactor)
                 {
                     return this.RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = this.Input.RememberMe });
                 }
+
                 if (result.IsLockedOut)
                 {
                     this._logger.LogWarning("User account locked out.");

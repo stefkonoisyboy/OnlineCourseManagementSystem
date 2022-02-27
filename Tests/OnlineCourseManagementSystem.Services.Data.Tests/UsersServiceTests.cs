@@ -274,7 +274,7 @@
         }
 
         [Theory]
-        [InlineData("1", "21/12/2003" ,"John", "Timsen", "Some Background1", 1, "Some address 12", "test_user1@gmail.com")]
+        [InlineData("1", "21/12/2003", "John", "Timsen", "Some Background1", 1, "Some address 12", "test_user1@gmail.com")]
         public async Task UpdateAsync_Should_Work_Correctly(string id, string birthdate, string firstName, string lastName, string background, int townId, string address, string email)
         {
             // Arrange

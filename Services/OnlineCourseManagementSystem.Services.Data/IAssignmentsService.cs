@@ -167,5 +167,12 @@
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         IEnumerable<T> GetAllByAdmin<T>();
+
+        /// <summary>
+        /// This method gets all assignments created by current lecture.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        IEnumerable<T> GetAllByLecturer<T>(string lecturerId);
     }
 }

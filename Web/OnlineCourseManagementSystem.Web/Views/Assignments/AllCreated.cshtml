@@ -1,10 +1,10 @@
 ﻿@using OnlineCourseManagementSystem.Web.ViewModels.Assignments
-@model AllLectureAssignmetViewModel
+@model AllLectureAssignmetsByCourseViewModel
 @{
     this.ViewData["Title"] = "Created Assignments";
 }
 
-<h1 class="text-center my-5">All Created Assignments</h1>
+<h1 class="text-center my-5">All Created Assignments In Course @this.Model.CreatedAssignments.First().CourseName</h1>
 
 @if (this.TempData.ContainsKey("Message"))
 {

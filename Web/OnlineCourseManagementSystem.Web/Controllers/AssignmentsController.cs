@@ -113,7 +113,7 @@
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         public IActionResult AllCreated(int id)
         {
-            AllLectureAssignmetViewModel assignmetViewModel = new AllLectureAssignmetViewModel
+            AllLectureAssignmetsByCourseViewModel assignmetViewModel = new AllLectureAssignmetsByCourseViewModel
             {
                 CreatedAssignments = this.assignmentsService.GetAllBy<LectureAssignmentViewModel>(id),
                 //CheckedAssignmets = this.assignmentsService.GetAllCheckedBy<LectureAssignmentViewModel>(id),
@@ -333,6 +333,24 @@
 
             this.ViewData["BreadcrumbNode"] = myassignmentsByCourseNode;
             return this.View(allAssignmentsViewModel);
+        }
+
+        [Breadcrumb("My Assignments", FromAction = "Index", FromController = typeof(HomeController))]
+        public async Task<IActionResult> AllCreatedByLecturer()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            AllLectureAssignmentsViewModel viewModel = new AllLectureAssignmentsViewModel()
+            {
+                CreatedAssignments = this.assignmentsService.GetAllByLecturer<LectureAssignmentViewModel>(user.Id),
+            };
+
+            foreach (var assignment in viewModel.CreatedAssignments)
+            {
+                assignment.Users = this.assignmentsService.GetAllUsersForAssignment<AssignmentUserInfoViewModel>(assignment.AssignmentId);
+            }
+
+            return this.View(viewModel);
         }
 
         //public IActionResult AllCheckedUsersForAssignment(int id)

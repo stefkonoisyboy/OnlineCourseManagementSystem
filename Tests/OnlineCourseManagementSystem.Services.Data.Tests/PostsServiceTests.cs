@@ -89,7 +89,7 @@
 
             // Arrange
             Assert.Equal(expectedIds, actual.Select(a => a.Id));
-            Assert.Equal(expectedTitles, actual.Select(a=>a.Title));
+            Assert.Equal(expectedTitles, actual.Select(a => a.Title));
             Assert.Equal(expectedAuthorIds, actual.Select(a => a.AuthorId));
         }
 

@@ -67,6 +67,7 @@ body {
     margin-bottom: 60px;
     background: #1e3e63;
     min-height:80vh;
+    scroll-behavior: smooth;
 }
 
 .footer {
@@ -813,3 +814,6 @@ form.hide-submit input[type="submit"] {
         border-radius: 10px;
         width: 5px;
     }
+.breadcrumb-item a{
+    color:black;
+}

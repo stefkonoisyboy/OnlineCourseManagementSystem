@@ -50,7 +50,7 @@
                                 string modalId = $"#addResourceModal{eventCreated.Id}";
                             }
                             <div class="d-flex align-items-center rounded-pill p-1 my-1" data-bs-toggle="modal" data-bs-target="@modalId" style="cursor:pointer;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-                                <div style="font-size: 10px;">
+                                <div class="px-2" style="font-size: 10px;">
                                     Video Resource
                                 </div>
                                 <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 20 20" fill="currentColor">
@@ -76,12 +76,12 @@
                         <div class="card-body">
                             <div class="my-1">
                                 <h3>
-                                    <a class="text" style="color: #ff6a00; width: 10px;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
+                                    <a class="text" style="color: #2196f3; width: inherit;overflow: hidden; text-overflow: ellipsis;" asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
                                         @eventCreated.Theme
                                     </a>
                                 </h3>
                             </div>
-                            <div class="my-1">
+                            <div class="my-1 mr-1">
                                 @if (!string.IsNullOrEmpty(eventCreated.AuthorProfileImageUrl))
                                 {
                                     <img class="rounded-circle" style="width:50px;height:50px" src="@eventCreated.AuthorProfileImageUrl" />
@@ -93,20 +93,19 @@
                                     </div>
                                 }
                                 <span class="text-black">@(eventCreated.CreatorFirstName+" "+eventCreated.CreatorLastName)</span>
-
-                                @if (eventCreated.IsApproved)
-                                {
-                                    <div class="bg-success">
-                                        Approved
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="bg-danger">
-                                        Disapproved
-                                    </div>
-                                }
                             </div>
+                            @if (eventCreated.IsApproved)
+                            {
+                                <div class="bg-success mt-2 p-1">
+                                    Approved
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="bg-danger mt-2 p-1">
+                                    Disapproved
+                                </div>
+                            }
                         </div>
                         <div class="card-footer">
                             <a asp-controller="Events" asp-action="EventInfo" asp-route-id="@eventCreated.Id">
@@ -195,13 +194,15 @@
                                         </div>
                                         <input hidden asp-for="@this.Model.InputModel.EventId" value="@eventCreated.Id" />
                                         <div class="d-flex justify-content-end">
-                                            <button class="btn btn-secondary ">
-                                                Add
-                                                <span class="badge">
+                                            <button class="btn btn-secondary">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="mr-2">
+                                                        Add
+                                                    </div>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                                     </svg>
-                                                </span>
+                                                </div>
                                             </button>
                                         </div>
                                     </form>
@@ -226,27 +227,30 @@
         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accountOptions">
             <div class="accordion-body">
                 <ul class="list-group">
-                    <li class="list-group-item">
-                        @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
-                        {
-                            <a asp-controller="Dashboard" asp-action="StudentDashboard">Dashboard</a>
 
-                        }
-                        else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
-                        {
+                    @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                    {
+                        <li class="list-group-item">
+                            <a asp-controller="Dashboard" asp-action="StudentDashboard">Dashboard</a>
+                        </li>
+                    }
+                    else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                    {
+                        <li class="list-group-item">
                             <a asp-controller="Dashboard" asp-action="LecturerDashboard">Dashboard</a>
-                        }
-                        else if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                        {
+                        </li>
+                    }
+                    else if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <li class="list-group-item">
                             <a asp-controller="Dashboard" asp-action="AdminDashboard">Dashboard</a>
-                        }
-                    </li>
+                        </li>
+                    }
                     @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
                     {
                         <li class="list-group-item">
                             <a asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a>
                         </li>
-
                     }
                     @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
                     {

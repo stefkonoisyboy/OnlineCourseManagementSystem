@@ -122,12 +122,7 @@ let _activeRoom = null;
 let _participants = new Map();
 let _dominantSpeaker = null;
 
-function sayHallo() {
-    console.log("Hello");
-}
-
 async function getVideoDevices() {
-    sayHallo();
     try {
         let devices = await navigator.mediaDevices.enumerateDevices();
         if (devices.every(d => !d.label)) {
@@ -255,22 +250,27 @@ function attachTrack(track) {
         audioOrVideo.id = track.sid;
 
         if ('video' === audioOrVideo.tagName.toLowerCase()) {
-            const responsiveDiv = document.createElement('div');
-            responsiveDiv.id = track.sid;
-            responsiveDiv.classList.add('embed-responsive');
-            responsiveDiv.classList.add('embed-responsive-16by9');
 
-            const responsiveItem = document.createElement('div');
-            responsiveItem.classList.add('embed-responsive-item');
-            // Similar to.
-            // <div class="embed-responsive embed-responsive-16by9">
-            //   <div id="camera" class="embed-responsive-item">
-            //     <video></video>
-            //   </div>
-            // </div>
-            responsiveItem.appendChild(audioOrVideo);
-            responsiveDiv.appendChild(responsiveItem);
-            document.getElementById('participants').appendChild(responsiveDiv);
+            if (track.name === "screen") {
+                document.getElementById("sharedScreen").appendChild(audioOrVideo);
+            } else {
+                const responsiveDiv = document.createElement('div');
+                responsiveDiv.id = track.sid;
+                responsiveDiv.classList.add('embed-responsive');
+                responsiveDiv.classList.add('embed-responsive-16by9');
+
+                const responsiveItem = document.createElement('div');
+                responsiveItem.classList.add('embed-responsive-item');
+                // Similar to.
+                // <div class="embed-responsive embed-responsive-16by9">
+                //   <div id="camera" class="embed-responsive-item">
+                //     <video></video>
+                //   </div>
+                // </div>
+                responsiveItem.appendChild(audioOrVideo);
+                responsiveDiv.appendChild(responsiveItem);
+                document.getElementById('participants').appendChild(responsiveDiv);
+            }
         } else {
             document.getElementById('participants')
                 .appendChild(audioOrVideo);
@@ -358,7 +358,7 @@ var screenTrack;
 function shareScreenHandler() {
     if (!screenTrack) {
         navigator.mediaDevices.getDisplayMedia().then(stream => {
-            screenTrack = new Twilio.Video.LocalVideoTrack(stream.getTracks()[0]);
+            screenTrack = new Twilio.Video.LocalVideoTrack(stream.getTracks()[0], {name: "screen"});
             _activeRoom.localParticipant.publishTrack(screenTrack);
             screenTrack.mediaStreamTrack.onended = () => { shareScreenHandler() };
         }).catch(() => {

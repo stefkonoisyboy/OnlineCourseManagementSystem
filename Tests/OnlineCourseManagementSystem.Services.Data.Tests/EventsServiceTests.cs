@@ -126,7 +126,7 @@
             IEnumerable<EventViewModel> actual = eventsService.GetAllFinished<EventViewModel>();
 
             // Arrange
-            Assert.Equal(expectedIds, actual.Select(e=>e.Id));
+            Assert.Equal(expectedIds, actual.Select(e => e.Id));
             Assert.Equal(expectedThemes, actual.Select(e => e.Theme));
         }
 

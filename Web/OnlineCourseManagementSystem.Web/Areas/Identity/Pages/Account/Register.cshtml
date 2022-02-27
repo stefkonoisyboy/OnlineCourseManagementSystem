@@ -40,14 +40,10 @@
             padding: 20px 30px;
             box-sizing: border-box;
             width: 80%;
-            margin: 0 10%;
+            margin: 10% 10%;
             /*stacking fieldsets above each other*/
             position: relative;
         }
-            /*Hide all except first fieldset*/
-            #msform fieldset:not(:first-of-type) {
-                display: none;
-            }
         /*inputs*/
         #msform input, #msform textarea {
             padding: 15px;
@@ -155,10 +151,6 @@
     <!-- partial:index.partial.html -->
     <!-- multistep form -->
     <form id="msform" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-        <ul id="progressbar" class="d-flex justify-content-center">
-            <li class="active">Account Setup</li>
-            <li>Personal Details</li>
-        </ul>
         <fieldset class="position-relative">
 
             <h2 class="fs-title">Create your account</h2>
@@ -189,9 +181,9 @@
                 </div>
                 <span asp-validation-for="Input.Role" class="text-danger"></span>
             </div>
-            <div class="next action-button position-relative">
+            @*<div class="next action-button position-relative">
                 Next
-            </div>
+            </div>*@
         </fieldset>
         <fieldset class="position-relative">
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -257,15 +249,15 @@
             <span asp-validation-for="Input.Background" class="text-danger"></span>
             <input asp-for="Input.Address" placeholder="Address" />
             <span asp-validation-for="Input.Address" class="text-danger"></span>
-            <div class="previous action-button">
+            @*<div class="previous action-button">
                 Previous
-            </div>
+            </div>*@
             <button class="btn action-button">Submit</button>
         </fieldset>
     </form>
     <!-- partial -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>*@
 </body>
 
 <div class="row">
@@ -449,7 +441,7 @@
     
 }
 
-<script type="text/javascript">
+@*<script type="text/javascript">
     //jQuery time
     var current_fs, next_fs, previous_fs; //fieldsets
     var left, opacity, scale; //fieldset properties which we will animate
@@ -531,4 +523,4 @@
     $(".submit").click(function () {
         return false;
     })
-</script>
+</script>*@

@@ -119,7 +119,7 @@
             AllCommentsViewModel viewModel = new AllCommentsViewModel()
             {
                 Comments = this.commentsService.GetAllCommentsClassified(),
-                DeletedToxicCommentIds = this.commentsService.GetAllCommentsClassified().Where(x=>x.Score> 0.5).Select(x=>x.Comment.Id),
+                DeletedToxicCommentIds = this.commentsService.GetAllCommentsClassified().Where(x => x.Score > 0.5).Select(x => x.Comment.Id),
             };
             return this.View(viewModel);
         }
