@@ -70,7 +70,7 @@
         public IActionResult VideoById(int id, int courseId)
         {
             VideoByIdViewModel viewModel = this.fileService.GetById<VideoByIdViewModel>(id);
-            viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(courseId);
+            viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(courseId, 1, 100000);
 
             BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
 
@@ -93,6 +93,17 @@
         public IActionResult AddImageToGallery()
         {
             return this.View();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MarkAsCompleted(int id, int courseId)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            await this.fileService.MarkAsCompletedAsync(id, user.Id);
+            this.TempData["Message"] = "File marked as completed successfully!";
+
+            return this.RedirectToAction("ById", "Courses", new { id = courseId });
         }
 
         [HttpPost]

@@ -16,12 +16,16 @@
   <ItemGroup>
     <Compile Remove="Views\AudienceComments\**" />
     <Compile Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <Compile Remove="Views\Test\**" />
     <Content Remove="Views\AudienceComments\**" />
     <Content Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <Content Remove="Views\Test\**" />
     <EmbeddedResource Remove="Views\AudienceComments\**" />
     <EmbeddedResource Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <EmbeddedResource Remove="Views\Test\**" />
     <None Remove="Views\AudienceComments\**" />
     <None Remove="Views\Comments\Edit.cshtml~RFc0e96de.TMP\**" />
+    <None Remove="Views\Test\**" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
@@ -37,6 +41,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.11" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -249,7 +254,8 @@
 
   <ItemGroup>
     <Folder Include="Views\Shared\Components\QA\" />
-    <Folder Include="Views\Test\" />
+    <Folder Include="wwwroot\code\input\" />
+    <Folder Include="wwwroot\code\expectedOutput\" />
   </ItemGroup>
 
   <ItemGroup>

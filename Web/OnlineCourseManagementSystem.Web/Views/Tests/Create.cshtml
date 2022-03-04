@@ -1,0 +1,41 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Tests.CreateTestInputModel
+@{
+    this.ViewData["Title"] = "Add Test";
+}
+
+<link rel="stylesheet" href="~/codemirror-5.65.2/lib/codemirror.css" />
+<link href="~/css/themes/ambiance.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-2">@this.ViewData["Title"]</h1>
+
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <textarea class="code w-100" style="width: 300px;" asp-for="TestInput"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <textarea class="code w-100" style="width: 300px;" asp-for="ExpectedOutput"></textarea>
+                </div>
+            </div>
+
+            <input type="submit" value="Create" class="btn btn-primary mt-3" />
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/codemirror-5.65.2/lib/codemirror.js"></script>
+    <script>
+        let codeTextarea = Array.from(document.querySelectorAll(".code"));
+        for (var i = 0; i < codeTextarea.length; i++) {
+            var editor = CodeMirror.fromTextArea(codeTextarea[i],
+                {
+                    lineNumbers: true,
+                    theme: 'ambiance',
+                });
+        }
+       
+    </script>
+}

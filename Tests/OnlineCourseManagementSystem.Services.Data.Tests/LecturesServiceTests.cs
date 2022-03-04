@@ -112,7 +112,7 @@ namespace OnlineCourseManagementSystem.Services.Data.Tests
             IEnumerable<string> expectedCourseFileRemoteUrls = lecturesTestData.Where(x => x.CourseId == courseId).Select(x => x.Course.File.RemoteUrl).ToList();
 
             // Act
-            IEnumerable<AllLecturesByCreatorIdViewModel> actual = lecturesService.GetAllById<AllLecturesByCreatorIdViewModel>(courseId);
+            IEnumerable<AllLecturesByCreatorIdViewModel> actual = lecturesService.GetAllById<AllLecturesByCreatorIdViewModel>(courseId, 1, 100000);
 
             // Assert
             Assert.Equal(expectedIds, actual.Select(x => x.Id));

@@ -120,11 +120,12 @@
                 .CourseId;
         }
 
-        public IEnumerable<T> GetAllById<T>(int courseId)
+        public IEnumerable<T> GetAllById<T>(int courseId, int page, int itemsPerPage = 3)
         {
             return this.lecturesRepository
                 .All()
                 .Where(l => l.CourseId == courseId)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .OrderByDescending(l => l.StartDate)
                 .To<T>()
                 .ToList();
@@ -220,6 +221,13 @@
             Lecture lecture = this.lecturesRepository.All().FirstOrDefault(l => l.Id == id);
             lecture.ModifiedOn = DateTime.UtcNow;
             await this.lecturesRepository.SaveChangesAsync();
+        }
+
+        public int GetLecturesCountById(int courseId)
+        {
+            return this.lecturesRepository
+                .All()
+                .Count(l => l.CourseId == courseId);
         }
 
         private async Task<string> UploadWordFileAsync(IFormFile formFile, string fileName)

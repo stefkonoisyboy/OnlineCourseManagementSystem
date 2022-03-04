@@ -32,14 +32,22 @@
         public async Task<IActionResult> Create(int id)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            if (this.ordersService.IsOrderAvailable(id, user.Id))
+
+            if (this.coursesService.IsCourseAvailable(id, user.Id))
             {
-                await this.ordersService.CreateAsync(id, user.Id);
-                this.TempData["Message"] = "Course added successfully to cart!";
+                if (this.ordersService.IsOrderAvailable(id, user.Id))
+                {
+                    await this.ordersService.CreateAsync(id, user.Id);
+                    this.TempData["Message"] = "Course added successfully to cart!";
+                }
+                else
+                {
+                    this.TempData["AlertMessage"] = "Order with such course and client already exists in your cart!";
+                }
             }
             else
             {
-                this.TempData["AlertMessage"] = "Order with such course and client already exists in your cart!";
+                this.TempData["AlertMessage"] = "You have already purchased this course!";
             }
 
             return this.RedirectToAction(nameof(this.AllByUserId));

@@ -10,11 +10,15 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Files
 {
     public class VideoByIdViewModel : IMapFrom<File>
     {
+        public int Id { get; set; }
+
         public string RemoteUrl { get; set; }
 
         public string LectureTitle { get; set; }
 
         public string LectureCourseName { get; set; }
+
+        public int LectureCourseId { get; set; }
 
         public DateTime LectureCourseStartDate { get; set; }
 

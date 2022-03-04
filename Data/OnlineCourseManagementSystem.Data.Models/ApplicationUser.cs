@@ -43,6 +43,8 @@ namespace OnlineCourseManagementSystem.Data.Models
             this.Completitions = new HashSet<Completition>();
             this.MessageQAs = new HashSet<MessageQA>();
             this.ChatbotMessages = new HashSet<ChatbotMessage>();
+            this.FileCompletitions = new HashSet<FileCompletition>();
+            this.Submissions = new HashSet<Submission>();
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
@@ -156,5 +158,9 @@ namespace OnlineCourseManagementSystem.Data.Models
         public virtual ICollection<MessageQA> MessageQAs { get; set; }
 
         public virtual ICollection<ChatbotMessage> ChatbotMessages { get; set; }
+
+        public virtual ICollection<FileCompletition> FileCompletitions { get; set; }
+
+        public virtual ICollection<Submission> Submissions { get; set; }
     }
 }

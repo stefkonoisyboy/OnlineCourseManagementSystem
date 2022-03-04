@@ -142,7 +142,7 @@ blockquote.media-object .media .usr-img img {
 }
 
 a {
-    color: #515365;
+    /*color: #515365;*/
     outline: none;
 }
 a:hover {

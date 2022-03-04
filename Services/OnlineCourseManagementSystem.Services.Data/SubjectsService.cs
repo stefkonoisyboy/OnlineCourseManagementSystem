@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using OnlineCourseManagementSystem.Data.Common.Repositories;
     using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
 
     public class SubjectsService : ISubjectsService
     {
@@ -16,6 +17,15 @@
         public SubjectsService(IDeletableEntityRepository<Subject> subjectsRepository)
         {
             this.subjectsRepository = subjectsRepository;
+        }
+
+        public IEnumerable<T> GetAll<T>()
+        {
+            return this.subjectsRepository
+                .All()
+                .OrderBy(s => s.Name)
+                .To<T>()
+                .ToList();
         }
 
         public IEnumerable<SelectListItem> GetAllAsSelectListItems()

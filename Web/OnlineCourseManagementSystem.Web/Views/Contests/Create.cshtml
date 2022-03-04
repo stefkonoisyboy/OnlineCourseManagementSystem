@@ -1,0 +1,35 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Contests.CreateContestInputModel
+@{ 
+    this.ViewData["Title"] = "Create Contest";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1>@this.ViewData["Title"]</h1>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="text-dark"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StartDate" class="text-dark"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EndDate" class="text-dark"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Create</button>
+            </div>
+        </form>
+    </div>
+</div>

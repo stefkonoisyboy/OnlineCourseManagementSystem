@@ -33,9 +33,19 @@
 
         int GetAllActiveCoursesCount(string name);
 
+        bool IsCourseAvailable(int courseId, string userId);
+
+        int GetAllActiveCoursesBySubjectIdCount(int subjectId);
+
+        int GetAllCoursesByUserIdAndSubjectIdCount(int subjectId, string userId);
+
+        int GetAllCoursesByCreatorIdAndSubjectIdCount(int subjectId, string creatorId);
+
         int GetAllCoursesByUserIdCount(string userId);
 
         int GetAllCoursesByCreatorIdCount(string creatorId);
+
+        int GetCourseIdByFileId(int fileId);
 
         IEnumerable<UserInCourse> GetAllForTestingAIByUserId(int id, string userId, int itemsPerPage = 12);
 
@@ -51,17 +61,27 @@
 
         IEnumerable<T> GetAllRecommended<T>();
 
+        IEnumerable<T> GetTopLatest<T>();
+
+        IEnumerable<T> GetTopNext<T>();
+
         T GetById<T>(int id);
 
         IEnumerable<T> GetAllByUser<T>(int id, string userId, int itemsPerPage = 6);
 
+        IEnumerable<T> GetAllByUserAndSubject<T>(int id, string userId, int subjectId, int itemsPerPage = 6);
+
         IEnumerable<T> GetAllByCreatorId<T>(int id, string creatorId, int itemsPerPage = 6);
+
+        IEnumerable<T> GetAllByCreatorIdAndSubjectId<T>(int id, string creatorId, int subjectId, int itemsPerPage = 6);
 
         IEnumerable<T> GetAllUpcoming<T>();
 
         IEnumerable<T> GetAllPast<T>();
 
-        IEnumerable<T> GetAllActive<T>(int page, string name, int itemsPerPage = 5);
+        IEnumerable<T> GetAllActive<T>(int page, string name, int itemsPerPage = 6);
+
+        IEnumerable<T> GetAllActiveBySubjectId<T>(int page, int subjectId, int itemsPerPage = 6);
 
         IEnumerable<T> GetAllByTag<T>(SearchByTagInputModel input);
 

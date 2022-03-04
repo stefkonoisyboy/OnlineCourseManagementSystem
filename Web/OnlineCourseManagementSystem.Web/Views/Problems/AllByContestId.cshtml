@@ -1,0 +1,90 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Problems.AllProblemsByContestIdListViewModel
+@{
+    int problemIndex = 1;
+}
+
+<link rel="stylesheet" href="~/codemirror-5.65.2/lib/codemirror.css" />
+<link href="~/css/themes/ambiance.css" rel="stylesheet" />
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.TempData["Message"]
+    </div>
+}
+
+<body class="bg-white">
+    <h1 class="text-success mb-3">@this.ViewData["Title"]</h1>
+    <h2 class="mb-3">Submit solution</h2>
+
+    <div class="p-2" style="background-color: #E9F4F9;">
+        <div class="row mb-2">
+            @foreach (var problem in this.Model.Problems)
+            {
+                <div class="col-md-2">
+                    <a asp-action="AllByContestId" asp-route-problemId="@problem.Id" asp-route-contestId="@problem.ContestId" class="btn btn-secondary">@(problemIndex + ". " + string.Join("", problem.Name.Take(10)) + "...")</a>
+                </div>
+                problemIndex++;
+            }
+        </div>
+        <h2 class="mb-2">@this.Model.CurrentProblem.Name</h2>
+        <div class="row mb-3">
+            <p>
+                <a asp-controller="Tests" asp-action="Create" asp-route-problemId="@this.Model.CurrentProblem.Id" class="btn btn-primary mr-1">Add test</a>
+                <a asp-controller="Tests" asp-action="AllByProblemId" asp-route-problemId="@this.Model.CurrentProblem.Id" class="btn btn-info mr-1">All tests</a>
+                <a asp-action="Edit" asp-route-id="@this.Model.CurrentProblem.Id" class="btn btn-warning mr-1">Edit</a>
+                <a asp-action="Delete" asp-route-id="@this.Model.CurrentProblem.Id" class="btn btn-danger mr-1">Delete</a>
+            </p>
+        </div>
+
+        <form asp-controller="Submissions" asp-action="Create" asp-route-problemId="@this.Model.CurrentProblem.Id" method="post">
+            <textarea asp-for="Input.Code" id="code"></textarea>
+            <input type="submit" class="btn btn-success mt-2 mb-3" value="Submit" />
+        </form>
+
+        @if (this.Model.Submissions.Count() == 0)
+        {
+            <h2 class="text-center">You haven't submitted solutions to this contest yet!</h2>
+        }
+        else
+        {
+            <h2 class="text-center">Submissions</h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Problem</th>
+                        <th>Points</th>
+                        <th>Submitted on</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var submission in this.Model.Submissions)
+                    {
+                        <tr>
+                            <td>@submission.Id</td>
+                            <td>@submission.ProblemName</td>
+                            <td>@submission.Points / @submission.ProblemPoints</td>
+                            <td>
+                                @submission.CreatedOn.ToString("dd/MM/yyyy hh:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                                <a class="btn btn-secondary">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</body>
+
+@section Scripts{
+    <script src="~/codemirror-5.65.2/lib/codemirror.js"></script>
+    <script>
+        let codeTextarea = document.getElementById('code');
+        var editor = CodeMirror.fromTextArea(codeTextarea,
+            {
+                lineNumbers: true,
+                theme: 'ambiance',
+            });
+    </script>
+}

@@ -127,14 +127,15 @@
                 coursesReader.Close();
             }
 
-            if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+            if (this.User.Identity.IsAuthenticated)
             {
                 HomeViewModel homeViewModel = new HomeViewModel
                 {
                     AssignmentsCount = this.assignmentsService.GetAllBy<AssignmentViewModel>(user.Id).Count(),
                     CoursesInCartCount = this.ordersService.CoursesInCartCount(user.Id),
+                    LatestCourses = this.coursesService.GetTopLatest<TopLatestCoursesViewModel>(),
+                    NextCourses = this.coursesService.GetTopNext<TopNextCoursesViewModel>(),
                     Reviews = this.reviewsService.GetTop3Recent<AllReviewsByCourseIdViewModel>(),
-                    FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                     CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                     UserId = user.Id,
                     Chatbot = new AllChatbotMessagesByCreatorIdListViewModel
@@ -150,7 +151,6 @@
                 HomeViewModel homeViewModel = new HomeViewModel
                 {
                     Reviews = this.reviewsService.GetTop3Recent<AllReviewsByCourseIdViewModel>(),
-                    FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
                     CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
                     Chatbot = new AllChatbotMessagesByCreatorIdListViewModel
                     {

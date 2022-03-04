@@ -148,6 +148,11 @@
             services.AddTransient<IDashboardService, DashboardService>(); // Stefko
             services.AddTransient<IChatbotMessagesService, ChatbotMessagesService>(); // All GET methods done
             services.AddTransient<ISubscribersService, SubscribersService>(); // All GET methods and comments.
+            services.AddTransient<IContestsService, ContestsService>();
+            services.AddTransient<IProblemsService, ProblemsService>();
+            services.AddTransient<ISubmissionsService, SubmissionsService>();
+            services.AddTransient<ITestsService, TestsService>();
+
             services.AddTransient<IMailsService, MailsService>();
             services.AddSingleton<ITwilioService, TwilioService>();
 

@@ -6,6 +6,20 @@
     this.ViewData["Title"] = "Courses Cart";
 }
 
+@if (this.TempData.ContainsKey("AlertMessage"))
+{
+    <div class="alert alert-danger alert-dismissible">
+        @this.TempData["AlertMessage"]
+    </div>
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.TempData["Message"]
+    </div>
+}
+
 <h3>@this.ViewData["Title"]</h3>
 
 @if (this.Model.Orders.Count() > 0)

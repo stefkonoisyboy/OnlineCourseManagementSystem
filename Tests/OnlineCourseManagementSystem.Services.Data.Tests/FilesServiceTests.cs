@@ -31,7 +31,7 @@
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
             mockedRepository.Setup(x => x.Delete(It.IsAny<File>()))
                             .Callback((File file) => file.IsDeleted = true);
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
 
             // Act
             await filesService.DeleteImageFromGallery(fileId, userId);
@@ -48,7 +48,7 @@
             List<File> testData = this.GetAllFilesTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<File>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null); ; ;
             IEnumerable<string> expectedRemoteUrls = testData
                 .Where(f => f.LectureId == lectureId && f.Id != id)
                 .Select(f => f.RemoteUrl)
@@ -79,7 +79,7 @@
             List<File> testData = this.GetAllFilesTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<File>>();
             mockedRepository.Setup(f => f.All()).Returns(testData.AsQueryable());
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
             IEnumerable<int> expectedIds = testData
                 .Where(f => f.AssignmentId == assignmentId && f.Type == FileType.Resource)
                 .Select(f => f.Id)
@@ -110,7 +110,7 @@
             List<Album> testData = this.GetAlbumsTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<Album>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IFilesService filesService = new FilesService(null, null, null, mockedRepository.Object);
+            IFilesService filesService = new FilesService(null, null, null, mockedRepository.Object, null);
             string expectedName = testData.FirstOrDefault(a => a.Id == albumId && a.UserId == userId).Name;
             int expectedId = albumId;
             IEnumerable<string> expectedImagesRemoteUrls = testData.FirstOrDefault(a => a.Id == albumId && a.UserId == userId).Images.Select(f => f.RemoteUrl).ToList();
@@ -134,7 +134,7 @@
             List<File> testData = this.GetAllFilesTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<File>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
             IEnumerable<int> expectedIds = testData.Where(f => f.AssignmentId == assignmentId && f.UserId == userId && f.Type == FileType.Submit).Select(f => f.Id).ToList();
             IEnumerable<string> expectedRemoteUrls = testData.Where(f => f.AssignmentId == assignmentId && f.UserId == userId && f.Type == FileType.Submit).Select(f => f.RemoteUrl).ToList();
             IEnumerable<string> expectedExtensions = testData.Where(f => f.AssignmentId == assignmentId && f.UserId == userId && f.Type == FileType.Submit).Select(f => f.Extension).ToList();
@@ -161,7 +161,7 @@
                 {
                     file.IsDeleted = true;
                 });
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
             int? expectedAssignemntId = testData.FirstOrDefault(f => f.Id == fileId).AssignmentId;
 
             // Act
@@ -184,7 +184,7 @@
                 {
                     file.IsDeleted = true;
                 });
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
             int? expectedEventId = testData.FirstOrDefault(f => f.Id == fileId).EventId;
 
             // Act
@@ -208,7 +208,7 @@
                 {
                     file.IsDeleted = true;
                 });
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
             int? expectedLectureId = testData.FirstOrDefault(f => f.Id == fileId).LectureId;
 
             // Act
@@ -227,7 +227,7 @@
             List<File> testData = this.GetAllFilesTestData();
             var mockedReository = new Mock<IDeletableEntityRepository<File>>();
             mockedReository.Setup(f => f.All()).Returns(testData.AsQueryable());
-            IFilesService filesService = new FilesService(null, mockedReository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedReository.Object, null, null, null);
             string expectedRemoteUrl = testData.FirstOrDefault(f => f.Id == fileId).RemoteUrl;
 
             // Act
@@ -245,7 +245,7 @@
             List<File> testData = this.GetAllFilesTestData();
             var mockedRepository = new Mock<IDeletableEntityRepository<File>>();
             mockedRepository.Setup(x => x.All()).Returns(testData.AsQueryable());
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
             int expectedId = testData.FirstOrDefault(f => f.Id == filedId).Id;
             string expectedRemoteUrl = testData.FirstOrDefault(f => f.Id == filedId).RemoteUrl;
             string expectedExtension = testData.FirstOrDefault(f => f.Id == filedId).Extension;
@@ -277,7 +277,7 @@
                 RemoteUrl = remoteUrl,
                 EventId = eventId,
             };
-            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null);
+            IFilesService filesService = new FilesService(null, mockedRepository.Object, null, null, null);
 
             // Act
             int actualFileId = await filesService.AddVideoResourceToEventAsync(inputModel);

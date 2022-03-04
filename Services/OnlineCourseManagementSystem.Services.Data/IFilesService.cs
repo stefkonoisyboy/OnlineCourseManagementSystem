@@ -103,5 +103,7 @@
         /// <param name="inptuModel"></param>
         /// <returns></returns>
         Task<int> AddVideoResourceToEventAsync(VideoFileInputModel inptuModel);
+
+        Task MarkAsCompletedAsync(int id, string userId);
     }
 }

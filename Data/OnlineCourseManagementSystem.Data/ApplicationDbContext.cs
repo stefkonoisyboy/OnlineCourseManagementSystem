@@ -109,6 +109,16 @@
 
         public virtual DbSet<Subscriber> Subscribers { get; set; }
 
+        public virtual DbSet<FileCompletition> FileCompletitions { get; set; }
+
+        public virtual DbSet<Contest> Contests { get; set; }
+
+        public virtual DbSet<Problem> Problems { get; set; }
+
+        public virtual DbSet<Test> Tests { get; set; }
+
+        public virtual DbSet<Submission> Submissions { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

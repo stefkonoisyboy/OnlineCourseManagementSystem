@@ -1,0 +1,31 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Problems.EditProblemInputModel
+@{ 
+    this.ViewData["Title"] = "Edit Problem";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1>@this.ViewData["Title"]</h1>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="text-dark"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Points" class="text-dark"></label>
+                <input asp-for="Points" class="form-control" />
+                <span asp-validation-for="Points" class="text-danger"></span>
+            </div>
+
+            <input asp-for="Id" type="hidden" />
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-warning">Edit</button>
+            </div>
+        </form>
+    </div>
+</div>

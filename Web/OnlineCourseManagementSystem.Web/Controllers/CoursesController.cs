@@ -18,6 +18,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
     using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
     using OnlineCourseManagementSystem.Web.ViewModels.Skills;
+    using OnlineCourseManagementSystem.Web.ViewModels.Subjects;
     using OnlineCourseManagementSystem.Web.ViewModels.Tags;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using SmartBreadcrumbs.Attributes;
@@ -130,54 +131,70 @@
         }
 
         [Authorize(Roles = "Student,Lecturer,Administrator")]
-        public IActionResult ById(int id)
+        public async Task<IActionResult> ById(int id, int page = 1)
         {
-            CourseByIdViewModel viewModel = this.coursesService.GetById<CourseByIdViewModel>(id);
+            if (page <= 0)
+            {
+                return this.NotFound();
+            }
+
+            const int ItemsPerPage = 3;
+
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            CourseDetailsViewModel viewModel = this.coursesService.GetById<CourseDetailsViewModel>(id);
 
             viewModel.Skills = this.skillsService.GetAllByCourseId<AllSkillsByCourseIdViewModel>(id);
-            viewModel.Lecturers = this.lecturersService.GetAllByCourseId<AllLecturersByIdViewModel>(id);
-            viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(id);
-
-            if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+            viewModel.Reviews = this.reviewsService.GetAllByCourseId<AllReviewsByCourseIdViewModel>(id);
+            viewModel.Lecturers = this.lecturersService.GetAllByCourseId<AllLecturersByCourseIdViewModel>(id);
+            viewModel.CompletedLecturesCount = this.completitionsService.GetAllCompletitionsCountByCourseIdAndUserId(id, user.Id);
+            viewModel.ListOfLectures = new AllLecturesByIdListViewModel
             {
-                BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = page,
+                ActiveCoursesCount = this.lecturesService.GetLecturesCountById(id),
+                Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(id, page, ItemsPerPage),
+                CourseId = id,
+            };
+            viewModel.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
 
-                BreadcrumbNode courseDetailsNode = new MvcBreadcrumbNode("ById", "Courses", "Course Details")
-                {
-                    Parent = mycoursesNode,
-                    RouteValues = new { id = id },
-                };
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
 
-                this.ViewData["BreadcrumbNode"] = courseDetailsNode;
-            }
-            else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+            BreadcrumbNode courseDetailsNode = new MvcBreadcrumbNode("ById", "Courses", "Course Details")
             {
-                BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+                Parent = mycoursesNode,
+                RouteValues = new { id = id },
+            };
 
-                BreadcrumbNode courseDetailsNode = new MvcBreadcrumbNode("ById", "Courses", "Course Details")
-                {
-                    Parent = mycoursesNode,
-                    RouteValues = new { id = id },
-                };
-
-                this.ViewData["BreadcrumbNode"] = courseDetailsNode;
-            }
+            this.ViewData["BreadcrumbNode"] = courseDetailsNode;
 
             return this.View(viewModel);
         }
 
         [Authorize]
         [Breadcrumb(" Course Details ", FromAction = "AllUpcomingAndActive")]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, int page = 1)
         {
+            if (page <= 0)
+            {
+                return this.NotFound();
+            }
+
+            const int ItemsPerPage = 3;
+
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             CourseDetailsViewModel viewModel = this.coursesService.GetById<CourseDetailsViewModel>(id);
 
-            viewModel.Tags = this.tagsService.GetAllByCourseId<AllTagsByCourseIdViewModel>(id);
             viewModel.Skills = this.skillsService.GetAllByCourseId<AllSkillsByCourseIdViewModel>(id);
             viewModel.Reviews = this.reviewsService.GetAllByCourseId<AllReviewsByCourseIdViewModel>(id);
             viewModel.Lecturers = this.lecturersService.GetAllByCourseId<AllLecturersByCourseIdViewModel>(id);
-            viewModel.RecommendedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
+            viewModel.ListOfLectures = new AllLecturesByIdListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = page,
+                ActiveCoursesCount = this.lecturesService.GetLecturesCountById(id),
+                Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(id, page, ItemsPerPage),
+                CourseId = id,
+            };
             viewModel.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
 
             return this.View(viewModel);
@@ -195,6 +212,76 @@
         }
 
         [Authorize]
+        [Breadcrumb("My Courses", FromAction = "Index", FromController = typeof(HomeController))]
+        public async Task<IActionResult> AllByCurrentUser(int id = 1)
+        {
+            if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+            {
+                ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                const int ItemsPerPage = 6;
+                UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
+                {
+                    ListOfActiveCourses = new AllActiveCoursesListViewModel
+                    {
+                        ItemsPerPage = ItemsPerPage,
+                        PageNumber = id,
+                        ActiveCoursesCount = this.coursesService.GetAllCoursesByCreatorIdCount(user.Id),
+                        ActiveCourses = this.coursesService.GetAllByCreatorId<AllActiveCoursesViewModel>(id, user.Id, ItemsPerPage),
+                    },
+                    Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
+                };
+
+                this.ViewData["CurrentUserHeading"] = "Messages";
+
+                return this.View(viewModel);
+            }
+            else
+            {
+                ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                const int ItemsPerPage = 6;
+                UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
+                {
+                    ListOfActiveCourses = new AllActiveCoursesListViewModel
+                    {
+                        ItemsPerPage = ItemsPerPage,
+                        PageNumber = id,
+                        ActiveCoursesCount = this.coursesService.GetAllCoursesByUserIdCount(user.Id),
+                        ActiveCourses = this.coursesService.GetAllByUser<AllActiveCoursesViewModel>(id, user.Id, ItemsPerPage),
+                    },
+                    Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
+                };
+
+                this.ViewData["CurrentUserHeading"] = "Messages";
+
+                return this.View(viewModel);
+            }
+        }
+
+        [Authorize]
+        [Breadcrumb("My Courses", FromAction = "Index", FromController = typeof(HomeController))]
+        public async Task<IActionResult> AllByCurrentUserAndSubjectId(int subjectId, int id = 1)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            const int ItemsPerPage = 6;
+            UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
+            {
+                ListOfActiveCourses = new AllActiveCoursesListViewModel
+                {
+                    ItemsPerPage = ItemsPerPage,
+                    PageNumber = id,
+                    ActiveCoursesCount = this.coursesService.GetAllCoursesByCreatorIdAndSubjectIdCount(subjectId, user.Id),
+                    ActiveCourses = this.coursesService.GetAllByCreatorIdAndSubjectId<AllActiveCoursesViewModel>(id, user.Id, subjectId, ItemsPerPage),
+                    SubjectId = subjectId,
+                },
+                Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
+            };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
         [Breadcrumb(" Upcoming and Active Courses ", FromAction = "Index", FromController = typeof(HomeController))]
         public IActionResult AllUpcomingAndActive(string name = null, int id = 1)
         {
@@ -203,7 +290,7 @@
                 return this.NotFound();
             }
 
-            const int ItemsPerPage = 5;
+            const int ItemsPerPage = 6;
             UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
             {
                 ListOfActiveCourses = new AllActiveCoursesListViewModel
@@ -216,6 +303,35 @@
                 },
                 UpcomingCourses = this.coursesService.GetAllUpcoming<AllUpcomingCoursesViewModel>(),
                 Tags = this.tagsService.GetAll<AllTagsViewModel>(),
+                Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
+            };
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
+        [Breadcrumb(" Upcoming and Active Courses ", FromAction = "Index", FromController = typeof(HomeController))]
+        public IActionResult AllUpcomingAndActiveBySubjectId(int subjectId, int id = 1)
+        {
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
+            const int ItemsPerPage = 6;
+            UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
+            {
+                ListOfActiveCourses = new AllActiveCoursesListViewModel
+                {
+                    ItemsPerPage = ItemsPerPage,
+                    PageNumber = id,
+                    ActiveCoursesCount = this.coursesService.GetAllActiveCoursesBySubjectIdCount(subjectId),
+                    ActiveCourses = this.coursesService.GetAllActiveBySubjectId<AllActiveCoursesViewModel>(id, subjectId, ItemsPerPage),
+                    SubjectId = subjectId,
+                },
+                UpcomingCourses = this.coursesService.GetAllUpcoming<AllUpcomingCoursesViewModel>(),
+                Tags = this.tagsService.GetAll<AllTagsViewModel>(),
+                Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
             };
 
             return this.View(viewModel);
@@ -244,32 +360,6 @@
             {
                 course.CompletedLecturesCount = this.completitionsService.GetAllCompletitionsCountByCourseIdAndUserId(course.CourseId, id);
             }
-
-            return this.View(viewModel);
-        }
-
-        [Authorize(Roles = GlobalConstants.StudentRoleName)]
-        [Breadcrumb("My Courses", FromAction = "Index", FromController = typeof(HomeController))]
-        public async Task<IActionResult> AllByCurrentUser(int id = 1)
-        {
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            const int ItemsPerPage = 6;
-            AllCoursesByUserListViewModel viewModel = new AllCoursesByUserListViewModel
-            {
-                ItemsPerPage = ItemsPerPage,
-                PageNumber = id,
-                ActiveCoursesCount = this.coursesService.GetAllCoursesByUserIdCount(user.Id),
-                Courses = this.coursesService.GetAllByUser<AllCoursesByUserViewModel>(id, user.Id, ItemsPerPage),
-                FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>(),
-                CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id),
-            };
-
-            foreach (var course in viewModel.Courses)
-            {
-                course.CompletedLecturesCount = this.completitionsService.GetAllCompletitionsCountByCourseIdAndUserId(course.CourseId, user.Id);
-            }
-
-            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.View(viewModel);
         }

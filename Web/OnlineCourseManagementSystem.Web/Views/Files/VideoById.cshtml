@@ -24,6 +24,14 @@
     .accordion-item .accordion-header button:hover {
         background-color: orange;
     }
+
+    .bg-yellow {
+        background-color: #FFA000 !important;
+    }
+
+    .bg-red {
+        background-color: lightgray !important;
+    }
 </style>
 
 <body class="bg-light">
@@ -43,7 +51,7 @@
                 {
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-heading-@lectureIndex">
-                            <button class="accordion-button bg-danger text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@lectureIndex" aria-expanded="false" aria-controls="flush-collapse-@lectureIndex">
+                            <button class="accordion-button bg-red text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@lectureIndex" aria-expanded="false" aria-controls="flush-collapse-@lectureIndex">
                                 @(lectureIndex + ". " + lecture.Title)
                             </button>
                         </h2>
@@ -118,4 +126,39 @@
             </div>
         </div>
     </div>
+
+    <div class="row mt-3">
+        <p class="text-center">
+            <a asp-action="MarkAsCompleted" asp-route-id="@this.Model.Id" asp-route-courseId="@this.Model.LectureCourseId" class="btn btn-success w-50">MARK AS COMPLETE</a>
+        </p>
+    </div>
+
+    @section Scripts {
+        <script type="text/javascript">
+            window.addEventListener("click", function (e) {
+                if (e.target.classList.contains("bg-red")) {
+                    e.target.classList.remove("bg-red");
+                    e.target.classList.add("bg-yellow");
+                    const buttons = this.document.querySelectorAll("button.acc-button");
+                    buttons.forEach((button) => {
+                        if (button != e.target) {
+                            button.classList.remove("bg-yellow");
+                            button.classList.add("bg-red");
+                        }
+                    });
+                }
+                else if (e.target.classList.contains("bg-yellow")) {
+                    e.target.classList.remove("bg-yellow");
+                    e.target.classList.add("bg-red");
+                    const buttons = this.document.querySelectorAll("button.acc-button");
+                    buttons.forEach((button) => {
+                        if (button != e.target) {
+                            button.classList.remove("bg-yellow");
+                            button.classList.add("bg-red");
+                        }
+                    });
+                }
+            });
+        </script>
+    }
 </body>
