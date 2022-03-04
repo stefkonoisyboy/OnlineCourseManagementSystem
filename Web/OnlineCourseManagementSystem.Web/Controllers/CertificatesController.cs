@@ -49,7 +49,7 @@ namespace OnlineCourseManagementSystem.Web.Controllers
             viewModel.FeaturedCourses = this.coursesService.GetAllRecommended<AllRecommendedCoursesByIdViewModel>();
             viewModel.CurrentUser = this.usersService.GetById<CurrentUserViewModel>(user.Id);
             viewModel.Grade = this.examsService.GetGradeByUserIdAndCourseId(user.Id, courseId);
-            viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(courseId);
+            viewModel.Lectures = this.lecturesService.GetAllById<AllLecturesByIdViewModel>(courseId, 1, 100000);
             int examId = this.examsService.GetExamIdByUserIdAndCourseId(user.Id, courseId);
 
             if (viewModel.Grade < 5.00)

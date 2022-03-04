@@ -20,16 +20,22 @@
         private readonly IDeletableEntityRepository<File> fileRepository;
         private readonly Cloudinary cloudinaryUtility;
         private readonly IDeletableEntityRepository<Album> albumRepository;
+        private readonly IDeletableEntityRepository<FileCompletition> fileCompletitionsRepository;
         private readonly CloudinaryService cloudinaryService;
 
-        public FilesService(IDeletableEntityRepository<ApplicationUser> userRepository, IDeletableEntityRepository<File> fileRepository, Cloudinary cloudinaryUtility, IDeletableEntityRepository<Album> albumRepository)
+        public FilesService(
+            IDeletableEntityRepository<ApplicationUser> userRepository,
+            IDeletableEntityRepository<File> fileRepository,
+            Cloudinary cloudinaryUtility,
+            IDeletableEntityRepository<Album> albumRepository,
+            IDeletableEntityRepository<FileCompletition> fileCompletitionsRepository)
         {
             this.userRepository = userRepository;
             this.fileRepository = fileRepository;
 
             this.cloudinaryUtility = cloudinaryUtility;
             this.albumRepository = albumRepository;
-
+            this.fileCompletitionsRepository = fileCompletitionsRepository;
             this.cloudinaryService = new CloudinaryService(cloudinaryUtility);
         }
 
@@ -176,6 +182,18 @@
             await this.fileRepository.SaveChangesAsync();
 
             return file.Id;
+        }
+
+        public async Task MarkAsCompletedAsync(int id, string userId)
+        {
+            FileCompletition fileCompletition = new FileCompletition
+            {
+                FileId = id,
+                UserId = userId,
+            };
+
+            await this.fileCompletitionsRepository.AddAsync(fileCompletition);
+            await this.fileCompletitionsRepository.SaveChangesAsync();
         }
     }
 }

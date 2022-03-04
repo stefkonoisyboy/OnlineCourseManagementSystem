@@ -39,6 +39,10 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Paging
 
         public string Name { get; set; }
 
+        public int SubjectId { get; set; }
+
+        public int CourseId { get; set; }
+
         public string RecommendationType { get; set; }
     }
 }

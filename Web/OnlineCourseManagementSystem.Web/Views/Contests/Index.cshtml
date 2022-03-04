@@ -1,0 +1,49 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Contests.AllContestsIndexListViewModel
+@using System.Globalization
+@{ 
+    this.ViewData["Title"] = "Contests - Index";
+}
+
+<div class="mt-4 p-5 text-white rounded" style="background-color: #ecf0f1;">
+    <h1 class="mb-3">In this section you can test your C# skills!</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Active Contests</h3>
+            <div style="height: 400px; overflow-y: scroll;">
+                <table class="table table-hover">
+                   @foreach (var contest in this.Model.ActiveContests)
+                   {
+                        <tr>
+                            <td>
+                                <h3 class="text-success"><a style="font-size: 20px;" class="text-success" asp-action="Details" asp-route-id="@contest.Id">@contest.Name</a></h3>
+                                <h5>Remaining time: @contest.RemainingDays days, @contest.RemainingHours hours and @contest.RemainingMinutes minutes</h5>
+                            </td>
+                            <td>
+                                @if (contest.Problems.Count() > 0)
+                                {
+                                    <a asp-controller="Problems" asp-action="AllByContestId" asp-route-problemId="@contest.Problems.FirstOrDefault().Id" asp-route-contestId="@contest.Id" class="btn btn-secondary">Practice</a>
+                                }
+                            </td>
+                        </tr>
+                   }
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Finished Contests</h3>
+            <div style="height: 400px; overflow-y: scroll;">
+                <table class="table table-hover">
+                    @foreach (var contest in this.Model.FinishedContests)
+                    {
+                        <tr>
+                            <td>
+                                <h3 class="text-success"><a style="font-size: 20px;" class="text-success" asp-action="Details" asp-route-id="@contest.Id">@contest.Name</a></h3>
+                                <h5 class="text-right">Finished on: @contest.EndDate.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)</h5>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Contests.ContestsDetailsViewModel
+@using System.Globalization
+@{
+    this.ViewData["Title"] = "Contest details";
+}
+
+<h2 class="text-center">@this.ViewData["Title"]</h2>
+<hr class="bg-secondary" />
+<h3 class="text-center">
+    @this.Model.Name
+</h3>
+<hr class="bg-secondary" />
+<div class="d-flex justify-content-around my-4">
+    <h3 class="font-weight-normal">Start time: @this.Model.StartDate.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)</h3>
+    <h3 class="font-weight-normal">End time: @this.Model.EndDate.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)</h3>
+</div>
+<hr class="bg-secondary" />
+<div class="d-flex justify-content-center mt-3">
+    <a class="btn btn-warning" asp-controller="Contests" asp-action="Edit" asp-route-id="@this.Model.Id">Edit</a>
+    <a class="btn btn-primary mx-5" asp-controller="Contests" asp-action="All">Back to all</a>
+    <a class="btn btn-danger" asp-controller="Contests" asp-action="Delete" asp-route-id="@this.Model.Id">Delete</a>
+</div>
+
+@if (this.Model.Submissions.Count() == 0)
+{
+    <h2 class="text-center">You haven't submitted solutions to this contest yet!</h2>
+}
+else
+{
+    <h2 class="text-center">Submissions</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Problem</th>
+                <th>Points</th>
+                <th>Submitted on</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var submission in this.Model.Submissions)
+            {
+                <tr>
+                    <td>@submission.Id</td>
+                    <td>@submission.ProblemName</td>
+                    <td>@submission.Points / @submission.ProblemPoints</td>
+                    <td>
+                        @submission.CreatedOn.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)
+                        <a class="btn btn-secondary">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

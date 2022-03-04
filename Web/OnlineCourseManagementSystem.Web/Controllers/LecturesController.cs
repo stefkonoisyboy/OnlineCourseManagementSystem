@@ -264,7 +264,7 @@
         [Authorize(Roles = "Student,Lecturer")]
         public IActionResult CourseReports(int id)
         {
-            IEnumerable<AllLecturesForReportByCourseIdViewModel> lectures = this.lecturesService.GetAllById<AllLecturesForReportByCourseIdViewModel>(id);
+            IEnumerable<AllLecturesForReportByCourseIdViewModel> lectures = this.lecturesService.GetAllById<AllLecturesForReportByCourseIdViewModel>(id, 1, 100000);
             CourseReportsViewModel viewModel = this.coursesService.GetById<CourseReportsViewModel>(id);
 
             viewModel.Lectures = lectures;

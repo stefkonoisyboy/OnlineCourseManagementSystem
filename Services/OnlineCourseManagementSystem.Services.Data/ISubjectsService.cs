@@ -9,5 +9,7 @@
     public interface ISubjectsService
     {
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
+
+        IEnumerable<T> GetAll<T>();
     }
 }

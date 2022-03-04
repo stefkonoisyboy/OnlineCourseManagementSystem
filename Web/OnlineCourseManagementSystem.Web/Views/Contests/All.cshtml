@@ -1,0 +1,41 @@
+﻿@model OnlineCourseManagementSystem.Web.ViewModels.Contests.AllContestsListViewModel
+@{
+    this.ViewData["Title"] = "All Contests";
+}
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.TempData["Message"]
+    </div>
+}
+
+<h1 class="text-center">@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <table class="table table">
+        @foreach (var contest in this.Model.Contests)
+        {
+            <tr>
+                <td>
+                    <p style="font-size: 15px;" class="text-primary">@contest.Name</p>
+                </td>
+                <td>
+                    @if (contest.Problems.Count() > 0)
+                    {
+                        <a asp-controller="Problems" asp-action="AllByContestId" asp-route-problemId="@contest.Problems.FirstOrDefault().Id" asp-route-contestId="@contest.Id" class="btn btn-secondary">Practice</a>
+                    }
+                    <a asp-action="Details" asp-route-id="@contest.Id" class="btn btn-primary">Details</a>
+                    @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                    {
+                        <a asp-action="Edit" asp-route-id="@contest.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@contest.Id" class="btn btn-danger">Delete</a>
+                    }
+                    <a asp-controller="Problems" asp-action="Create" asp-route-contestId="@contest.Id" class="btn btn-info">Add Problem</a>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <partial name="_AllContestsPagingPartial" model="this.Model" />
+</div>

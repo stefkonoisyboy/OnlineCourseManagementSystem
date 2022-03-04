@@ -18,7 +18,9 @@
 
         public string UserId { get; set; }
 
-        public IEnumerable<AllRecommendedCoursesByIdViewModel> FeaturedCourses { get; set; }
+        public IEnumerable<TopLatestCoursesViewModel> LatestCourses { get; set; }
+
+        public IEnumerable<TopNextCoursesViewModel> NextCourses { get; set; }
 
         public IEnumerable<AllReviewsByCourseIdViewModel> Reviews { get; set; }
 

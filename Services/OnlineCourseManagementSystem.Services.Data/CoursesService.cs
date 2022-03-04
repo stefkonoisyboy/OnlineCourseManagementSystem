@@ -221,6 +221,24 @@
                 });
         }
 
+        public IEnumerable<T> GetAllActiveBySubjectId<T>(int page, int subjectId, int itemsPerPage = 6)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(q => q.StartDate < DateTime.UtcNow)
+                .OrderByDescending(q => q.StartDate)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+        }
+
+        public int GetAllActiveCoursesBySubjectIdCount(int subjectId)
+        {
+            return this.coursesRepository
+                .All()
+                .Count(c => c.StartDate <= DateTime.UtcNow && c.SubjectId == subjectId);
+        }
+
         public int GetAllActiveCoursesCount(string name)
         {
             if (name != null)
@@ -282,6 +300,17 @@
                .ToList();
         }
 
+        public IEnumerable<T> GetAllByCreatorIdAndSubjectId<T>(int id, string creatorId, int subjectId, int itemsPerPage = 6)
+        {
+            return this.coursesRepository
+              .All()
+              .OrderByDescending(c => c.StartDate)
+              .Where(c => c.CreatorId == creatorId && c.SubjectId == subjectId)
+              .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+              .To<T>()
+              .ToList();
+        }
+
         public IEnumerable<T> GetAllByNameOrTag<T>(SearchByCourseNameOrTagInputModel input)
         {
             var query = this.coursesRepository.All().AsQueryable();
@@ -306,13 +335,24 @@
 
         public IEnumerable<T> GetAllByUser<T>(int id, string userId, int itemsPerPage = 6)
         {
-            return this.userCoursesRepository
+            return this.coursesRepository
                 .All()
-                .OrderByDescending(c => c.Course.StartDate)
-                .Where(c => c.UserId == userId)
+                .OrderByDescending(c => c.StartDate)
+                .Where(c => c.Users.Any(u => u.UserId == userId))
                 .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()
                 .ToList();
+        }
+
+        public IEnumerable<T> GetAllByUserAndSubject<T>(int id, string userId, int subjectId, int itemsPerPage = 6)
+        {
+            return this.coursesRepository
+               .All()
+               .OrderByDescending(c => c.StartDate)
+               .Where(c => c.Users.Any(u => u.UserId == userId) && c.SubjectId == subjectId)
+               .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+               .To<T>()
+               .ToList();
         }
 
         public IEnumerable<T> GetAllCompletedByUserId<T>(string userId)
@@ -324,11 +364,25 @@
                 .ToList();
         }
 
+        public int GetAllCoursesByCreatorIdAndSubjectIdCount(int subjectId, string creatorId)
+        {
+            return this.coursesRepository
+               .All()
+               .Count(c => c.CreatorId == creatorId && c.SubjectId == subjectId);
+        }
+
         public int GetAllCoursesByCreatorIdCount(string creatorId)
         {
             return this.coursesRepository
                 .All()
                 .Count(c => c.CreatorId == creatorId);
+        }
+
+        public int GetAllCoursesByUserIdAndSubjectIdCount(int subjectId, string userId)
+        {
+            return this.userCoursesRepository
+                .All()
+                .Count(uc => uc.UserId == userId && uc.Course.SubjectId == subjectId);
         }
 
         public int GetAllCoursesByUserIdCount(string userId)
@@ -412,6 +466,42 @@
                 .Where(c => c.Id == id)
                 .To<T>()
                 .FirstOrDefault();
+        }
+
+        public int GetCourseIdByFileId(int fileId)
+        {
+            return this.filesRepository
+                .All()
+                .FirstOrDefault(f => f.Id == fileId)
+                .Lecture.CourseId;
+        }
+
+        public IEnumerable<T> GetTopLatest<T>()
+        {
+            return this.coursesRepository
+                .All()
+                .OrderByDescending(c => c.StartDate)
+                .Take(4)
+                .To<T>()
+                .ToList();
+        }
+
+        public IEnumerable<T> GetTopNext<T>()
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.StartDate > DateTime.UtcNow)
+                .OrderByDescending(c => c.StartDate)
+                .Take(4)
+                .To<T>()
+                .ToList();
+        }
+
+        public bool IsCourseAvailable(int courseId, string userId)
+        {
+            return !this.userCoursesRepository
+                .All()
+                .Any(uc => uc.UserId == userId && uc.CourseId == courseId);
         }
 
         public async Task UpdateAsync(EditCourseInputModel input)

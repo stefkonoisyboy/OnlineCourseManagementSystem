@@ -1,0 +1,46 @@
+﻿@model IEnumerable<OnlineCourseManagementSystem.Web.ViewModels.Tests.EditTestInputModel>
+@{
+    this.ViewData["Title"] = "All Tests";
+}
+
+<link rel="stylesheet" href="~/codemirror-5.65.2/lib/codemirror.css" />
+<link href="~/css/themes/ambiance.css" rel="stylesheet" />
+
+@if (this.TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success alert-dismissible">
+        @this.TempData["Message"]
+    </div>
+}
+
+<h1 class="text-center mb-2">@this.ViewData["Title"]</h1>
+@for (int i = 0; i < this.Model.Count(); i++)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <textarea class="code">@this.Model.ToList()[i].TestInput</textarea>
+        </div>
+        <div class="col-md-6">
+            <textarea class="code">@this.Model.ToList()[i].ExpectedOutput</textarea>
+        </div>
+    </div>
+
+    <p class="mt-2">
+        <a asp-action="Update" asp-route-id="@this.Model.ToList()[i].Id" class="btn btn-warning mr-2">Edit</a>
+        <a asp-action="Delete" asp-route-id="@this.Model.ToList()[i].Id" asp-route-problemId="@this.Model.ToList()[i].ProblemId" class="btn btn-danger">Delete</a>
+    </p>
+}
+
+@section Scripts{
+    <script src="~/codemirror-5.65.2/lib/codemirror.js"></script>
+    <script>
+        let codeTextarea = Array.from(document.querySelectorAll(".code"));
+        for (var i = 0; i < codeTextarea.length; i++) {
+            var editor = CodeMirror.fromTextArea(codeTextarea[i],
+                {
+                    lineNumbers: true,
+                    theme: 'ambiance',
+                });
+        }
+    </script>
+}

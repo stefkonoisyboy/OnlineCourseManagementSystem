@@ -23,5 +23,9 @@ namespace OnlineCourseManagementSystem.Web.ViewModels.Files
         public int LectureId { get; set; }
 
         public int LectureCourseId { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public ICollection<FileCompletition> FileCompletitions { get; set; }
     }
 }

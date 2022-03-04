@@ -27,11 +27,13 @@
 
         int GetCourseIdByLectureId(int id);
 
+        int GetLecturesCountById(int courseId);
+
         string GetNameById(int id);
 
         T GetById<T>(int id);
 
-        IEnumerable<T> GetAllById<T>(int courseId);
+        IEnumerable<T> GetAllById<T>(int courseId, int page, int itemsPerPage = 3);
 
         IEnumerable<T> GetAllByFileId<T>(int id);
 

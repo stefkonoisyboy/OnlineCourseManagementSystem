@@ -44,9 +44,9 @@
 </head>
 
 <body>
-    <header>
+    <header style="background-color: white !important;">
 
-        <nav class="navbar navbar-expand-sm navbar-light bg-white text-white text-center border-bottom box-shadow">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white text-white text-center border-bottom box-shadow" style="background-color: #e3f2fd !important;">
             <div class="row">
                 <div class="col-md-1">
                     @this.ViewBag.FullName
@@ -161,11 +161,33 @@
 
                                         @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
                                         {
-                                            <li><a class="dropdown-item" asp-controller="Courses" asp-action="AllByCurrentLecturer">My Courses</a></li>
+                                            <li><a class="dropdown-item" asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" asp-controller="Courses" asp-action="Create">Create Course</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" asp-controller="Courses" asp-action="Meta">Add Meta</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="contestsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Contests
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="contestsDropdown">
+                                        @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Contests" asp-action="Index">Index</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-controller="Contests" asp-action="All">All contests</a></li>
+                                        }
+
+                                        @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Contests" asp-action="Index">Index</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-controller="Contests" asp-action="All">All contests</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" asp-controller="Contests" asp-action="Create">Add contest</a></li>
                                         }
                                     </ul>
                                 </li>

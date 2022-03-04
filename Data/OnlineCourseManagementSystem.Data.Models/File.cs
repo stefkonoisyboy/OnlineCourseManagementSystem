@@ -9,6 +9,11 @@
 
     public class File : BaseDeletableModel<int>
     {
+        public File()
+        {
+            this.FileCompletitions = new HashSet<FileCompletition>();
+        }
+
         public string Extension { get; set; }
 
         public string RemoteUrl { get; set; }
@@ -38,5 +43,9 @@
         public Album Album { get; set; }
 
         public FileType Type { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public virtual ICollection<FileCompletition> FileCompletitions { get; set; }
     }
 }

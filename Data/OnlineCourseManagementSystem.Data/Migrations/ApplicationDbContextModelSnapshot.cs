@@ -871,6 +871,41 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.ToTable("ContactMessages");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Contest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Contests");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -1230,6 +1265,9 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<string>("Extension")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1263,6 +1301,42 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.FileCompletition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FileId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FileCompletitions");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Lecture", b =>
@@ -1651,6 +1725,43 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Problem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ContestId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContestId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Problems");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -1867,6 +1978,53 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.ToTable("Subjects");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Submission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContestId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProblemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContestId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProblemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Submissions");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Subscriber", b =>
                 {
                     b.Property<string>("Id")
@@ -1927,6 +2085,43 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Input")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Output")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProblemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProblemId");
+
+                    b.ToTable("Tests");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Town", b =>
@@ -2554,6 +2749,23 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.FileCompletition", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.File", "File")
+                        .WithMany("FileCompletitions")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "User")
+                        .WithMany("FileCompletitions")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("File");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Lecture", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Course", "Course")
@@ -2729,6 +2941,17 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Problem", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Contest", "Contest")
+                        .WithMany("Problems")
+                        .HasForeignKey("ContestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Contest");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Question", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Exam", "Exam")
@@ -2782,6 +3005,42 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Parent");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Submission", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Contest", "Contest")
+                        .WithMany("Submissions")
+                        .HasForeignKey("ContestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Problem", "Problem")
+                        .WithMany("Submissions")
+                        .HasForeignKey("ProblemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "User")
+                        .WithMany("Submissions")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Contest");
+
+                    b.Navigation("Problem");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Test", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Problem", "Problem")
+                        .WithMany("Tests")
+                        .HasForeignKey("ProblemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Problem");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.UserAssignment", b =>
@@ -2901,6 +3160,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.Navigation("ExamsCreated");
 
+                    b.Navigation("FileCompletitions");
+
                     b.Navigation("Files");
 
                     b.Navigation("Lecturer");
@@ -2928,6 +3189,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Roles");
 
                     b.Navigation("Student");
+
+                    b.Navigation("Submissions");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Assignment", b =>
@@ -2963,6 +3226,13 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Dislikes");
 
                     b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Contest", b =>
+                {
+                    b.Navigation("Problems");
+
+                    b.Navigation("Submissions");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Course", b =>
@@ -3012,6 +3282,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.File", b =>
                 {
                     b.Navigation("Course");
+
+                    b.Navigation("FileCompletitions");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Lecture", b =>
@@ -3056,6 +3328,13 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("Dislikes");
 
                     b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Problem", b =>
+                {
+                    b.Navigation("Submissions");
+
+                    b.Navigation("Tests");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Question", b =>
