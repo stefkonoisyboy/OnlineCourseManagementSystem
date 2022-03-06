@@ -133,15 +133,12 @@
                                                 </a>
                                             </li>
                                         }
-                                        @if (this.User.Identity.IsAuthenticated)
-                                        {
-                                            <li>
-                                                <hr class=" dropdown-divider" />
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="VideoChats" asp-action="IndexVideoChat">Video Conference</a>
-                                            </li>
-                                        }
+                                        <li>
+                                            <hr class=" dropdown-divider" />
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Subjects" asp-action="AllSubjectsRoadMap">Road Map</a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -218,12 +215,28 @@
                                         </ul>
                                     </li>
                                 }
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" asp-controller="Chats" asp-action="IndexChats">Messages</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" asp-controller="Posts" asp-action="All">Forum</a>
-                                </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link active dropdown-toggle" href="#" id="communicationToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Communication Tools
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="communicationToolsDropdown">
+                                    <li>
+                                        <a class="dropdown-item" aria-current="page" asp-controller="Chats" asp-action="IndexChats">Messages</a>
+                                    </li>
+                                    <li>
+                                        <hr class=" dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="VideoChats" asp-action="IndexVideoChat">Video Conference</a>
+                                    </li>
+                                    <li>
+                                        <hr class=" dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" aria-current="page" asp-controller="Posts" asp-action="All">Forum</a>
+                                    </li>
+                                </ul>
+                            </li>
                                 @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
                                 {
                                     string userId = this.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;

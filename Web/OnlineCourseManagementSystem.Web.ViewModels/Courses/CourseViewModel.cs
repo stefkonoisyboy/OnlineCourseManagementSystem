@@ -16,6 +16,8 @@
 
         public int PostsCount { get; set; }
 
+        public string FileRemoteUrl { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Course, CourseViewModel>()

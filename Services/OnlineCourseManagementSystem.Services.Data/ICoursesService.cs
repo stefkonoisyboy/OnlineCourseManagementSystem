@@ -13,8 +13,18 @@
 
     public interface ICoursesService
     {
+        /// <summary>
+        /// This method creates course.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         Task CreateAsync(CreateCourseInputModel input);
 
+        /// <summary>
+        /// This method creates meta for course.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         Task CreateMetaAsync(CreateMetaInputModel input);
 
         Task UpdateAsync(EditCourseInputModel input);
@@ -91,6 +101,44 @@
 
         IEnumerable<SelectListItem> GetAllAsSelectListItemsByCreatorId(string creatorId);
 
+        /// <summary>
+        /// This method gets all courses for admin.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         IEnumerable<T> GetAllByAdmin<T>();
+
+        /// <summary>
+        /// This method gets lastactive course or still active course by subject.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="subjectId"></param>
+        /// <returns></returns>
+        T GetLastActiveCourseBySubjectId<T>(int subjectId);
+
+        /// <summary>
+        /// This method gets all courses by subject for current year.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="subjectId"></param>
+        /// <returns></returns>
+        IEnumerable<T> GetAllCurrentYearBySubjectId<T>(int subjectId);
+
+        /// <summary>
+        /// This method gets all courses by subject and course name.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="subjectId"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        IEnumerable<T> GetBySubjectAndCourseName<T>(int subjectId, string name);
+
+        /// <summary>
+        /// This method gets all unactive(that have finished) courses by subjectId.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="subjectId"></param>
+        /// <returns></returns>
+        IEnumerable<T> GetAllUnactiveCourses<T>(int subjectId);
     }
 }

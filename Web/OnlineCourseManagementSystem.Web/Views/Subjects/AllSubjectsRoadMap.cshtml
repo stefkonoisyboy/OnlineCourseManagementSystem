@@ -1,0 +1,177 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Subjects
+@model AllSubjectsRoadMapViewModel
+@{
+    this.ViewData["Title"] = "Road Map";
+}
+<style>
+    .subject-item {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .course-item {
+        background: #f1f1f1;
+        padding: 20px;
+        margin-bottom: 4px;
+    }
+</style>
+
+<div class="d-flex justify-content-center mb-2">
+    <div class="subject-item w-50">
+        <div style="background:#0094ff;">
+            <h3 class="text-center p-3">
+                Entry Module
+            </h3>
+        </div>
+        <div class="course-item">
+            <h5 class="text-center">
+                <a asp-controller="Subjects" asp-action="ById" asp-route-subjectId="@this.Model.ProgrammingBasics.Id">@this.Model.ProgrammingBasics.Name</a>
+            </h5>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <svg height="30px" width="30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"></path></svg>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="subject-item w-50">
+        <div>
+            <h3 class="text-center p-3">
+                Fundamentals
+            </h3>
+        </div>
+        <div class="course-item">
+            <h5 class="text-center">
+                <a asp-controller="Subjects" asp-action="ById" asp-route-subjectId="@this.Model.Fundamentals.Id">@this.Model.Fundamentals.Name</a>
+            </h5>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <svg height="30px" width="30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"></path></svg>
+</div>
+<div class="text-center">
+    Professional
+</div>
+<div class="row">
+    <div class="col-md-4 text-center">
+        <div class="d-flex justify-content-center mb-2">
+            <div class="text-center bg-white" style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
+                <div class="p-3">
+                    <img src="https://cdn-ak.f.st-hatena.com/images/fotolife/m/mojeld/20191122/20191122125544.gif" height="70" width="70" alt="C#-svg" />
+                    <h2>C# RoadMap</h2>
+                </div>
+            </div>
+        </div>
+        <div>
+            @{
+                int indexCsharp = 0;
+            }
+            @foreach (var subject in this.Model.CsharpSubjectsRoadMap)
+            {
+                indexCsharp++;
+                <div class="subject-item">
+                    <h3 class="text-center">
+                        <a asp-controller="Subjects" asp-action="ById" asp-route-subjectId="@subject.Id">@subject.Name</a>
+                    </h3>
+                    @foreach (var course in subject.Courses.Distinct())
+                    {
+                        <div class="course-item">
+                            <h5 class="text-center">
+                                <a asp-controller="Courses" asp-action="AllCoursesByCourseNameAndSubject" asp-route-name="@course.Name" asp-route-subjectId="@course.SubjectId">@course.Name</a>
+                            </h5>
+                        </div>
+                    }
+                </div>
+                if (indexCsharp != this.Model.CsharpSubjectsRoadMap.Count())
+                {
+                    <div class="text-center">
+                        <svg height="30px" width="30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"></path></svg>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-md-4 text-center">
+        <div class="d-flex justify-content-center mb-2 ">
+            <div class="text-center bg-white" style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
+                <div class="p-3">
+                    <img src="https://2.bp.blogspot.com/-UICquv1dBMU/XGYIXqyhKeI/AAAAAAAAR8M/Evjt3ADUYEYqwDHPLhl_lK5_FTrb_VZpgCLcBGAs/s1600/Java.png" height="100" width="100" alt="C#-svg" />
+                    <h2>Java RoadMap</h2>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            @{
+                int indexJava = 0;
+            }
+            @foreach (var subject in this.Model.JavaSubjectsRoadMap)
+            {
+                indexJava++;
+                <div class="subject-item">
+                    <h3 class="text-center">
+                        <a asp-controller="Subjects" asp-action="ById" asp-route-subjectId ="@subject.Id">@subject.Name</a>
+                    </h3>
+                    @foreach (var course in subject.Courses.Distinct())
+                    {
+                        <div class="course-item">
+                            <h5 class="text-center">
+                                <a asp-controller="Courses" asp-action="AllCoursesByCourseNameAndSubject" asp-route-name="@course.Name" asp-route-subjectId="@course.SubjectId">@course.Name</a>
+                            </h5>
+                        </div>
+                    }
+                </div>
+                if (indexJava != this.Model.JavaSubjectsRoadMap.Count())
+                {
+                    <div class="text-center">
+                        <svg height="30px" width="30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"></path></svg>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="d-flex justify-content-center mb-2">
+            <div class="text-center" style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
+                <div class="p-3">
+                    <img src="https://th.bing.com/th/id/R.d2c78eab408a616010a54aa4a7700f22?rik=%2birDnPHtlmqszw&pid=ImgRaw&r=0" height="70" width="70" alt="C#-svg" />
+                    <h2>JS RoadMap</h2>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            @{
+                int indexJS = 0;
+            }
+            @foreach (var subject in this.Model.JSSubjectRoadMap)
+            {
+                indexJS++;
+                <div class="subject-item">
+                    <h3 class="text-center">
+                        <a asp-controller="Subjects" asp-action="ById" asp-route-subjectId="@subject.Id">@subject.Name</a>
+                    </h3>
+                    @foreach (var course in subject.Courses.Distinct())
+                    {
+                        <div class="course-item">
+                            <h5 class="text-center">
+                                <a asp-controller="Courses" asp-action="AllCoursesByCourseNameAndSubject" asp-route-name="@course.Name" asp-route-subjectId="@course.SubjectId">@course.Name</a>
+                            </h5>
+                        </div>
+                    }
+                </div>
+                if (indexJS != this.Model.JSSubjectRoadMap.Count())
+                {
+                    <div class="text-center">
+                        <svg height="30px" width="30" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 17l-4 4m0 0l-4-4m4 4V3"></path></svg>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

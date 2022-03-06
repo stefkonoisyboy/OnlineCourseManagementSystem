@@ -119,6 +119,8 @@
 
         public virtual DbSet<Submission> Submissions { get; set; }
 
+        public virtual DbSet<Shedule> Shedules { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

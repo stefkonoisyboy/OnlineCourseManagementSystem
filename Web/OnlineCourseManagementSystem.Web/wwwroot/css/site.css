@@ -66,8 +66,9 @@ body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
     background: #1e3e63;
-    min-height:80vh;
+    min-height: 80vh;
     scroll-behavior: smooth;
+    background-image: url("/Images/banner.png") !important;
 }
 
 .footer {
