@@ -8,6 +8,7 @@
     using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Files;
+    using OnlineCourseManagementSystem.Web.ViewModels.Shedules;
 
     public class EventInfoViewModel : IMapFrom<Event>, IHaveCustomMappings
     {
@@ -22,6 +23,8 @@
         public string Address { get; set; }
 
         public IEnumerable<FileViewModel> Files { get; set; }
+
+        public IEnumerable<SheduleViewModel> Shedules { get; set; }
 
         public string CreatorFirstName { get; set; }
 

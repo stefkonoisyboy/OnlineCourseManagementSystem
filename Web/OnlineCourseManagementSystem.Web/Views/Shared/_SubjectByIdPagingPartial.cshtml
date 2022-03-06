@@ -1,0 +1,61 @@
+﻿@using OnlineCourseManagementSystem.Web.ViewModels.Courses
+@model AllCoursesBySubjectListViewModel
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @if (this.Model.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a asp-controller="Subjects" asp-action="ById" asp-route-id="@this.Model.PreviousPage" asp-route-subjectId="@this.Model.SubjectId" class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        @{
+            const int MorePagesToShow = 3;
+            var pagesToShow = new List<int>();
+            for (var i = 1; i <= MorePagesToShow; i++)
+            {
+                pagesToShow.Add(i);
+            }
+            for (var i = this.Model.PageNumber - MorePagesToShow; i <= this.Model.PageNumber + MorePagesToShow; i++)
+            {
+                if (i > 0)
+                {
+                    pagesToShow.Add(i);
+                }
+            }
+            for (var i = this.Model.PagesCount - MorePagesToShow + 1; i <= this.Model.PagesCount; i++)
+            {
+                if (i > 0)
+                {
+                    pagesToShow.Add(i);
+                }
+            }
+            pagesToShow = pagesToShow.Where(x => x <= this.Model.PagesCount).Distinct().OrderBy(x => x).ToList();
+        }
+        @{
+            @for (var i = 0; i < pagesToShow.Count; i++)
+            {
+                var className = string.Empty;
+                var pageNumber = pagesToShow[i];
+                if (pageNumber == this.Model.PageNumber)
+                {
+                    className = "active";
+                }
+                if (i > 0 && pageNumber - 1 != pagesToShow[i - 1])
+                {
+                    <li class="page-item @className"><a class="page-link" asp-controller="Subjects" asp-action="ById" asp-route-id="@(pagesToShow[i - 1] + 1)" asp-route-subjectId="@this.Model.SubjectId">...</a></li>
+                }
+                <li class="page-item @className"><a class="page-link" asp-controller="Subjects" asp-action="ById" asp-route-id="@pageNumber" asp-route-subjectId="@this.Model.SubjectId">@pageNumber</a></li>
+            }
+        }
+        @if (this.Model.PageNumber < this.Model.PagesCount)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-controller="Subjects" asp-action="ById" asp-route-id="@this.Model.NextPage" asp-route-subjectId="@this.Model.SubjectId" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

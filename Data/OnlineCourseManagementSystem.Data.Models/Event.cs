@@ -11,6 +11,7 @@
         public Event()
         {
             this.Files = new HashSet<File>();
+            this.Shedules = new HashSet<Shedule>();
         }
 
         public string Theme { get; set; }
@@ -30,5 +31,7 @@
         public virtual ApplicationUser Creator { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
+
+        public virtual ICollection<Shedule> Shedules { get; set; }
     }
 }

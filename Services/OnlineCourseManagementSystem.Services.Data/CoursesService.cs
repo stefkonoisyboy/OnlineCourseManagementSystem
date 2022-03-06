@@ -459,6 +459,16 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllCurrentYearBySubjectId<T>(int subjectId)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.StartDate.Year == DateTime.UtcNow.Year && c.Id == subjectId)
+                .OrderBy(c => c.StartDate)
+                .To<T>()
+                .ToList();
+        }
+
         public T GetById<T>(int id)
         {
             return this.coursesRepository
@@ -468,12 +478,33 @@
                 .FirstOrDefault();
         }
 
+        public IEnumerable<T> GetBySubjectAndCourseName<T>(int subjectId, string name)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.SubjectId == subjectId && c.Name.Contains(name))
+                .OrderByDescending(c => c.StartDate)
+                .Skip(1)
+                .To<T>()
+                .ToList();
+        }
+
         public int GetCourseIdByFileId(int fileId)
         {
             return this.filesRepository
                 .All()
                 .FirstOrDefault(f => f.Id == fileId)
                 .Lecture.CourseId;
+        }
+
+        public T GetLastActiveCourseBySubjectId<T>(int subjectId)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.SubjectId == subjectId)
+                .OrderByDescending(c => c.StartDate)
+                .To<T>()
+                .FirstOrDefault();
         }
 
         public IEnumerable<T> GetTopLatest<T>()
@@ -561,6 +592,15 @@
             Course course = this.coursesRepository.All().FirstOrDefault(c => c.Id == id);
             course.ModifiedOn = DateTime.UtcNow;
             await this.coursesRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<T> GetAllUnactiveCourses<T>(int subjectId)
+        {
+            return this.coursesRepository
+                .All()
+                .Where(c => c.SubjectId == subjectId)
+                .To<T>()
+                .ToList();
         }
 
         private async Task<string> UploadImageAsync(IFormFile formFile, string fileName)

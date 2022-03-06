@@ -11,7 +11,6 @@
 
 <head>
     <meta charset="utf-8">
-    <title>LEARN - Courses, Education site template</title>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <!-- Favicons-->
@@ -79,6 +78,7 @@
             justify-content: center;
             align-items: center;
             border-radius: 3px 3px 0 0;
+            background:#42a5f5;
         }
 
             .assignment-option:hover {
@@ -139,8 +139,6 @@
                         </ul>
 
                         <hr>
-
-
                     </div>
                 </aside>
 
@@ -153,9 +151,28 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="assignment-options" id="view-@course.Id">
-                                                <div class="assignment-option mx-1 p-2" style="background:#42a5f5;">
-                                                    <a class="text-white" asp-controller="Assignments" asp-action="CurrentUserAllAssignmentsByCourse" asp-route-courseId="@course.Id">Assignments</a>
-                                                </div>
+
+                                                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-12 my-1">
+                                                            <div class="assignment-option p-1">
+                                                                <a class="text-white" asp-controller="Assignments" asp-action="AllCreated" asp-route-id="@course.Id">Created Assignments</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="assignment-option p-1">
+                                                                <a class="text-white" asp-controller="Assignments" asp-action="CreateAssignment" asp-route-id="@course.Id">Create Assignment</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="assignment-option mx-1 p-2" style="background:#42a5f5;">
+                                                        <a class="text-white" asp-controller="Assignments" asp-action="CurrentUserAllAssignmentsByCourse" asp-route-courseId="@course.Id">Assignments</a>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                         @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
@@ -376,6 +393,7 @@
             }
             function removeOpenedOptions(id) {
                 var allAssignmentOptions = document.getElementsByClassName("assignment-options");
+
                 for (var i = 0; i < allAssignmentOptions.length; i++) {
                     allAssignmentOptions[i].classList.remove(["show"]);
                 }

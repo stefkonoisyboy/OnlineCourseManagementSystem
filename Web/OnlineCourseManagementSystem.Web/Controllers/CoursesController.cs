@@ -591,5 +591,27 @@
 
             return this.Redirect("/");
         }
+
+        [Authorize]
+        public IActionResult AllCoursesByCourseNameAndSubject(int subjectId, string name)
+        {
+            AllCoursesBySubjectAndCourseNameViewModel viewModel = new AllCoursesBySubjectAndCourseNameViewModel()
+            {
+                CourseName = name,
+                LastActiveCourse = this.coursesService.GetLastActiveCourseBySubjectId<LastActiveCourseViewModel>(subjectId),
+                Courses = this.coursesService.GetBySubjectAndCourseName<AllCoursesBySubjectViewModel>(subjectId, name),
+            };
+
+            return this.View(viewModel);
+        }
+
+        //[Authorize]
+        //public IActionResult AllCoursesByNameAndSubject(int subjectId, string name)
+        //{
+        //    AllActiveCoursesListViewModel viewModel = new AllActiveCoursesListViewModel()
+        //    {
+        //        s
+        //    }
+        //}
     }
 }

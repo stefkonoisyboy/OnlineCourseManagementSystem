@@ -43,7 +43,46 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
+    <style>
+        .assignment-options {
+            display: none;
+            flex-direction: row;
+            justify-content: end;
+            position: absolute;
+            left: 10%;
+            bottom: 100%;
+            font-size: 12px;
+            z-index: 20;
+            -webkit-animation: toggleUp 1s ease-in-out normal;
+            animation: toggleUp 1s ease-in-out normal;
+        }
 
+        .assignment-option {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 3px 3px 0 0;
+        }
+
+            .assignment-option:hover {
+                transform: scale(1.03);
+                transition: transform 350ms;
+            }
+
+        .show {
+            display: flex;
+        }
+
+        @@keyframes toggleUp {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -307,5 +346,38 @@
     <script src="~/js/home/classie.js"></script>
     <script src="~/js/home/uisearch.js"></script>
     <script>new UISearch(document.getElementById('sb-search'));</script>
+
+    @section Scripts {
+        <script type="text/javascript">
+            function openOptions(id) {
+                removeOpenedOptions();
+                var assignmentOptions = document.getElementById("view-" + id);
+                var editOptions = document.getElementById("viewEdit-" + id);
+                assignmentOptions.classList.toggle("show");
+                editOptions.classList.toggle("show");
+            }
+            function removeOpenedOptions(id) {
+                var allAssignmentOptions = document.getElementsByClassName("assignment-options");
+
+                for (var i = 0; i < allAssignmentOptions.length; i++) {
+                    allAssignmentOptions[i].classList.remove(["show"]);
+                }
+            }
+        </script>
+        <script type="text/javascript">
+            window.onclick = function (event) {
+                if (!event.target.matches("#btn-options")) {
+                    var allAssignmentOptions = document.getElementsByClassName("assignment-options");
+                    var i;
+                    for (i = 0; i < allAssignmentOptions.length; i++) {
+                        var assignmentOption = allAssignmentOptions[i];
+                        if (assignmentOption.classList.contains("show")) {
+                            assignmentOption.classList.remove("show");
+                        }
+                    }
+                }
+            }
+        </script>
+    }
 </body>
 </html>

@@ -1876,6 +1876,49 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Shedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Shedules");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Skill", b =>
                 {
                     b.Property<int>("Id")
@@ -2980,6 +3023,17 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Shedule", b =>
+                {
+                    b.HasOne("OnlineCourseManagementSystem.Data.Models.Event", "Event")
+                        .WithMany("Shedules")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Skill", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Course", "Course")
@@ -3270,6 +3324,8 @@ namespace OnlineCourseManagementSystem.Data.Migrations
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Event", b =>
                 {
                     b.Navigation("Files");
+
+                    b.Navigation("Shedules");
                 });
 
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Exam", b =>
