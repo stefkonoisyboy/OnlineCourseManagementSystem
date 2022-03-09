@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Paging;
-using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Problems
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Problems
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Paging;
+    using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
+
     public class AllProblemsByContestIdListViewModel : PagingViewModel
     {
         public IEnumerable<AllProblemsByContestIdViewModel> Problems { get; set; }

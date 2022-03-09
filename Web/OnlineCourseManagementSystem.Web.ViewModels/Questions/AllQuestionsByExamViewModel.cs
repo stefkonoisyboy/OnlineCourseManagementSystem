@@ -1,14 +1,15 @@
-﻿using AutoMapper;
-using Ganss.XSS;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Choices;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using AutoMapper;
+    using Ganss.XSS;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Choices;
+
     public class AllQuestionsByExamViewModel : IMapFrom<Question>
     {
         public int Id { get; set; }

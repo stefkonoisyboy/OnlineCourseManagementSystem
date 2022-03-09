@@ -90,6 +90,6 @@
         /// <returns></returns>
         IEnumerable<T> GetAllLecturers<T>();
 
-        //T GetCourseCreatorById<T>(int courseId);
+        // T GetCourseCreatorById<T>(int courseId);
     }
 }

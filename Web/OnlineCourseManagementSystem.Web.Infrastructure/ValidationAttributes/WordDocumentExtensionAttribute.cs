@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes
+﻿namespace OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.IO;
+    using System.Text;
+
+    using Microsoft.AspNetCore.Http;
+
     public class WordDocumentExtensionAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)

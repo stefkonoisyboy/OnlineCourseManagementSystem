@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Problems
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Problems
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
     public class BaseProblemInputModel
     {
         [Required]

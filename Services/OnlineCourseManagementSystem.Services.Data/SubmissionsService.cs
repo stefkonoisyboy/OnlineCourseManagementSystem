@@ -1,18 +1,19 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
-using OnlineCourseManagementSystem.Data.Common.Repositories;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Services.Data
+﻿namespace OnlineCourseManagementSystem.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using Microsoft.CodeAnalysis.CSharp.Scripting;
+    using Microsoft.CodeAnalysis.Scripting;
+    using OnlineCourseManagementSystem.Data.Common.Repositories;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
+
     public class SubmissionsService : ISubmissionsService
     {
         private readonly IDeletableEntityRepository<Submission> submissionsRepository;
@@ -86,8 +87,8 @@ namespace OnlineCourseManagementSystem.Services.Data
                 {
                     if (lines[i].Contains("Console.ReadLine"))
                     {
-                        inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(0, "\"");
-                        inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(inputContentLines[lineToReadFromInputFile].Length, "\"");
+                        inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(0, @"""");
+                        inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(inputContentLines[lineToReadFromInputFile].Length, @"""");
                         lines[i] = lines[i].Replace("Console.ReadLine()", inputContentLines[lineToReadFromInputFile]);
                         lineToReadFromInputFile++;
                     }
@@ -99,8 +100,9 @@ namespace OnlineCourseManagementSystem.Services.Data
                         variable = variable.Remove(variable.IndexOf('('), 1);
                         variable = variable.Remove(variable.IndexOf(')'), 1);
                         variable = variable.Remove(variable.IndexOf(';'), 1);
-                        //variable = variable.Insert(0, "\"");
-                        //variable = variable.Insert(variable.Length, "\"");
+
+                        // variable = variable.Insert(0, "\"");
+                        // variable = variable.Insert(variable.Length, "\"");
 
                         code = code.Replace("Console.WriteLine", "File.AppendAllText");
 
@@ -108,7 +110,9 @@ namespace OnlineCourseManagementSystem.Services.Data
                         int endIndex = code.IndexOf(')');
 
                         code = code.Remove(startIndex);
-                        string physicalPath = outputPath + "/code/output/product.txt";
+                        string physicalPath = System.IO.Path.Combine("output.txt");
+                        physicalPath = physicalPath.Insert(0, @"""");
+                        physicalPath = physicalPath.Insert(physicalPath.Length, @"""");
                         code += $"({physicalPath}, {variable}.ToString() + Environment.NewLine);";
 
                         lines[i] = code;
@@ -124,7 +128,7 @@ namespace OnlineCourseManagementSystem.Services.Data
 
                 string userOutput = string.Empty;
 
-                using (StreamReader reader = new StreamReader($"{outputPath}/code/output/product.txt"))
+                using (StreamReader reader = new StreamReader(System.IO.Path.Combine("output.txt")))
                 {
                     string line = reader.ReadLine();
                     userOutput += line + Environment.NewLine;
@@ -156,7 +160,7 @@ namespace OnlineCourseManagementSystem.Services.Data
 
                 System.IO.File.Delete($"{inputPath}/code/input/{test.Id}.txt");
                 System.IO.File.Delete($"{inputPath}/code/expectedOutput/{test.Id}.txt");
-                System.IO.File.Delete($"{outputPath}/code/output/product.txt");
+                System.IO.File.Delete(System.IO.Path.Combine("output.txt"));
             }
 
             Submission submission = new Submission

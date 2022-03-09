@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Submissions
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Submissions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class Top5SubmissionsByUserIdAndProblemIdViewModel : Top5SubmissionsByUserIdAndContestIdViewModel
     {
     }

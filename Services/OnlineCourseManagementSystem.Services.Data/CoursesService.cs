@@ -178,9 +178,6 @@
 
             await this.userCoursesRepository.AddAsync(userCourse);
             await this.userCoursesRepository.SaveChangesAsync();
-
-            string line = $"{this.usersRepository.All().FirstOrDefault(u => u.Id == userId).MachineLearningId},{this.coursesRepository.All().FirstOrDefault(c => c.Id == courseId).MachineLearningId}";
-            System.IO.File.AppendAllText(path, Environment.NewLine + line);
         }
 
         public IEnumerable<T> GetAll<T>()

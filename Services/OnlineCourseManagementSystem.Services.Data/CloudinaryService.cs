@@ -63,6 +63,5 @@
 
             return result?.SecureUrl.AbsoluteUri;
         }
-
     }
 }

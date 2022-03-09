@@ -74,13 +74,13 @@
                 .Where(x => x.UserId == userId && x.Id == albumId)
                 .To<T>().FirstOrDefault();
 
-            //string albumName = this.albumRepository.All().FirstOrDefault(x => x.Id == albumId).Name;
-            //AllImagesViewModel allImages = new AllImagesViewModel
-            //{
+            // string albumName = this.albumRepository.All().FirstOrDefault(x => x.Id == albumId).Name;
+            // AllImagesViewModel allImages = new AllImagesViewModel
+            // {
             //    Images = images,
             //    AlbumId = albumId,
             //    AlbumName = albumName,
-            //};
+            // };
 
             return images;
         }

@@ -9,8 +9,17 @@
 
     public interface IParentsService
     {
+        /// <summary>
+        /// Get all.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         IEnumerable<T> GetAll<T>();
 
+        /// <summary>
+        /// Get all as select list items.
+        /// </summary>
+        /// <returns></returns>
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
     }
 }

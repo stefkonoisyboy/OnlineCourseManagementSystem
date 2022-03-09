@@ -1,20 +1,21 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Data;
-using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
-using OnlineCourseManagementSystem.Web.ViewModels.Courses;
-using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using SmartBreadcrumbs.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Controllers
+﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.ViewModels.Certificates;
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
+
     public class CertificatesController : Controller
     {
         private readonly ICertificatesService certificatesService;

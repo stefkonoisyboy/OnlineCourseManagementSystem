@@ -1,13 +1,14 @@
-﻿using AutoMapper;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Contests
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Contests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
+
     public class ContestsDetailsViewModel : IMapFrom<Contest>
     {
         public int Id { get; set; }

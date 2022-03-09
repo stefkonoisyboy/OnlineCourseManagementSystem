@@ -1,15 +1,16 @@
-﻿using AutoMapper;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Choices;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Choices;
+
     public class EditQuestionInputModel : IMapFrom<Question>
     {
         public int Id { get; set; }

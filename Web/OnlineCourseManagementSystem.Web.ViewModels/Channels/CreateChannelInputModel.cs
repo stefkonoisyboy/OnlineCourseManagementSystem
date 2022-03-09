@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
     public class CreateChannelInputModel
     {
         [Required]

@@ -1,16 +1,17 @@
-﻿using AutoMapper;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Courses;
-using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Certificates
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Certificates
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+
     public class CertificateByUserIdAndCourseIdViewModel : IMapFrom<Certificate>
     {
         public string UserFirstName { get; set; }

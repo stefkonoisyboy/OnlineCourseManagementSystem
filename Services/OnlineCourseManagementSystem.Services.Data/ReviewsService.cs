@@ -1,15 +1,16 @@
-﻿using OnlineCourseManagementSystem.Data.Common.Repositories;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Services.Data
+﻿namespace OnlineCourseManagementSystem.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using OnlineCourseManagementSystem.Data.Common.Repositories;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
+
     public class ReviewsService : IReviewsService
     {
         private readonly IDeletableEntityRepository<Review> reviewsRepository;

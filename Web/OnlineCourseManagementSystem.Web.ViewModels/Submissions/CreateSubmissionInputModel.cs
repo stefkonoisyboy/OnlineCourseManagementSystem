@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Submissions
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Submissions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
     public class CreateSubmissionInputModel
     {
         [Required]

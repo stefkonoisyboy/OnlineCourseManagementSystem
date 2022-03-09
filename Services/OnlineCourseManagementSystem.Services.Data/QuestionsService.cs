@@ -1,16 +1,17 @@
-﻿using Ganss.XSS;
-using OnlineCourseManagementSystem.Data.Common.Repositories;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Questions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Services.Data
+﻿namespace OnlineCourseManagementSystem.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using Ganss.XSS;
+    using OnlineCourseManagementSystem.Data.Common.Repositories;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Questions;
+
     public class QuestionsService : IQuestionsService
     {
         private readonly IDeletableEntityRepository<Question> questionsRepository;

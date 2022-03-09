@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Choices;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Questions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Choices;
+
     public class CreateQuestionInputModel
     {
         [Required]

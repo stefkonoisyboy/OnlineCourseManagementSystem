@@ -1,22 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using OnlineCourseManagementSystem.Common;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Data;
-using OnlineCourseManagementSystem.Web.Hubs;
-using OnlineCourseManagementSystem.Web.ViewModels.MessageQAs;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using SmartBreadcrumbs.Attributes;
-using SmartBreadcrumbs.Nodes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Controllers
+﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
+    using OnlineCourseManagementSystem.Common;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.Hubs;
+    using OnlineCourseManagementSystem.Web.ViewModels.MessageQAs;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+    using SmartBreadcrumbs.Attributes;
+    using SmartBreadcrumbs.Nodes;
+
     public class MessageQAsController : Controller
     {
         private readonly IMessageQAsService messageQAsService;

@@ -1,12 +1,13 @@
-﻿using AutoMapper;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Tests
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class EditTestInputModel : BaseTestInputModel, IMapFrom<Test>, IHaveCustomMappings
     {
         public int Id { get; set; }

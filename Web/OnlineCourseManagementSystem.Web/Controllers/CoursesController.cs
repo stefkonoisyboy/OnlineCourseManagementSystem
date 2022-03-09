@@ -605,13 +605,13 @@
             return this.View(viewModel);
         }
 
-        //[Authorize]
-        //public IActionResult AllCoursesByNameAndSubject(int subjectId, string name)
-        //{
+        // [Authorize]
+        // public IActionResult AllCoursesByNameAndSubject(int subjectId, string name)
+        // {
         //    AllActiveCoursesListViewModel viewModel = new AllActiveCoursesListViewModel()
         //    {
         //        s
         //    }
-        //}
+        // }
     }
 }

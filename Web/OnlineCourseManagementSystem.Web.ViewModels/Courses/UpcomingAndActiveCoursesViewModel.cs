@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Subjects;
-using OnlineCourseManagementSystem.Web.ViewModels.Tags;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Subjects;
+    using OnlineCourseManagementSystem.Web.ViewModels.Tags;
+
     public class UpcomingAndActiveCoursesViewModel
     {
         public IEnumerable<AllUpcomingCoursesViewModel> UpcomingCourses { get; set; }

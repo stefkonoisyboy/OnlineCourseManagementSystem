@@ -27,7 +27,7 @@
         IEnumerable<T> GetAllUsersForAssignment<T>(int assignmentId);
 
         /// <summary>
-        /// Thes method marks assignment as seen from user. 
+        /// Thes method marks assignment as seen from user.
         /// </summary>
         /// <param name="assignmentId"></param>
         /// <param name="userId"></param>

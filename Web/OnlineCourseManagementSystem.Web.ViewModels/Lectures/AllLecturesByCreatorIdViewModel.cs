@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Lectures
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Lectures
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class AllLecturesByCreatorIdViewModel : IMapFrom<Lecture>
     {
         public int Id { get; set; }

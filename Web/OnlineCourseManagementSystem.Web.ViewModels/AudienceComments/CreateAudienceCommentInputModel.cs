@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.AudienceComments
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.AudienceComments
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class CreateAudienceCommentInputModel
     {
         public string Content { get; set; }

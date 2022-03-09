@@ -7,6 +7,5 @@
     public class WelcomeRequest
     {
         public string ToEmail { get; set; }
-
     }
 }

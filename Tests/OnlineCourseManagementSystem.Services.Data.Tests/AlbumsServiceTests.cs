@@ -54,7 +54,7 @@
                     album.Name = name;
                 });
             IAlbumsService albumsService = new AlbumsService(mockedRepsitory.Object);
-            EditAlbumInputModel inputModel = new EditAlbumInputModel 
+            EditAlbumInputModel inputModel = new EditAlbumInputModel
             {
                 Id = albumId,
                 Name = name,
@@ -82,7 +82,7 @@
                     testData.Add(album);
                 });
             IAlbumsService albumsService = new AlbumsService(mockedRepsitory.Object);
-            AlbumInputModel inputModel = new AlbumInputModel 
+            AlbumInputModel inputModel = new AlbumInputModel
             {
                 UserId = userId,
                 Name = name,

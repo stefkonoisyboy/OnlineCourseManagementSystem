@@ -27,7 +27,7 @@
 
         public bool IsChecked { get; set; }
 
-        //public MarkSubmittedAssignmentInputModel InputModel { get; set; }
+        // public MarkSubmittedAssignmentInputModel InputModel { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

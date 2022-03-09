@@ -1,11 +1,12 @@
-﻿using Microsoft.ML;
-using Microsoft.ML.Trainers;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Services.Data.MachineLearning
+﻿namespace OnlineCourseManagementSystem.Services.Data.MachineLearning
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using Microsoft.ML;
+    using Microsoft.ML.Trainers;
+
     public static class Recommender
     {
         public static void TrainModel(string inputFile, string modelFile)

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace OnlineCourseManagementSystem.Data.Migrations
+﻿namespace OnlineCourseManagementSystem.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddedDescriptionToLectures : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

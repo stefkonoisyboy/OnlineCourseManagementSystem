@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Answers
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Answers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class CreateAnswerInputModel
     {
         public int QuestionId { get; set; }
