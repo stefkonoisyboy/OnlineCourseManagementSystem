@@ -8,6 +8,10 @@
 
     public interface ITownsService
     {
+        /// <summary>
+        /// Get all as select list items.
+        /// </summary>
+        /// <returns></returns>
         IEnumerable<SelectListItem> GetAllAsSelectListItems();
     }
 }

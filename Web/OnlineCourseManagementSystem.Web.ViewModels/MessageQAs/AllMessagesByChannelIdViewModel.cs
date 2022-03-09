@@ -1,12 +1,13 @@
-﻿using AutoMapper;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.MessageQAs
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.MessageQAs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class AllMessagesByChannelIdViewModel : IMapFrom<MessageQA>
     {
         public int Id { get; set; }

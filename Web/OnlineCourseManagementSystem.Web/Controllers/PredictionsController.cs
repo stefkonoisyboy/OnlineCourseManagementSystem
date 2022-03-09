@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OnlineCourseManagementSystem.Data;
-using OnlineCourseManagementSystem.Data.Common.Repositories;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Data.Models.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Controllers
+﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Data;
+    using OnlineCourseManagementSystem.Data.Common.Repositories;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
+
     public class PredictionsController : Controller
     {
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;

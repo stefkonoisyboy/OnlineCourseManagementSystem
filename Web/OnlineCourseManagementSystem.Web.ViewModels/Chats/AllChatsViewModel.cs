@@ -11,6 +11,5 @@
         public IEnumerable<ChatViewModel> Chats { get; set; }
 
         public IEnumerable<ChatViewModel> PinnedChats { get; set; }
-
     }
 }

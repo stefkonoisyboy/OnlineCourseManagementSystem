@@ -1,10 +1,11 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Paging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Contests
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Contests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Paging;
+
     public class AllContestsListViewModel : PagingViewModel
     {
         public IEnumerable<AllContestsViewModel> Contests { get; set; }

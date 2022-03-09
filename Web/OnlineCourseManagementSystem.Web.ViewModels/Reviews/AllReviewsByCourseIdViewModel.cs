@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Reviews
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Reviews
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class AllReviewsByCourseIdViewModel : IMapFrom<Review>
     {
         public string Content { get; set; }

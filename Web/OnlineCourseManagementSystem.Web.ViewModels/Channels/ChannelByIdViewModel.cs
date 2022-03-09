@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class ChannelByIdViewModel : IMapFrom<Channel>
     {
         public string Name { get; set; }

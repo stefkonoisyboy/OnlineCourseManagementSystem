@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Hubs
+﻿namespace OnlineCourseManagementSystem.Web.Hubs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.SignalR;
+
     public class QAHub : Hub
     {
         public async Task SendMessage()

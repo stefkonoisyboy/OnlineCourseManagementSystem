@@ -24,7 +24,7 @@
 
         public async Task CreateAsync(CreateSheduleInputModel inputModel)
         {
-            Event @event = this.eventRepository.All().FirstOrDefault(e => e.Id == inputModel.EventId); 
+            Event @event = this.eventRepository.All().FirstOrDefault(e => e.Id == inputModel.EventId);
             Shedule shedule = new Shedule()
             {
                 Name = inputModel.Name,

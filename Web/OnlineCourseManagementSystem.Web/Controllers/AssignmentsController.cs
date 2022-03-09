@@ -116,7 +116,8 @@
             AllLectureAssignmetsByCourseViewModel assignmetViewModel = new AllLectureAssignmetsByCourseViewModel
             {
                 CreatedAssignments = this.assignmentsService.GetAllBy<LectureAssignmentViewModel>(id),
-                //CheckedAssignmets = this.assignmentsService.GetAllCheckedBy<LectureAssignmentViewModel>(id),
+
+                // CheckedAssignmets = this.assignmentsService.GetAllCheckedBy<LectureAssignmentViewModel>(id),
                 CourseId = id,
             };
 
@@ -154,7 +155,6 @@
             {
                 Parent = mycoursesNode,
                 RouteValues = new { id = editAssignmentInputModel.CourseId, },
-
             };
 
             BreadcrumbNode editAssignmentNode = new MvcBreadcrumbNode("Edit", "Assignments", "Edit Assignment")
@@ -182,15 +182,15 @@
             return this.RedirectToAction("AllCreated", "Assignments", new { Id = courseId});
         }
 
-        //[Authorize(Roles = GlobalConstants.LecturerRoleName)]
-        //public IActionResult AllUsersForAssignment(int id)
-        //{
+        // [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        // public IActionResult AllUsersForAssignment(int id)
+        // {
         //    var usersAssignments = this.assignmentsService.GetAllUsersForAssignment<AssignmentUserInfoViewModel>(id);
 
-        //    this.TempData["AssignmentId"] = id;
+        // this.TempData["AssignmentId"] = id;
 
-        //    return this.View(usersAssignments);
-        //}
+        // return this.View(usersAssignments);
+        // }
 
         [Authorize]
         [HttpPost]
@@ -228,7 +228,6 @@
             {
                 Parent = mycoursesNode,
                 RouteValues = new { id = viewModel.CourseId, },
-
             };
             BreadcrumbNode markUserAssignment = new MvcBreadcrumbNode("MarkUserAssignment", "Assignments", "Mark User Assignment")
             {
@@ -353,11 +352,11 @@
             return this.View(viewModel);
         }
 
-        //public IActionResult AllCheckedUsersForAssignment(int id)
-        //{
+        // public IActionResult AllCheckedUsersForAssignment(int id)
+        // {
         //    var userAssignments = this.assignmentsService.GetAllCheckedUserAssignments<CheckedUserAssignmentsViewModel>(id);
 
-        //    return this.View(userAssignments);
-        //}
+        // return this.View(userAssignments);
+        // }
     }
 }

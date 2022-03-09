@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Services.Data.MachineLearning
+﻿namespace OnlineCourseManagementSystem.Services.Data.MachineLearning
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class UserInCourseScore
     {
         public float Score { get; set; }

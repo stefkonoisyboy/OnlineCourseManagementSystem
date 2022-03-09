@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Submissions
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Submissions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class Top5SubmissionsByUserIdAndContestIdViewModel : IMapFrom<Submission>
     {
         public int Id { get; set; }

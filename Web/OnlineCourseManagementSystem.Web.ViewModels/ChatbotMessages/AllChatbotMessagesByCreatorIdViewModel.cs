@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.ChatbotMessages
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+
     public class AllChatbotMessagesByCreatorIdViewModel : IMapFrom<ChatbotMessage>
     {
         public string Content { get; set; }

@@ -54,10 +54,11 @@
                 var prediction = predictionEngine.Predict(new CommentInput { Content = testData });
 
                 yield return prediction;
-                //Console.WriteLine(new string('-', 60));
-                //Console.WriteLine($"Content: {testData}");
-                //Console.WriteLine($"Is OK? {prediction.Prediction}");
-                //Console.WriteLine($"Score: {prediction.Score}");
+
+                // Console.WriteLine(new string('-', 60));
+                // Console.WriteLine($"Content: {testData}");
+                // Console.WriteLine($"Is OK? {prediction.Prediction}");
+                // Console.WriteLine($"Score: {prediction.Score}");
             }
         }
     }

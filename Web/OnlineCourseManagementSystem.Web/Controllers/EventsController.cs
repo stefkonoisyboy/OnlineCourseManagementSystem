@@ -31,7 +31,7 @@
         public IActionResult Create()
         {
             BreadcrumbNode mycreatedEventsNode = new MvcBreadcrumbNode("AllCreated", "Events", "My Created Events");
-            BreadcrumbNode createNode = new MvcBreadcrumbNode("Create", "Events", "Create Event") 
+            BreadcrumbNode createNode = new MvcBreadcrumbNode("Create", "Events", "Create Event")
             {
                 Parent = mycreatedEventsNode,
             };
@@ -123,7 +123,7 @@
         public IActionResult Edit(int id)
         {
             BreadcrumbNode mycreatedEventsNode = new MvcBreadcrumbNode("AllCreated", "Events", "My Created Events");
-            BreadcrumbNode editNode = new MvcBreadcrumbNode("Edit", "Events", "Edit Event") 
+            BreadcrumbNode editNode = new MvcBreadcrumbNode("Edit", "Events", "Edit Event")
             {
                 Parent = mycreatedEventsNode,
             };

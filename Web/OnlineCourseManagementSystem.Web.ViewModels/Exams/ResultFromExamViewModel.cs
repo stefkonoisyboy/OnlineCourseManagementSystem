@@ -1,16 +1,17 @@
-﻿using AutoMapper;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Data.Models.Enumerations;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Answers;
-using OnlineCourseManagementSystem.Web.ViewModels.Questions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Exams
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Answers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Questions;
+
     public class ResultFromExamViewModel : IMapFrom<UserExam>
     {
         public string UserFirstName { get; set; }

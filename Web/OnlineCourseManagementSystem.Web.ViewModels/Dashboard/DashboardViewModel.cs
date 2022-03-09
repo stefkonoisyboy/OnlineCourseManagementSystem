@@ -1,11 +1,12 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Courses;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Dashboard
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Dashboard
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Courses;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+
     public class DashboardViewModel
     {
         public int CourseCreated { get; set; }

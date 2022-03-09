@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OnlineCourseManagementSystem.Common;
-using OnlineCourseManagementSystem.Services.Data;
-using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Controllers
+﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using OnlineCourseManagementSystem.Common;
+    using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
+
     public class ReviewsController : Controller
     {
         private readonly IReviewsService reviewsService;

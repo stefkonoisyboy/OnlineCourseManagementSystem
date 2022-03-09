@@ -42,7 +42,7 @@
         Task<int?> DeleteAsync(int id);
 
         /// <summary>
-        /// This method gets file remoteurl. 
+        /// This method gets file remoteurl.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

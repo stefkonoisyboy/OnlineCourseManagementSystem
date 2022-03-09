@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Scripting;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Data;
-using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OnlineCourseManagementSystem.Web.Controllers
+﻿namespace OnlineCourseManagementSystem.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.CodeAnalysis.Scripting;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Data;
+    using OnlineCourseManagementSystem.Web.ViewModels.Submissions;
+
     public class SubmissionsController : Controller
     {
         private readonly ISubmissionsService submissionsService;
@@ -38,6 +39,8 @@ namespace OnlineCourseManagementSystem.Web.Controllers
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             int contestId = this.problemsService.GetContestIdByProblemId(problemId);
+
+            input.ContestId = contestId;
             input.ProblemId = problemId;
             input.UserId = user.Id;
 

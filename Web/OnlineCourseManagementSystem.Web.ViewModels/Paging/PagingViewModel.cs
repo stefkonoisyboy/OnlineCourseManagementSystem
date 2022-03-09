@@ -1,10 +1,11 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Exams;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Paging
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Paging
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Exams;
+
     public class PagingViewModel
     {
         public int PageNumber { get; set; }

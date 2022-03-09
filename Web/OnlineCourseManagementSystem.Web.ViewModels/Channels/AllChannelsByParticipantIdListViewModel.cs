@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Channels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class AllChannelsByParticipantIdListViewModel
     {
         public IEnumerable<GetAllChannelsByParticipantIdViewModel> Channels { get; set; }

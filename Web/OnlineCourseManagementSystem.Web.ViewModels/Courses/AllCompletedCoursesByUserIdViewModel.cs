@@ -1,14 +1,15 @@
-﻿using AutoMapper;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Tags;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using AutoMapper;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Tags;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+
     public class AllCompletedCoursesByUserIdViewModel : IMapFrom<Course>
     {
         public int Id { get; set; }

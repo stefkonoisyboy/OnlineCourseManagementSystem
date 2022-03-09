@@ -1,10 +1,11 @@
-﻿using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.MessageQAs
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.MessageQAs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+
     public class AllMessagesByChannleIdListViewModel
     {
         public IEnumerable<AllMessagesByChannelIdViewModel> Messages { get; set; }

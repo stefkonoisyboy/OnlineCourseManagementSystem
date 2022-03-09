@@ -11,10 +11,10 @@
     {
         public IEnumerable<LectureAssignmentViewModel> CreatedAssignments { get; set; }
 
-        //public IEnumerable<LectureAssignmentViewModel> CheckedAssignmets { get; set; }
+        // public IEnumerable<LectureAssignmentViewModel> CheckedAssignmets { get; set; }
 
         public int CourseId { get; set; }
 
-        //public string Category { get; set; }
+        // public string Category { get; set; }
     }
 }

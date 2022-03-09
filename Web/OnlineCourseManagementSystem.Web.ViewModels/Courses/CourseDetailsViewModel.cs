@@ -1,22 +1,23 @@
-﻿using AutoMapper;
-using Ganss.XSS;
-using OnlineCourseManagementSystem.Data.Models;
-using OnlineCourseManagementSystem.Data.Models.Enumerations;
-using OnlineCourseManagementSystem.Services.Mapping;
-using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
-using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
-using OnlineCourseManagementSystem.Web.ViewModels.Paging;
-using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
-using OnlineCourseManagementSystem.Web.ViewModels.Skills;
-using OnlineCourseManagementSystem.Web.ViewModels.Tags;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    using AutoMapper;
+    using Ganss.XSS;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Data.Models.Enumerations;
+    using OnlineCourseManagementSystem.Services.Mapping;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lecturers;
+    using OnlineCourseManagementSystem.Web.ViewModels.Lectures;
+    using OnlineCourseManagementSystem.Web.ViewModels.Paging;
+    using OnlineCourseManagementSystem.Web.ViewModels.Reviews;
+    using OnlineCourseManagementSystem.Web.ViewModels.Skills;
+    using OnlineCourseManagementSystem.Web.ViewModels.Tags;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+
     public class CourseDetailsViewModel : IMapFrom<Course>
     {
         public int Id { get; set; }

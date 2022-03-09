@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
-using OnlineCourseManagementSystem.Web.ViewModels.Users;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
+﻿namespace OnlineCourseManagementSystem.Web.ViewModels.Courses
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using OnlineCourseManagementSystem.Web.Infrastructure.ValidationAttributes;
+    using OnlineCourseManagementSystem.Web.ViewModels.Users;
+
     public class CreateMetaInputModel
     {
         [Required]

@@ -1,10 +1,11 @@
-﻿using Microsoft.ML.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineCourseManagementSystem.Services.Data.MachineLearning
+﻿namespace OnlineCourseManagementSystem.Services.Data.MachineLearning
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using Microsoft.ML.Data;
+
     public class UserInCourse
     {
         [LoadColumn(0)]

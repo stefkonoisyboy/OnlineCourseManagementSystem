@@ -77,11 +77,11 @@
                 .FirstOrDefault();
         }
 
-        //public T GetCourseCreatorById<T>(int courseId)
-        //{
+        // public T GetCourseCreatorById<T>(int courseId)
+        // {
         //    var creator = this.courseRepository.All().FirstOrDefault(c => c.Id == courseId).Creator;
         //    return this.
-        //}
+        // }
 
         public string GetFullNameById(string id)
         {
