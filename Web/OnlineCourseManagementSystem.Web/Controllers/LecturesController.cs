@@ -283,7 +283,7 @@
             }
             else if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
             {
-                BreadcrumbNode parentNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+                BreadcrumbNode parentNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
 
                 BreadcrumbNode childNode = new MvcBreadcrumbNode("CourseReports", "Lectures", "Course Reports")
                 {

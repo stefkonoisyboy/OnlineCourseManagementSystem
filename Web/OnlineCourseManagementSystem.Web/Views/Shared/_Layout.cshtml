@@ -151,7 +151,6 @@
                                         @if (this.User.IsInRole(GlobalConstants.StudentRoleName))
                                         {
                                             <li><a class="dropdown-item" asp-controller="Courses" asp-action="AllByCurrentUser">My Courses</a></li>
-                                            <li><a class="dropdown-item" asp-controller="Courses" asp-action="AllRecommendedByCurrentUser">Recommended Courses</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" asp-controller="Orders" asp-action="AllByUserId">My Cart</a></li>
                                         }
@@ -302,12 +301,7 @@
                                                 <li>
                                                     <hr class="dropdown-divider" />
                                                 </li>
-                                                <li>
-                                                    <a class="dropdown-item" asp-controller="Comments" asp-action="AllToxicComments">Toxic Comments</a>
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider" />
-                                                </li>
+                                             
                                                 <li>
                                                     <a class="dropdown-item" asp-controller="Mails" asp-action="SendMail">Send Mail</a>
                                                 </li>

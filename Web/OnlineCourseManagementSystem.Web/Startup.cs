@@ -152,6 +152,7 @@
             services.AddTransient<IProblemsService, ProblemsService>();
             services.AddTransient<ISubmissionsService, SubmissionsService>();
             services.AddTransient<ITestsService, TestsService>();
+            services.AddTransient<IExecutedTestsService, ExecutedTestsService>();
             services.AddTransient<IShedulesServices, ShedulesService>();
 
             services.AddTransient<IMailsService, MailsService>();

@@ -15,7 +15,7 @@
     <h3 class="font-weight-normal">End time: @this.Model.EndDate.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)</h3>
 </div>
 <hr class="bg-secondary" />
-<div class="d-flex justify-content-center mt-3">
+<div class="d-flex justify-content-center mt-3 mb-3">
     <a class="btn btn-warning" asp-controller="Contests" asp-action="Edit" asp-route-id="@this.Model.Id">Edit</a>
     <a class="btn btn-primary mx-5" asp-controller="Contests" asp-action="All">Back to all</a>
     <a class="btn btn-danger" asp-controller="Contests" asp-action="Delete" asp-route-id="@this.Model.Id">Delete</a>

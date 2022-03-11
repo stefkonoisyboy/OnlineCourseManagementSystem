@@ -44,7 +44,14 @@
             input.ProblemId = problemId;
             input.UserId = user.Id;
 
-            await this.submissionsService.CreateAsync(input, this.webEnv.WebRootPath, this.webEnv.WebRootPath);
+            try
+            {
+                await this.submissionsService.CreateAsync(input, this.webEnv.WebRootPath, this.webEnv.WebRootPath);
+            }
+            catch (Exception)
+            {
+            }
+
             this.TempData["Message"] = "You submitted your code successfully!";
 
             return this.RedirectToAction("AllByContestId", "Problems", new { problemId = problemId, contestId = contestId });

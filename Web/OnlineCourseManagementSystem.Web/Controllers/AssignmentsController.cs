@@ -40,7 +40,7 @@
                 CourseId = id,
             };
 
-            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
             BreadcrumbNode createassignmentNode = new MvcBreadcrumbNode("CreateAssignment", "Assignemnts", "Create Assignment")
             {
                 Parent = mycoursesNode,
@@ -121,7 +121,7 @@
                 CourseId = id,
             };
 
-            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
             MvcBreadcrumbNode mycreatedAssignmentsNode = new MvcBreadcrumbNode("AllCreated", "Assignments", "My Created Assignments")
             {
                 Parent = mycoursesNode,
@@ -223,7 +223,7 @@
             viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
             viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(assignmentId, userId);
 
-            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
             BreadcrumbNode mycreatedAssignmentsNode = new MvcBreadcrumbNode("AllCreated", "Assignments", "My Created Assignments")
             {
                 Parent = mycoursesNode,
@@ -270,7 +270,7 @@
             viewModel.AssignmentInfo.ResourceFiles = this.filesService.GetAllResourceFilesByAssignemt<FileAssignmentViewModel>(assignmentId, userId);
             viewModel.AssignmentInfo.WorkFiles = this.filesService.GetAllUserSubmittedFilesForAssignment<FileAssignmentViewModel>(assignmentId, userId);
 
-            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentLecturer", "Courses", "My Courses");
+            BreadcrumbNode mycoursesNode = new MvcBreadcrumbNode("AllByCurrentUser", "Courses", "My Courses");
 
             BreadcrumbNode mycreatedAssignmentsNode = new MvcBreadcrumbNode("AllCreated", "Assignments", "My Created Assignments")
             {

@@ -8,6 +8,11 @@
 
     public class Submission : BaseDeletableModel<int>
     {
+        public Submission()
+        {
+            this.ExecutedTests = new HashSet<ExecutedTest>();
+        }
+
         public string Code { get; set; }
 
         public int Points { get; set; }
@@ -23,5 +28,7 @@
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+
+        public virtual ICollection<ExecutedTest> ExecutedTests { get; set; }
     }
 }

@@ -261,24 +261,48 @@
         [Breadcrumb("My Courses", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> AllByCurrentUserAndSubjectId(int subjectId, int id = 1)
         {
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            const int ItemsPerPage = 6;
-            UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
+            if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
             {
-                ListOfActiveCourses = new AllActiveCoursesListViewModel
+                ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                const int ItemsPerPage = 6;
+                UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
                 {
-                    ItemsPerPage = ItemsPerPage,
-                    PageNumber = id,
-                    ActiveCoursesCount = this.coursesService.GetAllCoursesByCreatorIdAndSubjectIdCount(subjectId, user.Id),
-                    ActiveCourses = this.coursesService.GetAllByCreatorIdAndSubjectId<AllActiveCoursesViewModel>(id, user.Id, subjectId, ItemsPerPage),
-                    SubjectId = subjectId,
-                },
-                Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
-            };
+                    ListOfActiveCourses = new AllActiveCoursesListViewModel
+                    {
+                        ItemsPerPage = ItemsPerPage,
+                        PageNumber = id,
+                        ActiveCoursesCount = this.coursesService.GetAllCoursesByCreatorIdAndSubjectIdCount(subjectId, user.Id),
+                        ActiveCourses = this.coursesService.GetAllByCreatorIdAndSubjectId<AllActiveCoursesViewModel>(id, user.Id, subjectId, ItemsPerPage),
+                        SubjectId = subjectId,
+                    },
+                    Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
+                };
 
-            this.ViewData["CurrentUserHeading"] = "Messages";
+                this.ViewData["CurrentUserHeading"] = "Messages";
 
-            return this.View(viewModel);
+                return this.View(viewModel);
+            }
+            else
+            {
+                ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                const int ItemsPerPage = 6;
+                UpcomingAndActiveCoursesViewModel viewModel = new UpcomingAndActiveCoursesViewModel
+                {
+                    ListOfActiveCourses = new AllActiveCoursesListViewModel
+                    {
+                        ItemsPerPage = ItemsPerPage,
+                        PageNumber = id,
+                        ActiveCoursesCount = this.coursesService.GetAllCoursesByUserIdAndSubjectIdCount(subjectId, user.Id),
+                        ActiveCourses = this.coursesService.GetAllByUserAndSubject<AllActiveCoursesViewModel>(id, user.Id, subjectId, ItemsPerPage),
+                        SubjectId = subjectId,
+                    },
+                    Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
+                };
+
+                this.ViewData["CurrentUserHeading"] = "Messages";
+
+                return this.View(viewModel);
+            }
         }
 
         [Authorize]

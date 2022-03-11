@@ -119,6 +119,8 @@
 
         public virtual DbSet<Submission> Submissions { get; set; }
 
+        public virtual DbSet<ExecutedTest> ExecutedTests { get; set; }
+
         public virtual DbSet<Shedule> Shedules { get; set; }
 
         public virtual DbSet<Setting> Settings { get; set; }
