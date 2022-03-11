@@ -64,9 +64,80 @@
         })();
     </script>
 
+    <style>
+        .starFade {
+            background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarFade.gif');
+            min-width: 30px;
+            min-height: 30px;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .starFadeN {
+            background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarFade.gif');
+            min-width: 30px;
+            min-height: 30px;
+            display: inline-block;
+        }
+
+        .starGlow {
+            background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarGlow.gif');
+            min-width: 30px;
+            min-height: 30px;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .starGlowN {
+            background-image: url('https://raw.githubusercontent.com/dotnetfunda/StarRatingSystem/master/Images/StarGlow.gif');
+            min-width: 30px;
+            min-height: 30px;
+            display: inline-block;
+        }
+    </style>
+
 </head>
 
 <body>
+
+    <!--Reviews dialog-->
+
+    <div class="modal fade" id="reviewsModal" tabindex="-1" aria-labelledby="reviewsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reviewsModalLabel">Add review</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" asp-controller="Reviews" asp-action="Add">
+                        @Html.AntiForgeryToken()
+
+
+                        <div onmouseout="CRateSelected()">
+                            <span class="starFade" id="Rate1" onclick="CRate(1)" onmouseover="CRateOver(1)" onmouseout="CRateOut(1)"></span><span class="starFade" id="Rate2" onclick="CRate(2)" onmouseover="CRateOver(2)" onmouseout="CRateOut(2)"></span><span class="starFade" id="Rate3" onclick="CRate(3)" onmouseover="CRateOver(3)" onmouseout="CRateOut(3)"></span><span class="starFade" id="Rate4" onclick="CRate(4)" onmouseover="CRateOver(4)" onmouseout="CRateOut(4)"></span><span class="starFade" id="Rate5" onclick="CRate(5)" onmouseover="CRateOver(5)" onmouseout="CRateOut(5)"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <textarea name="Content" id="Content" rows="5" class="form-control"></textarea>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <input type="hidden" name="CourseId" value="@this.Model.Id" />
+                            <input type="hidden" name="Rating" id="Rating" value="0" />
+
+
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-info">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section id="sub-header">
         <div class="container text-white">
 
@@ -83,7 +154,6 @@
                 </div>
                 <div class="col-md-6">
                     <h2 class="text-white">What you will learn</h2>
-                    <p class="text-white">Lorem ipsum dolor sit amet, vix erat audiam ei. Cum doctus civibus efficiantur in. Nec id tempor imperdiet deterruisset, doctus volumus explicari qui.</p>
                     <ul>
                         @foreach (var skill in this.Model.Skills)
                         {
@@ -140,9 +210,11 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <span>You complete <strong>@this.Model.CompletedLecturesCount</strong> out of <strong>@this.Model.LecturesCount</strong> lectures</span><span id="end"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trophy-fill" viewBox="0 0 16 16">
-    <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935z" />
-</svg></span>
+                            <span>You complete <strong>@this.Model.CompletedLecturesCount</strong> out of <strong>@this.Model.LecturesCount</strong> lectures</span><span id="end">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trophy-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935z" />
+                                </svg>
+                            </span>
                             <div class="progress">
                                 @if (this.Model.LecturesCount != 0)
                                 {
@@ -260,7 +332,7 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-fill text-success" viewBox="0 0 16 16">
                                                         <circle cx="8" cy="8" r="8" />
                                                     </svg>
-                                                    <a asp-controller="Files" asp-action="ById" asp-route-id="@file.Id" asp-route-courseId="@file.LectureId">Word Document - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)</a>
+                                                    <a asp-controller="Files" asp-action="ById" asp-route-id="@file.Id" asp-route-lectureId="@file.LectureId">Word Document - @file.CreatedOn.ToString("dd MMMM yyyy") - @(file.UserFirstName + ' ' + file.UserLastName)</a>
                                                 </h4>
                                             }
                                             else
@@ -293,7 +365,7 @@
                                             </li>
                                         </ul>
                                     </div><!-- end strip single course -->
-       
+
                                 </div><!-- end strip single course -->
                             }
                         }
@@ -541,6 +613,44 @@
     <script src="~/js/home/classie.js"></script>
     <script src="~/js/home/uisearch.js"></script>
     <script>new UISearch(document.getElementById('sb-search'));</script>
+
+    <script>
+        function SubmitComment() {
+            if ($("#Rating").val() == "0") {
+                alert("Please rate this service provider.");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        function CRate(r) {
+            $("#Rating").val(r);
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+            // unselect remaining
+            for (var i = r + 1; i <= 5; i++) {
+                $("#Rate" + i).attr('class', 'starFade');
+            }
+        }
+        function CRateOver(r) {
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+        }
+        function CRateOut(r) {
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starFade');
+            }
+        }
+        function CRateSelected() {
+            var setRating = $("#Rating").val();
+            for (var i = 1; i <= setRating; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+        }
+    </script>
 </body>
 </html>
 

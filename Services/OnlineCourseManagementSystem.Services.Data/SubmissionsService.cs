@@ -18,18 +18,36 @@
     {
         private readonly IDeletableEntityRepository<Submission> submissionsRepository;
         private readonly IDeletableEntityRepository<Test> testsRepository;
+        private readonly IDeletableEntityRepository<ExecutedTest> executedTestsRepository;
+        private readonly IDeletableEntityRepository<Problem> problemsRepository;
 
         public SubmissionsService(
             IDeletableEntityRepository<Submission> submissionsRepository,
-            IDeletableEntityRepository<Test> testsRepository)
+            IDeletableEntityRepository<Test> testsRepository,
+            IDeletableEntityRepository<ExecutedTest> executedTestsRepository,
+            IDeletableEntityRepository<Problem> problemsRepository)
         {
             this.submissionsRepository = submissionsRepository;
             this.testsRepository = testsRepository;
+            this.executedTestsRepository = executedTestsRepository;
+            this.problemsRepository = problemsRepository;
         }
 
         public async Task CreateAsync(CreateSubmissionInputModel input, string inputPath, string outputPath)
         {
             int points = 0;
+
+            Submission submission = new Submission
+            {
+                Code = input.Code,
+                Points = points,
+                ProblemId = input.ProblemId,
+                ContestId = input.ContestId,
+                UserId = input.UserId,
+            };
+
+            await this.submissionsRepository.AddAsync(submission);
+            await this.submissionsRepository.SaveChangesAsync();
 
             IEnumerable<Test> testsByProblem = this.testsRepository
                 .All()
@@ -40,6 +58,16 @@
 
             foreach (var test in testsByProblem)
             {
+                ExecutedTest executedTest = new ExecutedTest
+                {
+                    TestInput = test.Input,
+                    ExpectedOutput = test.Output,
+                    SubmissionId = submission.Id,
+                };
+
+                await this.executedTestsRepository.AddAsync(executedTest);
+                await this.executedTestsRepository.SaveChangesAsync();
+
                 using (StreamWriter writer = new StreamWriter($"{inputPath}/code/input/{test.Id}.txt"))
                 {
                     writer.WriteLine(test.Input);
@@ -119,61 +147,86 @@
                     }
                 }
 
-                var state = await CSharpScript.RunAsync(lines.FirstOrDefault(), ScriptOptions.Default.WithImports("System", "System.IO"));
-
-                foreach (var line in lines.Skip(1))
+                try
                 {
-                    state = await state.ContinueWithAsync(line, ScriptOptions.Default.WithImports("System", "System.IO"));
-                }
+                    var state = await CSharpScript.RunAsync(lines.FirstOrDefault(), ScriptOptions.Default.WithImports("System", "System.IO"));
 
-                string userOutput = string.Empty;
-
-                using (StreamReader reader = new StreamReader(System.IO.Path.Combine("output.txt")))
-                {
-                    string line = reader.ReadLine();
-                    userOutput += line + Environment.NewLine;
-
-                    while (line != null)
+                    foreach (var line in lines.Skip(1))
                     {
-                        line = reader.ReadLine();
+                        state = await state.ContinueWithAsync(line, ScriptOptions.Default.WithImports("System", "System.IO"));
+                    }
+
+                    string userOutput = string.Empty;
+
+                    using (StreamReader reader = new StreamReader(System.IO.Path.Combine("output.txt")))
+                    {
+                        string line = reader.ReadLine();
                         userOutput += line + Environment.NewLine;
+
+                        while (line != null)
+                        {
+                            line = reader.ReadLine();
+                            userOutput += line + Environment.NewLine;
+                        }
                     }
-                }
 
-                string[] userOutputArr = userOutput.Split(Environment.NewLine).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+                    executedTest.UserOutput = userOutput;
 
-                bool prime = true;
+                    string[] userOutputArr = userOutput.Split(Environment.NewLine).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
 
-                for (int i = 0; i < userOutputArr.Length; i++)
-                {
-                    if (userOutputArr[i] != expectedOutputContentLines[i])
+                    bool prime = true;
+
+                    for (int i = 0; i < userOutputArr.Length; i++)
                     {
-                        prime = false;
-                        break;
+                        if (userOutputArr[i] != expectedOutputContentLines[i])
+                        {
+                            prime = false;
+                            break;
+                        }
                     }
-                }
 
-                if (prime)
+                    if (prime)
+                    {
+                        points += pointsPerTest;
+                        executedTest.HasPassed = true;
+                    }
+                    else
+                    {
+                        executedTest.HasPassed = false;
+                    }
+
+                    submission.Points = points;
+                    await this.submissionsRepository.SaveChangesAsync();
+
+                    await this.executedTestsRepository.SaveChangesAsync();
+
+                    System.IO.File.Delete($"{inputPath}/code/input/{test.Id}.txt");
+                    System.IO.File.Delete($"{inputPath}/code/expectedOutput/{test.Id}.txt");
+                    System.IO.File.Delete(System.IO.Path.Combine("output.txt"));
+                }
+                catch (Exception ex)
                 {
-                    points += pointsPerTest;
-                }
+                    executedTest.UserOutput = ex.Message;
+                    executedTest.HasPassed = false;
 
-                System.IO.File.Delete($"{inputPath}/code/input/{test.Id}.txt");
-                System.IO.File.Delete($"{inputPath}/code/expectedOutput/{test.Id}.txt");
-                System.IO.File.Delete(System.IO.Path.Combine("output.txt"));
+                    await this.executedTestsRepository.SaveChangesAsync();
+
+                    System.IO.File.Delete($"{inputPath}/code/input/{test.Id}.txt");
+                    System.IO.File.Delete($"{inputPath}/code/expectedOutput/{test.Id}.txt");
+                    System.IO.File.Delete(System.IO.Path.Combine("output.txt"));
+                }
             }
 
-            Submission submission = new Submission
-            {
-                Code = input.Code,
-                Points = points,
-                ProblemId = input.ProblemId,
-                ContestId = input.ContestId,
-                UserId = input.UserId,
-            };
-
-            await this.submissionsRepository.AddAsync(submission);
+            submission.Points = points;
             await this.submissionsRepository.SaveChangesAsync();
+        }
+
+        public int GetProblemIdBySubmissionId(int submissionId)
+        {
+            return this.submissionsRepository
+                .All()
+                .FirstOrDefault(s => s.Id == submissionId)
+                .ProblemId;
         }
 
         public IEnumerable<T> GetTop5ByContestIdAndUserId<T>(int contestId, string userId)

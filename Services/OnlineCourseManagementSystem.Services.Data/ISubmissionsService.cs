@@ -35,5 +35,12 @@
         /// <param name="userId"></param>
         /// <returns></returns>
         IEnumerable<T> GetTop5ByProblemIdAndUserId<T>(int problemId, string userId);
+
+        /// <summary>
+        /// Get problem id by submission id.
+        /// </summary>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
+        int GetProblemIdBySubmissionId(int submissionId);
     }
 }

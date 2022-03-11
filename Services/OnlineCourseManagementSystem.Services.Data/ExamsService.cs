@@ -86,7 +86,7 @@
 
         public bool CheckAlreadyUsedExam(int examId, int courseId)
         {
-            return this.examsRepository.All().Any(e => e.Id == examId && e.CourseId == courseId);
+            return this.examsRepository.All().Any(e => e.Id == examId && e.CourseId == courseId && e.IsCertificated.HasValue);
         }
 
         public async Task CreateAsync(CreateExamInputModel input)
