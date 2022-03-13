@@ -105,5 +105,13 @@
         Task<int> AddVideoResourceToEventAsync(VideoFileInputModel inptuModel);
 
         Task MarkAsCompletedAsync(int id, string userId);
+
+        /// <summary>
+        /// Adds file to album.
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <param name="lectureId"></param>
+        /// <returns></returns>
+        Task AddToAlbumFromLecture(int fileId, int lectureId);
     }
 }

@@ -76,5 +76,7 @@
         /// <param name=""></param>
         /// <returns></returns>
         Task UpdateAsync(EditSubjectInputModel inputModel);
+
+        IEnumerable<T> GetAllByModule<T>(int moduleId);
     }
 }

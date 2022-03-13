@@ -55,7 +55,7 @@
                                                         .Skip(skip)
                                                         .Take(viewModel.CoursesBySubjectListViewModel.ItemsPerPage);
             viewModel.CoursesBySubjectListViewModel.SubjectId = subjectId;
-            BreadcrumbNode roadMapNode = new MvcBreadcrumbNode("AllSubjectsRoadMap", "Subjects", "RoadMap");
+            BreadcrumbNode roadMapNode = new MvcBreadcrumbNode("All", "Trainings", "RoadMap");
             BreadcrumbNode byIdNode = new MvcBreadcrumbNode("ById", "Subjects", "Subject")
             {
                 Parent = roadMapNode,
