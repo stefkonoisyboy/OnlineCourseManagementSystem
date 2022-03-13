@@ -53,7 +53,7 @@
                     Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    RemoteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RemoteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {

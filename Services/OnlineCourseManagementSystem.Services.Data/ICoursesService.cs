@@ -357,5 +357,13 @@
         /// <param name="subjectId"></param>
         /// <returns></returns>
         IEnumerable<T> GetAllUnactiveCourses<T>(int subjectId);
+
+        /// <summary>
+        /// Gets all top latest courses by subject in module.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="moduleId"></param>
+        /// <returns></returns>
+        IEnumerable<T> GetAllTopLatestBySubjectInModule<T>(int moduleId);
     }
 }

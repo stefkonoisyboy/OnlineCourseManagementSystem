@@ -154,6 +154,8 @@
             services.AddTransient<ITestsService, TestsService>();
             services.AddTransient<IExecutedTestsService, ExecutedTestsService>();
             services.AddTransient<IShedulesServices, ShedulesService>();
+            services.AddTransient<ITrainingsService, TrainingsService>();
+            services.AddTransient<IModulesService, ModulesService>();
 
             services.AddTransient<IMailsService, MailsService>();
             services.AddSingleton<ITwilioService, TwilioService>();

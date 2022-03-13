@@ -600,6 +600,21 @@
                 .ToList();
         }
 
+        public IEnumerable<T> GetAllTopLatestBySubjectInModule<T>(int moduleId)
+        {
+            List<int?> subjectIds = this.coursesRepository.All().Where(c => c.Subject.ModuleId == moduleId).Select(c => c.SubjectId).ToList();
+            List<Course> courses = new List<Course>();
+            foreach (var subjectId in subjectIds)
+            {
+                courses.Add(this.coursesRepository.All().OrderByDescending(c => c.StartDate).FirstOrDefault(c => c.SubjectId == subjectId));
+            }
+
+            return courses
+                .AsQueryable()
+                .To<T>()
+                .ToList();
+        }
+
         private async Task<string> UploadImageAsync(IFormFile formFile, string fileName)
         {
             byte[] destinationData;

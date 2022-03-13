@@ -19,23 +19,26 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<File> fileRepository;
         private readonly Cloudinary cloudinaryUtility;
-        private readonly IDeletableEntityRepository<Album> albumRepository;
+        private readonly IDeletableEntityRepository<Album> albumsRepository;
         private readonly IDeletableEntityRepository<FileCompletition> fileCompletitionsRepository;
+        private readonly IDeletableEntityRepository<Lecture> lectureRepository;
         private readonly CloudinaryService cloudinaryService;
 
         public FilesService(
             IDeletableEntityRepository<ApplicationUser> userRepository,
             IDeletableEntityRepository<File> fileRepository,
             Cloudinary cloudinaryUtility,
-            IDeletableEntityRepository<Album> albumRepository,
-            IDeletableEntityRepository<FileCompletition> fileCompletitionsRepository)
+            IDeletableEntityRepository<Album> albumsRepository,
+            IDeletableEntityRepository<FileCompletition> fileCompletitionsRepository,
+            IDeletableEntityRepository<Lecture> lectureRepository)
         {
             this.userRepository = userRepository;
             this.fileRepository = fileRepository;
 
             this.cloudinaryUtility = cloudinaryUtility;
-            this.albumRepository = albumRepository;
+            this.albumsRepository = albumsRepository;
             this.fileCompletitionsRepository = fileCompletitionsRepository;
+            this.lectureRepository = lectureRepository;
             this.cloudinaryService = new CloudinaryService(cloudinaryUtility);
         }
 
@@ -69,7 +72,7 @@
 
         public T GetAllImagesForUserByAlbum<T>(string userId, int albumId)
         {
-            var images = this.albumRepository
+            var images = this.albumsRepository
                 .All()
                 .Where(x => x.UserId == userId && x.Id == albumId)
                 .To<T>().FirstOrDefault();
@@ -194,6 +197,30 @@
 
             await this.fileCompletitionsRepository.AddAsync(fileCompletition);
             await this.fileCompletitionsRepository.SaveChangesAsync();
+        }
+
+        public async Task AddToAlbumFromLecture(int fileId, int lectureId)
+        {
+            Lecture lecture = this.lectureRepository.All().FirstOrDefault(l => l.Id == lectureId);
+
+            Album album;
+            if (this.albumsRepository.All().Any(a => a.Name == "Lectures"))
+            {
+                album = new Album()
+                {
+                    Name = "Lectures",
+                };
+            }
+            else
+            {
+                album = this.albumsRepository.All().FirstOrDefault(a => a.Name == "Lectures");
+            }
+
+            File file = this.fileRepository.All().FirstOrDefault(f => f.Id == fileId);
+            album.Images.Add(file);
+
+            await this.albumsRepository.AddAsync(album);
+            await this.albumsRepository.SaveChangesAsync();
         }
     }
 }

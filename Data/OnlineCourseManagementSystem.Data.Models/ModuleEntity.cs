@@ -6,21 +6,19 @@
 
     using OnlineCourseManagementSystem.Data.Common.Models;
 
-    public class Subject : BaseDeletableModel<int>
+    public class ModuleEntity : BaseDeletableModel<int>
     {
-        public Subject()
+        public ModuleEntity()
         {
-            this.Courses = new HashSet<Course>();
+            this.Subjects = new HashSet<Subject>();
         }
 
         public string Name { get; set; }
 
         public string Description { get; set; }
 
-        public virtual ModuleEntity Module { get; set; }
+        public virtual ICollection<TrainingModule> Trainings { get; set; }
 
-        public int? ModuleId { get; set; }
-
-        public virtual ICollection<Course> Courses { get; set; }
+        public virtual ICollection<Subject> Subjects { get; set; }
     }
 }

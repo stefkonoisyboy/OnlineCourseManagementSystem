@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using Ganss.XSS;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,15 @@
                     Text = s.Name,
                     Value = s.Id.ToString(),
                 })
+                .ToList();
+        }
+
+        public IEnumerable<T> GetAllByModule<T>(int moduleId)
+        {
+            return this.subjectsRepository
+                .All()
+                .Where(s => s.ModuleId == moduleId)
+                .To<T>()
                 .ToList();
         }
 
