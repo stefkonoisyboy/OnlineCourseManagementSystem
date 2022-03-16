@@ -68,12 +68,12 @@
                 await this.executedTestsRepository.AddAsync(executedTest);
                 await this.executedTestsRepository.SaveChangesAsync();
 
-                using (StreamWriter writer = new StreamWriter($"{inputPath}/code/input/{test.Id}.txt"))
+                using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine("input.txt")))
                 {
                     writer.WriteLine(test.Input);
                 }
 
-                using (StreamWriter writer = new StreamWriter($"{inputPath}/code/expectedOutput/{test.Id}.txt"))
+                using (StreamWriter writer = new StreamWriter(System.IO.Path.Combine("expectedOutput.txt")))
                 {
                     writer.WriteLine(test.Output);
                 }
@@ -81,7 +81,7 @@
                 string inputContent = string.Empty;
                 string expectedOutputContent = string.Empty;
 
-                using (StreamReader reader = new StreamReader($"{inputPath}/code/input/{test.Id}.txt"))
+                using (StreamReader reader = new StreamReader(System.IO.Path.Combine("input.txt")))
                 {
                     string line = reader.ReadLine();
                     inputContent += line + Environment.NewLine;
@@ -93,7 +93,7 @@
                     }
                 }
 
-                using (StreamReader reader = new StreamReader($"{inputPath}/code/expectedOutput/{test.Id}.txt"))
+                using (StreamReader reader = new StreamReader(System.IO.Path.Combine("expectedOutput.txt")))
                 {
                     string line = reader.ReadLine();
                     expectedOutputContent += line + Environment.NewLine;
@@ -109,16 +109,20 @@
                 string[] expectedOutputContentLines = expectedOutputContent.Split(Environment.NewLine).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
 
                 string[] lines = input.Code.Split(Environment.NewLine).ToArray();
-                int lineToReadFromInputFile = 0;
+                string additionalCode = "int _indexCodeEvaluationSystem = 0; List<string> lines = new List<string>(); StreamReader streamReader = new StreamReader(System.IO.Path.Combine(\"input.txt\")); string line = streamReader.ReadLine(); while (line != null) { lines.Add(line); line = streamReader.ReadLine(); } streamReader.Close();";
+                string mainCode = string.Empty;
+                //int lineToReadFromInputFile = 0;
 
                 for (int i = 0; i < lines.Length; i++)
                 {
                     if (lines[i].Contains("Console.ReadLine"))
                     {
-                        inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(0, @"""");
-                        inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(inputContentLines[lineToReadFromInputFile].Length, @"""");
-                        lines[i] = lines[i].Replace("Console.ReadLine()", inputContentLines[lineToReadFromInputFile]);
-                        lineToReadFromInputFile++;
+                        //inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(0, @"""");
+                        //inputContentLines[lineToReadFromInputFile] = inputContentLines[lineToReadFromInputFile].Insert(inputContentLines[lineToReadFromInputFile].Length, @"""");
+                        //lines[i] = lines[i].Replace("Console.ReadLine()", inputContentLines[lineToReadFromInputFile]);
+                        //lineToReadFromInputFile++;
+
+                        lines[i] = lines[i].Replace("Console.ReadLine()", "lines[_indexCodeEvaluationSystem++]");
                     }
                     else if (lines[i].Contains("Console.WriteLine"))
                     {
@@ -145,16 +149,21 @@
 
                         lines[i] = code;
                     }
+
+                    mainCode += lines[i];
                 }
+
+                string finalCode = additionalCode + mainCode;
 
                 try
                 {
-                    var state = await CSharpScript.RunAsync(lines.FirstOrDefault(), ScriptOptions.Default.WithImports("System", "System.IO"));
+                    var script = CSharpScript.Create(finalCode, ScriptOptions.Default.WithImports("System", "System.IO", "System.Collections.Generic", "System.Text"));
+                    await script.RunAsync();
 
-                    foreach (var line in lines.Skip(1))
-                    {
-                        state = await state.ContinueWithAsync(line, ScriptOptions.Default.WithImports("System", "System.IO"));
-                    }
+                    //foreach (var line in lines.Skip(1))
+                    //{
+                    //    state = await state.ContinueWithAsync(line, ScriptOptions.Default.WithImports("System", "System.IO", "System.Collections.Generic", "System.Linq", "System.Text"));
+                    //}
 
                     string userOutput = string.Empty;
 
@@ -200,8 +209,8 @@
 
                     await this.executedTestsRepository.SaveChangesAsync();
 
-                    System.IO.File.Delete($"{inputPath}/code/input/{test.Id}.txt");
-                    System.IO.File.Delete($"{inputPath}/code/expectedOutput/{test.Id}.txt");
+                    System.IO.File.Delete(System.IO.Path.Combine("input.txt"));
+                    System.IO.File.Delete(System.IO.Path.Combine("expectedOutput.txt"));
                     System.IO.File.Delete(System.IO.Path.Combine("output.txt"));
                 }
                 catch (Exception ex)

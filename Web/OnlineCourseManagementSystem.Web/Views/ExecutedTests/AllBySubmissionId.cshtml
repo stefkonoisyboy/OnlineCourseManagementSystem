@@ -8,7 +8,7 @@
 <link href="~/css/themes/ambiance.css" rel="stylesheet" />
 
 <div class="ml-2">
-    <h1>Submission №@this.Model.FirstOrDefault().SubmissionId from @this.Model.FirstOrDefault().SubmissionUserUserName to problem <a asp-controller="Problems" asp-action="AllByContestId" asp-route-contestId="@this.Model.FirstOrDefault().SubmissionContestId" asp-route-problemId="@this.Model.FirstOrDefault().SubmissionProblemId" style="color: #18BB9B; font-size: 35px;">@this.Model.FirstOrDefault().SubmissionProblemName</a></h1>
+    <h1>Submission №@this.Model.FirstOrDefault().SubmissionId from @this.Model.FirstOrDefault().SubmissionUserUserName to problem <a asp-controller="Problems" asp-action="AllByContestId" asp-route-contestId="@this.Model.FirstOrDefault().SubmissionContestId" asp-route-problemId="@this.Model.FirstOrDefault().SubmissionProblemId" style="color: #18BB9B; font-size: 35px; text-decoration: underline;">@this.Model.FirstOrDefault().SubmissionProblemName</a></h1>
 
     <div class="m-2">
         <a class="btn btn-secondary" href="/ExecutedTests/AllBySubmissionId?submissionId=@this.Model.FirstOrDefault().SubmissionId#yourCode">View code</a>
