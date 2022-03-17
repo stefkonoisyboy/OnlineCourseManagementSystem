@@ -44,6 +44,8 @@
 
         public int CourseId { get; set; }
 
+        public int ExamId { get; set; }
+
         public string RecommendationType { get; set; }
     }
 }

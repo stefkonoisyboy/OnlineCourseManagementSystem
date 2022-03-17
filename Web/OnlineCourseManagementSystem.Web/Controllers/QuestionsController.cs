@@ -2,12 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
-
+    using ClosedXML.Excel;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using OnlineCourseManagementSystem.Common;
+    using OnlineCourseManagementSystem.Data.Models;
     using OnlineCourseManagementSystem.Services.Data;
     using OnlineCourseManagementSystem.Web.ViewModels.Choices;
     using OnlineCourseManagementSystem.Web.ViewModels.Questions;
@@ -19,12 +23,18 @@
         private readonly IQuestionsService questionsService;
         private readonly IChoicesService choicesService;
         private readonly IExamsService examsService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public QuestionsController(IQuestionsService questionsService, IChoicesService choicesService, IExamsService examsService)
+        public QuestionsController(
+            IQuestionsService questionsService,
+            IChoicesService choicesService,
+            IExamsService examsService,
+            UserManager<ApplicationUser> userManager)
         {
             this.questionsService = questionsService;
             this.choicesService = choicesService;
             this.examsService = examsService;
+            this.userManager = userManager;
         }
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
@@ -115,11 +125,17 @@
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [Breadcrumb("View Questions", FromAction = "All", FromController = typeof(ExamsController))]
-        public IActionResult AllByExam(int examId)
+        public IActionResult AllByExam(int examId, string input, int id = 1)
         {
+            const int ItemsPerPage = 5;
+
             AllQuestionsByExamListViewModel viewModel = new AllQuestionsByExamListViewModel
             {
-                Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(examId),
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                ActiveCoursesCount = this.questionsService.GetCountByExamId(examId, input),
+                Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(examId, id, input, ItemsPerPage),
+                Name = input,
             };
 
             return this.View(viewModel);
@@ -147,6 +163,58 @@
             this.ViewData["BreadcrumbNode"] = detailsQuestionNode;
 
             return this.View(viewModel);
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> ExportAllExamsAsCSV(int examId)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Exam,Question");
+
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllQuestionsByExamListViewModel viewModel = new AllQuestionsByExamListViewModel
+            {
+                Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(examId, 1, string.Empty, int.MaxValue),
+            };
+
+            foreach (var question in viewModel.Questions)
+            {
+                sb.AppendLine($"{question.ExamName},{question.SanitizedText}");
+            }
+
+            return this.File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "QuestionsInfo.csv");
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> ExportAllExamsAsExcel(int examId)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllQuestionsByExamListViewModel viewModel = new AllQuestionsByExamListViewModel
+            {
+                Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(examId, 1, string.Empty, int.MaxValue),
+            };
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("MyExams");
+                int currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Exam";
+                worksheet.Cell(currentRow, 2).Value = "Question";
+
+                foreach (var question in viewModel.Questions)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = question.ExamName;
+                    worksheet.Cell(currentRow, 2).Value = question.SanitizedText;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return this.File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "QuestionsInfo.xlsx");
+                }
+            }
         }
     }
 }

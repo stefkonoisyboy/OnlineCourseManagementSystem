@@ -99,12 +99,24 @@
             await this.questionsRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAllByExam<T>(int examId)
+        public IEnumerable<T> GetAllByExam<T>(int examId, int page, string input, int itemsPerPage)
         {
-            return this.questionsRepository
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return this.questionsRepository
                 .All()
                 .Where(q => q.ExamId == examId)
                 .OrderBy(q => q.Id)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+            }
+
+            return this.questionsRepository
+                .All()
+                .Where(q => q.ExamId == examId && q.Text.ToLower().Contains(input.ToLower()))
+                .OrderBy(q => q.Id)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()
                 .ToList();
         }
@@ -118,11 +130,18 @@
                 .FirstOrDefault();
         }
 
-        public int GetCountByExamId(int examId)
+        public int GetCountByExamId(int examId, string input)
         {
-            return this.questionsRepository
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return this.questionsRepository
                 .All()
                 .Count(q => q.ExamId == examId);
+            }
+
+            return this.questionsRepository
+                .All()
+                .Count(q => q.ExamId == examId && q.Text.ToLower().Contains(input.ToLower()));
         }
 
         public async Task UpdateAsync(EditQuestionInputModel input)

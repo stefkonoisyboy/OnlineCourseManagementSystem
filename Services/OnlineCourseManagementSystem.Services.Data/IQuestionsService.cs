@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="examId"></param>
         /// <returns></returns>
-        int GetCountByExamId(int examId);
+        int GetCountByExamId(int examId, string input);
 
         /// <summary>
         /// Get by id.
@@ -51,6 +51,6 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="examId"></param>
         /// <returns></returns>
-        IEnumerable<T> GetAllByExam<T>(int examId);
+        IEnumerable<T> GetAllByExam<T>(int examId, int page, string input, int itemsPerPage = 5);
     }
 }

@@ -109,6 +109,15 @@
         int GetExamsCountByUserId(string userId, string searchItem);
 
         /// <summary>
+        /// Get exams count by user id and subject id.
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="userId"></param>
+        /// <param name="searchItem"></param>
+        /// <returns></returns>
+        int GetExamsCountByUserIdAndSubjectId(int subjectId, string userId, string searchItem);
+
+        /// <summary>
         /// Get results count by user id.
         /// </summary>
         /// <param name="userId"></param>
@@ -236,7 +245,7 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        IEnumerable<T> GetAll<T>();
+        IEnumerable<T> GetAll<T>(int page, string input, int itemsPerPage = 5);
 
         /// <summary>
         /// Get all by user id.
@@ -248,6 +257,18 @@
         /// <param name="itemsPerPage"></param>
         /// <returns></returns>
         IEnumerable<T> GetAllByUserId<T>(int id, string userId, string searchItem, int itemsPerPage = 5);
+
+        /// <summary>
+        /// Get all by user id and subject id.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="subjectId"></param>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <param name="searchItem"></param>
+        /// <param name="itemsPerPage"></param>
+        /// <returns></returns>
+        IEnumerable<T> GetAllByUserIdAndSubjectId<T>(int subjectId, int id, string userId, string searchItem, int itemsPerPage = 5);
 
         /// <summary>
         /// Get all by current user id.
@@ -289,5 +310,11 @@
         /// <param name="courseId"></param>
         /// <returns></returns>
         bool CheckAlreadyUsedExam(int examId, int courseId);
+
+        /// <summary>
+        /// Get all exams count.
+        /// </summary>
+        /// <returns></returns>
+        int GetAllExamsCount(string input);
     }
 }

@@ -29,7 +29,7 @@
         <div class="container">
 
             <div class="row mb-2">
-                <form class="w-100" style="display: inline;">
+                <form asp-route-subjectId="@this.Model.SubjectId" class="w-100" style="display: inline;">
                     <div class="row">
                         <div class="col-8">
                             <input asp-for="Input" class="form-control" />
@@ -64,7 +64,7 @@
                         {
                             <div class="col-lg-4 col-md-6">
                                 <div class="col-item" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; min-height: 450px;">
-                                   
+
                                     <span class="ribbon_course"></span>
                                     <div class="photo">
                                         <a href="#"><img height="200" src="@exam.CourseFileRemoteUrl" alt="courseImage" /></a>
@@ -126,7 +126,7 @@
 
             <hr>
             <div style="background-color:white !important; color: white !important;" class="bg-white">
-                <partial name="_MyExamsPagingPartial" model="@this.Model" />
+                <partial name="_AllExamsByUserIdAndSubjectIdPagingPartial" model="@this.Model" />
             </div>
 
         </div><!-- End container -->

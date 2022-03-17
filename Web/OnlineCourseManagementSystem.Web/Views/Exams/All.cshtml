@@ -13,19 +13,53 @@
 
 <head>
     <link href="~/css/responsiveTables.css" rel="stylesheet" />
+
+    <style>
+        #pdf:hover {
+            color: aqua !important;
+        }
+
+        #excel:hover {
+            color: lawngreen !important;
+        }
+
+        #csv:hover {
+            color: red !important;
+        }
+    </style>
 </head>
 
-<div class="row">
-    <div class="alert alert-dark col-md-2" role="alert">
-        @this.ViewData["Title"]
+<div class="row ml-2">
+    <div class="row mb-2">
+        <div class="bg bg-dark col-md-2 rounded-2">
+            @this.ViewData["Title"]
+        </div>
+        <div class="bg bg-danger col-md-10 rounded-2">
+            <a asp-controller="Exams" asp-action="Create" style="text-decoration: underline;">Add Exam</a>
+        </div>
     </div>
-    <div class="alert alert-danger col-md-10" role="alert">
-        <a asp-controller="Exams" asp-action="Create">Add Exam</a>
+
+    <div class="mb-2">
+        <button id="pdf" class="btn btn-outline-primary mb-3">PDF</button>
+        <a id="excel" asp-action="ExportAllExamsAsExcel" class="btn btn-outline-success mb-3">Excel</a>
+        <a id="csv" asp-action="ExportAllExamsAsCSV" class="btn btn-outline-danger mb-3">CSV</a>
+
+        <form class="float-end" style="display: inline;">
+            <div class="row">
+                <div class="col-8">
+                    <input asp-for="Input" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-success">Search</button>
+                </div>
+            </div>
+        </form>
     </div>
+
     <ul class="list-group col-md-12">
         <li class="list-group-item">
             <div class="row">
-                <table class="table-bordered table-hover table-striped col-md-12">
+                <table id="myTable" class="table table table-hover">
                     <thead>
                         <tr>
                             <th class="priority-1">Name</th>
@@ -46,34 +80,46 @@
                                 <td class="priority-4">@exam.StartDate.ToString("yyyy-MM-dd HH:mm tt")</td>
                                 <td class="priority-5">@exam.EndDate.ToString("yyyy-MM-dd HH:mm tt")</td>
                                 <td class="priority-6">
-                                    <a asp-controller="Exams" asp-action="Details" asp-route-id="@exam.Id" class=" btn btn-secondary" style="background:#137cdc">
+                                    <a asp-controller="Exams" asp-action="Details" asp-route-id="@exam.Id" class=" btn btn-secondary mr-1" style="background:#137cdc; display: inline;">
                                         <i class="fa fa-info"></i>
-                                        Details
                                     </a>
-                                    <a asp-controller="Exams" asp-action="Edit" asp-route-id="@exam.Id" class=" btn btn-warning">
+                                    <a asp-controller="Exams" asp-action="Edit" asp-route-id="@exam.Id" class=" btn btn-warning mr-1" style="display: inline;">
                                         <i class="fa fa-edit"></i>
-                                        Edit
                                     </a>
-                                    <form asp-controller="Exams" asp-action="Delete" asp-route-id="@exam.Id" method="post">
+                                    <form class="mr-1" asp-controller="Exams" asp-action="Delete" asp-route-id="@exam.Id" method="post" style="display: inline;">
                                         <button class=" btn btn-danger">
                                             <i class="fa fa-trash"></i>
-                                            Delete
                                         </button>
                                     </form>
-                                    <a asp-controller="Questions" asp-action="Create" asp-route-examId="@exam.Id" class=" btn btn-success">
+                                    <a asp-controller="Questions" asp-action="Create" asp-route-examId="@exam.Id" class=" btn btn-success mr-1" style="display: inline;">
                                         <i class="fa fa-plus"></i>
-                                        Add Question
                                     </a>
-                                    <a asp-controller="Questions" asp-action="AllByExam" asp-route-examId="@exam.Id" class=" btn btn-dark">
-                                        <i class="fa fa-info"></i>
-                                        View Questions
+                                    <a asp-controller="Questions" asp-action="AllByExam" asp-route-examId="@exam.Id" class=" btn btn-dark mr-1" style="display: inline;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill mb-2" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                                        </svg>
                                     </a>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                <partial name="_AllExamsPagingPartial" model="@this.Model" />
             </div>
         </li>
     </ul>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#pdf").click(function () {
+            var element = document.getElementById("myTable");
+
+            html2pdf().from(element).set({
+                margin: [30, 10, 5, 10],
+                pagebreak: { avoid: 'tr' },
+                jsPDF: { orientation: 'landscape', unit: 'pt', format: 'letter', compressPDF: false }
+            }).save()
+        });
+    </script>
+}

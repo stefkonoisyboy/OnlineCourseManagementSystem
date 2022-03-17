@@ -3,6 +3,23 @@
     this.ViewData["Title"] = "All Questions";
 }
 
+<head>
+    <style>
+
+        #pdf:hover {
+            color: aqua !important;
+        }
+
+        #excel:hover {
+            color: lawngreen !important;
+        }
+
+        #csv:hover {
+            color: red !important;
+        }
+    </style>
+</head>
+
 @if (this.TempData.ContainsKey("Message"))
 {
     <div class="alert alert-success alert-dismissible">
@@ -19,46 +36,83 @@
     </div>
 }
 
-<div class="row">
+<div class="row mb-2">
     <div class="alert alert-dark col-md-2" role="alert">
         @this.ViewData["Title"]
     </div>
     <div class="alert alert-danger col-md-10" role="alert">
     </div>
 </div>
-<div class="row">
-    <table class="table-bordered table-hover table-striped col-md-12 bg-light">
-        <thead>
-            <tr>
-                <th>Exam</th>
-                <th>Question</th>
-                <th>Options</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var question in this.Model.Questions)
-            {
+
+@if (this.Model.Questions.Count() == 0)
+{
+    <h1 class="text-center">No Questions</h1>
+}
+else
+{
+    <div class="mb-2 ml-2">
+        <button id="pdf" class="btn btn-outline-primary mb-3">PDF</button>
+        <a id="excel" asp-action="ExportAllExamsAsExcel" asp-route-examId="@this.Model.Questions.FirstOrDefault().ExamId" class="btn btn-outline-success mb-3">Excel</a>
+        <a id="csv" asp-action="ExportAllExamsAsCSV" asp-route-examId="@this.Model.Questions.FirstOrDefault().ExamId" class="btn btn-outline-danger mb-3">CSV</a>
+
+        <form asp-route-examId="@this.Model.Questions.FirstOrDefault().ExamId" class="float-end" style="display: inline;">
+            <div class="row">
+                <div class="col-8">
+                    <input asp-for="Input" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-success">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row ml-2">
+        <table id="myTable" class="table table table-hover">
+            <thead>
                 <tr>
-                    <td>@question.ExamName</td>
-                    <td>@Html.Raw(question.Text)</td>
-                    <td>
-                        <a asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id" class="btn btn-secondary" style="background:#137cdc">
-                            <i class="fa fa-info"></i>
-                            Details
-                        </a>
-                        <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-warning">
-                            <i class="fa fa-edit"></i>
-                            Edit
-                        </a>
-                        <form asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" asp-route-examId="@question.ExamId" method="post">
-                            <button class="btn btn-danger">
-                                <i class="fa fa-trash"></i>
-                                Delete
-                            </button>
-                        </form>
-                    </td>
+                    <th>Exam</th>
+                    <th>Question</th>
+                    <th>Options</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var question in this.Model.Questions)
+                {
+                    <tr>
+                        <td>@question.ExamName</td>
+                        <td>@Html.Raw(question.Text)</td>
+                        <td>
+                            <a asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id" class="btn btn-secondary mr-2" style="background:#137cdc; display: inline;">
+                                <i class="fa fa-info"></i>
+                            </a>
+                            <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-warning mr-2" style="display: inline;">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <form asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" asp-route-examId="@question.ExamId" method="post" style="display: inline;">
+                                <button class="btn btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <partial name="_AllQuestionsByExamPagingPartial" model="@this.Model" />
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#pdf").click(function () {
+            var element = document.getElementById("myTable");
+
+            html2pdf().from(element).set({
+                margin: [30, 10, 5, 10],
+                pagebreak: { avoid: 'tr' },
+                jsPDF: { orientation: 'landscape', unit: 'pt', format: 'letter', compressPDF: false }
+            }).save()
+        });
+    </script>
+}

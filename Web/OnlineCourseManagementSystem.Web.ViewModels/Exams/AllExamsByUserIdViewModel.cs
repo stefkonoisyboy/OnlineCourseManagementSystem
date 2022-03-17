@@ -15,15 +15,21 @@
 
         public string Name { get; set; }
 
-        public string Description { get; set; }
+        public string CourseDescription { get; set; }
 
         public int LectureId { get; set; }
+
+        public bool? IsCertificated { get; set; }
 
         public int CourseId { get; set; }
 
         public string CourseName { get; set; }
 
-        public string ExamType => this.LectureId == 0 ? "Certification Exam" : "Lecture Exam";
+        public string CourseSubjectName { get; set; }
+
+        public string CourseFileRemoteUrl { get; set; }
+
+        public string ExamType => this.IsCertificated.HasValue ? "Certification Exam" : "Lecture Exam";
 
         public IEnumerable<Question> Questions { get; set; }
 
