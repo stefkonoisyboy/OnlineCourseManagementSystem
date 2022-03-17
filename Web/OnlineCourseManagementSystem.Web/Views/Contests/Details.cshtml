@@ -46,7 +46,7 @@ else
                     <td>@submission.Points / @submission.ProblemPoints</td>
                     <td>
                         @submission.CreatedOn.ToString("dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture)
-                        <a class="btn btn-secondary">Details</a>
+                        <a asp-controller="ExecutedTests" asp-action="AllBySubmissionId" asp-route-submissionId="@submission.Id" class="btn btn-secondary">Details</a>
                     </td>
                 </tr>
             }

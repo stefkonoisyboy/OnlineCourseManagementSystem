@@ -19,6 +19,7 @@
     using OnlineCourseManagementSystem.Web.ViewModels.Courses;
     using OnlineCourseManagementSystem.Web.ViewModels.Exams;
     using OnlineCourseManagementSystem.Web.ViewModels.Questions;
+    using OnlineCourseManagementSystem.Web.ViewModels.Subjects;
     using OnlineCourseManagementSystem.Web.ViewModels.Users;
     using SmartBreadcrumbs.Attributes;
 
@@ -31,6 +32,7 @@
         private readonly IAnswersService answersService;
         private readonly IUsersService usersService;
         private readonly ILecturesService lecturesService;
+        private readonly ISubjectsService subjectsService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ExamsController(
@@ -41,6 +43,7 @@
             IAnswersService answersService,
             IUsersService usersService,
             ILecturesService lecturesService,
+            ISubjectsService subjectsService,
             UserManager<ApplicationUser> userManager)
         {
             this.examsService = examsService;
@@ -50,6 +53,7 @@
             this.answersService = answersService;
             this.usersService = usersService;
             this.lecturesService = lecturesService;
+            this.subjectsService = subjectsService;
             this.userManager = userManager;
         }
 
@@ -185,11 +189,17 @@
 
         [Authorize(Roles = GlobalConstants.LecturerRoleName)]
         [Breadcrumb("All Exams", FromAction = "Index", FromController = typeof(HomeController))]
-        public IActionResult All()
+        public IActionResult All(string input, int id = 1)
         {
+            const int ItemsPerPage = 5;
+
             AllExamsListViewModel viewModel = new AllExamsListViewModel
             {
-                Exams = this.examsService.GetAll<AllExamsViewModel>(),
+                ActiveCoursesCount = this.examsService.GetAllExamsCount(input),
+                PageNumber = id,
+                ItemsPerPage = ItemsPerPage,
+                Exams = this.examsService.GetAll<AllExamsViewModel>(id, input, ItemsPerPage),
+                Name = input,
             };
 
             return this.View(viewModel);
@@ -200,15 +210,38 @@
         public async Task<IActionResult> AllByUser(string input, int id = 1)
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            const int ItemsPerPage = 5;
+            const int ItemsPerPage = 6;
             AllExamsByUserIdListViewModel viewModel = new AllExamsByUserIdListViewModel
             {
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
                 ActiveCoursesCount = this.examsService.GetExamsCountByUserId(user.Id, input),
                 Exams = this.examsService.GetAllByUserId<AllExamsByUserIdViewModel>(id, user.Id, input, ItemsPerPage),
+                Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
                 Name = input,
             };
+
+            return this.View(viewModel);
+        }
+
+        [Authorize(Roles = GlobalConstants.StudentRoleName)]
+        [Breadcrumb("My Exams", FromAction = "Index", FromController = typeof(HomeController))]
+        public async Task<IActionResult> AllByUserAndSubjectId(int subjectId, string input, int id = 1)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            const int ItemsPerPage = 6;
+            AllExamsByUserIdListViewModel viewModel = new AllExamsByUserIdListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                ActiveCoursesCount = this.examsService.GetExamsCountByUserIdAndSubjectId(subjectId, user.Id, input),
+                Exams = this.examsService.GetAllByUserIdAndSubjectId<AllExamsByUserIdViewModel>(subjectId, id, user.Id, input, ItemsPerPage),
+                Subjects = this.subjectsService.GetAll<AllSubjectsViewModel>(),
+                Name = input,
+                SubjectId = subjectId,
+            };
+
+            this.ViewData["CurrentUserHeading"] = "Messages";
 
             return this.View(viewModel);
         }
@@ -230,7 +263,7 @@
 
             foreach (var item in viewModel.Exams)
             {
-                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId);
+                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId, 1, string.Empty);
                 item.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(item.ExamId, user.Id);
             }
 
@@ -272,7 +305,7 @@
                         StartDate = this.examsService.GetStartDateById(id),
                         Duration = this.examsService.GetDurationById(id),
                         Name = this.examsService.GetNameById(id),
-                        Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id),
+                        Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id, 1, string.Empty),
                         Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id),
                     };
 
@@ -296,7 +329,7 @@
             {
                 await this.examsService.TakeExamAsync(id, user.Id, formCollection);
                 ResultFromExamViewModel viewModel = this.examsService.GetByExamIdAndUserId<ResultFromExamViewModel>(user.Id, id);
-                viewModel.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id);
+                viewModel.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id, 1, string.Empty);
                 viewModel.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id);
                 int usersCountOnCertainExam = this.examsService.GetCountOfAllUsersWhoPassedCertainExam(id);
                 double usersCountWithLowerGradesOnCertainExam = this.examsService.GetCountOfUsersWithLowerGradesOnCertainExam(id, viewModel.Grade);
@@ -351,7 +384,7 @@
         {
             ApplicationUser user = await this.userManager.GetUserAsync(this.User);
             ResultFromExamViewModel viewModel = this.examsService.GetByExamIdAndUserId<ResultFromExamViewModel>(user.Id, id);
-            viewModel.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id);
+            viewModel.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(id, 1, string.Empty);
             viewModel.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(id, user.Id);
             int usersCountOnCertainExam = this.examsService.GetCountOfAllUsersWhoPassedCertainExam(id);
             double usersCountWithLowerGradesOnCertainExam = this.examsService.GetCountOfUsersWithLowerGradesOnCertainExam(id, viewModel.Grade);
@@ -408,7 +441,7 @@
 
             foreach (var exam in viewModel.Exams)
             {
-                sb.AppendLine($"{exam.Name},{exam.ExamType},{exam.CourseName},{exam.Description},{exam.PassMarks},{exam.TotalMarks}");
+                sb.AppendLine($"{exam.Name},{exam.ExamType},{exam.CourseName},{exam.CourseDescription},{exam.PassMarks},{exam.TotalMarks}");
             }
 
             return this.File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "MyExamsInfo.csv");
@@ -440,7 +473,7 @@
                     worksheet.Cell(currentRow, 1).Value = exam.Name;
                     worksheet.Cell(currentRow, 2).Value = exam.ExamType;
                     worksheet.Cell(currentRow, 3).Value = exam.CourseName;
-                    worksheet.Cell(currentRow, 4).Value = exam.Description;
+                    worksheet.Cell(currentRow, 4).Value = exam.CourseDescription;
                     worksheet.Cell(currentRow, 5).Value = exam.PassMarks;
                     worksheet.Cell(currentRow, 6).Value = exam.TotalMarks;
                 }
@@ -450,6 +483,64 @@
                     workbook.SaveAs(stream);
                     var content = stream.ToArray();
                     return this.File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MyExamsInfo.xlsx");
+                }
+            }
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> ExportAllExamsAsCSV()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Name,Course,Lecturer,StartDate,EndDate");
+
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllExamsListViewModel viewModel = new AllExamsListViewModel
+            {
+                Exams = this.examsService.GetAll<AllExamsViewModel>(1, string.Empty, int.MaxValue),
+            };
+
+            foreach (var exam in viewModel.Exams)
+            {
+                sb.AppendLine($"{exam.Name},{exam.CourseName},{exam.LecturerFirstName + ' ' + exam.LecturerLastName},{exam.StartDate},{exam.EndDate}");
+            }
+
+            return this.File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "AllExamsInfo.csv");
+        }
+
+        [Authorize(Roles = GlobalConstants.LecturerRoleName)]
+        public async Task<IActionResult> ExportAllExamsAsExcel()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+            AllExamsListViewModel viewModel = new AllExamsListViewModel
+            {
+                Exams = this.examsService.GetAll<AllExamsViewModel>(1, string.Empty, int.MaxValue),
+            };
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("MyExams");
+                int currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Name";
+                worksheet.Cell(currentRow, 2).Value = "Course";
+                worksheet.Cell(currentRow, 3).Value = "Lecturer";
+                worksheet.Cell(currentRow, 4).Value = "StartDate";
+                worksheet.Cell(currentRow, 5).Value = "EndDate";
+
+                foreach (var exam in viewModel.Exams)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = exam.Name;
+                    worksheet.Cell(currentRow, 2).Value = exam.CourseName;
+                    worksheet.Cell(currentRow, 3).Value = exam.LecturerFirstName + ' ' + exam.LecturerLastName;
+                    worksheet.Cell(currentRow, 4).Value = exam.StartDate;
+                    worksheet.Cell(currentRow, 5).Value = exam.EndDate;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    return this.File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AllExamsInfo.xlsx");
                 }
             }
         }
@@ -465,7 +556,7 @@
 
             foreach (var item in viewModel)
             {
-                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId);
+                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId, 1, string.Empty);
                 item.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(item.ExamId, user.Id);
             }
 
@@ -486,7 +577,7 @@
 
             foreach (var item in viewModel)
             {
-                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId);
+                item.Questions = this.questionsService.GetAllByExam<AllQuestionsByExamViewModel>(item.ExamId, 1, string.Empty);
                 item.Answers = this.answersService.GetAllByExamIdAndUserId<AllAnswersByExamIdAndUserIdViewModel>(item.ExamId, user.Id);
             }
 

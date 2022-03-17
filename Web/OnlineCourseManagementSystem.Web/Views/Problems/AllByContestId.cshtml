@@ -30,10 +30,13 @@
         <h2 class="mb-2">@this.Model.CurrentProblem.Name</h2>
         <div class="row mb-3">
             <p>
-                <a asp-controller="Tests" asp-action="Create" asp-route-problemId="@this.Model.CurrentProblem.Id" class="btn btn-primary mr-1">Add test</a>
-                <a asp-controller="Tests" asp-action="AllByProblemId" asp-route-problemId="@this.Model.CurrentProblem.Id" class="btn btn-info mr-1">All tests</a>
-                <a asp-action="Edit" asp-route-id="@this.Model.CurrentProblem.Id" class="btn btn-warning mr-1">Edit</a>
-                <a asp-action="Delete" asp-route-id="@this.Model.CurrentProblem.Id" class="btn btn-danger mr-1">Delete</a>
+                @if (this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                {
+                    <a asp-controller="Tests" asp-action="Create" asp-route-problemId="@this.Model.CurrentProblem.Id" class="btn btn-primary mr-1">Add test</a>
+                    <a asp-controller="Tests" asp-action="AllByProblemId" asp-route-problemId="@this.Model.CurrentProblem.Id" class="btn btn-info mr-1">All tests</a>
+                    <a asp-action="Edit" asp-route-id="@this.Model.CurrentProblem.Id" class="btn btn-warning mr-1">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@this.Model.CurrentProblem.Id" class="btn btn-danger mr-1">Delete</a>
+                }
             </p>
         </div>
 

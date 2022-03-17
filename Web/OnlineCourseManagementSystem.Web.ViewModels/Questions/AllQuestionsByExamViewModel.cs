@@ -19,7 +19,7 @@
         public string Text { get; set; }
 
         [IgnoreMap]
-        public string SanitizedText => this.Text.Replace("<p>", string.Empty).Replace("</p>", string.Empty);
+        public string SanitizedText => new HtmlSanitizer().Sanitize(this.Text);
 
         public int ExamId { get; set; }
 

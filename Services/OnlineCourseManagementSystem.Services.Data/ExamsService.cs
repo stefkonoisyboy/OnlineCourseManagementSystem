@@ -113,11 +113,23 @@
             await this.examsRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public IEnumerable<T> GetAll<T>(int page, string input, int itemsPerPage = 5)
         {
-            return this.examsRepository
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return this.examsRepository
                 .All()
                 .OrderByDescending(e => e.CreatedOn)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .To<T>()
+                .ToList();
+            }
+
+            return this.examsRepository
+                .All()
+                .Where(e => (e.Course.Name.ToLower().Contains(input.ToLower()) || e.Name.Contains(input.ToLower())))
+                .OrderByDescending(e => e.CreatedOn)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()
                 .ToList();
         }
@@ -186,6 +198,28 @@
                .ToList();
         }
 
+        public IEnumerable<T> GetAllByUserIdAndSubjectId<T>(int subjectId, int id, string userId, string searchItem, int itemsPerPage = 5)
+        {
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return this.examsRepository
+               .All()
+               .Where(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId) && e.Course.SubjectId == subjectId)
+               .OrderByDescending(e => e.StartDate)
+               .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+               .To<T>()
+               .ToList();
+            }
+
+            return this.examsRepository
+               .All()
+               .Where(e => e.Course.SubjectId == subjectId && e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId) && (e.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Description.ToLower().Contains(searchItem.ToLower())))
+               .OrderByDescending(e => e.StartDate)
+               .Skip((id - 1) * itemsPerPage).Take(itemsPerPage)
+               .To<T>()
+               .ToList();
+        }
+
         public IEnumerable<SelectListItem> GetAllExamsAsSelectListItemsByCreatorId(string creatorId)
         {
             return this.examsRepository
@@ -198,6 +232,21 @@
                     Value = e.Id.ToString(),
                 })
                 .ToList();
+        }
+
+        public int GetAllExamsCount(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return this.examsRepository
+                .All()
+                .Count();
+            }
+
+            return this.examsRepository
+                .All()
+                .Where(e => (e.Course.Name.ToLower().Contains(input.ToLower()) || e.Name.Contains(input.ToLower())))
+                .Count();
         }
 
         public T GetByExamIdAndUserId<T>(string userId, int examId)
@@ -299,6 +348,20 @@
             return this.examsRepository
                 .All()
                 .Count(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId) && (e.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Description.ToLower().Contains(searchItem.ToLower())));
+        }
+
+        public int GetExamsCountByUserIdAndSubjectId(int subjectId, string userId, string searchItem)
+        {
+            if (string.IsNullOrWhiteSpace(searchItem))
+            {
+                return this.examsRepository
+                .All()
+                .Count(e => e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId) && e.Course.SubjectId == subjectId);
+            }
+
+            return this.examsRepository
+                .All()
+                .Count(e => e.Course.SubjectId == subjectId && e.Course.Users.Any(u => u.UserId == userId) && !e.Users.Any(u => u.UserId == userId) && (e.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Name.ToLower().Contains(searchItem.ToLower()) || e.Course.Description.ToLower().Contains(searchItem.ToLower())));
         }
 
         public double GetGradeByUserIdAndCourseId(string userId, int courseId)
