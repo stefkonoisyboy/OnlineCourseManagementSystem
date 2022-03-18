@@ -221,6 +221,7 @@
         {
             return this.coursesRepository
                 .All()
+                .Where(c => c.SubjectId == subjectId)
                 .OrderByDescending(q => q.StartDate)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()

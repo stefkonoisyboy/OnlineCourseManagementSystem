@@ -4,8 +4,6 @@
     this.ViewData["Title"] = "Created Assignments";
 }
 
-<h1 class="text-center my-5">All Created Assignments In Course @this.Model.CreatedAssignments.First().CourseName</h1>
-
 @if (this.TempData.ContainsKey("Message"))
 {
     <div class="alert alert-success alert-dismissible">
@@ -17,6 +15,8 @@
 
 @if (this.Model.CreatedAssignments.Any())
 {
+    <h1 class="text-center my-5">All Created Assignments In Course @this.Model.CreatedAssignments.First().CourseName</h1>
+
     @foreach (var assignment in this.Model.CreatedAssignments)
     {
         <div class="my-1 mx-md-1 p-3 rounded-1 position-relative bg-white" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
