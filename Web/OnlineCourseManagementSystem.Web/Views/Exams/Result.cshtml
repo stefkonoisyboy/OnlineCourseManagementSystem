@@ -134,7 +134,7 @@
                 <div class="accordion-body">
                     @if (!this.Model.Answers.Any(a => a.QuestionId == this.Model.Questions.ToList()[i].Id))
                     {
-                        <strong style="font-size: 20px;">@this.Model.Questions.ToList()[i].SanitizedText</strong>
+                        <strong style="font-size: 20px;">@Html.Raw(this.Model.Questions.ToList()[i].Text)</strong>
                         @foreach (var choice in this.Model.Questions.ToList()[i].Choices)
                         {
                             if (choice.IsCorrect)
@@ -164,7 +164,7 @@
                     }
                     else if (this.Model.Answers.FirstOrDefault(a => a.QuestionId == this.Model.Questions.ToList()[i].Id).IsCorrect)
                     {
-                        <strong style="font-size: 20px;">@this.Model.Questions.ToList()[i].SanitizedText</strong>
+                        <strong style="font-size: 20px;">@Html.Raw(this.Model.Questions.ToList()[i].Text)</strong>
                         @foreach (var choice in this.Model.Questions.ToList()[i].Choices)
                         {
                             if (choice.Text == this.Model.Answers.FirstOrDefault(a => a.QuestionId == this.Model.Questions.ToList()[i].Id).Text)
