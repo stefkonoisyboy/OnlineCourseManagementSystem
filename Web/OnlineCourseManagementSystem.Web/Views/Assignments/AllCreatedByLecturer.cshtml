@@ -19,7 +19,7 @@
 {
     @foreach (var assignment in this.Model.CreatedAssignments)
     {
-        <div class="my-1 mx-md-1 p-3 rounded-1 position-relative" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
+        <div class="my-1 mx-md-1 p-3 rounded-1 position-relative bg-white" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;">
             <div class="d-flex justify-content-end align-items-center my-1">
                 <a style="color:black" asp-controller="Assignments" asp-action="Edit" asp-route-id="@assignment.AssignmentId">
                     <svg class="mx-1" onclick="event.stopPropagation();" style="cursor:pointer;" xmlns="http://www.w3.org/2000/svg" height="25px" width="25px" viewBox="0 0 20 20" fill="currentColor">
