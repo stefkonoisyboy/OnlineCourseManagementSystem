@@ -17,11 +17,16 @@
     {
         private readonly IDeletableEntityRepository<ModuleEntity> modulesRepository;
         private readonly IDeletableEntityRepository<TrainingModule> trainingModulesRepository;
+        private readonly IDeletableEntityRepository<Subject> subjectsRepository;
 
-        public ModulesService(IDeletableEntityRepository<ModuleEntity> modulesRepository, IDeletableEntityRepository<TrainingModule> trainingModulesRepository)
+        public ModulesService(
+            IDeletableEntityRepository<ModuleEntity> modulesRepository,
+            IDeletableEntityRepository<TrainingModule> trainingModulesRepository,
+            IDeletableEntityRepository<Subject> subjectsRepository)
         {
             this.modulesRepository = modulesRepository;
             this.trainingModulesRepository = trainingModulesRepository;
+            this.subjectsRepository = subjectsRepository;
         }
 
         public async Task Create(CreateModuleInputModel inputModel)
@@ -32,13 +37,15 @@
                 Description = new HtmlSanitizer().Sanitize(inputModel.Description),
             };
 
-            foreach (var subjectId in inputModel.SubjectIds)
-            {
-                module.Subjects.Add(new Subject { Id = subjectId });
-            }
-
             await this.modulesRepository.AddAsync(module);
             await this.modulesRepository.SaveChangesAsync();
+
+            foreach (var subjectId in inputModel.SubjectIds)
+            {
+                Subject subject = this.subjectsRepository.All().FirstOrDefault(s => s.Id == subjectId);
+                subject.ModuleId = module.Id;
+                await this.subjectsRepository.SaveChangesAsync();
+            }
         }
 
         public IEnumerable<SelectListItem> GetAllAsSelectListItems()

@@ -67,6 +67,8 @@
             AllTrainingsViewModel viewModel = new AllTrainingsViewModel()
             {
                 Trainings = this.trainingsService.GetAll<TrainingViewModel>(),
+                Module = this.modulesService.GetById<ModuleViewModel>(15),
+                Fundamentals = this.modulesService.GetById<ModuleViewModel>(16),
             };
 
             foreach (var training in viewModel.Trainings)

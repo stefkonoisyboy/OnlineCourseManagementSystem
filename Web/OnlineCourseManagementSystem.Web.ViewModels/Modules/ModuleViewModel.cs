@@ -9,7 +9,7 @@
     using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.Subjects;
 
-    public class ModuleViewModel : IMapFrom<TrainingModule>, IHaveCustomMappings
+    public class ModuleViewModel : IMapFrom<TrainingModule>, IMapFrom<ModuleEntity>, IHaveCustomMappings
     {
         public int Id { get; set; }
 

@@ -12,6 +12,6 @@
 
         public IEnumerable<AllCoursesBySubjectViewModel> Courses { get; set; }
 
-        public override int ItemsPerPage => 3;
+        public override int ItemsPerPage => 4;
     }
 }

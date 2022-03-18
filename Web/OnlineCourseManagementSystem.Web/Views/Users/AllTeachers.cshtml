@@ -23,8 +23,8 @@
 </style>
 
 <body class="bg-light">
-    <h3 class="text-center mr-5" style="color: #234465;">@this.ViewData["Title"]</h3>
-    <div class="row">
+    <h3 class="text-center" style="color: #234465;">@this.ViewData["Title"]</h3>
+    <div class="row ml-5">
         @foreach (var lecturer in this.Model)
         {
             <div class="modal fade" id="staticBackdrop-@lecturerIndex" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@lecturerIndex" aria-hidden="true">
