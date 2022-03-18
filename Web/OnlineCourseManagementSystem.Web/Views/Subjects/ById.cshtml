@@ -55,7 +55,7 @@
         <div class="row">
             @foreach (var course in this.Model.CurrentYearCourses)
             {
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="col-item" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; min-height: 450px;">
                         <span class="ribbon_course"></span>
                         <div class="photo">
@@ -201,7 +201,7 @@
                                     </a>
                                 </p>
                                 <p class="btn-details">
-                                    <a asp-action="ById" asp-route-id="@course.Id">
+                                    <a asp-controller="Courses" asp-action="ById" asp-route-id="@course.Id">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
                                         </svg>
@@ -218,7 +218,7 @@
         <div class="row">
             @foreach (var course in this.Model.CoursesBySubjectListViewModel.Courses)
             {
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="col-item" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; min-height: 450px;">
                         <span class="ribbon_course"></span>
                         <div class="photo">

@@ -25,7 +25,7 @@
         </svg>
     </div>
 
-    <div class="row">
+    <div class="row ml-5">
         @foreach (var album in this.Model.Albums)
         {
             <a class="d-flex col-12 col-md-3 mx-2 justify-content-center align-items-center card card-body p-5" style="color: black;" asp-controller="Files" asp-action="AllImages" asp-route-id="@album.AlbumId">

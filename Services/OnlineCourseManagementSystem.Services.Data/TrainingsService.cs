@@ -17,11 +17,19 @@
     public class TrainingsService : ITrainingsService
     {
         private readonly IDeletableEntityRepository<Training> trainingRepository;
+        private readonly IDeletableEntityRepository<ModuleEntity> modulesRepository;
+        private readonly IDeletableEntityRepository<TrainingModule> trainingModulesRepository;
         private readonly CloudinaryService cloudinaryService;
 
-        public TrainingsService(IDeletableEntityRepository<Training> trainingRepository, Cloudinary cloudinaryUtility)
+        public TrainingsService(
+            IDeletableEntityRepository<Training> trainingRepository,
+            IDeletableEntityRepository<ModuleEntity> modulesRepository,
+            IDeletableEntityRepository<TrainingModule> trainingModulesRepository,
+            Cloudinary cloudinaryUtility)
         {
             this.trainingRepository = trainingRepository;
+            this.modulesRepository = modulesRepository;
+            this.trainingModulesRepository = trainingModulesRepository;
             this.cloudinaryService = new CloudinaryService(cloudinaryUtility);
         }
 
@@ -33,6 +41,8 @@
                 Description = new HtmlSanitizer().Sanitize(inputModel.Description),
                 TrainingType = (TrainingType)Enum.Parse(typeof(TrainingType), inputModel.TrainingType, true),
             };
+
+            await this.trainingRepository.AddAsync(training);
 
             if (string.IsNullOrEmpty(inputModel.Link) && inputModel.Image == null)
             {
@@ -51,13 +61,19 @@
                 training.ImageRemoteUrl = inputModel.Link;
             }
 
+            await this.trainingRepository.SaveChangesAsync();
+
             foreach (var moduleId in inputModel.ModuleIds)
             {
-                training.Modules.Add(new TrainingModule() { ModuleId = moduleId });
-            }
+                TrainingModule trainingModule = new TrainingModule
+                {
+                    TrainingId = training.Id,
+                    ModuleId = moduleId,
+                };
 
-            await this.trainingRepository.AddAsync(training);
-            await this.trainingRepository.SaveChangesAsync();
+                await this.trainingModulesRepository.AddAsync(trainingModule);
+                await this.trainingModulesRepository.SaveChangesAsync();
+            }
         }
 
         public IEnumerable<T> GetAll<T>()

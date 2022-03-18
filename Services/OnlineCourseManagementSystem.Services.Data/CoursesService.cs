@@ -199,7 +199,6 @@
             }
 
             query = query
-                .Where(q => q.StartDate < DateTime.UtcNow)
                 .OrderByDescending(q => q.StartDate)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage);
 
@@ -222,7 +221,6 @@
         {
             return this.coursesRepository
                 .All()
-                .Where(q => q.StartDate < DateTime.UtcNow)
                 .OrderByDescending(q => q.StartDate)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                 .To<T>()
@@ -233,7 +231,7 @@
         {
             return this.coursesRepository
                 .All()
-                .Count(c => c.StartDate <= DateTime.UtcNow && c.SubjectId == subjectId);
+                .Count(c => c.SubjectId == subjectId);
         }
 
         public int GetAllActiveCoursesCount(string name)
@@ -242,12 +240,12 @@
             {
                 return this.coursesRepository
                .All()
-               .Count(c => c.StartDate <= DateTime.UtcNow && (c.Name.Contains(name) || c.Tags.Any(t => t.Tag.Name.Contains(name))));
+               .Count(c => (c.Name.Contains(name) || c.Tags.Any(t => t.Tag.Name.Contains(name))));
             }
 
             return this.coursesRepository
                 .All()
-                .Count(c => c.StartDate <= DateTime.UtcNow);
+                .Count();
         }
 
         public IEnumerable<SelectListItem> GetAllAsSelectListItems()

@@ -62,7 +62,7 @@ a#logo {
 }
 
 .divider_top {
-    background: url(https://www.ansonika.com/learn/img/top_divider.png) center bottom repeat-x;
+    background: url(/Images/top_divider.png) center bottom repeat-x;
     width: 100%;
     height: 37px;
     position: absolute;
@@ -76,7 +76,7 @@ a#logo {
     position: relative;
     text-shadow: 0 1px 1px rgba(0,0,0,.4);
     width: 100%;
-    background: url(https://www.ansonika.com/learn/boxed/img/bg_sub-header.png) #0cbdaa
+    background: url(/Images/bg_sub-header.png) #0cbdaa
 }
 
 #sub-header_pattern_1 {
@@ -94,7 +94,7 @@ a#logo {
     position: relative;
     text-shadow: 0 1px 1px rgba(0,0,0,.4);
     width: 100%;
-    background: url(https://www.ansonika.com/learn/img/pattern_2.png) center top #1abc9c
+    background: url(/Images/pattern_2.png) center top #1abc9c
 }
 
 #main_content {
@@ -753,7 +753,7 @@ button[disabled].backward, button[disabled].forward {
 }
 
 #main-features {
-    background: url(https://www.ansonika.com/learn/boxed/img/bg_sub-header_2.png) #1c1c1c;
+    background: url(/Images/bg_sub-header_2.png) #1c1c1c;
     position: relative;
     color: #8c8c8c;
     font-weight: 600;
@@ -810,7 +810,7 @@ button[disabled].backward, button[disabled].forward {
 }
 
 #testimonials {
-    background: url(https://www.ansonika.com/learn/boxed/img/users_bg.jpg) #1abc9c;
+    background: url(/Images/users_bg.jpg) #1abc9c;
     padding: 60px 0;
     color: #fff
 }
@@ -1152,7 +1152,7 @@ button[disabled].backward, button[disabled].forward {
     }
 
 #subscribe {
-    background: url(../img/arrow_hand_1.png) center bottom no-repeat;
+    background: url(/Images/arrow_hand_1.png) center bottom no-repeat;
     padding-bottom: 70px
 }
 
@@ -2580,7 +2580,7 @@ nav.sticky {
 }*/
 
 #join {
-    background: url(https://www.ansonika.com/learn/img/pattern_2.png);
+    background: url(/Images/pattern_2.png);
     padding: 60px 0;
     -moz-box-shadow: inset 0 0 10px #000;
     -webkit-box-shadow: inset 0 0 10px #000;
