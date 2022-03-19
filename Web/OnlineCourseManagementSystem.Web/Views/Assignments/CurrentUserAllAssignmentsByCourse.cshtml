@@ -9,7 +9,7 @@
 <div class="d-flex flex-column mb-5">
     @foreach (var assignment in this.Model.UnfinishedAssignments)
     {
-        <a class="my-1 d-flex rounded-3" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+        <a class="my-1 d-flex rounded-3 bg-white" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
             <div class="flex-grow-1 m-3">
                 <h6>@assignment.Title</h6>
                 <h6 class="text-black-50"> @assignment.CourseName</h6>
@@ -70,7 +70,7 @@
     <div class="d-flex flex-column my-1">
         @foreach (var assignment in this.Model.FinishedAssignments)
         {
-            <a class="d-flex rounded-3 my-1" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
+            <a class="d-flex rounded-3 my-1 bg-white" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;" asp-controller="Assignments" asp-action="GetInfo" asp-route-id="@assignment.AssignmentId">
                 <div class="flex-grow-1 m-3">
                     <h6>
                         @assignment.Title
