@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineCourseManagementSystem.Data;
 
 namespace OnlineCourseManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220413183706_RoomEntityInitialized")]
+    partial class RoomEntityInitialized
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1927,9 +1929,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
@@ -1959,8 +1958,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
-
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Rooms");
@@ -1976,9 +1973,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsCreator")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3279,15 +3273,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.Room", b =>
-                {
-                    b.HasOne("OnlineCourseManagementSystem.Data.Models.ApplicationUser", "Creator")
-                        .WithMany("CreatedRooms")
-                        .HasForeignKey("CreatorId");
-
-                    b.Navigation("Creator");
-                });
-
             modelBuilder.Entity("OnlineCourseManagementSystem.Data.Models.RoomParticipant", b =>
                 {
                     b.HasOne("OnlineCourseManagementSystem.Data.Models.Room", "Room")
@@ -3505,8 +3490,6 @@ namespace OnlineCourseManagementSystem.Data.Migrations
                     b.Navigation("CreatedChannels");
 
                     b.Navigation("CreatedChats");
-
-                    b.Navigation("CreatedRooms");
 
                     b.Navigation("Dislikes");
 

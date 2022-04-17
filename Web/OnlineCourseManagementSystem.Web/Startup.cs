@@ -130,7 +130,7 @@
             services.AddTransient<IAbsencesService, AbsencesService>(); // NOT
             services.AddTransient<IPostsService, PostsService>(); // 100%
             services.AddTransient<ICommentsService, CommentsService>(); // 100%
-            services.AddTransient<IEventsService, EventsService>();// All GET methods and comments done
+            services.AddTransient<IEventsService, EventsService>(); // All GET methods and comments done
             services.AddTransient<IExamsService, ExamsService>(); // All GET methods done
             services.AddTransient<IQuestionsService, QuestionsService>(); // All GET methods done
             services.AddTransient<IChoicesService, ChoicesService>(); // 100%
@@ -156,6 +156,7 @@
             services.AddTransient<IShedulesServices, ShedulesService>();
             services.AddTransient<ITrainingsService, TrainingsService>();
             services.AddTransient<IModulesService, ModulesService>();
+            services.AddTransient<IRoomsService, RoomsService>();
 
             services.AddTransient<IMailsService, MailsService>();
             services.AddSingleton<ITwilioService, TwilioService>();

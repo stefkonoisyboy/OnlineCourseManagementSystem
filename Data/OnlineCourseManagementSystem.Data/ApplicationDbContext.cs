@@ -129,6 +129,10 @@
 
         public virtual DbSet<TrainingModule> TrainingModules { get; set; }
 
+        public virtual DbSet<Room> Rooms { get; set; }
+
+        public virtual DbSet<RoomParticipant> RoomParticipants { get; set; }
+
         public virtual DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);

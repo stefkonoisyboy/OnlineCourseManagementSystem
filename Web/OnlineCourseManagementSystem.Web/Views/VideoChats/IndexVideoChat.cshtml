@@ -25,10 +25,10 @@
     }
 </style>
 <body>
-    <component type="typeof(VideoConference)" render-mode="ServerPrerendered" param-UserIdentityName="@this.User.Identity.Name"/>
+    <component type="typeof(VideoConference)" render-mode="ServerPrerendered" param-UserIdentityName="@this.User.Identity.Name" param-UserId="@user.Id" param-IsLecturerOrAdmin="@this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.LecturerRoleName)" />
 </body>
 
 
-<script>
-  
-</script>
+
+
+

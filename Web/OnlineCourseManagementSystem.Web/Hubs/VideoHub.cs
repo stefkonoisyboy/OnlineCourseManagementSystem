@@ -14,5 +14,25 @@
         {
             await this.Clients.All.SendAsync(HubEndpoints.RoomsUpdated, room);
         }
+
+        public async Task AddParticipant(string name, string participantId)
+        {
+            await this.Clients.All.SendAsync("AddParticipant", name, participantId);
+        }
+
+        public async Task AllowDisplayVideo(string roomId, string participantId)
+        {
+            await this.Clients.All.SendAsync("AllowDisplayVideo", roomId, participantId);
+        }
+
+        public async Task AllowUnmuteMic(string roomId, string participantId)
+        {
+            await this.Clients.All.SendAsync("AllowUnmuteMic", roomId, participantId);
+        }
+
+        public async Task AllowShareScreen(string roomId,string participantId)
+        {
+            await this.Clients.All.SendAsync("AllowShareScreen", roomId, participantId);
+        }
     }
 }

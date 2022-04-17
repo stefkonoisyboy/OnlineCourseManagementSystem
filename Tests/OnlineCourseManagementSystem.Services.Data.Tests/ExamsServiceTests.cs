@@ -413,7 +413,7 @@
             IEnumerable<DateTime> expectedEndDates = testData.OrderByDescending(x => x.CreatedOn).Select(x => x.EndDate).ToList();
 
             // Act
-            IEnumerable<AllExamsViewModel> actual = examsService.GetAll<AllExamsViewModel>();
+            IEnumerable<AllExamsViewModel> actual = examsService.GetAll<AllExamsViewModel>(1, "test");
 
             // Assert
             Assert.Equal(expectedIds, actual.Select(x => x.Id));
