@@ -32,7 +32,7 @@
             int expectedCount = testData.Count(x => x.ExamId == examId);
 
             // Act
-            int actual = questionsService.GetCountByExamId(examId);
+            int actual = questionsService.GetCountByExamId(examId, "test");
 
             // Assert
             Assert.Equal(expectedCount, actual);
@@ -71,7 +71,7 @@
             IEnumerable<string> expectedTexts = testData.Where(x => x.ExamId == examId).OrderBy(x => x.Id).Select(x => x.Text).ToList();
 
             // Act
-            IEnumerable<AllQuestionsByExamViewModel> actual = questionsService.GetAllByExam<AllQuestionsByExamViewModel>(examId);
+            IEnumerable<AllQuestionsByExamViewModel> actual = questionsService.GetAllByExam<AllQuestionsByExamViewModel>(examId, 1, "test");
 
             // Assert
             Assert.Equal(expectedExamNames, actual.Select(x => x.ExamName));

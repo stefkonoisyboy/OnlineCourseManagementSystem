@@ -22,7 +22,7 @@
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly CloudinaryService cloudinaryService;
 
-        public ChatsService(IDeletableEntityRepository<Chat> chatRepository, IDeletableEntityRepository<ChatUser> chatUserRepository,IDeletableEntityRepository<ApplicationUser> userRepository, Cloudinary cloudinaryUtility)
+        public ChatsService(IDeletableEntityRepository<Chat> chatRepository, IDeletableEntityRepository<ChatUser> chatUserRepository, IDeletableEntityRepository<ApplicationUser> userRepository, Cloudinary cloudinaryUtility)
         {
             this.chatRepository = chatRepository;
             this.chatUserRepository = chatUserRepository;

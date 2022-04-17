@@ -5,6 +5,7 @@
 @using Microsoft.Extensions.DependencyInjection
 
 @inject ITwilioService TwilioService
+@inject IRoomsService RoomsService
 @inject IJSRuntime JavaScript
 @inject NavigationManager NavigationManager
 
@@ -158,12 +159,12 @@
 
     .bar-options svg:hover {
         cursor:pointer;
-        transform:scale(1.03);
+        transform:scale(1.10);
         transition: transform 350ms ease-in-out;
     }
 
     .video-streams{
-        height: 45vh;
+        height: 50vh;
         overflow-x:hidden;
         overflow-y:scroll;
     }
@@ -182,15 +183,33 @@
             border-radius: 10px;
             width: 5px;
         }
+
+    .participant-right {
+        background: #eef6fb;
+        color:black !important;
+        padding: 10px;
+        border-radius: 20px;
+        margin-right: 5px;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .bar-options button {
+        color: #85d3c7;
+    }
+    .dots:after{
+        content: '\2807';
+        font-size: 70px;
+    }
 </style>
 
 <div class="row mt-5">
-    @if (!string.IsNullOrEmpty(this.activeRoom))
+    @if (this.activeRoom != null)
     {
         <div class="content-h py-3">
             <div class="mx-4">
                 <h5>
-                    @this.activeRoom
+                    @this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).Name
                 </h5>
             </div>
             <div class="rounded-pill p-2" style="background-color:#d0d3e3;">
@@ -198,6 +217,17 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                 </svg>
                 <span class="badge" style="color:#5c679f !important;">Teams</span>
+            </div>
+            <div class="m-5 d-flex">
+                <span class="badge participant-right">
+                    Display Camera @(this.rooms.FirstOrDefault(r => r.Id == this.activeRoom.Id).IsDisplayCameraAllowed ? null : "Not") Allowed
+                </span>
+                <span class="badge participant-right">
+                    Unmute Mic @(this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).IsUnmutedMicAllowed ? null : "Not") Allowed
+                </span>
+                <span class="badge participant-right">
+                    Share Screen @(this.rooms.FirstOrDefault(r => r.Id == this.activeRoom.Id).IsShareScreenAllowed ? null : "Not") Allowed
+                </span>
             </div>
         </div>
 
@@ -208,74 +238,93 @@
                 </svg>
             </div>
             <h6 class="ml-2">
-                Participants: <span class="badge p-2" style="color:#edfaf8; background: #85d3c7">@this.rooms.FirstOrDefault(r => r.Name == this.activeRoom).ParticipantCount</span>
+                Participants: <span class="badge p-2" style="color:#edfaf8; background: #85d3c7">@this.rooms.FirstOrDefault(r => r.Id == (this.activeRoom.Id!)).ParticipantCount</span>
             </h6>
         </div>
     }
 
-    <div class="rounded col-md-9">
+    <div class="rounded col-md-8">
         <div class="video-streams mb-2">
             <div id="participants" class="participants-grid">
                 <div class="embed-responsive embed-responsive-16by9 position-relative">
                     <div id="camera" class="embed-responsive-item"></div>
-                    <div class="bar-options text-center @(string.IsNullOrEmpty(this.activeRoom) ? null : "row")">
-                        @if (!string.IsNullOrEmpty(this.activeRoom))
+                    <div class="bar-options text-center @(this.activeRoom == null ? null : "row")">
+                        @if (this.activeRoom != null)
                         {
-                            if (this.IsVideoMuted)
+                            if (this.activeParticipant != null)
                             {
+                                if (this.IsVideoMuted)
+                                {
+                                    <div class="py-1 col-md-4">
+                                        <button @onclick="this.UnMuteVideo" disabled="@(!(this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).CreatorId == this.UserId
+                                                                                   || this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).Participants.FirstOrDefault(p=>p.Id == this.activeParticipant.Id).IsGivenRightToDisplayCamera
+                                                                                   || this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).IsDisplayCameraAllowed))" class="bg-transparent border-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="py-1 col-md-4">
+                                        <button @onclick="this.MuteVideo" class="bg-transparent borde-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-camera-video-off-fill" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A1 1 0 0 0 16 11.731V4.269a1 1 0 0 0-1.406-.913l-3.111 1.382A2 2 0 0 0 9.5 3H4.272l6.69 9.365zm-10.114-9A2.001 2.001 0 0 0 0 5v6a2 2 0 0 0 2 2h5.728L.847 3.366zm9.746 11.925-10-14 .814-.58 10 14-.814.58z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                }
+
+                                if (this.IsAudioMuted)
+                                {
+                                    <div class="py-1 col-md-4">
+                                        <button @onclick="this.UnMuteAudio" disabled="@(!(this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).IsUnmutedMicAllowed
+                                                                                    || this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).Participants.FirstOrDefault(p=>p.Id == this.activeParticipant.Id).IsGivenRightToUnmuteMic
+                                                                                    ||this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).CreatorId == this.UserId))" class="bg-transparent border-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+                                                <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+                                                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="py-1 col-md-4">
+                                        <button @onclick="this.MuteAudio" class="bg-transparent border-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
+                                                <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3z" />
+                                                <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607zm-7.84-9.253 12 12 .708-.708-12-12-.708.708z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                }
+
                                 <div class="py-1 col-md-4">
-                                    <svg @onclick="this.UnMuteVideo" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
-                                    </svg>
+                                    <button @onclick="this.ShareScreen" disabled="@(!(this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).IsShareScreenAllowed
+                                                                                || this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).Participants.FirstOrDefault(p=>p.Id == this.activeParticipant.Id).IsGivenRightToShareScreen
+                                                                                || this.rooms.FirstOrDefault(r=>r.Id == this.activeRoom.Id).CreatorId == this.UserId))" class="bg-transparent border-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
+                                            <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
+                                        </svg>
+                                    </button>
                                 </div>
                             }
-                            else
-                            {
-                                <div class="py-1 col-md-4">
-
-                                    <svg @onclick="this.MuteVideo" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-camera-video-off-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A1 1 0 0 0 16 11.731V4.269a1 1 0 0 0-1.406-.913l-3.111 1.382A2 2 0 0 0 9.5 3H4.272l6.69 9.365zm-10.114-9A2.001 2.001 0 0 0 0 5v6a2 2 0 0 0 2 2h5.728L.847 3.366zm9.746 11.925-10-14 .814-.58 10 14-.814.58z" />
-                                    </svg>
-                                </div>
-
-                            }
-
-                            if (this.IsAudioMuted)
-                            {
-                                <div class="py-1 col-md-4">
-
-                                    <svg @onclick="this.UnMuteAudio" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
-                                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
-                                        <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-                                    </svg>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="py-1 col-md-4">
-                                    <svg @onclick="this.MuteAudio" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
-                                        <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3z" />
-                                        <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607zm-7.84-9.253 12 12 .708-.708-12-12-.708.708z" />
-                                    </svg>
-                                </div>
-                            }
-
-                            <div class="py-1 col-md-4">
-                                <svg @onclick="this.ShareScreen" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
-                                    <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-                                </svg>
-                            </div>
                             <div class="text-center col-md-12 my-1">
-                                <svg @onclick="@(async _ => await this.OnLeaveRoom())" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-telephone-x-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zm9.261 1.135a.5.5 0 0 1 .708 0L13 2.793l1.146-1.147a.5.5 0 0 1 .708.708L13.707 3.5l1.147 1.146a.5.5 0 0 1-.708.708L13 4.207l-1.146 1.147a.5.5 0 0 1-.708-.708L12.293 3.5l-1.147-1.146a.5.5 0 0 1 0-.708z" />
-                                </svg>
+                                <button @onclick="@(async _ => await this.OnLeaveRoom())" class="bg-transparent border-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-telephone-x-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zm9.261 1.135a.5.5 0 0 1 .708 0L13 2.793l1.146-1.147a.5.5 0 0 1 .708.708L13.707 3.5l1.147 1.146a.5.5 0 0 1-.708.708L13 4.207l-1.146 1.147a.5.5 0 0 1-.708-.708L12.293 3.5l-1.147-1.146a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </button>
                             </div>
                         }
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="rounded col-lg-12">
                 <div class="embed-responsive embed-responsive-16by9 position-relative">
@@ -287,16 +336,115 @@
         </div>
     </div>
     <div class="rounded col-md-3">
+        @if(this.activeRoom != null)
+        {
+            <div class="d-block" style="background: #f5f5f5;">
+
+                @{
+                    int c = 1;
+                    string participantToken = "#participantDropdown" + c;
+                }
+                @foreach (var participant in this.rooms.FirstOrDefault(r => r.Id == this.activeRoom.Id).Participants)
+                {
+                    <div class="d-flex">
+                        <div class="flex-grow-1">
+                            <h6>@participant.Name</h6>
+                        </div>
+
+                        @if (this.UserId == this.activeRoom.CreatorId)
+                        {
+                            <div class="dropdown">
+                                <button style="background: #eef6fb;" class="btn dropdown-toggle" type="button" id="@participantToken" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="@participantToken.Substring(1,participantToken.Length - 1)">
+                                    <li>
+                                        @if (participant.IsGivenRightToDisplayCamera)
+                                        {
+                                            <span class="badge">Display Camera Allowed</span>
+                                            <button class="btn btn-secondary dropdown-item"
+                                                    @onclick="(async () => await this.DontGiveRightToDisplayCamera(this.activeRoom.Id, participant.Id))">
+                                                Don't Give Right Display Camera
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge">Display Camera Not Allowed</span>
+                                            <button class="btn btn-secondary dropdown-item"
+                                                    @onclick="(async () => await this.GiveRightToDisplayCamera(this.activeRoom.Id, participant.Id))">
+                                                Give Right Display Camera
+                                            </button>
+                                        }
+
+                                    </li>
+                                    <li>
+                                        @if (participant.IsGivenRightToUnmuteMic)
+                                        {
+                                            <span class="badge text-black-50">Unmute Audio Allowed</span>
+                                            <button class="btn btn-secondary dropdown-item"
+                                                    @onclick="(async () => await this.DontGiveRightToUnMuteMic(this.activeRoom.Id, participant.Id))">
+                                                Don't Give Right Unmute Audio
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-balck-50">Unmute Audio Not Allowed</span>
+                                            <button class="btn btn-secondary dropdown-item"
+                                                    @onclick="(async () => await this.GiveRightToUnMuteMic(this.activeRoom.Id, participant.Id))">
+                                                Give Right Unmute Audio
+                                            </button>
+                                        }
+
+                                    </li>
+                                    <li>
+                                        @if (participant.IsGivenRightToShareScreen)
+                                        {
+                                            <span class="badge text-balck-50">Share Screen Allowed</span>
+                                            <button class="btn btn-secondary dropdown-item"
+                                                    @onclick="(async () => await this.DontGiveRightToShareScreen(this.activeRoom.Id, participant.Id))">
+                                                Don't Give Right ShareScreen
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge">Share Screen Not Allowed</span>
+                                            <button class="btn btn-secondary dropdown-item"
+                                                    @onclick="(async () => await this.GiveRightToShareScreen(this.activeRoom.Id, participant.Id))">
+                                                Give Right ShareScreen
+                                            </button>
+                                        }
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+
+                    </div>
+                        participantToken = "participantDropdown" + (c++);
+                }
+            </div>
+         }
+         else
+         {
+            <div class="d-flex justify-content-center" style="background: #f5f5f5;">
+                You are not in room or there are no participants
+            </div>
+         }
+    
         <div class="accordion accordion-flush mb-2" id="accordionFlushExample">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                         Options
                     </button>
+
                 </h2>
+                
+                    
                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                        
+
                         <div class="m-2">
                             <Cameras CameraChanged="OnCameraChanged" />
                         </div>
@@ -311,13 +459,16 @@
                 </h2>
             </div>
             <div class="card-body">
-                <div class="d-flex">
-                    <button type="button" class="btn twilio-btn-red" data-bs-toggle="modal" data-bs-target="#createRoomModal">
-                        Create Room
-                    </button>
-                </div>
+                @if (this.IsLecturerOrAdmin)
+                {
+                    <div class="d-flex">
+                        <button type="button" class="btn twilio-btn-red" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                            Create Room
+                        </button>
+                    </div>
+                }
                 <div class="d-flex my-2">
-                    @if (!(this.rooms?.Any() ?? false))
+                    @if (!this.rooms.Any())
                     {
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <p class="lead mb-0">
@@ -327,16 +478,15 @@
                     }
                     else
                     {
-                        @foreach (var room in this.rooms!)
+                        @foreach (var room in this.rooms)
                         {
                             <button class="list-group-item list-group-item-action d-flex justify-content-between align-items-center
-                                @(room.Name == activeRoom ? "active" : null)" @onclick="@(async _ => await TryJoinRoom(room.Name))">
+                                   @(room.Id == this.activeRoom?.Id ? "active" : null)"
+                                    @onclick="@(async _ => await TryJoinRoom(room.Name, room.Id))">
                                 @room.Name
                                 <span class="badge badge-primary badge-pill">
                                     @($"{room.ParticipantCount} / {room.MaxParticipants}")
                                 </span>
-
-                                @room.Id
                             </button>
                         }
                     }
@@ -358,6 +508,37 @@
                 <input type="text" class="form-control form-control-lg"
                        placeholder="Room name" aria-label="Room Name" disabled="@(this.activeCamera is null)"
                        @bind="this.roomName" @onkeydown="@(async args => await TryAddRoom(args))" />
+                <h6 class="my-3">
+                    Advanced options
+                </h6>
+                Allowed rights:
+                @if (this.isDisplayCameraAllowed)
+                {
+                    <p>Display Camera Allowed</p>
+                }
+                @if (this.isUnMuteMicrophoneAllowed)
+                {
+                    <p>UnMute Microphone Allowed</p>
+                }
+                @if (this.isShareScreenAllowed)
+                {
+                    <p>Share Screen Allowed</p>
+                }
+                <label>Manage rights to participants:</label>
+                <div class="ml-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" @bind="this.isDisplayCameraAllowed">
+                        <label class="form-check-label">Display Camera</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" @bind="this.isUnMuteMicrophoneAllowed">
+                        <label class="form-check-label">UnMute Microphone</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" @bind="this.isShareScreenAllowed">
+                        <label class="form-check-label">Share Screen</label>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -376,27 +557,58 @@
     </div>
 </div>
 
-<span class="mate">
-
-</span>
-
 @code{
     private List<RoomDetails> rooms = new List<RoomDetails>();
 
-    private string roomName;
+
     private string activeCamera;
     private bool activeScreen;
-    private string activeRoom;
     private HubConnection hubConnection;
     private bool IsVideoMuted;
     private bool IsAudioMuted;
 
+    // Inputs
+    private string roomName;
+    private bool isDisplayCameraAllowed;
+    private bool isUnMuteMicrophoneAllowed;
+    private bool isShareScreenAllowed;
+
+    // Filds for current user
+    private RoomDetails activeRoom;
+    private ParticipantViewModel activeParticipant;
+
     [Parameter]
     public string UserIdentityName { get; set; }
+
+    [Parameter]
+    public bool IsLecturerOrAdmin { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         this.rooms = this.TwilioService.GetAllRoomsAsync().ToList();
+        for (int i = 0; i < this.rooms.Count; i++)
+        {
+            RoomDetails roomdb = this.RoomsService.GetRoomById<RoomDetails>(this.rooms[i].Id);
+            this.rooms[i].Name = roomdb.Name;
+            this.rooms[i].IsDisplayCameraAllowed = roomdb.IsDisplayCameraAllowed;
+            this.rooms[i].IsShareScreenAllowed = roomdb.IsShareScreenAllowed;
+            this.rooms[i].IsUnmutedMicAllowed = roomdb.IsUnmutedMicAllowed;
+            this.rooms[i].CreatorId = roomdb.CreatorId;
+            for (int j = 0; j < this.rooms[i].Participants.Count; j++)
+            {
+                ParticipantViewModel participant = this.rooms[i].Participants[i];
+                ParticipantViewModel participantDb = this.RoomsService.GetRoomParticipant<ParticipantViewModel>(participant.Id);
+
+                participant.Name = participantDb.Name;
+                participant.RoomId = participantDb.RoomId;
+                participant.IsGivenRightToDisplayCamera = participantDb.IsGivenRightToDisplayCamera;
+                participant.IsGivenRightToShareScreen = participantDb.IsGivenRightToShareScreen;
+                participant.IsGivenRightToUnmuteMic = participantDb.IsGivenRightToUnmuteMic;
+            }
+        }
 
         this.hubConnection = new HubConnectionBuilder()
         .AddMessagePackProtocol()
@@ -405,6 +617,7 @@
         .Build();
 
         this.hubConnection.On<string>(HubEndpoints.RoomsUpdated, this.OnRoomAdded);
+
         await this.hubConnection.StartAsync();
     }
 
@@ -428,28 +641,74 @@
             if (addedOrJoined)
             {
                 this.roomName = null;
+                this.isDisplayCameraAllowed = false;
+                this.isShareScreenAllowed = false;
+                this.isUnMuteMicrophoneAllowed = false;
             }
         }
     }
 
-    protected async ValueTask<bool> TryJoinRoom(string roomName)
+    protected async ValueTask<bool> TryJoinRoom(string roomName, string roomId = null)
     {
-        if (string.IsNullOrEmpty(roomName) || roomName is { Length: 0 })
+        if (string.IsNullOrEmpty(roomName) || string.IsNullOrWhiteSpace(roomName))
         {
             return false;
         }
 
-        var jwt = this.TwilioService.GetTwilioJwt(this.UserIdentityName);
+        CreateRoomInputModel inputModel = new CreateRoomInputModel()
+        {
+            Name = roomName,
+            CreatorId = this.UserId,
+            IsDisplayCameraAllowed = this.isDisplayCameraAllowed,
+            IsShareScreenAllowed = this.isShareScreenAllowed,
+            IsUnmutedMicAllowed = this.isUnMuteMicrophoneAllowed,
+        };
+
+        string participantId;
+        if (string.IsNullOrEmpty(roomId))
+        {
+            roomId = await this.RoomsService.CreateRoomAsync(inputModel);
+        }
+
+        this.activeRoom = this.RoomsService.GetRoomById<RoomDetails>(roomId);
+
+
+        if (this.activeRoom.CreatorId != this.UserId)
+        {
+            participantId = await this.RoomsService.AddParticipantsToRoom(roomId, this.UserIdentityName);
+        }
+        else
+        {
+            participantId = await this.RoomsService.AddParticipantsToRoom(roomId, this.UserIdentityName, true);
+        }
+
+        this.activeParticipant = this.RoomsService.GetRoomParticipant<ParticipantViewModel>(participantId);
+
+        var jwt = this.TwilioService.GetTwilioJwt(participantId);
         if (string.IsNullOrEmpty(jwt?.Token))
         {
             return false;
         }
 
-        var joined = await this.JavaScript.CreateOrJoinRoomAsync(roomName, jwt.Token);
+        var joined = await this.JavaScript.CreateOrJoinRoomAsync(roomId, jwt.Token);
+
+        if (this.activeRoom.CreatorId != this.UserId)
+        {
+            if (!this.activeRoom.IsDisplayCameraAllowed)
+            {
+                this.IsVideoMuted = true;
+                await this.MuteVideo();
+            }
+            if (!this.activeRoom.IsUnmutedMicAllowed)
+            {
+                this.IsAudioMuted = true;
+                await this.MuteAudio();
+            }
+        }
+
         if (joined)
         {
-            this.activeRoom = roomName;
-            await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, this.activeRoom);
+            await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, this.activeRoom.Id);
         }
 
         return joined;
@@ -464,6 +723,8 @@
     private async ValueTask OnLeaveRoom()
     {
         await this.JavaScript.LeaveRoomAsync();
+        this.activeRoom = null;
+        this.activeParticipant = null;
         await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, this.activeRoom = null);
         if (!string.IsNullOrWhiteSpace(this.activeCamera))
         {
@@ -474,12 +735,105 @@
     private async Task OnCameraChanged(string activeCamera) =>
         await this.InvokeAsync(() => this.activeCamera = activeCamera);
 
-    private async Task OnRoomAdded(string roomName) =>
+    private async Task OnRoomAdded(string roomId) =>
         await this.InvokeAsync(() =>
         {
             this.rooms = this.TwilioService.GetAllRoomsAsync().ToList();
+
+
+            for (int i = 0; i < this.rooms.Count; i++)
+            {
+                RoomDetails roomdb = this.RoomsService.GetRoomById<RoomDetails>(this.rooms[i].Id);
+                this.rooms[i].Name = roomdb.Name;
+                this.rooms[i].IsDisplayCameraAllowed = roomdb.IsDisplayCameraAllowed;
+                this.rooms[i].IsShareScreenAllowed = roomdb.IsShareScreenAllowed;
+                this.rooms[i].IsUnmutedMicAllowed = roomdb.IsUnmutedMicAllowed;
+                this.rooms[i].CreatorId = roomdb.CreatorId;
+
+                for (int j = 0; j < this.rooms[i].Participants.Count; j++)
+                {
+                    ParticipantViewModel participant = this.rooms[i].Participants[j];
+                    ParticipantViewModel participantDb = this.RoomsService.GetRoomParticipant<ParticipantViewModel>(participant.Id);
+
+                    participant.Name = participantDb.Name;
+                    participant.RoomId = participantDb.RoomId;
+                    participant.IsGivenRightToDisplayCamera = participantDb.IsGivenRightToDisplayCamera;
+                    participant.IsGivenRightToShareScreen = participantDb.IsGivenRightToShareScreen;
+                    participant.IsGivenRightToUnmuteMic = participantDb.IsGivenRightToUnmuteMic;
+                }
+            }
+
             this.StateHasChanged();
         });
+
+    public async Task GiveRightToDisplayCamera(string roomId, string participantId)
+    {
+        await this.RoomsService.GiveRightToDisplayCamera(participantId);
+        await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
+    }
+
+    public async Task GiveRightToUnMuteMic(string roomId, string participantId)
+    {
+        await this.RoomsService.GiveRightToUnMuteMic(participantId);
+        await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
+    }
+
+    public async Task GiveRightToShareScreen(string roomId, string participantId)
+    {
+        await this.RoomsService.GiveRightToShareScreen(participantId);
+        await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
+    }
+
+    public async Task DontGiveRightToDisplayCamera(string roomId, string participantId)
+    {
+        await this.RoomsService.DontGiveRightToDisplayCamera(participantId);
+        await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
+    }
+
+    public async Task DontGiveRightToUnMuteMic(string roomId, string participantId)
+    {
+        await this.RoomsService.DontGiveRightToUnMuteMic(participantId);
+        await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
+    }
+
+    public async Task DontGiveRightToShareScreen(string roomId, string participantId)
+    {
+        await this.RoomsService.DontGiveRightToShareScreen(participantId);
+        await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
+    }
+
+    //    public async Task AllowDisplayVideo(string roomId, string participantId) =>
+    //await this.InvokeAsync(() =>
+    //{
+    //    this.rooms.FirstOrDefault(r => r.Id == roomId)
+    //    .Participants
+    //    .FirstOrDefault(p => p.Id == participantId)
+    //    .IsGivenRightToDisplayCamera = true;
+
+    //    this.StateHasChanged();
+    //});
+
+    //    public async Task AllowUnmuteMic(string roomId, string participantId) =>
+    //        await this.InvokeAsync(() =>
+    //        {
+    //            this.rooms.FirstOrDefault(r => r.Id == roomId)
+    //            .Participants
+    //            .FirstOrDefault(p => p.Id == participantId)
+    //            .IsGivenRightToUnmuteMic = true;
+
+    //            this.StateHasChanged();
+    //        });
+
+    //    public async Task AllowShareScreen(string roomId, string participantId) =>
+    //        await this.InvokeAsync(() =>
+    //        {
+    //            this.rooms.FirstOrDefault(r => r.Id == roomId)
+    //            .Participants
+    //            .FirstOrDefault(p => p.Id == participantId)
+    //            .IsGivenRightToShareScreen = true;
+
+    //            this.StateHasChanged();
+    //        });
 
     private async Task MuteVideo()
     {

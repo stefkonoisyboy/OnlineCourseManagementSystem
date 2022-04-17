@@ -6,6 +6,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    using OnlineCourseManagementSystem.Data.Common.Repositories;
+    using OnlineCourseManagementSystem.Data.Models;
+    using OnlineCourseManagementSystem.Services.Mapping;
     using OnlineCourseManagementSystem.Web.ViewModels.VideoConferences;
     using Twilio;
     using Twilio.Base;
@@ -60,9 +63,14 @@
             var participants = participantTask;
             return new RoomDetails
             {
-                Name = room.UniqueName,
+                Id = room.UniqueName,
                 MaxParticipants = room.MaxParticipants ?? 0,
                 ParticipantCount = participants.Count(),
+                Participants = participants.Select(p => new ParticipantViewModel()
+                {
+                    Id = p.Identity,
+                    Name ="Test Name",
+                }).ToList(),
             };
         }
     }
