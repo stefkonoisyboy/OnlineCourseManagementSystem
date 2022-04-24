@@ -131,5 +131,16 @@
 
             await this.roomParticipantsRepository.SaveChangesAsync();
         }
+
+        public async Task UpdateAsync(UpdateRoomInputModel inputModel)
+        {
+            Room room = this.roomsRepository.All().FirstOrDefault(r => r.Id == inputModel.Id);
+
+            room.IsDisplayCameraAllowed = inputModel.IsDisplayCameraAllowed;
+            room.IsShareScreenAllowed = inputModel.IsShareScreenAllowed;
+            room.IsUnmutedMicAllowed = inputModel.IsUnmuteMicAllowed;
+
+            await this.roomsRepository.SaveChangesAsync();
+        }
     }
 }
