@@ -201,7 +201,25 @@
         content: '\2807';
         font-size: 70px;
     }
+
+    body{
+        background:white !important;
+    }
+
+    .grey-color {
+        color: #d0d0d0;
+    }
+
+    .special-green-color {
+        color: #249782;
+        background: #e9f1f5;
+    }
+
+    .dialog-option:hover{
+        cursor:pointer;
+    }
 </style>
+
 
 <div class="row mt-5">
     @if (this.activeRoom != null)
@@ -335,123 +353,149 @@
             </div>
         </div>
     </div>
-    <div class="rounded col-md-3">
-        @if(this.activeRoom != null)
-        {
-            <div class="d-block" style="background: #f5f5f5;">
-
-                @{
-                    int c = 1;
-                    string participantToken = "#participantDropdown" + c;
-                }
-                @foreach (var participant in this.rooms.FirstOrDefault(r => r.Id == this.activeRoom.Id).Participants)
-                {
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <h6>@participant.Name</h6>
-                        </div>
-
-                        @if (this.UserId == this.activeRoom.CreatorId)
-                        {
-                            <div class="dropdown">
-                                <button style="background: #eef6fb;" class="btn dropdown-toggle" type="button" id="@participantToken" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-                                    </svg>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="@participantToken.Substring(1,participantToken.Length - 1)">
-                                    <li>
-                                        @if (participant.IsGivenRightToDisplayCamera)
-                                        {
-                                            <span class="badge">Display Camera Allowed</span>
-                                            <button class="btn btn-secondary dropdown-item"
-                                                    @onclick="(async () => await this.DontGiveRightToDisplayCamera(this.activeRoom.Id, participant.Id))">
-                                                Don't Give Right Display Camera
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge">Display Camera Not Allowed</span>
-                                            <button class="btn btn-secondary dropdown-item"
-                                                    @onclick="(async () => await this.GiveRightToDisplayCamera(this.activeRoom.Id, participant.Id))">
-                                                Give Right Display Camera
-                                            </button>
-                                        }
-
-                                    </li>
-                                    <li>
-                                        @if (participant.IsGivenRightToUnmuteMic)
-                                        {
-                                            <span class="badge text-black-50">Unmute Audio Allowed</span>
-                                            <button class="btn btn-secondary dropdown-item"
-                                                    @onclick="(async () => await this.DontGiveRightToUnMuteMic(this.activeRoom.Id, participant.Id))">
-                                                Don't Give Right Unmute Audio
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge text-balck-50">Unmute Audio Not Allowed</span>
-                                            <button class="btn btn-secondary dropdown-item"
-                                                    @onclick="(async () => await this.GiveRightToUnMuteMic(this.activeRoom.Id, participant.Id))">
-                                                Give Right Unmute Audio
-                                            </button>
-                                        }
-
-                                    </li>
-                                    <li>
-                                        @if (participant.IsGivenRightToShareScreen)
-                                        {
-                                            <span class="badge text-balck-50">Share Screen Allowed</span>
-                                            <button class="btn btn-secondary dropdown-item"
-                                                    @onclick="(async () => await this.DontGiveRightToShareScreen(this.activeRoom.Id, participant.Id))">
-                                                Don't Give Right ShareScreen
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge">Share Screen Not Allowed</span>
-                                            <button class="btn btn-secondary dropdown-item"
-                                                    @onclick="(async () => await this.GiveRightToShareScreen(this.activeRoom.Id, participant.Id))">
-                                                Give Right ShareScreen
-                                            </button>
-                                        }
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-
-                    </div>
-                        participantToken = "participantDropdown" + (c++);
-                }
+    <div class="rounded col-md-3" style="background: #f5f7fb;">
+        <div class="row bg-white p-1">
+            <div class="dialog-option text-center col-md-6 rounded-3 py-2 @(this.isOptionsDialogOpen ? "special-green-color" : "grey-color")" @onclick="() => this.OpenOptionsDialog()">
+                Settings
             </div>
-         }
-         else
-         {
-            <div class="d-flex justify-content-center" style="background: #f5f5f5;">
-                You are not in room or there are no participants
-            </div>
-         }
-    
-        <div class="accordion accordion-flush mb-2" id="accordionFlushExample">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                        Options
-                    </button>
-
-                </h2>
-                
-                    
-                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-
-                        <div class="m-2">
-                            <Cameras CameraChanged="OnCameraChanged" />
-                        </div>
-                    </div>
-                </div>
+            <div class="dialog-option text-center col-md-6 rounded-3 py-2 @(this.isParticipantsDialogOpen ? "special-green-color" : "grey-color")" @onclick="() => this.OpenParticipantsDialog()">
+                Participants @(this.activeRoom == null ? "(0)" : $"({this.rooms.FirstOrDefault(r => r.Id == this.activeRoom.Id).ParticipantCount})")
             </div>
         </div>
+        @if (this.isOptionsDialogOpen)
+        {
+            <div class="mt-2">
+                <Cameras CameraChanged="OnCameraChanged" />
+            </div>
+
+            @if (this.activeRoom != null)
+            {
+                if (this.UserId == this.activeRoom.CreatorId)
+                {
+                    <div class="mt-2">
+                        <h6>Permissions:</h6>
+                        <EditForm Model="this.updateRoomInputModel" OnSubmit="(async _=> await UpdateRoom(this.activeRoom.Id))">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" @bind="this.updateRoomInputModel.IsDisplayCameraAllowed">
+                                <label class="form-check-label">Display Camera</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" @bind="this.updateRoomInputModel.IsUnmuteMicAllowed">
+                                <label class="form-check-label">Unmute Mic</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" @bind="this.updateRoomInputModel.IsShareScreenAllowed">
+                                <label class="form-check-label">Share Screen</label>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Update</button>
+                        </EditForm>
+                    </div>
+                }
+            }
+        }
+
+        @if (this.isParticipantsDialogOpen)
+        {
+            @if (this.activeRoom != null)
+            {
+                <div class="text-center py-4" style="background: #f5f5f5;">
+
+                    @{
+                        int c = 1;
+                        string participantToken = "#participantDropdown" + c;
+                    }
+                    @foreach (var participant in this.rooms.FirstOrDefault(r => r.Id == this.activeRoom.Id).Participants)
+                    {
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h6>@participant.Name</h6>
+                            </div>
+
+                            @if (this.UserId == this.activeRoom.CreatorId)
+                            {
+                                <div class="dropdown">
+                                    <button style="background: #eef6fb;" class="btn dropdown-toggle" type="button" id="@participantToken" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                                        </svg>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="@participantToken.Substring(1,participantToken.Length - 1)">
+                                        <li>
+                                            <h6>Permissions:</h6>
+                                        </li>
+                                        <li>
+                                            @if (participant.IsGivenRightToDisplayCamera)
+                                            {
+                                                <span class="badge text-black-50">Display Camera Allowed</span>
+                                                <button class="btn btn-secondary dropdown-item"
+                                                        @onclick="(async () => await this.DontGiveRightToDisplayCamera(this.activeRoom.Id, participant.Id))">
+                                                    Don't Give Right Display Camera
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge text-black-50">Display Camera Not Allowed</span>
+                                                <button class="btn btn-secondary dropdown-item"
+                                                        @onclick="(async () => await this.GiveRightToDisplayCamera(this.activeRoom.Id, participant.Id))">
+                                                    Give Right Display Camera
+                                                </button>
+                                            }
+
+                                        </li>
+                                        <li>
+                                            @if (participant.IsGivenRightToUnmuteMic)
+                                            {
+                                                <span class="badge text-black-50">Unmute Audio Allowed</span>
+                                                <button class="btn btn-secondary dropdown-item"
+                                                        @onclick="(async () => await this.DontGiveRightToUnMuteMic(this.activeRoom.Id, participant.Id))">
+                                                    Don't Give Right Unmute Audio
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge text-black-50">Unmute Audio Not Allowed</span>
+                                                <button class="btn btn-secondary dropdown-item"
+                                                        @onclick="(async () => await this.GiveRightToUnMuteMic(this.activeRoom.Id, participant.Id))">
+                                                    Give Right Unmute Audio
+                                                </button>
+                                            }
+
+                                        </li>
+                                        <li>
+                                            @if (participant.IsGivenRightToShareScreen)
+                                            {
+                                                <span class="badge text-balck-50">Share Screen Allowed</span>
+                                                <button class="btn btn-secondary dropdown-item"
+                                                        @onclick="(async () => await this.DontGiveRightToShareScreen(this.activeRoom.Id, participant.Id))">
+                                                    Don't Give Right ShareScreen
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge text-black-50">Share Screen Not Allowed</span>
+                                                <button class="btn btn-secondary dropdown-item"
+                                                        @onclick="(async () => await this.GiveRightToShareScreen(this.activeRoom.Id, participant.Id))">
+                                                    Give Right ShareScreen
+                                                </button>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+
+                        </div>
+                        participantToken = "participantDropdown" + (c++);
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4" style="background: #f5f5f5;">
+                    You are not in room or there are no participants
+                </div>
+            }
+
+        }
         <div class="card">
             <div class="card-header">
                 <h2>
@@ -511,7 +555,11 @@
                 <h6 class="my-3">
                     Advanced options
                 </h6>
-                Allowed rights:
+                <div>
+                    <label>
+                        Allowed rights:
+                    </label>
+                </div>
                 @if (this.isDisplayCameraAllowed)
                 {
                     <p>Display Camera Allowed</p>
@@ -524,7 +572,9 @@
                 {
                     <p>Share Screen Allowed</p>
                 }
-                <label>Manage rights to participants:</label>
+                 <div>
+                     <label>Manage rights to participants:</label>
+                 </div> 
                 <div class="ml-3">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" @bind="this.isDisplayCameraAllowed">
@@ -545,7 +595,7 @@
                 <button class="btn btn-lg btn-info"
                         disabled="@(this.activeCamera is null || this.roomName is null)"
                         @onclick="@(async args => await TryAddRoom(args))">
-                    Create Room  <span class="badge">
+                            Create Room  <span class="badge">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
                             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -560,12 +610,17 @@
 @code{
     private List<RoomDetails> rooms = new List<RoomDetails>();
 
+    //Other fields
+    private bool isOptionsDialogOpen = true;
+    private bool isParticipantsDialogOpen;
 
+    //Fields used on Live connection.
     private string activeCamera;
     private bool activeScreen;
     private HubConnection hubConnection;
     private bool IsVideoMuted;
     private bool IsAudioMuted;
+    private UpdateRoomInputModel updateRoomInputModel;
 
     // Inputs
     private string roomName;
@@ -586,6 +641,7 @@
     [Parameter]
     public string UserId { get; set; }
 
+    //Methods for Video Conference on Live connection
     protected override async Task OnInitializedAsync()
     {
         this.rooms = this.TwilioService.GetAllRoomsAsync().ToList();
@@ -671,7 +727,7 @@
         }
 
         this.activeRoom = this.RoomsService.GetRoomById<RoomDetails>(roomId);
-
+        this.updateRoomInputModel = this.RoomsService.GetRoomById<UpdateRoomInputModel>(roomId);
 
         if (this.activeRoom.CreatorId != this.UserId)
         {
@@ -802,6 +858,18 @@
         await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
     }
 
+    public void OpenOptionsDialog()
+    {
+        this.isOptionsDialogOpen = true;
+        this.isParticipantsDialogOpen = false;
+    }
+
+    public void OpenParticipantsDialog()
+    {
+        this.isOptionsDialogOpen = false;
+        this.isParticipantsDialogOpen = true;
+    }
+
     //    public async Task AllowDisplayVideo(string roomId, string participantId) =>
     //await this.InvokeAsync(() =>
     //{
@@ -845,6 +913,12 @@
     {
         await this.JavaScript.InvokeVoidAsync("unMuteVideo");
         this.IsVideoMuted = false;
+    }
+
+    public async Task UpdateRoom(string roomId)
+    {
+        await this.RoomsService.UpdateAsync(this.updateRoomInputModel);
+        await this.hubConnection.InvokeAsync(HubEndpoints.RoomsUpdated, roomId);
     }
 
     private async Task MuteAudio()

@@ -29,13 +29,13 @@
     }
 </style>
 
-<div class="d-flex mt-4" id="wrapper">
+<div class="d-flex mt-4 m-2" id="wrapper">
     <div class="border-right bg-transparent" id="sidebar-wrapper" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
         <div class="list-group list-group-flush">
             <h4>
                 Courses Options(@this.Model.Courses.Count())
             </h4>
-            <a class="course-choice m-2 rounded d-flex align-items-center" asp-controller="Posts" asp-action="All" asp-route-id="1">
+            <a class="course-choice m-2 rounded d-flex align-items-center bg-white" asp-controller="Posts" asp-action="All" asp-route-id="1">
                 <div class="flex-grow-1">See all</div>
                 <div>
                     <span class="badge badge-primary">
@@ -129,7 +129,7 @@
             {
                 foreach (var post in this.Model.Posts)
                 {
-                    <div class="d-flex align-items-center p-2 my-1" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                    <div class="d-flex align-items-center p-2 my-1 bg-white" style="box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                          @if (userId == post.AuthorId)
                           {
                              <div class="d-flex">
